@@ -33,7 +33,7 @@
 #define ADD_MOVE_SPEED (1.0f)	//加速
 #define DEC_MOVE_SPEED (0.3f)	//減速
 #define MAX_MOVE_SPEED (15.0f)	//歩行速度
-#define ROTATE_SPEED (0.1f)		//回転速度
+#define ROTATE_SPEED (0.01f)		//回転速度
 
 //--------------------------------
 //当たり判定
