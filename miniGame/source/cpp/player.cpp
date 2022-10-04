@@ -33,7 +33,7 @@
 #define ADD_MOVE_SPEED (1.0f)	//加速
 #define DEC_MOVE_SPEED (0.3f)	//減速
 #define MAX_MOVE_SPEED (15.0f)	//歩行速度
-#define ROTATE_SPEED (0.1f)	//回転速度
+#define ROTATE_SPEED (0.05f)	//回転速度
 
 //--------------------------------
 //当たり判定
@@ -71,6 +71,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_nCntGameover = 0;
+	m_fMoveSpeed = 0.0f;
 }
 
 //=============================================================================
@@ -102,6 +103,8 @@ HRESULT CPlayer::Init(void) {
 	//プレイヤーの初期設定
 	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
 	m_destRot.y =  D3DX_PI;	//奥向き
+	m_fMoveSpeed = 0.0f;
+
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -270,42 +273,87 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	//------------------------
 	//移動量の決定
 	//------------------------
+	////前後移動のどちらかのみ押されている場合
+	//if (bPressUp != bPressDown) {
+	//	if (bPressUp) {
+	//		moveAddSpeed.z = ADD_MOVE_SPEED;
+	//		moveMaxSpeed.z = fMaxSpeed;
+	//		bRotateUp = true;
+	//	}
+	//	else if (bPressDown) {
+	//		moveAddSpeed.z = -ADD_MOVE_SPEED;
+	//		moveMaxSpeed.z = -fMaxSpeed;
+	//		bRotateDown = true;
+	//	}
+	//	//斜め移動
+	//	if (bDiagonalMove) {
+	//		moveAddSpeed.z *= 0.7f;
+	//		moveMaxSpeed.z *= 0.7f;
+	//	}
+	//}
+	////左右移動のどちらかのみ押されている場合
+	//if (bPressLeft != bPressRight) {
+	//	if (bPressLeft) {
+	//		moveAddSpeed.x = -ADD_MOVE_SPEED;
+	//		moveMaxSpeed.x = -fMaxSpeed;
+	//		bRotateLeft = true;
+	//	}
+	//	else if (bPressRight) {
+	//		moveAddSpeed.x = ADD_MOVE_SPEED;
+	//		moveMaxSpeed.x = fMaxSpeed;
+	//		bRotateRight = true;
+	//	}
+	//	//斜め移動
+	//	if (bDiagonalMove) {
+	//		moveAddSpeed.x *= 0.7f;
+	//		moveMaxSpeed.x *= 0.7f;
+	//	}
+	//}
+
 	//前後移動のどちらかのみ押されている場合
 	if (bPressUp != bPressDown) {
 		if (bPressUp) {
-			moveAddSpeed.z = ADD_MOVE_SPEED;
-			moveMaxSpeed.z = fMaxSpeed;
 			bRotateUp = true;
 		}
 		else if (bPressDown) {
-			moveAddSpeed.z = -ADD_MOVE_SPEED;
-			moveMaxSpeed.z = -fMaxSpeed;
 			bRotateDown = true;
-		}
-		//斜め移動
-		if (bDiagonalMove) {
-			moveAddSpeed.z *= 0.7f;
-			moveMaxSpeed.z *= 0.7f;
 		}
 	}
 	//左右移動のどちらかのみ押されている場合
 	if (bPressLeft != bPressRight) {
 		if (bPressLeft) {
-			moveAddSpeed.x = -ADD_MOVE_SPEED;
-			moveMaxSpeed.x = -fMaxSpeed;
 			bRotateLeft = true;
 		}
 		else if (bPressRight) {
-			moveAddSpeed.x = ADD_MOVE_SPEED;
-			moveMaxSpeed.x = fMaxSpeed;
 			bRotateRight = true;
 		}
-		//斜め移動
-		if (bDiagonalMove) {
-			moveAddSpeed.x *= 0.7f;
-			moveMaxSpeed.x *= 0.7f;
+	}
+
+
+	//Aボタンを押している間向いている方向に進む
+	if (pInput->GetPress(CInput::CODE::ACCELE))
+	{
+		//加速させる
+		m_fMoveSpeed += ADD_MOVE_SPEED;
+		//最大値よりも大きくなったら
+		if (m_fMoveSpeed > 8.0f)
+		{
+			m_fMoveSpeed = 8.0f;
 		}
 	}
+	else if (pInput->GetPress(CInput::CODE::REVERSE))
+	{//Bボタンを押したら
+		//加速させる
+		m_fMoveSpeed -= ADD_MOVE_SPEED;
+		//最大値よりも大きくなったら
+		if (m_fMoveSpeed < -8.0f)
+		{
+			m_fMoveSpeed = -8.0f;
+		}
+	}
+
+	m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
+	m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 
 	//------------------------
 	//カメラの角度に合わせて移動量の最大量を設定
@@ -436,7 +484,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		}
 
 		//回転の反映
-		rotPlayer.y += fdeltaRot * ROTATE_SPEED;
+		rotPlayer.y += fdeltaRot * ROTATE_SPEED * (m_fMoveSpeed / 8.0f);
 
 		//パイ超過時
 		if (rotPlayer.y > D3DX_PI) {
@@ -460,31 +508,38 @@ void CPlayer::DecMove(void) {
 	vecMoveDec *= DEC_MOVE_SPEED;	//移動量の加算
 
 	//減速
-	m_move.x += vecMoveDec.x;
-	m_move.z += vecMoveDec.y;
+	//m_move.x += vecMoveDec.x;
+	//m_move.z += vecMoveDec.y;
 
-	//X方向の移動量の停止
-	if (vecMoveDec.x > 0.0f) {
-		if (m_move.x > 0.0f) {
-			m_move.x = 0.0f;
-		}
+	m_fMoveSpeed *= 0.95f;
+
+	if (m_fMoveSpeed < 0.1f && m_fMoveSpeed > 0.1f)
+	{
+		m_fMoveSpeed = 0.0f;
 	}
-	else if (vecMoveDec.x < 0.0f) {
-		if (m_move.x < 0.0f) {
-			m_move.x = 0.0f;
-		}
-	}
-	//Z方向の移動量の停止
-	if (vecMoveDec.y > 0.0f) {
-		if (m_move.z > 0.0f) {
-			m_move.z = 0.0f;
-		}
-	}
-	else if (vecMoveDec.x < 0.0f) {
-		if (m_move.z < 0.0f) {
-			m_move.z = 0.0f;
-		}
-	}
+
+	////X方向の移動量の停止
+	//if (vecMoveDec.x > 0.0f) {
+	//	if (m_move.x > 0.0f) {
+	//		m_move.x = 0.0f;
+	//	}
+	//}
+	//else if (vecMoveDec.x < 0.0f) {
+	//	if (m_move.x < 0.0f) {
+	//		m_move.x = 0.0f;
+	//	}
+	//}
+	////Z方向の移動量の停止
+	//if (vecMoveDec.y > 0.0f) {
+	//	if (m_move.z > 0.0f) {
+	//		m_move.z = 0.0f;
+	//	}
+	//}
+	//else if (vecMoveDec.x < 0.0f) {
+	//	if (m_move.z < 0.0f) {
+	//		m_move.z = 0.0f;
+	//	}
+	//}
 }
 
 //=============================================================================

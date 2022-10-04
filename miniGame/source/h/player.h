@@ -52,6 +52,7 @@ private:
 	D3DXVECTOR3 m_move;		//移動量
 
 	int m_nCntGameover;		//ゲームオーバー後のカウント
+	float m_fMoveSpeed;		//移動する速さ
 };
 
 #endif // !_PLAYER_H_
