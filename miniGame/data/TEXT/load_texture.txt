@@ -54,6 +54,8 @@ data/TEXTURE/UI/x5.png
 data/TEXTURE/UI/text_score.png
 data/TEXTURE/UI/text_hiscore.png
 
+data/TEXTURE/MESH/floor_01.jpg
+
 data/TEXTURE/EFFECT/explosion.png
 data/TEXTURE/EFFECT/damage_player.png
 data/TEXTURE/EFFECT/damage_enemy.png
