@@ -1,15 +1,8 @@
-﻿  billboard.cpp
-  camera.cpp
-  gameCamera.cpp
-  gameScene.cpp
-  gauge.cpp
-  manager.cpp
-  objectList.cpp
-  pauseMenu.cpp
-  player.cpp
-  scene.cpp
+﻿  gameScene.cpp
   コード生成しています。
-  All 735 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  0 of 735 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\miniGame\Release\miniGame.exe
-  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\miniGame\Release\miniGame.pdb (Full PDB)
+  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\miniGame\Release\miniGame.exe
+  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\miniGame\Release\miniGame.pdb (Full PDB)

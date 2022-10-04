@@ -112,7 +112,6 @@ void CGameScene::Init(void) {
 	//------------------------------
 	//モーション情報のロード
 	//------------------------------
-	CPlayer::LoadMotionInfo();
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
@@ -161,9 +160,6 @@ void CGameScene::Uninit(void) {
 		delete m_pStage;
 		m_pStage = nullptr;
 	}
-
-	//モーション情報のアンロード
-	CPlayer::UnloadMotionInfo();
 
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);
