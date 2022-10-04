@@ -72,7 +72,8 @@ public:
 		TEXT_SCORE,
 		TEXT_HISCORE,
 
-		//モデルのテクスチャ
+		//メッシュのテクスチャ
+		MESH_FLOOR_DESERT,
 
 		//エフェクトのテクスチャ
 		EFFECT_EXPLOSION,		// 爆発エフェクト

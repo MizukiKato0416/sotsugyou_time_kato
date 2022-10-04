@@ -163,7 +163,7 @@ bool CInputKeyboard::GetPress(CODE code) {
 	{
 		//選択
 	case CODE::SELECT:
-		if (GetPress(DIK_SPACE) || GetPress(DIK_RETURN)) {
+		if (GetPress(DIK_RETURN)) {
 			return true;
 		}
 		break;
@@ -208,13 +208,6 @@ bool CInputKeyboard::GetPress(CODE code) {
 		}
 		break;
 
-		//ダッシュ
-	case CODE::DASH:
-		if (GetPress(DIK_LSHIFT) || GetPress(DIK_RSHIFT)) {
-			return true;
-		}
-		break;
-
 
 		//カメラの前後左右
 	case CODE::ROTATE_UP:
@@ -238,15 +231,9 @@ bool CInputKeyboard::GetPress(CODE code) {
 		}
 		break;
 
-		//攻撃
-	case CODE::ATTACK_1:
-		if (GetPress(DIK_U)) {
-			return true;
-		}
-		break;
-		//攻撃
-	case CODE::ATTACK_2:
-		if (GetPress(DIK_O)) {
+		//アクセル
+	case CODE::ACCELE:
+		if (GetPress(DIK_SPACE)) {
 			return true;
 		}
 		break;
@@ -353,19 +340,6 @@ bool CInputKeyboard::GetTrigger(CODE code) {
 		break;
 	case CODE::SELECT_RIGHT:
 		if (GetTrigger(DIK_RIGHT)) {
-			return true;
-		}
-		break;
-
-		//攻撃
-	case CODE::ATTACK_1:
-		if (GetTrigger(DIK_U)) {
-			return true;
-		}
-		break;
-		//攻撃
-	case CODE::ATTACK_2:
-		if (GetTrigger(DIK_O)) {
 			return true;
 		}
 		break;
@@ -617,7 +591,7 @@ bool CInputGamepadX::GetPress(CODE code) {
 	{
 		//選択
 	case CODE::SELECT:
-		if (GetButtonPress(XINPUT_GAMEPAD_A) || GetButtonPress(XINPUT_GAMEPAD_START)) {
+		if (GetButtonPress(XINPUT_GAMEPAD_START)) {
 			return true;
 		}
 		break;
@@ -651,13 +625,6 @@ bool CInputGamepadX::GetPress(CODE code) {
 		}
 		break;
 
-		//ダッシュ
-	case CODE::DASH:
-		if (GetTriggerPress(TRIGGER_TYPE::LEFT)) {
-			return true;
-		}
-		break;
-
 		//カメラの上下左右
 	case CODE::ROTATE_UP:
 		if (GetRightStick(STICK_TYPE::MOVE_UP)) {
@@ -680,15 +647,16 @@ bool CInputGamepadX::GetPress(CODE code) {
 		}
 		break;
 
-		//攻撃
-	case CODE::ATTACK_1:
-		if (GetButtonPress(XINPUT_GAMEPAD_R)) {
+		//アクセル
+	case CODE::ACCELE:
+		if (GetButtonPress(XINPUT_GAMEPAD_A)) {
 			return true;
 		}
 		break;
-		//攻撃
-	case CODE::ATTACK_2:
-		if (GetTriggerPress(TRIGGER_TYPE::RIGHT)) {
+
+		//バック
+	case CODE::REVERSE:
+		if (GetButtonPress(XINPUT_GAMEPAD_B)) {
 			return true;
 		}
 		break;
@@ -768,18 +736,6 @@ bool CInputGamepadX::GetTrigger(CODE code) {
 		break;
 
 
-		//攻撃
-	case CODE::ATTACK_1:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_R)) {
-			return true;
-		}
-		break;
-		//攻撃
-	case CODE::ATTACK_2:
-		if (GetTriggerTrigger(TRIGGER_TYPE::RIGHT)) {
-			return true;
-		}
-		break;
 		//インタラクト
 	case CODE::INTERACT:
 		if (GetButtonTrigger(XINPUT_GAMEPAD_X)) {

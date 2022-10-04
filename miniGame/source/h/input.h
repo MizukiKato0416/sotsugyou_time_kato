@@ -38,9 +38,8 @@ public:
 		SELECT_LFET,
 		SELECT_RIGHT,
 		//アクション
-		ATTACK_1,
-		ATTACK_2,
-		DASH,
+		ACCELE,			//アクセル
+		REVERSE,		//バック
 		INTERACT,
 
 #ifdef _DEBUG

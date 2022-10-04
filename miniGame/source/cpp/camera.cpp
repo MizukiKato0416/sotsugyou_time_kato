@@ -167,9 +167,7 @@ void CCamera::Move(void) {
 	//“ü—Íˆ—
 	//--------------------
 	float fMoveSpeed = 5.0f;
-	if (pInput->GetPress(CInput::CODE::DASH)) {
-		fMoveSpeed *= 3;
-	}
+	
 
 	if (pInput->GetPress(CInput::CODE::MOVE_UP)) {
 		//‘OˆÚ“®
