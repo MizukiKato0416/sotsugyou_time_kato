@@ -687,7 +687,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/ItemBOX";
+    "data/TEXTURE/PLAYER/ItemBOX.jpg";
    }
   }
   Material {
@@ -696,7 +696,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/ItemBOX";
+    "data/TEXTURE/PLAYER/ItemBOX.jpg";
    }
   }
   Material {
@@ -705,7 +705,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/ItemBOX";
+    "data/TEXTURE/PLAYER/ItemBOX.jpg";
    }
   }
   Material {
@@ -714,7 +714,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/ItemBOX";
+    "data/TEXTURE/PLAYER/ItemBOX.jpg";
    }
   }
  }
