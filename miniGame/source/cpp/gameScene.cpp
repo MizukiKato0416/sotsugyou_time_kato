@@ -119,7 +119,7 @@ void CGameScene::Init(void) {
 	//ステージの生成
 	//if (m_pStage == nullptr) m_pStage = new CStage;
 	//if (m_pStage != nullptr) m_pStage->CreateStage(TEXT_FILE_NAME_STAGE_GAME);
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 3000.0f, 3000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 1000.0f, 1000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//円柱の壁の生成
 	CWallCylinder::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 800.0f, 40.0f, CTexture::TEXTURE_TYPE::NONE, true);
