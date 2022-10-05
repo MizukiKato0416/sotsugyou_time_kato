@@ -8,6 +8,9 @@
 // enumÇ∆ìØÇ∂èáÇ…
 
 data/MODEL/OBJECT/car.x	
+data/MODEL/OBJECT/stage.x	
+data/MODEL/OBJECT/balloon_pink.x	
+data/MODEL/OBJECT/balloon_gold.x	
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	

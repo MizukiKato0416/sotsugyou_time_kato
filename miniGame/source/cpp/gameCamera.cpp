@@ -14,9 +14,9 @@
 // マクロ定義
 //=============================================================================
 #define MAX_DRAW_DISTANCE		(5000.0f)	//描画可能な最大の距離
-#define DEFAULT_CAMERA_DISTANCE (1500.0f)	//視点と注視点の距離
+#define DEFAULT_CAMERA_DISTANCE (1200.0f)	//視点と注視点の距離
 #define DEFAULT_CAMERA_ROT_X	(-40.0f)	//カメラの向きX
-#define DEFAULT_CAMERA_POS_Z	(-200.0f)	//カメラの位置Z
+#define DEFAULT_CAMERA_POS_Z	(-220.0f)	//カメラの位置Z
 
 //=============================================================================
 // デフォルトコンストラクタ

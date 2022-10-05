@@ -25,7 +25,10 @@ public:
 	//モデルの種類
 	enum class MODELTYPE{
 		//オブジェクト
-		OBJ_CAR = 0,	//車
+		OBJ_CAR = 0,		//車
+		OBJ_STADIUM,		//スタジアム
+		OBJ_BALLOON_PINK,	//風船(ピンク)
+		OBJ_BALLOON_GOLD,	//風船(ゴールド)
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
