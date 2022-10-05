@@ -351,7 +351,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "E:\\画像避難\\画像データ\\使用可能\データ\\kinn.jpg";
+    "data/TEXTURE/BALLOON/kinn.jpg";
    }
   }
   Material {
@@ -360,7 +360,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "E:\\画像避難\\画像データ\\使用可能\データ\\3金背景_01.png";
+    "data/TEXTURE/BALLOON/BalloonGold3_01.png";
    }
   }
  }

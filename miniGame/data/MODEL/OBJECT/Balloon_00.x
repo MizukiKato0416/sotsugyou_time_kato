@@ -367,7 +367,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\OneDrive\\ドキュメント\\Visual Studio 2015\\画像データ\\使用可能\データ\\1ピンク背景.png";
+    "data/TEXTURE/BALLOON/BalloonPink1_00.png";
    }
   }
  }
