@@ -30,11 +30,11 @@
 //--------------------------------
 //ˆÚ“®
 //--------------------------------
-#define ADD_MOVE_SPEED (1.0f)	//‰Á‘¬
+#define ADD_MOVE_SPEED (0.5f)	//‰Á‘¬
 #define DEC_MOVE_SPEED (0.93f)	//Œ¸‘¬
 #define MAX_MOVE_SPEED (10.0f)	//Å‘å‘¬“x
 #define MOVE_ZERO_RANGE (0.09f)	//ˆÚ“®—Ê‚ğ0‚É‚·‚é”ÍˆÍ
-#define ROTATE_SPEED (0.03f)	//‰ñ“]‘¬“x
+#define ROTATE_SPEED (0.025f)	//‰ñ“]‘¬“x
 
 //--------------------------------
 //“–‚½‚è”»’è
