@@ -153,8 +153,8 @@ VS_OUTPUT RenderSceneVSLight(
 	}
 
 	 //ハーフランバート
-	//col += 1.0;
-	//col *= 0.5;
+	col += 1.0;
+	col *= 0.5;
 
 	//スペキュラーの計算
 	float3 vecHarf = normalize(-light + vecView);	//ハーフベクトル

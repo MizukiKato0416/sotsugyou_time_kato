@@ -30,24 +30,20 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED (1.0f)	//加速
+#define ADD_MOVE_SPEED (0.5f)	//加速
 #define DEC_MOVE_SPEED (0.93f)	//減速
 #define MAX_MOVE_SPEED (10.0f)	//最大速度
 #define MOVE_ZERO_RANGE (0.09f)	//移動量を0にする範囲
-#define ROTATE_SPEED (0.03f)	//回転速度
+#define ROTATE_SPEED (0.025f)	//回転速度
 
 //--------------------------------
 //当たり判定
 //--------------------------------
-#define COLLISION_RADIUS (70.0f)		//当たり判定の半径	壁とかに使う
-#define NUM_COLLISION (10)				//当たり判定の数
+#define COLLISION_RADIUS (30.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
 //ゲームオーバー時
 //--------------------------------
-#define FINISH_TIME_CHANGE_COLOR_GAMEOVER (120)	//ゲームオーバー後の色変更にかかる時間
-#define START_CHANGE_COLOR_CLEAR (180)	//ゲームオーバー後の透明色へ変更する開始時間
-#define FINISH_TIME_CLEAR (60)			//ゲームオーバー後の透明色への変更にかかる時間
 
 //--------------------------------
 //その他
@@ -57,12 +53,16 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
+int CPlayer::m_nPlayerNum = 0;
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
 CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 {
+	//総数を加算
+	m_nPlayerNum++;
+
 	SetObjType(OBJTYPE_PLAYER);	//オブジェクトタイプの設定
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);	//更新順の設定
 	SetDrawPriority(DRAW_PRIORITY::CHARA);	//描画順の設定
@@ -71,8 +71,11 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
+	m_nIndex = m_nPlayerNum;
 	m_nCntGameover = 0;
 	m_fMoveSpeed = 0.0f;
+	m_fBoundMoveSpeed = 0.0f;
+	m_state = PLAYER_STATE::NONE;
 }
 
 //=============================================================================
@@ -105,7 +108,8 @@ HRESULT CPlayer::Init(void) {
 	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
 	m_destRot.y =  D3DX_PI;	//奥向き
 	m_fMoveSpeed = 0.0f;
-
+	m_fBoundMoveSpeed = 0.0f;
+	m_state = PLAYER_STATE::NOMAL;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -158,14 +162,30 @@ void CPlayer::Update(void) {
 		fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
 	}
 
-	//----------------------------
-	//移動
-	//----------------------------
+	//状態分け
+	switch (m_state)
+	{
+	case CPlayer::PLAYER_STATE::NOMAL:
+		//----------------------------
+		//移動
+		//----------------------------
 
-	//移動と回転
-	if (pInput != nullptr) {
-		Move(pInput, fRotCameraY);
+		//移動と回転
+		if (pInput != nullptr) {
+			Move(pInput, fRotCameraY);
+		}
+		break;
+	case CPlayer::PLAYER_STATE::BOUND:
+		//バウンド状態処理
+		StateBound();
+		break;
+	case CPlayer::PLAYER_STATE::SPIN:
+		break;
+	default:
+		break;
 	}
+
+	
 
 	
 
@@ -185,7 +205,7 @@ void CPlayer::Update(void) {
 	Collision(posPlayer);
 
 	//----------------------------
-	//モーションの更新
+	//モデルの更新
 	//----------------------------
 	CObjectModel::Update();
 }
@@ -194,8 +214,7 @@ void CPlayer::Update(void) {
 // プレイヤーの描画処理
 //=============================================================================
 void CPlayer::Draw(void) {
-	if (m_nCntGameover >= START_CHANGE_COLOR_CLEAR + FINISH_TIME_CLEAR) return;	//フェード完了時は描画しない 影や透過の影響をなくすため
-
+	
 	CObjectModel::Draw();
 }
 
@@ -322,44 +341,6 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	moveMax.z += moveMaxSpeed.x * -sinf(fRotCameraY);
 	moveMax.z += moveMaxSpeed.z * cosf(fRotCameraY);
 
-	////------------------------
-	////加速
-	////------------------------
-	////X方向の移動量が最大量未満の場合
-	//if ((moveMax.x > 0 && m_move.x < moveMax.x) || (moveMax.x < 0 && m_move.x > moveMax.x)) {
-	//	//カメラの角度に合わせて移動量を追加
-	//	m_move.x += moveAddSpeed.x * sinf(fRotCameraY + 0.5f * D3DX_PI);
-	//	m_move.x += moveAddSpeed.z * sinf(fRotCameraY);
-	//	//加速時に移動量が最大を超えた場合
-	//	if (moveMax.x > 0) {
-	//		if (m_move.x > moveMax.x) {
-	//			m_move.x = moveMax.x;
-	//		}
-	//	}
-	//	else if (moveMax.x < 0) {
-	//		if (m_move.x < moveMax.x) {
-	//			m_move.x = moveMax.x;
-	//		}
-	//	}
-	//}
-	////Z方向の移動量が最大量未満の場合
-	//if ((moveMax.z > 0 && m_move.z < moveMax.z) || (moveMax.z < 0 && m_move.z > moveMax.z)) {
-	//	//カメラの角度に合わせて移動量を追加
-	//	m_move.z += moveAddSpeed.x * -sinf(fRotCameraY);
-	//	m_move.z += moveAddSpeed.z * cosf(fRotCameraY);
-	//	//加速時に移動量が最大を超えた場合
-	//	if (moveMax.z > 0) {
-	//		if (m_move.z > moveMax.z) {
-	//			m_move.z = moveMax.z;
-	//		}
-	//	}
-	//	else if (moveMax.z < 0) {
-	//		if (m_move.z < moveMax.z) {
-	//			m_move.z = moveMax.z;
-	//		}
-	//	}
-	//}
-
 	//------------------------
 	//回転方向の決定
 	//------------------------		
@@ -472,9 +453,67 @@ void CPlayer::DecMove(void) {
 }
 
 //=============================================================================
+// 移動量の減少
+//=============================================================================
+void CPlayer::DecBoundMove(void) {
+	//減速
+	m_fBoundMoveSpeed *= DEC_MOVE_SPEED;
+
+	//既定の値の誤差になったら
+	if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+	{
+		//移動量を0にする
+		m_fBoundMoveSpeed = 0.0f;
+		m_fMoveSpeed = 0.0f;
+
+		//状態を通常にする
+		m_state = PLAYER_STATE::NOMAL;
+	}
+}
+
+
+//=============================================================================
 // 当たり判定
 //=============================================================================
 void CPlayer::Collision(D3DXVECTOR3& pos) {
 	//壁との当たり判定
-	CWallCylinder::Collision(&pos, m_lastPos, COLLISION_RADIUS);
+	if (CWallCylinder::Collision(&pos, m_lastPos, COLLISION_RADIUS))
+	{
+		//位置設定
+		SetPos(pos);
+
+		if (m_state == PLAYER_STATE::BOUND)
+		{
+			return;
+		}
+
+		//状態をBOUNDに設定
+		m_state = PLAYER_STATE::BOUND;
+
+		//バウンド時の初速を設定
+		m_fBoundMoveSpeed = m_fMoveSpeed * 0.7f;
+		//最小値の範囲より小さくなったら
+		if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+		{
+			//移動量を0にする
+			m_fBoundMoveSpeed = 0.0f;
+			m_fMoveSpeed = 0.0f;
+
+			//状態を通常にする
+			m_state = PLAYER_STATE::NOMAL;
+		}
+	}
+}
+
+//=============================================================================
+//バウンド状態の処理
+//=============================================================================
+void CPlayer::StateBound(void)
+{
+	//向いている方向と逆の方向に跳ね返す
+	m_move.x = sinf(GetRot().y) * m_fBoundMoveSpeed;
+	m_move.z = cosf(GetRot().y) * m_fBoundMoveSpeed;
+
+	//移動量の減少
+	DecBoundMove();
 }

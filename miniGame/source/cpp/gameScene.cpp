@@ -22,6 +22,7 @@
 #include "meshwall.h"
 #include "wallCylinder.h"
 #include "pauseMenu.h"
+#include "balloon.h"
 
 //=============================================================================
 // マクロ定義
@@ -119,10 +120,19 @@ void CGameScene::Init(void) {
 	//ステージの生成
 	//if (m_pStage == nullptr) m_pStage = new CStage;
 	//if (m_pStage != nullptr) m_pStage->CreateStage(TEXT_FILE_NAME_STAGE_GAME);
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 3000.0f, 3000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+
+	//床の生成
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 1000.0f, 1000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+
+	//スタジアムの生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//円柱の壁の生成
-	CWallCylinder::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 800.0f, 40.0f, CTexture::TEXTURE_TYPE::NONE, true);
+	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 700.0f, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
+
+	//風船の生成
+	CBalloon::Create(false, D3DXVECTOR3(300.0f, 50.0f, 0.0f));
+	CBalloon::Create(true, D3DXVECTOR3(-300.0f, 50.0f, 0.0f));
 
 	//プレイヤーの生成
 	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -198,6 +208,13 @@ void CGameScene::Update(void) {
 	//タイム追加
 	if (pInput->GetTrigger(CInput::CODE::DEBUG_3)) {
 		if (m_pTimer != nullptr) m_pTimer->AddScore(50);
+	}
+
+	if (CBalloon::GetNum() == 0)
+	{
+		//風船の生成
+		CBalloon::Create(false, D3DXVECTOR3(300.0f, 50.0f, 0.0f));
+		CBalloon::Create(true, D3DXVECTOR3(-300.0f, 50.0f, 0.0f));
 	}
 #endif
 
