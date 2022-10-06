@@ -83,7 +83,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 //=============================================================================
 CPlayer::~CPlayer()
 {
-
+	
 }
 
 //=============================================================================
@@ -123,6 +123,8 @@ HRESULT CPlayer::Init(void) {
 // プレイヤーの終了処理
 //=============================================================================
 void CPlayer::Uninit(void) {
+	m_nPlayerNum--;
+
 	//終了処理
 	CObjectModel::Uninit();
 }
@@ -263,11 +265,13 @@ float CPlayer::GetRadius(void) {
 void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	if (pInput == nullptr) return;
 
+	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
+
 	//上下左右キー入力状態の取得
-	const bool bPressUp = pInput->GetPress(CInput::CODE::MOVE_UP);
-	const bool bPressDown = pInput->GetPress(CInput::CODE::MOVE_DOWN);
-	const bool bPressLeft = pInput->GetPress(CInput::CODE::MOVE_LEFT);
-	const bool bPressRight = pInput->GetPress(CInput::CODE::MOVE_RIGHT);
+	const bool bPressUp = pPadX->GetPress(CInput::CODE::MOVE_UP, m_nIndex - 1);
+	const bool bPressDown = pPadX->GetPress(CInput::CODE::MOVE_DOWN, m_nIndex - 1);
+	const bool bPressLeft = pPadX->GetPress(CInput::CODE::MOVE_LEFT, m_nIndex - 1);
+	const bool bPressRight = pPadX->GetPress(CInput::CODE::MOVE_RIGHT, m_nIndex - 1);
 
 	bool bDiagonalMove = (bPressUp != bPressDown) && (bPressLeft != bPressRight);	//斜め移動
 	bool bRotateUp, bRotateDown, bRotateLeft, bRotateRight;	//回転する方向
@@ -302,7 +306,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 
 	//Aボタンを押している間向いている方向に進む
-	if (pInput->GetPress(CInput::CODE::ACCELE))
+	if (pPadX->GetPress(CInput::CODE::ACCELE, m_nIndex - 1))
 	{
 		//加速させる
 		m_fMoveSpeed += ADD_MOVE_SPEED;
@@ -312,7 +316,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
 	}
-	else if (pInput->GetPress(CInput::CODE::REVERSE))
+	else if (pPadX->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
 		//加速させる
 		m_fMoveSpeed -= ADD_MOVE_SPEED;
@@ -471,11 +475,14 @@ void CPlayer::DecBoundMove(void) {
 	}
 }
 
-
 //=============================================================================
 // 当たり判定
 //=============================================================================
 void CPlayer::Collision(D3DXVECTOR3& pos) {
+
+	//プレイヤーとの当たり判定
+	CollisionPlayer();
+
 	//壁との当たり判定
 	if (CWallCylinder::Collision(&pos, m_lastPos, COLLISION_RADIUS))
 	{
@@ -502,6 +509,76 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 			//状態を通常にする
 			m_state = PLAYER_STATE::NOMAL;
 		}
+	}
+}
+
+//=============================================================================
+//プレイヤーとの当たり判定
+//=============================================================================
+void CPlayer::CollisionPlayer(void)
+{
+	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
+
+	while (pObject != nullptr) {
+		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
+
+		//オブジェクトタイプの確認
+		bool bMatchType = false;
+		if (pObject->GetObjType() & OBJTYPE_PLAYER) bMatchType = true;
+
+		if (!bMatchType || pObject == this)
+		{
+			pObject = pObjNext;	//リストの次のオブジェクトを代入
+			continue;
+		}
+
+		//プレイヤーにキャスト
+		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos = pPlayer->GetPos();
+		D3DXVECTOR3 myPos = GetPos();
+
+		//二点の距離ベクトル
+		D3DXVECTOR2 differVec = D3DXVECTOR2(playerPos.x - myPos.x, playerPos.z - myPos.z);
+		//二点の距離
+		float fDiffer = D3DXVec2Length(&differVec);
+
+		//当たっていたら
+		if (fDiffer <= COLLISION_RADIUS * 2.0f)
+		{
+			//自身と対象のオブジェクトの角度を求める
+			float fRot = atan2((myPos.x - playerPos.x), (myPos.z - playerPos.z));
+
+			//自身の位置を押し出す
+			myPos.x = playerPos.x + (sinf(fRot) * (COLLISION_RADIUS * 2.0f));
+			myPos.z = playerPos.z + (cosf(fRot) * (COLLISION_RADIUS * 2.0f));
+
+			//位置設定
+			SetPos(myPos);
+
+			if (m_state == PLAYER_STATE::BOUND)
+			{
+				return;
+			}
+
+			//状態をBOUNDに設定
+			m_state = PLAYER_STATE::BOUND;
+
+			//バウンド時の初速を設定
+			m_fBoundMoveSpeed = m_fMoveSpeed * 0.7f;
+			//最小値の範囲より小さくなったら
+			if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+			{
+				//移動量を0にする
+				m_fBoundMoveSpeed = 0.0f;
+				m_fMoveSpeed = 0.0f;
+
+				//状態を通常にする
+				m_state = PLAYER_STATE::NOMAL;
+			}
+		}
+		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
 }
 
