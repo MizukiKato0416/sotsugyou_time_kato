@@ -14,7 +14,6 @@
 // マクロ定義
 //=============================================================================
 #define ITEM_PLAYER_COLL_SIZE	(30.0f)		//プレイヤーの当たり判定の大きさ半径
-#define ITEM_SIZE				(50.0f)		//アイテムボックスのサイズ半径
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -85,14 +84,6 @@ void CItem::Uninit(void) {
 //=============================================================================
 void CItem::Update(void) {
 
-	//プレイヤーとの当たり判定
-	if (CollisionPlayer())
-	{
-		//当たっていたら消す
-		Uninit();
-		return;
-	}
-
 	CObjectModel::Update();
 }
 
@@ -106,7 +97,7 @@ void CItem::Draw(void) {
 //=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CItem::CollisionPlayer(void)
+bool CItem::CollisionPlayer(const float fMySize)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
 	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
@@ -138,7 +129,7 @@ bool CItem::CollisionPlayer(void)
 		float fDiffer = D3DXVec2Length(&differVec);
 
 		//当たっていたら
-		if (fDiffer <= ITEM_PLAYER_COLL_SIZE + ITEM_SIZE)
+		if (fDiffer <= ITEM_PLAYER_COLL_SIZE + fMySize)
 		{
 			return true;
 		}

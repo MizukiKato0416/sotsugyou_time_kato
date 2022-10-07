@@ -1,12 +1,13 @@
 //=============================================================================
 //
-// アイテム処理 [item.h]
+// アイテムバナナ処理 [item_banana.h]
 // Author : 加藤瑞葵
 //
 //=============================================================================
-#ifndef _ITEM_H_
-#define _ITEM_H_
+#ifndef _ITEM_BANANA_H_
+#define _ITEM_BANANA_H_
 
+#include "item.h"
 #include "objectModel.h"
 
 //*****************************************************************************
@@ -20,21 +21,20 @@
 //*****************************************************************************
 // アイテムボックスクラス
 //*****************************************************************************
-class CItem : public CObjectModel
+class CItemBanana : public CItem
 {
 public:
-	CItem();	//デフォルトコンストラクタ
-	CItem(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
-	virtual ~CItem();	//デストラクタ
-	static CItem* Create(D3DXVECTOR3 pos);	//生成処理
+	CItemBanana();	//デフォルトコンストラクタ
+	CItemBanana(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
+	virtual ~CItemBanana();	//デストラクタ
+	static CItemBanana* Create(D3DXVECTOR3 pos);	//生成処理
 	virtual HRESULT Init(void);				//初期化処理
 	virtual void Uninit(void);				//終了処理
 	virtual void Update(void);				//更新処理
 	virtual void Draw(void);				//描画処理
 
 private:
-	bool CollisionPlayer(void);	//プレイヤーとの当たり判定
 
 };
 
-#endif // !_ITEM_H_
+#endif // !_ITEM_BANANA_H_

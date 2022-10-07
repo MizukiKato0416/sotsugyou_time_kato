@@ -41,7 +41,9 @@ public:
 	virtual void Draw(void);				//描画処理
 
 private:
-	bool CollisionPlayer(void);	//プレイヤーとの当たり判定
+
+protected:
+	bool CollisionPlayer(const float fMySize);	//プレイヤーとの当たり判定
 
 };
 
