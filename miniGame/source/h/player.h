@@ -59,12 +59,15 @@ public:
 	void SetIndex(const int nIndex) { m_nIndex = nIndex; }
 	//プレイヤー番号取得処理
 	int GetIndex(void) { return m_nIndex; }
+	//プレイヤーの総数取得処理
+	static int GetNum(void) { return m_nPlayerNum; }
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
 	void DecMove(void);	//移動量の減少
 	void DecBoundMove(void);	//バウンド時の移動量の減少
 	void Collision(D3DXVECTOR3& pos);	//当たり判定
+	void CollisionPlayer(void);	//プレイヤーとの当たり判定
 	void StateBound(void);				//バウンド状態の処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標

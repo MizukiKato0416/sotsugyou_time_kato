@@ -122,7 +122,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 
 
 	//ÉVÅ[ÉìÇÃê∂ê¨
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::TITLE);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::GAME);
 
 	return S_OK;
 }

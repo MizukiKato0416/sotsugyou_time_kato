@@ -14,7 +14,10 @@
 // マクロ定義
 //=============================================================================
 #define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
-#define BALLOON_SIZE				(50.0f)		//風船のサイズ
+#define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
+#define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
+#define BALLOON_UP_POS				(50.0f)		//風船の上がる位置
+#define BALLOON_DOWN_POS			(40.0f)		//風船の下がる位置
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -54,7 +57,7 @@ CBalloon::~CBalloon()
 }
 
 //=============================================================================
-// 弾の生成処理
+// 生成処理
 //=============================================================================
 CBalloon* CBalloon::Create(bool bGold, D3DXVECTOR3 pos) {
 	
@@ -80,7 +83,7 @@ CBalloon* CBalloon::Create(bool bGold, D3DXVECTOR3 pos) {
 }
 
 //=============================================================================
-// 弾の初期化処理
+// 初期化処理
 //=============================================================================
 HRESULT CBalloon::Init(void) {
 	
@@ -92,7 +95,7 @@ HRESULT CBalloon::Init(void) {
 }
 
 //=============================================================================
-// 弾の終了処理
+// 終了処理
 //=============================================================================
 void CBalloon::Uninit(void) {
 
@@ -100,7 +103,7 @@ void CBalloon::Uninit(void) {
 }
 
 //=============================================================================
-// 弾の更新処理
+// 更新処理
 //=============================================================================
 void CBalloon::Update(void) {
 	
@@ -110,30 +113,30 @@ void CBalloon::Update(void) {
 	//加速
 	if (m_bUp)
 	{
-		m_move.y += 0.02f;
+		m_move.y += BALLOON_ADD_MOVE;
 
-		if (pos.y > 50.0f)
+		if (pos.y > BALLOON_UP_POS)
 		{
 			m_bUp = false;
 		}
 	}
 	else
 	{
-		m_move.y -= 0.02f;
+		m_move.y -= BALLOON_ADD_MOVE;
 
-		if (pos.y < 40.0f)
+		if (pos.y < BALLOON_DOWN_POS)
 		{
 			m_bUp = true;
 		}
 	}
 
-	if (m_move.y > 0.2f)
+	if (m_move.y > BALLOON_MAX_MOVE)
 	{
-		m_move.y = 0.2f;
+		m_move.y = BALLOON_MAX_MOVE;
 	}
-	else if (m_move.y < -0.2f)
+	else if (m_move.y < -BALLOON_MAX_MOVE)
 	{
-		m_move.y = -0.2f;
+		m_move.y = -BALLOON_MAX_MOVE;
 	}
 
 	//移動量を設定
@@ -153,7 +156,7 @@ void CBalloon::Update(void) {
 }
 
 //=============================================================================
-// 弾の描画処理
+// 描画処理
 //=============================================================================
 void CBalloon::Draw(void) {
 	CObjectModel::Draw();
