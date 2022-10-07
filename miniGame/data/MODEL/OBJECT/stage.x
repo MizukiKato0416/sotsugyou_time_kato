@@ -301,7 +301,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/audience.png";
+    "data/TEXTURE/MESH/audience.png";
    }
   }
   Material {
@@ -310,7 +310,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/audience.png";
+    "data/TEXTURE/MESH/audience.png";
    }
   }
   Material {
@@ -319,7 +319,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/audience.png";
+    "data/TEXTURE/MESH/audience.png";
    }
   }
   Material {
@@ -328,7 +328,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/audience.png";
+    "data/TEXTURE/MESH/audience.png";
    }
   }
   Material {
@@ -337,7 +337,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/doorway.png";
+    "data/TEXTURE/MESH/doorway.png";
    }
   }
   Material {
@@ -352,7 +352,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/doorway.png";
+    "data/TEXTURE/MESH/doorway.png";
    }
   }
   Material {
@@ -361,7 +361,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/doorway.png";
+    "data/TEXTURE/MESH/doorway.png";
    }
   }
   Material {
@@ -370,7 +370,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/STAGE/doorway.png";
+    "data/TEXTURE/MESH/doorway.png";
    }
   }
   Material {
