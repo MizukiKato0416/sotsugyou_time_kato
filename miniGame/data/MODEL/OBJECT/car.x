@@ -2421,7 +2421,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/tire.png";
+    "data/TEXTURE/MESH/tire.png";
    }
   }
   Material {
@@ -2430,7 +2430,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/tire.png";
+    "data/TEXTURE/MESH/tire.png";
    }
   }
   Material {
@@ -2439,7 +2439,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/tire.png";
+    "data/TEXTURE/MESH/tire.png";
    }
   }
   Material {
@@ -2448,7 +2448,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/tire.png";
+    "data/TEXTURE/MESH/tire.png";
    }
   }
   Material {
@@ -2457,7 +2457,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/black00.png";
+    "data/TEXTURE/MESH/black00.png";
    }
   }
   Material {
@@ -2466,7 +2466,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/wheel.png";
+    "data/TEXTURE/MESH/wheel.png";
    }
   }
   Material {
@@ -2475,7 +2475,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/wheel.png";
+    "data/TEXTURE/MESH/wheel.png";
    }
   }
   Material {
@@ -2484,7 +2484,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/wheel.png";
+    "data/TEXTURE/MESH/wheel.png";
    }
   }
   Material {
@@ -2493,7 +2493,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/PLAYER/wheel.png";
+    "data/TEXTURE/MESH/wheel.png";
    }
   }
   Material {
