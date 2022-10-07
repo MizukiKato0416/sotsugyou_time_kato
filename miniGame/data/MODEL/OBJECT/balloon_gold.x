@@ -352,7 +352,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/BALLOON/kinn.jpg";
+    "data/TEXTURE/MESH/kinn.jpg";
    }
   }
   Material {
@@ -361,7 +361,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/BALLOON/BalloonGold3_01.png";
+    "data/TEXTURE/MESH/BalloonGold3_01.png";
    }
   }
  }
