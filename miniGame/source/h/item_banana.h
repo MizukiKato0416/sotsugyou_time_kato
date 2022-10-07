@@ -23,14 +23,6 @@
 class CItem : public CObjectModel
 {
 public:
-	//アイテムの種類
-	enum class ITEM_TYPE
-	{
-		NONE = 0,
-		BAANA,
-		MAX
-	};
-
 	CItem();	//デフォルトコンストラクタ
 	CItem(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
 	virtual ~CItem();	//デストラクタ
