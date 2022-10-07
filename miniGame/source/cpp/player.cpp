@@ -28,18 +28,27 @@
 #define TEXT_FILE_NAME_LOAD_MOTION "data/MOTION/motion_player.txt"
 
 //--------------------------------
+//プレイヤーカラー
+//--------------------------------
+#define PLAYER_COLOR_1P		(D3DXCOLOR(0.1f, 0.3f, 1.0f, 1.0f))	//1pのカラー
+#define PLAYER_COLOR_2P		(D3DXCOLOR(1.0f, 0.2f, 0.0f, 1.0f))	//2pのカラー
+#define PLAYER_COLOR_3P		(D3DXCOLOR(0.1f, 0.7f, 0.0f, 1.0f))	//3pのカラー
+#define PLAYER_COLOR_4P		(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f))	//4pのカラー
+
+//--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED (0.15f)	//加速
-#define DEC_MOVE_SPEED (0.93f)	//減速
-#define MAX_MOVE_SPEED (9.0f)	//最大速度
-#define MOVE_ZERO_RANGE (0.08f)	//移動量を0にする範囲
-#define ROTATE_SPEED (0.025f)	//回転速度
+#define ADD_MOVE_SPEED			(0.15f)		//加速
+#define DEC_MOVE_SPEED			(0.93f)		//減速
+#define MAX_MOVE_SPEED			(9.0f)		//最大速度
+#define MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
+#define ROTATE_SPEED			(0.025f)	//回転速度
+#define PLAYER_BOUND_SPEED		(0.9f)		//バウンドする量
 
 //--------------------------------
 //当たり判定
 //--------------------------------
-#define COLLISION_RADIUS (30.0f)		//当たり判定の半径	壁とかに使う
+#define COLLISION_RADIUS (40.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
 //ゲームオーバー時
@@ -115,6 +124,36 @@ HRESULT CPlayer::Init(void) {
 	CManager* pManager = CManager::GetManager();
 
 	CObjectModel::Init();
+
+	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//プレイヤー番号によって色を変える
+	switch (m_nIndex)
+	{
+	case 1:
+		col = PLAYER_COLOR_1P;
+		break;
+	case 2:
+		col = PLAYER_COLOR_2P;
+		break;
+	case 3:
+		col = PLAYER_COLOR_3P;
+		break;
+	case 4:
+		col = PLAYER_COLOR_4P;
+		break;
+	default:
+		break;
+	}
+
+	//モデル取得
+	CModel *pModel = GetPtrModel();
+	if (pModel!= nullptr)
+	{
+		//指定したマテリアルの色を設定
+		pModel->SetMaterialDiffuse(col,0);
+	}
+
 
 	return S_OK;
 }
@@ -498,7 +537,7 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 		m_state = PLAYER_STATE::BOUND;
 
 		//バウンド時の初速を設定
-		m_fBoundMoveSpeed = m_fMoveSpeed * 0.7f;
+		m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
 		//最小値の範囲より小さくなったら
 		if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
 		{
@@ -566,7 +605,7 @@ void CPlayer::CollisionPlayer(void)
 			m_state = PLAYER_STATE::BOUND;
 
 			//バウンド時の初速を設定
-			m_fBoundMoveSpeed = m_fMoveSpeed * 0.7f;
+			m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
 			//最小値の範囲より小さくなったら
 			if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
 			{

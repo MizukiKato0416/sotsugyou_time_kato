@@ -47,6 +47,7 @@ private:
 	void UpdateGameOver(void);		//ゲームオーバー時の更新
 	void CreateMenuEndGame(void);	//ゲーム終了時の選択メニューの生成
 	void CreateBalloon(void);		//風船生成処理
+	void CreateItemBox(void);		//アイテムボックス生成処理
 
 	bool m_bGameOver;	//ゲームオーバー
 
@@ -58,6 +59,7 @@ private:
 	CSelectMenu2D* m_pMenuGameEnd;	//ゲーム終了時の選択メニュー
 
 	int m_nCntGameClear;	//ゲームクリア後のカウント
+	int m_nCreateItemBoxCounter;	//アイテムボックスの生成カウンター
 };
 
 #endif // !_GAME_SCENE_H_
