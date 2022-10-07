@@ -81,8 +81,11 @@ void CItemBanana::Uninit(void) {
 //=============================================================================
 void CItemBanana::Update(void) {
 
+	//プレイヤーのポインタ
+	CPlayer *pPlayer = nullptr;
+
 	//プレイヤーとの当たり判定
-	if (CollisionPlayer(ITEM_BANANA_SIZE))
+	if (CollisionPlayer(pPlayer, ITEM_BANANA_SIZE))
 	{
 		//当たっていたら消す
 		Uninit();

@@ -8,6 +8,7 @@
 #define _PLAYER_H_
 
 #include "objectModel.h"
+#include "item.h"
 
 
 //*****************************************************************************
@@ -62,6 +63,10 @@ public:
 	int GetIndex(void) { return m_nIndex; }
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nPlayerNum; }
+	//アイテムタイプ取得処理
+	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
+	//アイテムタイプ設定処理
+	void SetItemType(CItem::ITEM_TYPE itemType) { m_itemType = itemType; }
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
@@ -75,12 +80,13 @@ private:
 	D3DXVECTOR3 m_destRot;	//目標の角度
 	D3DXVECTOR3 m_move;		//移動量
 
-	static int m_nPlayerNum;	//プレイヤーの数
-	int m_nIndex;				//プレイヤー番号
-	int m_nCntGameover;			//ゲームオーバー後のカウント
-	float m_fMoveSpeed;			//移動する速さ
-	float m_fBoundMoveSpeed;	//跳ね返るときの速さ
-	PLAYER_STATE m_state;		//状態
+	static int m_nPlayerNum;		//プレイヤーの数
+	int m_nIndex;					//プレイヤー番号
+	int m_nCntGameover;				//ゲームオーバー後のカウント
+	float m_fMoveSpeed;				//移動する速さ
+	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
+	PLAYER_STATE m_state;			//状態
+	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
 };
 
 #endif // !_PLAYER_H_

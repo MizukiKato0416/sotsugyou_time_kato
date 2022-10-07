@@ -97,7 +97,7 @@ void CItem::Draw(void) {
 //=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CItem::CollisionPlayer(const float fMySize)
+bool CItem::CollisionPlayer(CPlayer *&pReturnPlayer, const float fMySize)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
 	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
@@ -131,6 +131,7 @@ bool CItem::CollisionPlayer(const float fMySize)
 		//当たっていたら
 		if (fDiffer <= ITEM_PLAYER_COLL_SIZE + fMySize)
 		{
+			pReturnPlayer = pPlayer;
 			return true;
 		}
 

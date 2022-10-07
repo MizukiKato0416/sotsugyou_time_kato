@@ -85,6 +85,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = PLAYER_STATE::NONE;
+	m_itemType = CItem::ITEM_TYPE::NONE;
 }
 
 //=============================================================================
@@ -119,6 +120,7 @@ HRESULT CPlayer::Init(void) {
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = PLAYER_STATE::NOMAL;
+	m_itemType = CItem::ITEM_TYPE::NONE;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -153,7 +155,6 @@ HRESULT CPlayer::Init(void) {
 		//指定したマテリアルの色を設定
 		pModel->SetMaterialDiffuse(col,0);
 	}
-
 
 	return S_OK;
 }

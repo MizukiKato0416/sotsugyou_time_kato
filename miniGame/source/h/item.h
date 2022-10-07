@@ -16,6 +16,7 @@
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
+class CPlayer;
 
 //*****************************************************************************
 // アイテムボックスクラス
@@ -27,7 +28,7 @@ public:
 	enum class ITEM_TYPE
 	{
 		NONE = 0,
-		BAANA,
+		BANANA,
 		MAX
 	};
 
@@ -43,7 +44,8 @@ public:
 private:
 
 protected:
-	bool CollisionPlayer(const float fMySize);	//プレイヤーとの当たり判定
+	//第一引数プレイヤーのポインタが帰る
+	bool CollisionPlayer(CPlayer *&pReturnPlayer, const float fMySize);	//プレイヤーとの当たり判定
 
 };
 

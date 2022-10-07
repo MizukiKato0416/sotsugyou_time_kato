@@ -169,6 +169,13 @@ bool CItemBox::CollisionPlayer(void)
 		//当たっていたら
 		if (fDiffer <= ITEMBOX_PLAYER_COLL_SIZE + ITEMBOX_SIZE)
 		{
+			//何もアイテムを持っていない状態なら
+			if (pPlayer->GetItemType() == CItem::ITEM_TYPE::NONE)
+			{
+				//バナナを取得させる
+				pPlayer->SetItemType(CItem::ITEM_TYPE::BANANA);
+			}
+
 			return true;
 		}
 
