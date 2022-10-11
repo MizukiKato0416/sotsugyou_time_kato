@@ -14,8 +14,8 @@
 // マクロ定義
 //=============================================================================
 #define ITEM_BANANA_SIZE				(30.0f)		//バナナのサイズ半径
-#define ITEM_BANANA_ROTATE_SPEED		(0.05f)		//バナナの回転の速さ
-#define ITEM_BANANA_MOVE_SPEED			(5.0f)		//バナナの移動の速さ
+#define ITEM_BANANA_ROTATE_SPEED		(0.08f)		//バナナの回転の速さ
+#define ITEM_BANANA_MOVE_SPEED			(20.0f)		//バナナの移動の速さ
 
 //=============================================================================
 // 静的メンバ変数宣言
