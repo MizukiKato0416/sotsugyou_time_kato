@@ -34,7 +34,7 @@
 #define FOG_COLOR								 (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 #define GAME_STAGE_SIZE							 (700.0f)								//すてーじの大きさ
-#define GAME_BALLOON_CREATE_POS_Y				 (45.0f)								//風船の位置Y
+#define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
 #define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
@@ -543,32 +543,34 @@ void CGameScene::CreateItemBox(void){
 	//アイテムが生成されていないなら
 	if (CItemBox::GetNum() == 0)
 	{
-		m_nCreateItemBoxCounter++;
-		//一定の値になったら
-		if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
+		
+	}
+
+	m_nCreateItemBoxCounter++;
+	//一定の値になったら
+	if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
+	{
+		m_nCreateItemBoxCounter = 0;
+
+		//生成位置
+		D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
+		//移動量
+		D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
+
+		//2分の1の確率で
+		if (rand() % 2 == 0)
 		{
-			m_nCreateItemBoxCounter = 0;
-
-			//生成位置
-			D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
-			//移動量
-			D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
-
-			//2分の1の確率で
-			if (rand() % 2 == 0)
-			{
-				//逆に生成
-				itemBoxPos.x *= -1.0f;
-				//逆に移動させる
-				itemBoxMove.x *= -1.0f;
-			}
-
-			//ランダムでZ位置を決める
-			itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
-
-			//アイテムボックスを生成する
-			CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
-			pItemBox->SetMove(itemBoxMove);
+			//逆に生成
+			itemBoxPos.x *= -1.0f;
+			//逆に移動させる
+			itemBoxMove.x *= -1.0f;
 		}
+
+		//ランダムでZ位置を決める
+		itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
+
+		//アイテムボックスを生成する
+		CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
+		pItemBox->SetMove(itemBoxMove);
 	}
 }
