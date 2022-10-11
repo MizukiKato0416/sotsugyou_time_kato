@@ -72,7 +72,17 @@ public:
 		TEXT_SCORE,
 		TEXT_HISCORE,
 
-		//モデルのテクスチャ
+		//メッシュのテクスチャ
+		MESH_FLOOR_DESERT,		//砂漠
+		MESH_STAGE_AUDIENCE,	//観衆
+		MESH_BALLOON_GOLD,		//風船金
+		MESH_BALLOON_PINK,		//風船ピンク
+		MESH_CAR_BLACK,			//黒
+		MESH_STAGE_DOOR_WAY,	//ゲート
+		MESH_ITEM_BOX,			//アイテム
+		MESH_GOLD,				//金
+		MESH_CAR_TIRE,			//タイヤ
+		MESH_CAR_WHEEL,			//ホイール
 
 		//エフェクトのテクスチャ
 		EFFECT_EXPLOSION,		// 爆発エフェクト

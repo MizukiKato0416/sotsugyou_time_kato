@@ -18,6 +18,7 @@
 #include "particleEffect.h"
 #include "object2D.h"
 #include "billboard.h"
+#include "item_banana.h"
 
 //=============================================================================
 // マクロ定義
@@ -28,56 +29,67 @@
 #define TEXT_FILE_NAME_LOAD_MOTION "data/MOTION/motion_player.txt"
 
 //--------------------------------
+//プレイヤーカラー
+//--------------------------------
+#define PLAYER_COLOR_1P		(D3DXCOLOR(0.1f, 0.3f, 1.0f, 1.0f))	//1pのカラー
+#define PLAYER_COLOR_2P		(D3DXCOLOR(1.0f, 0.2f, 0.0f, 1.0f))	//2pのカラー
+#define PLAYER_COLOR_3P		(D3DXCOLOR(0.1f, 0.7f, 0.0f, 1.0f))	//3pのカラー
+#define PLAYER_COLOR_4P		(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f))	//4pのカラー
+
+//--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED (1.0f)	//加速
-#define DEC_MOVE_SPEED (0.3f)	//減速
-#define MAX_MOVE_SPEED (13.0f)	//歩行速度
-#define ROTATE_SPEED (0.1f)		//回転速度
+#define ADD_MOVE_SPEED			(0.15f)		//加速
+#define DEC_MOVE_SPEED			(0.93f)		//減速
+#define MAX_MOVE_SPEED			(9.0f)		//最大速度
+#define MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
+#define ROTATE_SPEED			(0.025f)	//回転速度
+#define PLAYER_BOUND_SPEED		(0.9f)		//バウンドする量
 
 //--------------------------------
 //当たり判定
 //--------------------------------
-#define COLLISION_RADIUS (70.0f)		//当たり判定の半径	壁とかに使う
-#define NUM_COLLISION (10)				//当たり判定の数
+#define COLLISION_RADIUS (40.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
-//ゲームオーバー時
+//回転
 //--------------------------------
-#define FINISH_TIME_CHANGE_COLOR_GAMEOVER (120)	//ゲームオーバー後の色変更にかかる時間
-#define START_CHANGE_COLOR_CLEAR (180)	//ゲームオーバー後の透明色へ変更する開始時間
-#define FINISH_TIME_CLEAR (60)			//ゲームオーバー後の透明色への変更にかかる時間
+#define PLAYER_SPIN_COUNT	(180)								//スピンする時間
+#define PLAYER_SPIN_SPEED	(0.08f)								//スピンする速さ
 
 //--------------------------------
 //その他
 //--------------------------------
-#define COLOR_OUTLINE (D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
+#define COLOR_OUTLINE		(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CPlayer::m_nNumParts = 0;
-CObjectMotion::PARTS_INFO* CPlayer::m_pPartsInfoArray = nullptr;
-CObjectMotion::MOTION_INFO CPlayer::m_aMotionInfo[(int)CPlayer::MOTION_TYPE::ENUM_MAX] = {};
+int CPlayer::m_nPlayerNum = 0;
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CPlayer::CPlayer() : CObjectMotion(m_pPartsInfoArray, m_nNumParts, &m_aMotionInfo[0], (int)MOTION_TYPE::ENUM_MAX, false)
+CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 {
+	//総数を加算
+	m_nPlayerNum++;
+
 	SetObjType(OBJTYPE_PLAYER);	//オブジェクトタイプの設定
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);	//更新順の設定
 	SetDrawPriority(DRAW_PRIORITY::CHARA);	//描画順の設定
-
-	SetColorOutlineAll(COLOR_OUTLINE);	//輪郭の色の設定
-	SetDiffuseModelAll(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 0);	//モデルの色の設定
-	SetColorGlowAll(D3DXCOLOR(1.0f, 0.8f, 0.4f, 1.0f));	//輪郭の発光色の設定
 
 	m_lastPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
+	m_nIndex = m_nPlayerNum;
 	m_nCntGameover = 0;
+	m_fMoveSpeed = 0.0f;
+	m_fBoundMoveSpeed = 0.0f;
+	m_state = PLAYER_STATE::NONE;
+	m_itemType = CItem::ITEM_TYPE::NONE;
+	m_nSpinCounter = 0;
 }
 
 //=============================================================================
@@ -85,7 +97,7 @@ CPlayer::CPlayer() : CObjectMotion(m_pPartsInfoArray, m_nNumParts, &m_aMotionInf
 //=============================================================================
 CPlayer::~CPlayer()
 {
-
+	
 }
 
 //=============================================================================
@@ -96,44 +108,10 @@ CPlayer* CPlayer::Create(D3DXVECTOR3 pos) {
 	pPlayer = new CPlayer();
 	if (pPlayer == nullptr) return nullptr;
 
-	pPlayer->CObjectMotion::SetPos(pos);
+	pPlayer->SetPos(pos);
 	pPlayer->Init();
 
 	return pPlayer;
-}
-
-//=============================================================================
-// モーション情報をロード
-//=============================================================================
-void CPlayer::LoadMotionInfo(void) {
-	//ロードする前に動的確保したメモリをdeleteする
-	UnloadMotionInfo();
-
-	LoadMotionText(TEXT_FILE_NAME_LOAD_MOTION, m_pPartsInfoArray, m_nNumParts, &m_aMotionInfo[0], (int)MOTION_TYPE::ENUM_MAX);
-}
-
-//=============================================================================
-// モーション情報をアンロード
-//=============================================================================
-void CPlayer::UnloadMotionInfo(void) {
-	m_nNumParts = 0;
-
-	//パーツ情報の解放
-	if (m_pPartsInfoArray != nullptr) {
-		delete[] m_pPartsInfoArray;
-		m_pPartsInfoArray = nullptr;
-	}
-	//モーション情報の解放
-	for (int nCntMotionInfo = 0; nCntMotionInfo < (int)MOTION_TYPE::ENUM_MAX; nCntMotionInfo++)
-	{
-		for (int nCntKeyInfo = 0; nCntKeyInfo < MAX_KEY_MOTION; nCntKeyInfo++)
-		{
-			if (m_aMotionInfo[nCntMotionInfo].aKeyInfo[nCntKeyInfo].pKeyArray != nullptr) {
-				delete[] m_aMotionInfo[nCntMotionInfo].aKeyInfo[nCntKeyInfo].pKeyArray;
-				m_aMotionInfo[nCntMotionInfo].aKeyInfo[nCntKeyInfo].pKeyArray = nullptr;
-			}
-		}
-	}
 }
 
 //=============================================================================
@@ -141,14 +119,47 @@ void CPlayer::UnloadMotionInfo(void) {
 //=============================================================================
 HRESULT CPlayer::Init(void) {
 	//プレイヤーの初期設定
-	CObjectMotion::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
+	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
 	m_destRot.y =  D3DX_PI;	//奥向き
+	m_fMoveSpeed = 0.0f;
+	m_fBoundMoveSpeed = 0.0f;
+	m_state = PLAYER_STATE::NOMAL;
+	m_itemType = CItem::ITEM_TYPE::NONE;
+	m_nSpinCounter = 0;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 
-	CObjectMotion::Init();
-	SetMotion((int)MOTION_TYPE::NEUTRAL);	//モーションの初期設定
+	CObjectModel::Init();
+
+	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//プレイヤー番号によって色を変える
+	switch (m_nIndex)
+	{
+	case 1:
+		col = PLAYER_COLOR_1P;
+		break;
+	case 2:
+		col = PLAYER_COLOR_2P;
+		break;
+	case 3:
+		col = PLAYER_COLOR_3P;
+		break;
+	case 4:
+		col = PLAYER_COLOR_4P;
+		break;
+	default:
+		break;
+	}
+
+	//モデル取得
+	CModel *pModel = GetPtrModel();
+	if (pModel!= nullptr)
+	{
+		//指定したマテリアルの色を設定
+		pModel->SetMaterialDiffuse(col,0);
+	}
 
 	return S_OK;
 }
@@ -157,8 +168,10 @@ HRESULT CPlayer::Init(void) {
 // プレイヤーの終了処理
 //=============================================================================
 void CPlayer::Uninit(void) {
+	m_nPlayerNum--;
+
 	//終了処理
-	CObjectMotion::Uninit();
+	CObjectModel::Uninit();
 }
 
 //=============================================================================
@@ -183,41 +196,12 @@ void CPlayer::Update(void) {
 		//ゲームシーンの取得
 		pGame = pManager->GetGameScene();
 	}
+	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
+
 
 	//位置情報のポインタの取得
-	D3DXVECTOR3* pPosPlayer = GetPtrPos();
+	D3DXVECTOR3 posPlayer = GetPos();
 
-	
-	//----------------------------
-	//ゲームオーバー時
-	//----------------------------
-	if (pGame != nullptr) {
-		//ゲームオーバー時
-		if (pGame->GetGameOver()) {
-			SetMotion((int)MOTION_TYPE::NEUTRAL);	//ニュートラルから動かないように
-			//モーションのアップデート
-			CObjectMotion::Update();	//モデルの更新が必要なため
-
-			//すべて終わったら更新なし
-			if (m_nCntGameover >= START_CHANGE_COLOR_CLEAR + FINISH_TIME_CLEAR) return;
-
-			//カウンターの加算
-			m_nCntGameover++;
-
-			//透明の変更を開始
-			if (m_nCntGameover == START_CHANGE_COLOR_CLEAR) {
-				//プレイヤーの色を透明にする
-				StartChangeDiffuseAll(0, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), FINISH_TIME_CLEAR);
-			}
-			return;
-		}
-	}
-	//ゲーム以外
-	else {
-		//モーションのアップデート
-		CObjectMotion::Update();
-		return;
-	}
 
 	//----------------------------
 	//カメラの設定
@@ -227,99 +211,83 @@ void CPlayer::Update(void) {
 		fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
 	}
 
-	//----------------------------
-	//移動
-	//----------------------------
+	//状態分け
+	switch (m_state)
+	{
+	case CPlayer::PLAYER_STATE::NOMAL:
+		//----------------------------
+		//移動
+		//----------------------------
 
-	//移動と回転
-	if (pInput != nullptr && GetMotionCategory() != MOTION_CATEGORY::ATTACK) {
-		Move(pInput, fRotCameraY);
-	}
+		//移動と回転
+		if (pInput != nullptr) {
+			Move(pInput, fRotCameraY);
+		}
 
-	//減速
-	DecMove();
+		break;
+	case CPlayer::PLAYER_STATE::BOUND:
+		//バウンド状態処理
+		StateBound();
+		break;
+	case CPlayer::PLAYER_STATE::SPIN:
+		//スピン処理
+		StateSpin();
+		break;
+	default:
+		break;
+	}	
 
 	//----------------------------
 	//移動の反映
 	//----------------------------
 	//最後の位置座標の保存
-	m_lastPos = *pPosPlayer;
+	m_lastPos = posPlayer;
 	//移動
-	*pPosPlayer += m_move;
+	posPlayer += m_move;
+	//位置設定
+	SetPos(posPlayer);
+
+
+
+	//L1ボタンを押したら
+	if (pPadX->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))
+	{
+		//アイテム使用
+		UseItem();
+	}
 
 	//----------------------------
 	//当たり判定
 	//----------------------------
-	Collision(*pPosPlayer);
+	Collision(posPlayer);
 
 	//----------------------------
-	//モーションの更新
+	//モデルの更新
 	//----------------------------
-	CObjectMotion::Update();
+	CObjectModel::Update();
 }
 
 //=============================================================================
 // プレイヤーの描画処理
 //=============================================================================
 void CPlayer::Draw(void) {
-	if (m_nCntGameover >= START_CHANGE_COLOR_CLEAR + FINISH_TIME_CLEAR) return;	//フェード完了時は描画しない 影や透過の影響をなくすため
-
-	CObjectMotion::Draw();
-}
-
-
-//=============================================================================
-// プレイヤーのゲームクリア時の処理
-//=============================================================================
-void CPlayer::GameClear(void) {
-	//ニュートラルモーションの設定
-	if(GetMotionCategory() != MOTION_CATEGORY::ATTACK) SetMotion((int)MOTION_TYPE::NEUTRAL);
+	
+	CObjectModel::Draw();
 }
 
 //=============================================================================
 // プレイヤーのゲームオーバー時の処理
 //=============================================================================
 void CPlayer::GameOver(void) {
-	//プレイヤーの色を黒くする
-	StartChangeDiffuseAll(0, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), FINISH_TIME_CHANGE_COLOR_GAMEOVER);
-
-	//パーティクルエフェクトの生成
-	CParticleEffect::PARTICLE_INFO particleInfo;	//パーティクル情報
-	particleInfo.addMove = D3DXVECTOR3(0.0f, 0.08f, 0.0f); particleInfo.colEnd = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f); particleInfo.colStart = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-	particleInfo.fAddSize = -1.0f; particleInfo.fSizeStart = 60.0f; particleInfo.fSpeedMove = 3.5f; particleInfo.nLife = 60;
-	//エフェクトを生成
-	CParticleEffect::Create(particleInfo, GetPos(), FINISH_TIME_CHANGE_COLOR_GAMEOVER, 1, 0.45f * D3DX_PI, true);
+	
+	
 }
 
 //=============================================================================
 // プレイヤーの当たり判定の情報の取得
 //=============================================================================
 void CPlayer::GetCollisionInfo(int nIdxColParts, int* const pNumCol, D3DXVECTOR3** const ppPosColArray, float* const pRadiusCol) {
-	//当たり判定の数を設定
-	if (pNumCol != nullptr) *pNumCol = NUM_COLLISION;
-	//当たり判定の半径を設定
-	if (pRadiusCol != nullptr) *pRadiusCol = COLLISION_RADIUS;
-	//当たり判定の位置の配列のポインタがnullの場合終了
-	if (ppPosColArray == nullptr) {
-		return;
-	}
-	//posのポインタが空ではない場合終了
-	if (*ppPosColArray != nullptr) {
-		return;
-	}
-
-	//posの変数を当たり判定の数分配列で確保
-	*ppPosColArray = new D3DXVECTOR3[NUM_COLLISION];
-
-	D3DXVECTOR3 posOffset = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//モデルのposからのオフセット
-	int nIdxModel = 0;	//胴体
-
-	//当たり判定の位置の取得
-	for (int nCntCol = 0; nCntCol < NUM_COLLISION; nCntCol++)
-	{
-		GetPosCollision(*ppPosColArray + nCntCol, posOffset, nIdxModel);
-		posOffset += D3DXVECTOR3(0.0f, 5.0f, 0.0f);	//オフセットを加算
-	}
+	
 }
 
 //=============================================================================
@@ -352,11 +320,13 @@ float CPlayer::GetRadius(void) {
 void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	if (pInput == nullptr) return;
 
+	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
+
 	//上下左右キー入力状態の取得
-	const bool bPressUp = pInput->GetPress(CInput::CODE::MOVE_UP);
-	const bool bPressDown = pInput->GetPress(CInput::CODE::MOVE_DOWN);
-	const bool bPressLeft = pInput->GetPress(CInput::CODE::MOVE_LEFT);
-	const bool bPressRight = pInput->GetPress(CInput::CODE::MOVE_RIGHT);
+	const bool bPressUp = pPadX->GetPress(CInput::CODE::MOVE_UP, m_nIndex - 1);
+	const bool bPressDown = pPadX->GetPress(CInput::CODE::MOVE_DOWN, m_nIndex - 1);
+	const bool bPressLeft = pPadX->GetPress(CInput::CODE::MOVE_LEFT, m_nIndex - 1);
+	const bool bPressRight = pPadX->GetPress(CInput::CODE::MOVE_RIGHT, m_nIndex - 1);
 
 	bool bDiagonalMove = (bPressUp != bPressDown) && (bPressLeft != bPressRight);	//斜め移動
 	bool bRotateUp, bRotateDown, bRotateLeft, bRotateRight;	//回転する方向
@@ -365,58 +335,60 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	D3DXVECTOR3 moveAddSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//追加する移動量
 	D3DXVECTOR3 moveMaxSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//移動量の最大
 
-	//------------------------
-	//移動速度の最大を計算
-	//------------------------
-	float fMaxSpeed;	//移動速度の最大
-	//地上
-	//if (pInput->GetPress(CInput::CODE::DASH)) {
-	//	fMaxSpeed = MAX_MOVE_SPEED_DASH;
-	//}
-	//else {
-	fMaxSpeed = MAX_MOVE_SPEED;
-	//}
-
-
+	
 	//------------------------
 	//移動量の決定
 	//------------------------
+
 	//前後移動のどちらかのみ押されている場合
 	if (bPressUp != bPressDown) {
 		if (bPressUp) {
-			moveAddSpeed.z = ADD_MOVE_SPEED;
-			moveMaxSpeed.z = fMaxSpeed;
 			bRotateUp = true;
 		}
 		else if (bPressDown) {
-			moveAddSpeed.z = -ADD_MOVE_SPEED;
-			moveMaxSpeed.z = -fMaxSpeed;
 			bRotateDown = true;
-		}
-		//斜め移動
-		if (bDiagonalMove) {
-			moveAddSpeed.z *= 0.7f;
-			moveMaxSpeed.z *= 0.7f;
 		}
 	}
 	//左右移動のどちらかのみ押されている場合
 	if (bPressLeft != bPressRight) {
 		if (bPressLeft) {
-			moveAddSpeed.x = -ADD_MOVE_SPEED;
-			moveMaxSpeed.x = -fMaxSpeed;
 			bRotateLeft = true;
 		}
 		else if (bPressRight) {
-			moveAddSpeed.x = ADD_MOVE_SPEED;
-			moveMaxSpeed.x = fMaxSpeed;
 			bRotateRight = true;
 		}
-		//斜め移動
-		if (bDiagonalMove) {
-			moveAddSpeed.x *= 0.7f;
-			moveMaxSpeed.x *= 0.7f;
+	}
+
+
+	//Aボタンを押している間向いている方向に進む
+	if (pPadX->GetPress(CInput::CODE::ACCELE, m_nIndex - 1))
+	{
+		//加速させる
+		m_fMoveSpeed += ADD_MOVE_SPEED;
+		//最大値よりも大きくなったら
+		if (m_fMoveSpeed > MAX_MOVE_SPEED)
+		{
+			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
 	}
+	else if (pPadX->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
+	{//Bボタンを押したら
+		//加速させる
+		m_fMoveSpeed -= ADD_MOVE_SPEED;
+		//最大値よりも大きくなったら
+		if (m_fMoveSpeed < -MAX_MOVE_SPEED)
+		{
+			m_fMoveSpeed = -MAX_MOVE_SPEED;
+		}
+	}
+	else
+	{
+		//減速
+		DecMove();
+	}
+
+	m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
+	m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 
 	//------------------------
 	//カメラの角度に合わせて移動量の最大量を設定
@@ -427,44 +399,6 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 	moveMax.z += moveMaxSpeed.x * -sinf(fRotCameraY);
 	moveMax.z += moveMaxSpeed.z * cosf(fRotCameraY);
-
-	//------------------------
-	//加速
-	//------------------------
-	//X方向の移動量が最大量未満の場合
-	if ((moveMax.x > 0 && m_move.x < moveMax.x) || (moveMax.x < 0 && m_move.x > moveMax.x)) {
-		//カメラの角度に合わせて移動量を追加
-		m_move.x += moveAddSpeed.x * sinf(fRotCameraY + 0.5f * D3DX_PI);
-		m_move.x += moveAddSpeed.z * sinf(fRotCameraY);
-		//加速時に移動量が最大を超えた場合
-		if (moveMax.x > 0) {
-			if (m_move.x > moveMax.x) {
-				m_move.x = moveMax.x;
-			}
-		}
-		else if (moveMax.x < 0) {
-			if (m_move.x < moveMax.x) {
-				m_move.x = moveMax.x;
-			}
-		}
-	}
-	//Z方向の移動量が最大量未満の場合
-	if ((moveMax.z > 0 && m_move.z < moveMax.z) || (moveMax.z < 0 && m_move.z > moveMax.z)) {
-		//カメラの角度に合わせて移動量を追加
-		m_move.z += moveAddSpeed.x * -sinf(fRotCameraY);
-		m_move.z += moveAddSpeed.z * cosf(fRotCameraY);
-		//加速時に移動量が最大を超えた場合
-		if (moveMax.z > 0) {
-			if (m_move.z > moveMax.z) {
-				m_move.z = moveMax.z;
-			}
-		}
-		else if (moveMax.z < 0) {
-			if (m_move.z < moveMax.z) {
-				m_move.z = moveMax.z;
-			}
-		}
-	}
 
 	//------------------------
 	//回転方向の決定
@@ -516,7 +450,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 			m_destRot.y = D3DX_PI * 2 + m_destRot.y;
 		}
 
-		D3DXVECTOR3 rotPlayer = CObjectMotion::GetRot();//角度の取得
+		D3DXVECTOR3 rotPlayer = CObjectModel::GetRot();//角度の取得
 		float fdeltaRot;	//角度の差分
 		//現在の角度と目標の角度の差分の計算
 		if (m_destRot.y >= 0.0f) {
@@ -547,7 +481,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		}
 
 		//回転の反映
-		rotPlayer.y += fdeltaRot * ROTATE_SPEED;
+		rotPlayer.y += fdeltaRot * ROTATE_SPEED * (m_fMoveSpeed / 8.0f);
 
 		//パイ超過時
 		if (rotPlayer.y > D3DX_PI) {
@@ -558,24 +492,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		}
 
 		//角度の設定
-		CObjectMotion::SetRot(rotPlayer);
-	}
-
-	//------------------------
-	//地上にいる時のモーション切り替え
-	//------------------------
-	//移動キーを押している時のモーション切り替え
-	if (bInputMove) {
-		if (GetMotionCategory() != MOTION_CATEGORY::MOVE) {
-			SetMotion((int)MOTION_TYPE::WALK);
-		}
-	}
-	//移動キーを押していない場合のモーション切り替え
-	if (!bInputMove) {
-		//モーションの設定
-		if (GetMotionCategory() == MOTION_CATEGORY::MOVE) {
-			SetMotion((int)MOTION_TYPE::NEUTRAL);
-		}
+		CObjectModel::SetRot(rotPlayer);
 	}
 }
 
@@ -583,35 +500,33 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 // 移動量の減少
 //=============================================================================
 void CPlayer::DecMove(void) {
-	D3DXVECTOR2 vecMoveDec = D3DXVECTOR2(-m_move.x, -m_move.z);	//移動量ベクトルの逆
-	D3DXVec2Normalize(&vecMoveDec, &vecMoveDec);	//正規化
-	vecMoveDec *= DEC_MOVE_SPEED;	//移動量の加算
-
 	//減速
-	m_move.x += vecMoveDec.x;
-	m_move.z += vecMoveDec.y;
+	m_fMoveSpeed *= DEC_MOVE_SPEED;
 
-	//X方向の移動量の停止
-	if (vecMoveDec.x > 0.0f) {
-		if (m_move.x > 0.0f) {
-			m_move.x = 0.0f;
-		}
+	//既定の値の誤差になったら
+	if (m_fMoveSpeed < MOVE_ZERO_RANGE && m_fMoveSpeed > -MOVE_ZERO_RANGE)
+	{
+		//移動量を0にする
+		m_fMoveSpeed = 0.0f;
 	}
-	else if (vecMoveDec.x < 0.0f) {
-		if (m_move.x < 0.0f) {
-			m_move.x = 0.0f;
-		}
-	}
-	//Z方向の移動量の停止
-	if (vecMoveDec.y > 0.0f) {
-		if (m_move.z > 0.0f) {
-			m_move.z = 0.0f;
-		}
-	}
-	else if (vecMoveDec.x < 0.0f) {
-		if (m_move.z < 0.0f) {
-			m_move.z = 0.0f;
-		}
+}
+
+//=============================================================================
+// 移動量の減少
+//=============================================================================
+void CPlayer::DecBoundMove(void) {
+	//減速
+	m_fBoundMoveSpeed *= DEC_MOVE_SPEED;
+
+	//既定の値の誤差になったら
+	if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+	{
+		//移動量を0にする
+		m_fBoundMoveSpeed = 0.0f;
+		m_fMoveSpeed = 0.0f;
+
+		//状態を通常にする
+		m_state = PLAYER_STATE::NOMAL;
 	}
 }
 
@@ -619,31 +534,171 @@ void CPlayer::DecMove(void) {
 // 当たり判定
 //=============================================================================
 void CPlayer::Collision(D3DXVECTOR3& pos) {
-	//壁との当たり判定
-	CWallCylinder::Collision(&pos, m_lastPos, COLLISION_RADIUS);
 
+	//プレイヤーとの当たり判定
+	CollisionPlayer();
+
+	//壁との当たり判定
+	if (CWallCylinder::Collision(&pos, m_lastPos, COLLISION_RADIUS))
+	{
+		//位置設定
+		SetPos(pos);
+
+		if (m_state == PLAYER_STATE::BOUND)
+		{
+			return;
+		}
+
+		//状態をBOUNDに設定
+		m_state = PLAYER_STATE::BOUND;
+
+		//バウンド時の初速を設定
+		m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
+		//最小値の範囲より小さくなったら
+		if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+		{
+			//移動量を0にする
+			m_fBoundMoveSpeed = 0.0f;
+			m_fMoveSpeed = 0.0f;
+
+			//状態を通常にする
+			m_state = PLAYER_STATE::NOMAL;
+		}
+	}
 }
 
 //=============================================================================
-// モーションの区分の取得
+//プレイヤーとの当たり判定
 //=============================================================================
-CPlayer::MOTION_CATEGORY CPlayer::GetMotionCategory(void) {
-	switch ((MOTION_TYPE)GetMotionType())
+void CPlayer::CollisionPlayer(void)
+{
+	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
+
+	while (pObject != nullptr) {
+		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
+
+		//オブジェクトタイプの確認
+		bool bMatchType = false;
+		if (pObject->GetObjType() & OBJTYPE_PLAYER) bMatchType = true;
+
+		if (!bMatchType || pObject == this)
+		{
+			pObject = pObjNext;	//リストの次のオブジェクトを代入
+			continue;
+		}
+
+		//プレイヤーにキャスト
+		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos = pPlayer->GetPos();
+		D3DXVECTOR3 myPos = GetPos();
+
+		//二点の距離ベクトル
+		D3DXVECTOR2 differVec = D3DXVECTOR2(playerPos.x - myPos.x, playerPos.z - myPos.z);
+		//二点の距離
+		float fDiffer = D3DXVec2Length(&differVec);
+
+		//当たっていたら
+		if (fDiffer <= COLLISION_RADIUS * 2.0f)
+		{
+			//自身と対象のオブジェクトの角度を求める
+			float fRot = atan2((myPos.x - playerPos.x), (myPos.z - playerPos.z));
+
+			//自身の位置を押し出す
+			myPos.x = playerPos.x + (sinf(fRot) * (COLLISION_RADIUS * 2.0f));
+			myPos.z = playerPos.z + (cosf(fRot) * (COLLISION_RADIUS * 2.0f));
+
+			//位置設定
+			SetPos(myPos);
+
+			if (m_state == PLAYER_STATE::BOUND)
+			{
+				return;
+			}
+
+			//状態をBOUNDに設定
+			m_state = PLAYER_STATE::BOUND;
+
+			//バウンド時の初速を設定
+			m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
+			//最小値の範囲より小さくなったら
+			if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+			{
+				//移動量を0にする
+				m_fBoundMoveSpeed = 0.0f;
+				m_fMoveSpeed = 0.0f;
+
+				//状態を通常にする
+				m_state = PLAYER_STATE::NOMAL;
+			}
+		}
+		pObject = pObjNext;	//リストの次のオブジェクトを代入
+	}
+}
+
+//=============================================================================
+//バウンド状態の処理
+//=============================================================================
+void CPlayer::StateBound(void)
+{
+	//向いている方向と逆の方向に跳ね返す
+	m_move.x = sinf(GetRot().y) * m_fBoundMoveSpeed;
+	m_move.z = cosf(GetRot().y) * m_fBoundMoveSpeed;
+
+	//移動量の減少
+	DecBoundMove();
+}
+
+//=============================================================================
+//スピン状態の処理
+//=============================================================================
+void CPlayer::StateSpin(void)
+{
+	//カウンター加算
+	m_nSpinCounter++;
+	//既定の値より大きくなったら
+	if (m_nSpinCounter > PLAYER_SPIN_COUNT)
 	{
-		//移動
-	case MOTION_TYPE::WALK:
-		return MOTION_CATEGORY::MOVE;
+		m_nSpinCounter = 0;
+		//状態を通常にする
+		m_state = PLAYER_STATE::NOMAL;
+	}
+	else
+	{
+		//向き取得
+		D3DXVECTOR3 rot = GetRot();
+
+		//回転させる
+		rot.y += PLAYER_SPIN_SPEED;
+
+		//向き設定
+		SetRot(rot);
+	}
+}
+
+//=============================================================================
+//アイテム使用処理
+//=============================================================================
+void CPlayer::UseItem(void)
+{
+	//アイテムを持っている状態なら
+	if (m_itemType == CItem::ITEM_TYPE::NONE || m_state == PLAYER_STATE::SPIN)
+	{
+		return;
+	}
+
+	//位置取得
+	D3DXVECTOR3 pos = GetPos();
+
+	//アイテムを生成する
+	switch (m_itemType)
+	{
+	case CItem::ITEM_TYPE::BANANA:
+		//バナナの生成
+		CItemBanana::Create(pos, this);
 		break;
-
-		//攻撃
-	case MOTION_TYPE::PUNCH:
-	case MOTION_TYPE::STAMP:
-		return MOTION_CATEGORY::ATTACK;
-			break;
-
-		//その他
 	default:
-		return MOTION_CATEGORY::NONE;
 		break;
 	}
 }

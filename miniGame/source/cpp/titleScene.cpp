@@ -98,7 +98,6 @@ void CTitleScene::Init(void) {
 	//------------------------------
 	//モーション情報のロード
 	//------------------------------
-	CPlayer::LoadMotionInfo();
 
 	//------------------------------
 	//3Dモデルの生成
@@ -155,7 +154,6 @@ void CTitleScene::Init(void) {
 //=============================================================================
 void CTitleScene::Uninit(void) {
 	//モーション情報のアンロード
-	CPlayer::UnloadMotionInfo();
 
 	//シーンの終了処理
 	CScene::Uninit();

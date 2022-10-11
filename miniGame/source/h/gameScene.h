@@ -8,10 +8,12 @@
 #define _GAME_SCENE_H_
 
 #include "scene.h"
+#include "main.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+#define BALLOON_MAX_NUM		(3)		//風船を一度に出す量
 
 //*****************************************************************************
 // 前方宣言
@@ -44,6 +46,8 @@ private:
 	void UpdateGame(void);			//ゲーム中の更新
 	void UpdateGameOver(void);		//ゲームオーバー時の更新
 	void CreateMenuEndGame(void);	//ゲーム終了時の選択メニューの生成
+	void CreateBalloon(void);		//風船生成処理
+	void CreateItemBox(void);		//アイテムボックス生成処理
 
 	bool m_bGameOver;	//ゲームオーバー
 
@@ -55,6 +59,7 @@ private:
 	CSelectMenu2D* m_pMenuGameEnd;	//ゲーム終了時の選択メニュー
 
 	int m_nCntGameClear;	//ゲームクリア後のカウント
+	int m_nCreateItemBoxCounter;	//アイテムボックスの生成カウンター
 };
 
 #endif // !_GAME_SCENE_H_

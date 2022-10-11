@@ -24,27 +24,16 @@ class CModel
 public:
 	//モデルの種類
 	enum class MODELTYPE{
-		//地形
-		TERRAIN = 0,	//地形
-
 		//オブジェクト
-		OBJ_APPLE,
-		OBJ_APPLE_TREE,
-		OBJ_APPLE_BULLET,
-		OBJ_MENUAPPLE,
-		OBJ_TREE,
-		OBJ_SCAPEGOAT,
-		OBJ_SEEDLING,
-		OBJ_FOUNTAIN,
-		OBJ_ROCK,
+		OBJ_CAR = 0,		//車
+		OBJ_STADIUM,		//スタジアム
+		OBJ_BALLOON_PINK,	//風船(ピンク)
+		OBJ_BALLOON_GOLD,	//風船(ゴールド)
+		OBJ_ITEM_BOX,		//アイテムボックス
+		OBJ_BANANA,			//バナナ
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
-
-		//敵
-		eNo_0, eNo_1, eNo_2, eNo_3, eNo_4,	//通常敵
-		eHu_0, eHu_1, eHu_2, eHu_3, eHu_4, eHu_5, eHu_6, eHu_7, eHu_8, eHu_9,	//通常敵
-		eSo_0, eSo_1, eSo_2, eSo_3, eSo_4,	//魔術師敵
 
 		ENUM_MAX	//最大数
 	};

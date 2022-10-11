@@ -10,6 +10,11 @@
 #include "main.h"
 
 //*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define MAX_PAD_CONNECT_NUM	(4)		//マウスパッド接続数
+
+//*****************************************************************************
 // インプットクラス
 //*****************************************************************************
 class CInput
@@ -38,10 +43,9 @@ public:
 		SELECT_LFET,
 		SELECT_RIGHT,
 		//アクション
-		ATTACK_1,
-		ATTACK_2,
-		DASH,
-		INTERACT,
+		ACCELE,			//アクセル
+		REVERSE,		//バック
+		USE_ITEM,		//アイテムの使用
 
 #ifdef _DEBUG
 		//デバッグ用
@@ -116,23 +120,23 @@ public:
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 	bool GetConnectGamepad(void);	//ゲームパッド接続の判定
-	bool GetButtonPress(int nButton);		//ボタンのプレス判定
-	bool GetButtonTrigger(int nButton);		//ボタンのトリガー判定
-	bool GetTriggerPress(TRIGGER_TYPE type);		//トリガーのプレス判定
-	bool GetTriggerTrigger(TRIGGER_TYPE type);	//トリガーのトリガー判定
-	bool GetLeftStick(STICK_TYPE type);			//左スティックの判定
-	bool GetRightStick(STICK_TYPE type);			//右スティックの判定
-	bool GetPress(CODE code);	//入力判定（プレス）
-	bool GetTrigger(CODE code);	//入力判定（トリガー）
-	void SetVibration(int nLeftValue, int nRightValue, int nCntVibration);	//バイブレーションの設定
+	bool GetButtonPress(int nButton, int nCntPad);		//ボタンのプレス判定
+	bool GetButtonTrigger(int nButton, int nCntPad);		//ボタンのトリガー判定
+	bool GetTriggerPress(TRIGGER_TYPE type, int nCntPad);		//トリガーのプレス判定
+	bool GetTriggerTrigger(TRIGGER_TYPE type, int nCntPad);	//トリガーのトリガー判定
+	bool GetLeftStick(STICK_TYPE type, int nCntPad);			//左スティックの判定
+	bool GetRightStick(STICK_TYPE type, int nCntPad);			//右スティックの判定
+	bool GetPress(CODE code, int nCntPad);	//入力判定（プレス）
+	bool GetTrigger(CODE code, int nCntPad);	//入力判定（トリガー）
+	void SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nCntPad);	//バイブレーションの設定
 
 private:
-	XINPUT_STATE m_state;		//コントローラーの状態
-	XINPUT_STATE m_stateLast;	//コントローラーのひとつ前の状態（トリガー判定用）
-	XINPUT_VIBRATION m_vibration;	//バイブレーション
-	bool m_bConnect;		//接続確認
-	int m_nCntVibration;	//バイブレーション用のカウンター
-	bool m_bVibration;		//バイブレーションが実行中かどうか
+	XINPUT_STATE m_state[MAX_PAD_CONNECT_NUM];		//コントローラーの状態
+	XINPUT_STATE m_stateLast[MAX_PAD_CONNECT_NUM];	//コントローラーのひとつ前の状態（トリガー判定用）
+	XINPUT_VIBRATION m_vibration[MAX_PAD_CONNECT_NUM];	//バイブレーション
+	bool m_bConnect[MAX_PAD_CONNECT_NUM];		//接続確認
+	int m_nCntVibration[MAX_PAD_CONNECT_NUM];	//バイブレーション用のカウンター
+	bool m_bVibration[MAX_PAD_CONNECT_NUM];		//バイブレーションが実行中かどうか
 };
 
 #endif // !_INPUT_H_
