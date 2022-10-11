@@ -54,8 +54,8 @@
 //--------------------------------
 //回転
 //--------------------------------
-#define PLAYER_SPIN_COUNT	(180)								//スピンする時間
-#define PLAYER_SPIN_SPEED	(0.08f)								//スピンする速さ
+#define PLAYER_SPIN_COUNT	(120)								//スピンする時間
+#define PLAYER_SPIN_SPEED	(0.3f)								//スピンする速さ
 
 //--------------------------------
 //その他
