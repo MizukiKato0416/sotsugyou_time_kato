@@ -195,7 +195,7 @@ void CTitleScene::Update(void) {
 
 
 	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT) && m_pSelectMenuTitle != nullptr) {
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && m_pSelectMenuTitle != nullptr) {
 		//フェード中だった場合
 		if (pFade->GetFade()) {
 			//フェードをスキップ

@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\cpp\balloon.cpp" />
     <ClCompile Include="source\cpp\billboard.cpp" />
     <ClCompile Include="source\cpp\bullet.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
@@ -163,6 +164,9 @@
     <ClCompile Include="source\cpp\gauge2D.cpp" />
     <ClCompile Include="source\cpp\gauge3D.cpp" />
     <ClCompile Include="source\cpp\input.cpp" />
+    <ClCompile Include="source\cpp\item.cpp" />
+    <ClCompile Include="source\cpp\itemBox.cpp" />
+    <ClCompile Include="source\cpp\item_banana.cpp" />
     <ClCompile Include="source\cpp\main.cpp" />
     <ClCompile Include="source\cpp\manager.cpp" />
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
@@ -195,6 +199,7 @@
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\h\balloon.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\bullet.h" />
     <ClInclude Include="source\h\camera.h" />
@@ -207,6 +212,9 @@
     <ClInclude Include="source\h\gauge2D.h" />
     <ClInclude Include="source\h\gauge3D.h" />
     <ClInclude Include="source\h\input.h" />
+    <ClInclude Include="source\h\item.h" />
+    <ClInclude Include="source\h\itemBox.h" />
+    <ClInclude Include="source\h\item_banana.h" />
     <ClInclude Include="source\h\main.h" />
     <ClInclude Include="source\h\manager.h" />
     <ClInclude Include="source\h\meshcylinder.h" />

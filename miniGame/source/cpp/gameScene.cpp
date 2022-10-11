@@ -96,15 +96,15 @@ void CGameScene::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 4000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLightV = D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);	//ライトの視点の位置
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
 	//ライトのビューマトリックスを生成
-	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectLightMatrixView(mtxLightView);
@@ -224,12 +224,12 @@ void CGameScene::Update(void) {
 	if (pInput == nullptr) return;
 
 	//ゲームオーバー
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_1)) {
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_1, 0)) {
 		GameOver();
 	}
 
 	//タイム追加
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_3)) {
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_3, 0)) {
 		if (m_pTimer != nullptr) m_pTimer->AddScore(50);
 	}
 
@@ -279,7 +279,7 @@ void CGameScene::UpdateGame(void) {
 	if (pFade == nullptr) return;
 
 	//ポーズ
-	if (pInput->GetTrigger(CInput::CODE::PAUSE) && !pFade->GetFade()) {
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
 		//ポーズメニュークラスを生成
 		m_pMenuPause = CPauseMenu::Create();
 		//サウンドを再生
@@ -306,7 +306,7 @@ void CGameScene::UpdateGameOver(void) {
 	if (pSound == nullptr) return;
 
 	//選択時
-	if (pInput->GetTrigger(CInput::CODE::SELECT)) {
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
 		switch (m_pMenuGameEnd->GetIdxCurSelect())
 		{
 		case 0:

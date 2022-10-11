@@ -59,14 +59,6 @@ void CInput::Uninit(void) {
 	}
 }
 
-//更新処理
-void CInput::Update(void){}
-//入力判定（プレス）
-bool CInput::GetPress(CODE code) { return false; }
-//入力判定（トリガー）
-bool CInput::GetTrigger(CODE code) { return false; }
-
-
 //******************************************************************************************************************
 // キーボードクラス
 //******************************************************************************************************************
@@ -158,7 +150,7 @@ bool CInputKeyboard::GetTrigger(int nKey) {
 //=============================================================================
 // キーボードの入力判定（プレス）
 //=============================================================================
-bool CInputKeyboard::GetPress(CODE code) {
+bool CInputKeyboard::GetPress(CODE code, int nIdx) {
 	switch (code)
 	{
 		//選択
@@ -237,6 +229,12 @@ bool CInputKeyboard::GetPress(CODE code) {
 			return true;
 		}
 		break;
+		//バック
+	case CODE::REVERSE:
+		if (GetPress(DIK_LSHIFT)) {
+			return true;
+		}
+		break;
 	}
 	return false;
 }
@@ -244,7 +242,7 @@ bool CInputKeyboard::GetPress(CODE code) {
 //=============================================================================
 // キーボードの入力判定（トリガー）
 //=============================================================================
-bool CInputKeyboard::GetTrigger(CODE code) {
+bool CInputKeyboard::GetTrigger(CODE code, int nIdx) {
 	switch (code)
 	{
 		//選択
@@ -392,12 +390,12 @@ bool CInputKeyboard::GetTrigger(CODE code) {
 //=============================================================================
 CInputGamepadX::CInputGamepadX()
 {
-	ZeroMemory(&m_state, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_stateLast, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_vibration, sizeof(XINPUT_VIBRATION));
-	memset(m_bConnect, false, sizeof(m_bConnect[MAX_PAD_CONNECT_NUM]));
-	memset(m_nCntVibration, NULL, sizeof(m_nCntVibration[MAX_PAD_CONNECT_NUM]));
-	memset(m_bVibration, false, sizeof(m_bVibration[MAX_PAD_CONNECT_NUM]));
+	ZeroMemory(&m_aState, sizeof(XINPUT_STATE));
+	ZeroMemory(&m_aStateLast, sizeof(XINPUT_STATE));
+	ZeroMemory(&m_aVibrationState, sizeof(XINPUT_VIBRATION));
+	memset(m_abConnect, false, sizeof(m_abConnect[MAX_PAD_CONNECT_NUM]));
+	memset(m_aCntVibration, NULL, sizeof(m_aCntVibration[MAX_PAD_CONNECT_NUM]));
+	memset(m_abVibration, false, sizeof(m_abVibration[MAX_PAD_CONNECT_NUM]));
 }
 
 //=============================================================================
@@ -411,12 +409,12 @@ CInputGamepadX::~CInputGamepadX()
 // ゲームパッドの初期化処理(Xinput)
 //=============================================================================
 void CInputGamepadX::Init(void) {
-	ZeroMemory(&m_state, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_stateLast, sizeof(XINPUT_STATE));
-	ZeroMemory(&m_vibration, sizeof(XINPUT_VIBRATION));
-	memset(m_bConnect, false, sizeof(m_bConnect[MAX_PAD_CONNECT_NUM]));
-	memset(m_nCntVibration, NULL, sizeof(m_nCntVibration[MAX_PAD_CONNECT_NUM]));
-	memset(m_bVibration, false, sizeof(m_bVibration[MAX_PAD_CONNECT_NUM]));
+	ZeroMemory(&m_aState, sizeof(XINPUT_STATE));
+	ZeroMemory(&m_aStateLast, sizeof(XINPUT_STATE));
+	ZeroMemory(&m_aVibrationState, sizeof(XINPUT_VIBRATION));
+	memset(m_abConnect, false, sizeof(m_abConnect[MAX_PAD_CONNECT_NUM]));
+	memset(m_aCntVibration, NULL, sizeof(m_aCntVibration[MAX_PAD_CONNECT_NUM]));
+	memset(m_abVibration, false, sizeof(m_abVibration[MAX_PAD_CONNECT_NUM]));
 }
 
 //=============================================================================
@@ -431,47 +429,47 @@ void CInputGamepadX::Uninit(void) {
 //=============================================================================
 void CInputGamepadX::Update(void) {
 
-	for (int nCntPad = 0; nCntPad < MAX_PAD_CONNECT_NUM; nCntPad++)
+	for (int nIdx = 0; nIdx < MAX_PAD_CONNECT_NUM; nIdx++)
 	{
 		XINPUT_STATE state;
 
-		DWORD dwResult = XInputGetState(nCntPad, &state);
+		DWORD dwResult = XInputGetState(nIdx, &state);
 
-		m_stateLast[nCntPad] = m_state[nCntPad];
-		m_state[nCntPad] = state;
+		m_aStateLast[nIdx] = m_aState[nIdx];
+		m_aState[nIdx] = state;
 
 		if (dwResult == ERROR_SUCCESS)
 		{
 			// Controller is connected
-			m_bConnect[nCntPad] = true;
+			m_abConnect[nIdx] = true;
 		}
 		else
 		{
 			// Controller is not connected
-			m_bConnect[nCntPad] = false;
+			m_abConnect[nIdx] = false;
 		}
 
-		if (XInputGetState(nCntPad, &state) == ERROR_SUCCESS)
+		if (XInputGetState(nIdx, &state) == ERROR_SUCCESS)
 		{
 			// Zero value if thumbsticks are within the dead zone
-			if ((m_state[nCntPad].Gamepad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-				m_state[nCntPad].Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
-				(m_state[nCntPad].Gamepad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-					m_state[nCntPad].Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
+			if ((m_aState[nIdx].Gamepad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+				m_aState[nIdx].Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
+				(m_aState[nIdx].Gamepad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+					m_aState[nIdx].Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
 			{
-				m_state[nCntPad].Gamepad.sThumbLX = 0;
-				m_state[nCntPad].Gamepad.sThumbLY = 0;
+				m_aState[nIdx].Gamepad.sThumbLX = 0;
+				m_aState[nIdx].Gamepad.sThumbLY = 0;
 			}
 		}
 
 		//バイブレーションのカウント
-		if (m_nCntVibration[nCntPad] > 0) {
-			m_nCntVibration[nCntPad]--;
+		if (m_aCntVibration[nIdx] > 0) {
+			m_aCntVibration[nIdx]--;
 		}
 		//バイブレーションの終了
-		if (m_nCntVibration[nCntPad] <= 0 && m_bVibration[nCntPad]) {
-			SetVibration(0, 0, 0, nCntPad);
-			m_bVibration[nCntPad] = false;
+		if (m_aCntVibration[nIdx] <= 0 && m_abVibration[nIdx]) {
+			SetVibration(0, 0, 0, nIdx);
+			m_abVibration[nIdx] = false;
 		}
 	}
 }
@@ -479,38 +477,38 @@ void CInputGamepadX::Update(void) {
 //=============================================================================
 // ゲームパッド接続の判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetConnectGamepad(void) {
-	return m_bConnect;
+bool CInputGamepadX::GetConnectGamepad(int nIdx) {
+	return m_abConnect[nIdx];
 }
 
 //=============================================================================
 // ゲームパッドのボタンのプレス判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetButtonPress(int nButton, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
-	return (m_state[nCntPad].Gamepad.wButtons & nButton) ? true : false;
+bool CInputGamepadX::GetButtonPress(int nButton, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
+	return (m_aState[nIdx].Gamepad.wButtons & nButton) ? true : false;
 }
 
 //=============================================================================
 // ゲームパッドのボタンのトリガー判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetButtonTrigger(int nButton, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
-	return !(m_stateLast[nCntPad].Gamepad.wButtons & nButton) && (m_state[nCntPad].Gamepad.wButtons & nButton);
+bool CInputGamepadX::GetButtonTrigger(int nButton, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
+	return !(m_aStateLast[nIdx].Gamepad.wButtons & nButton) && (m_aState[nIdx].Gamepad.wButtons & nButton);
 }
 
 //=============================================================================
 // ゲームパッドのトリガーのプレス判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetTriggerPress(TRIGGER_TYPE type, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
+bool CInputGamepadX::GetTriggerPress(TRIGGER_TYPE type, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
 	switch (type)
 	{
 	case TRIGGER_TYPE::RIGHT:
-		return m_state[nCntPad].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+		return m_aState[nIdx].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
 		break;
 	case TRIGGER_TYPE::LEFT:
-		return m_state[nCntPad].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+		return m_aState[nIdx].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
 		break;
 	default:
 		return false;
@@ -521,15 +519,15 @@ bool CInputGamepadX::GetTriggerPress(TRIGGER_TYPE type, int nCntPad) {
 //=============================================================================
 // ゲームパッドのトリガーのトリガー判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetTriggerTrigger(TRIGGER_TYPE type, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
+bool CInputGamepadX::GetTriggerTrigger(TRIGGER_TYPE type, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
 	switch (type)
 	{
 	case TRIGGER_TYPE::RIGHT:
-		return !(m_stateLast[nCntPad].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) && (m_state[nCntPad].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
+		return !(m_aStateLast[nIdx].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) && (m_aState[nIdx].Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
 		break;
 	case TRIGGER_TYPE::LEFT:
-		return !(m_stateLast[nCntPad].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) && (m_state[nCntPad].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
+		return !(m_aStateLast[nIdx].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) && (m_aState[nIdx].Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD);
 		break;
 	default:
 		return false;
@@ -540,22 +538,22 @@ bool CInputGamepadX::GetTriggerTrigger(TRIGGER_TYPE type, int nCntPad) {
 //=============================================================================
 // ゲームパッドの左スティックの判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetLeftStick(STICK_TYPE type, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
+bool CInputGamepadX::GetLeftStick(STICK_TYPE type, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
 
 	switch (type)
 	{
 	case STICK_TYPE::MOVE_UP:
-		return m_state[nCntPad].Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 		break;
 	case STICK_TYPE::MOVE_DOWN:
-		return m_state[nCntPad].Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 		break;
 	case STICK_TYPE::MOVE_LEFT:
-		return m_state[nCntPad].Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 		break; 
 	case STICK_TYPE::MOVE_RIGHT:
-		return m_state[nCntPad].Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 		break;
 
 	default:
@@ -567,21 +565,21 @@ bool CInputGamepadX::GetLeftStick(STICK_TYPE type, int nCntPad) {
 //=============================================================================
 // ゲームパッドの左スティックの判定(Xinput)
 //=============================================================================
-bool CInputGamepadX::GetRightStick(STICK_TYPE type, int nCntPad) {
-	if (!m_bConnect[nCntPad]) return false;	//接続されていない場合falseを返す
+bool CInputGamepadX::GetRightStick(STICK_TYPE type, int nIdx) {
+	if (!m_abConnect[nIdx]) return false;	//接続されていない場合falseを返す
 	switch ((STICK_TYPE)type)
 	{
 	case STICK_TYPE::MOVE_UP:
-		return m_state[nCntPad].Gamepad.sThumbRY > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbRY > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 		break;
 	case STICK_TYPE::MOVE_DOWN:
-		return m_state[nCntPad].Gamepad.sThumbRY < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbRY < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 		break;
 	case STICK_TYPE::MOVE_LEFT:
-		return m_state[nCntPad].Gamepad.sThumbRX < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbRX < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 		break;
 	case STICK_TYPE::MOVE_RIGHT:
-		return m_state[nCntPad].Gamepad.sThumbRX > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+		return m_aState[nIdx].Gamepad.sThumbRX > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 		break;
 
 	default:
@@ -593,77 +591,77 @@ bool CInputGamepadX::GetRightStick(STICK_TYPE type, int nCntPad) {
 //=============================================================================
 // ゲームパッドの入力判定（プレス）
 //=============================================================================
-bool CInputGamepadX::GetPress(CODE code, int nCntPad) {
+bool CInputGamepadX::GetPress(CODE code, int nIdx) {
 	switch (code)
 	{
 		//選択
 	case CODE::SELECT:
-		if (GetButtonPress(XINPUT_GAMEPAD_START, nCntPad)) {
+		if (GetButtonPress(XINPUT_GAMEPAD_START, nIdx)) {
 			return true;
 		}
 		break;
 
 		//戻る
 	case CODE::BACK:
-		if (GetButtonPress(XINPUT_GAMEPAD_B, nCntPad) || GetButtonPress(XINPUT_GAMEPAD_BACK, nCntPad)) {
+		if (GetButtonPress(XINPUT_GAMEPAD_B, nIdx) || GetButtonPress(XINPUT_GAMEPAD_BACK, nIdx)) {
 			return true;
 		}
 		break;
 
 		//上下左右
 	case CODE::MOVE_UP:
-		if (GetLeftStick(STICK_TYPE::MOVE_UP, nCntPad)) {
+		if (GetLeftStick(STICK_TYPE::MOVE_UP, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_DOWN:
-		if (GetLeftStick(STICK_TYPE::MOVE_DOWN, nCntPad)) {
+		if (GetLeftStick(STICK_TYPE::MOVE_DOWN, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_LEFT:
-		if (GetLeftStick(STICK_TYPE::MOVE_LEFT, nCntPad)) {
+		if (GetLeftStick(STICK_TYPE::MOVE_LEFT, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_RIGHT:
-		if (GetLeftStick(STICK_TYPE::MOVE_RIGHT, nCntPad)) {
+		if (GetLeftStick(STICK_TYPE::MOVE_RIGHT, nIdx)) {
 			return true;
 		}
 		break;
 
 		//カメラの上下左右
 	case CODE::ROTATE_UP:
-		if (GetRightStick(STICK_TYPE::MOVE_UP, nCntPad)) {
+		if (GetRightStick(STICK_TYPE::MOVE_UP, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::ROTATE_DOWN:
-		if (GetRightStick(STICK_TYPE::MOVE_DOWN, nCntPad)) {
+		if (GetRightStick(STICK_TYPE::MOVE_DOWN, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::ROTATE_LEFT:
-		if (GetRightStick(STICK_TYPE::MOVE_LEFT, nCntPad)) {
+		if (GetRightStick(STICK_TYPE::MOVE_LEFT, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::ROTATE_RIGHT:
-		if (GetRightStick(STICK_TYPE::MOVE_RIGHT, nCntPad)) {
+		if (GetRightStick(STICK_TYPE::MOVE_RIGHT, nIdx)) {
 			return true;
 		}
 		break;
 
 		//アクセル
 	case CODE::ACCELE:
-		if (GetButtonPress(XINPUT_GAMEPAD_A, nCntPad)) {
+		if (GetButtonPress(XINPUT_GAMEPAD_A, nIdx)) {
 			return true;
 		}
 		break;
 
 		//バック
 	case CODE::REVERSE:
-		if (GetButtonPress(XINPUT_GAMEPAD_B, nCntPad)) {
+		if (GetButtonPress(XINPUT_GAMEPAD_B, nIdx)) {
 			return true;
 		}
 		break;
@@ -675,46 +673,46 @@ bool CInputGamepadX::GetPress(CODE code, int nCntPad) {
 //=============================================================================
 // ゲームパッドの入力判定（トリガー）
 //=============================================================================
-bool CInputGamepadX::GetTrigger(CODE code, int nCntPad) {
+bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 	switch (code)
 	{
 		//選択
 	case CODE::SELECT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_A, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_A, nIdx)) {
 			return true;
 		}
 		break;
 		//戻る
 	case CODE::BACK:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_B, nCntPad) || GetButtonTrigger(XINPUT_GAMEPAD_BACK, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_B, nIdx) || GetButtonTrigger(XINPUT_GAMEPAD_BACK, nIdx)) {
 			return true;
 		}
 		break;
 		//ポーズ
 	case CODE::PAUSE:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_START, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_START, nIdx)) {
 			return true;
 		}
 		break;
 
 		//上下左右
 	case CODE::MOVE_UP:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_UP, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_UP, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_DOWN:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_LEFT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_LEFT, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_LEFT, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::MOVE_RIGHT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_RIGHT, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_RIGHT, nIdx)) {
 			return true;
 		}
 		break;
@@ -722,22 +720,22 @@ bool CInputGamepadX::GetTrigger(CODE code, int nCntPad) {
 
 		//選択の上下左右
 	case CODE::SELECT_UP:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_UP, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_UP, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::SELECT_DOWN:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_DOWN, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::SELECT_LFET:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_LEFT, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_LEFT, nIdx)) {
 			return true;
 		}
 		break;
 	case CODE::SELECT_RIGHT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_RIGHT, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_RIGHT, nIdx)) {
 			return true;
 		}
 		break;
@@ -745,7 +743,7 @@ bool CInputGamepadX::GetTrigger(CODE code, int nCntPad) {
 
 		//アイテムの使用
 	case CODE::USE_ITEM:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_L, nCntPad)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_L, nIdx)) {
 			return true;
 		}
 		break;
@@ -757,10 +755,10 @@ bool CInputGamepadX::GetTrigger(CODE code, int nCntPad) {
 //=============================================================================
 // ゲームパッドのバイブレーションの設定(Xinput)
 //=============================================================================
-void CInputGamepadX::SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nCntPad) {
-	m_vibration[nCntPad].wLeftMotorSpeed = nLeftValue; // use any value between 0-65535 here
-	m_vibration[nCntPad].wRightMotorSpeed = nRightValue; // use any value between 0-65535 here
-	XInputSetState(0, &m_vibration[nCntPad]);
-	m_nCntVibration[nCntPad] = nCntVibration;
-	m_bVibration[nCntPad] = true;
+void CInputGamepadX::SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nIdx) {
+	m_aVibrationState[nIdx].wLeftMotorSpeed = nLeftValue; // use any value between 0-65535 here
+	m_aVibrationState[nIdx].wRightMotorSpeed = nRightValue; // use any value between 0-65535 here
+	XInputSetState(0, &m_aVibrationState[nIdx]);
+	m_aCntVibration[nIdx] = nCntVibration;
+	m_abVibration[nIdx] = true;
 }

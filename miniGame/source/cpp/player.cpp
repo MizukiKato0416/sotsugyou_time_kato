@@ -39,10 +39,12 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED (1.0f)	//加速
-#define DEC_MOVE_SPEED (0.3f)	//減速
-#define MAX_MOVE_SPEED (15.0f)	//歩行速度
-#define ROTATE_SPEED (0.1f)		//回転速度
+#define ADD_MOVE_SPEED			(0.15f)		//加速
+#define DEC_MOVE_SPEED			(0.93f)		//減速
+#define MAX_MOVE_SPEED			(9.0f)		//最大速度
+#define MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
+#define ROTATE_SPEED			(0.025f)	//回転速度
+#define PLAYER_BOUND_SPEED		(0.9f)		//バウンドする量
 
 //--------------------------------
 //当たり判定
@@ -194,8 +196,6 @@ void CPlayer::Update(void) {
 		//ゲームシーンの取得
 		pGame = pManager->GetGameScene();
 	}
-	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
-
 
 	//位置情報のポインタの取得
 	D3DXVECTOR3 posPlayer = GetPos();
@@ -248,7 +248,7 @@ void CPlayer::Update(void) {
 
 
 	//L1ボタンを押したら
-	if (pPadX->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))
+	if (pInput->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))
 	{
 		//アイテム使用
 		UseItem();
@@ -318,13 +318,11 @@ float CPlayer::GetRadius(void) {
 void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 	if (pInput == nullptr) return;
 
-	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
-
 	//上下左右キー入力状態の取得
-	const bool bPressUp = pPadX->GetPress(CInput::CODE::MOVE_UP, m_nIndex - 1);
-	const bool bPressDown = pPadX->GetPress(CInput::CODE::MOVE_DOWN, m_nIndex - 1);
-	const bool bPressLeft = pPadX->GetPress(CInput::CODE::MOVE_LEFT, m_nIndex - 1);
-	const bool bPressRight = pPadX->GetPress(CInput::CODE::MOVE_RIGHT, m_nIndex - 1);
+	const bool bPressUp = pInput->GetPress(CInput::CODE::MOVE_UP, m_nIndex - 1);
+	const bool bPressDown = pInput->GetPress(CInput::CODE::MOVE_DOWN, m_nIndex - 1);
+	const bool bPressLeft = pInput->GetPress(CInput::CODE::MOVE_LEFT, m_nIndex - 1);
+	const bool bPressRight = pInput->GetPress(CInput::CODE::MOVE_RIGHT, m_nIndex - 1);
 
 	bool bDiagonalMove = (bPressUp != bPressDown) && (bPressLeft != bPressRight);	//斜め移動
 	bool bRotateUp, bRotateDown, bRotateLeft, bRotateRight;	//回転する方向
@@ -359,7 +357,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 
 	//Aボタンを押している間向いている方向に進む
-	if (pPadX->GetPress(CInput::CODE::ACCELE, m_nIndex - 1))
+	if (pInput->GetPress(CInput::CODE::ACCELE, m_nIndex - 1))
 	{
 		//加速させる
 		m_fMoveSpeed += ADD_MOVE_SPEED;
@@ -369,7 +367,7 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
 	}
-	else if (pPadX->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
+	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
 		//加速させる
 		m_fMoveSpeed -= ADD_MOVE_SPEED;

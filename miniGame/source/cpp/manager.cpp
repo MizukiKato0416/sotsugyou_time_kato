@@ -90,7 +90,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 		//初期化
 		m_pInputGamepadX->Init();
 		//現在の入力デバイスの設定		
-		if (m_pInputGamepadX->GetConnectGamepad()) {	//ゲームパッドが接続されている場合
+		if (m_pInputGamepadX->GetConnectGamepad(0)) {	//ゲームパッドが接続されている場合
 			m_pInputCur = m_pInputGamepadX;	//ゲームパッド操作
 			m_bEnableXInput = true;
 		}
@@ -207,7 +207,7 @@ void CManager::Update(void) {
 	//現在の入力デバイスの設定
 	if (m_pInputGamepadX != nullptr) {
 		//ゲームパッドが接続されている場合
-		if (m_pInputGamepadX->GetConnectGamepad()) {
+		if (m_pInputGamepadX->GetConnectGamepad(0)) {
 			m_pInputCur = m_pInputGamepadX;
 			m_bEnableXInput = true;
 		}
