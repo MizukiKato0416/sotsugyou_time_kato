@@ -169,31 +169,31 @@ void CCamera::Move(void) {
 	float fMoveSpeed = 5.0f;
 	
 
-	if (pInput->GetPress(CInput::CODE::MOVE_UP)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_UP, 0)) {
 		//前移動
 		m_pos.z += fMoveSpeed * cosf(m_rot.y);
 		m_pos.x += fMoveSpeed * sinf(m_rot.y);
 	}
-	if (pInput->GetPress(CInput::CODE::MOVE_DOWN)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_DOWN, 0)) {
 		//後ろ移動
 		m_pos.z -= fMoveSpeed * cosf(m_rot.y);
 		m_pos.x -= fMoveSpeed * sinf(m_rot.y);
 	}
-	if (pInput->GetPress(CInput::CODE::MOVE_LEFT)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_LEFT, 0)) {
 		//左移動
 		m_pos.x -= fMoveSpeed * cosf(m_rot.y);
 		m_pos.z += fMoveSpeed * sinf(m_rot.y);
 	}
-	if (pInput->GetPress(CInput::CODE::MOVE_RIGHT)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_RIGHT, 0)) {
 		//右移動
 		m_pos.x += fMoveSpeed * cosf(m_rot.y);
 		m_pos.z -= fMoveSpeed * sinf(m_rot.y);
 	}
-	if (pInput->GetPress(CInput::CODE::MOVE_RISE)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_RISE, 0)) {
 		//上昇
 		m_pos.y += fMoveSpeed;
 	}
-	if (pInput->GetPress(CInput::CODE::MOVE_FALL)) {
+	if (pInput->GetPress(CInput::CODE::MOVE_FALL, 0)) {
 		//下降
 		m_pos.y -= fMoveSpeed;
 	}
@@ -214,14 +214,14 @@ void CCamera::Rotate(void) {
 	//--------------------
 	//入力処理
 	//--------------------
-	if (pInput->GetPress(CInput::CODE::ROTATE_UP)) {
+	if (pInput->GetPress(CInput::CODE::ROTATE_UP, 0)) {
 		//視点を下げる
 		m_rot.x += CAMERA_ROTATE_SPEED_PITCH * D3DX_PI;
 		if (m_rot.x > MAX_ROTATE_PITCH * D3DX_PI) {
 			m_rot.x = MAX_ROTATE_PITCH * D3DX_PI;
 		}
 	}
-	if (pInput->GetPress(CInput::CODE::ROTATE_DOWN)) {
+	if (pInput->GetPress(CInput::CODE::ROTATE_DOWN, 0)) {
 		//視点を上げる
 		m_rot.x -= CAMERA_ROTATE_SPEED_PITCH * D3DX_PI;
 		if (m_rot.x < MIN_ROTATE_PITCH * D3DX_PI) {
@@ -229,14 +229,14 @@ void CCamera::Rotate(void) {
 		}
 	}
 
-	if (pInput->GetPress(CInput::CODE::ROTATE_LEFT)) {
+	if (pInput->GetPress(CInput::CODE::ROTATE_LEFT, 0)) {
 		//視点を左回転
 		m_rot.y -= CAMERA_ROTATE_SPEED_YAW * D3DX_PI;
 		if (m_rot.y < -D3DX_PI) {
 			m_rot.y = m_rot.y + D3DX_PI * 2;
 		}
 	}
-	if (pInput->GetPress(CInput::CODE::ROTATE_RIGHT)) {
+	if (pInput->GetPress(CInput::CODE::ROTATE_RIGHT, 0)) {
 		//視点を右回転
 		m_rot.y += CAMERA_ROTATE_SPEED_YAW * D3DX_PI;
 		if (m_rot.y > D3DX_PI) {

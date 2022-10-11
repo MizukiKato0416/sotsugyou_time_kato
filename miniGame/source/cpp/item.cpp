@@ -1,10 +1,10 @@
 //=============================================================================
 //
-// 風船処理 [balloon.cpp]
+// アイテム処理 [item.cpp]
 // Author : 加藤瑞葵
 //
 //=============================================================================
-#include "balloon.h"
+#include "item.h"
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
@@ -13,88 +13,62 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
-#define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
-#define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
-#define BALLOON_UP_POS				(50.0f)		//風船の上がる位置
-#define BALLOON_DOWN_POS			(40.0f)		//風船の下がる位置
+#define ITEM_PLAYER_COLL_SIZE	(30.0f)		//プレイヤーの当たり判定の大きさ半径
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CBalloon::m_nNum = 0;
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CBalloon::CBalloon()
+CItem::CItem()
 {
-	m_nNum++;
-
-	m_bGold = false;
-	m_bUp = false;
-	m_move = { 0.0f, 0.0f, 0.0f };
+	m_pPlayer = nullptr;
 }
 
 //=============================================================================
 // オーバーロードされたコンストラクタ
 //=============================================================================
-CBalloon::CBalloon(CModel::MODELTYPE typeModel) : CObjectModel(typeModel, false)
+CItem::CItem(CModel::MODELTYPE typeModel) : CObjectModel(typeModel, false)
 {
-	m_nNum++;
-
-	m_bGold = false;
-	m_bUp = false;
-	m_move = { 0.0f, 0.0f, 0.0f };
+	m_pPlayer = nullptr;
 }
 
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CBalloon::~CBalloon()
+CItem::~CItem()
 {
-	m_nNum--;
+	
 }
 
 //=============================================================================
 // 生成処理
 //=============================================================================
-CBalloon* CBalloon::Create(bool bGold, D3DXVECTOR3 pos) {
+CItem* CItem::Create(D3DXVECTOR3 pos, const CPlayer *pPlayer) {
 	
 	//デフォルトのモデルを設定
-	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_BALLOON_PINK;
+	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_ITEM_BOX;
+
+	CItem* pItem;
+	pItem = new CItem(typeModel);
+	if (pItem == nullptr) return nullptr;
+
+	pItem->SetPos(pos);
 	
-	//金色に設定されていたら
-	if (bGold)
-	{
-		typeModel = CModel::MODELTYPE::OBJ_BALLOON_GOLD;
-	}
+	pItem->Init();
 
-	CBalloon* pBalloon;
-	pBalloon = new CBalloon(typeModel);
-	if (pBalloon == nullptr) return nullptr;
-
-	pBalloon->SetPos(pos);
-	pBalloon->m_bGold = bGold;
-	
-	pBalloon->Init();
-
-	return pBalloon;
+	return pItem;
 }
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CBalloon::Init(void) {
-	
-	m_move = { 0.0f, 0.0f, 0.0f };
-	m_bUp = true;
+HRESULT CItem::Init(void) {
 
-	//CModel *pModel = GetPtrModel();
-	//if (pModel!= nullptr)
-	//{
-	//	pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),0);
-	//}
+	//何もアイテムを持っていない状態にする
+	m_pPlayer->SetItemType(ITEM_TYPE::NONE);
 
 	CObjectModel::Init();
 	return S_OK;
@@ -103,7 +77,7 @@ HRESULT CBalloon::Init(void) {
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CBalloon::Uninit(void) {
+void CItem::Uninit(void) {
 
 	CObjectModel::Uninit();
 }
@@ -111,52 +85,7 @@ void CBalloon::Uninit(void) {
 //=============================================================================
 // 更新処理
 //=============================================================================
-void CBalloon::Update(void) {
-	
-	//位置取得
-	D3DXVECTOR3 pos = GetPos();
-
-	//加速
-	if (m_bUp)
-	{
-		m_move.y += BALLOON_ADD_MOVE;
-
-		if (pos.y > BALLOON_UP_POS)
-		{
-			m_bUp = false;
-		}
-	}
-	else
-	{
-		m_move.y -= BALLOON_ADD_MOVE;
-
-		if (pos.y < BALLOON_DOWN_POS)
-		{
-			m_bUp = true;
-		}
-	}
-
-	if (m_move.y > BALLOON_MAX_MOVE)
-	{
-		m_move.y = BALLOON_MAX_MOVE;
-	}
-	else if (m_move.y < -BALLOON_MAX_MOVE)
-	{
-		m_move.y = -BALLOON_MAX_MOVE;
-	}
-
-	//移動量を設定
-	pos += m_move;
-
-	SetPos(pos);
-
-	//プレイヤーとの当たり判定
-	if (CollisionPlayer())
-	{
-		//当たっていたら消す
-		Uninit();
-		return;
-	}
+void CItem::Update(void) {
 
 	CObjectModel::Update();
 }
@@ -164,14 +93,21 @@ void CBalloon::Update(void) {
 //=============================================================================
 // 描画処理
 //=============================================================================
-void CBalloon::Draw(void) {
+void CItem::Draw(void) {
 	CObjectModel::Draw();
+}
+
+//=============================================================================
+//プレイヤーにヒットしたときの処理
+//=============================================================================
+void CItem::HitPlayer(CPlayer * pPlayer)
+{
 }
 
 //=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CBalloon::CollisionPlayer(void)
+bool CItem::CollisionPlayer(const float fMySize)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
 	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
@@ -179,18 +115,18 @@ bool CBalloon::CollisionPlayer(void)
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
 
+		//プレイヤーにキャスト
+		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+
 		//オブジェクトタイプの確認
 		bool bMatchType = false;
-		if (pObject->GetObjType() & OBJTYPE_PLAYER) bMatchType = true;
+		if ((pObject->GetObjType() & OBJTYPE_PLAYER) && m_pPlayer != pPlayer) bMatchType = true;
 
-		if (!bMatchType)
+		if (!bMatchType || pPlayer == nullptr)
 		{
 			pObject = pObjNext;	//リストの次のオブジェクトを代入
 			continue;
 		}
-
-		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();
@@ -203,8 +139,10 @@ bool CBalloon::CollisionPlayer(void)
 		float fDiffer = D3DXVec2Length(&differVec);
 
 		//当たっていたら
-		if (fDiffer <= BALLOON_PLAYER_COLL_SIZE + BALLOON_SIZE)
+		if (fDiffer <= ITEM_PLAYER_COLL_SIZE + fMySize)
 		{
+			//ヒット時処理
+			HitPlayer(pPlayer);
 			return true;
 		}
 

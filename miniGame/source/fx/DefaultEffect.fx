@@ -153,18 +153,18 @@ VS_OUTPUT RenderSceneVSLight(
 	}
 
 	 //ハーフランバート
-	col += 1.0;
+	col += 1.5;
 	col *= 0.5;
 
 	//スペキュラーの計算
 	float3 vecHarf = normalize(-light + vecView);	//ハーフベクトル
 
 	//色と掛け合わせる
-	Out.Diffuse.xyz = g_matDiffuse.xyz * col + pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
+	Out.Diffuse.xyz = g_matDiffuse.xyz * col;// +pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
 	Out.Diffuse.w = g_matDiffuse.w;
 
 	//輪郭を光らせる
-	Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
+	if(g_colGlow.w) Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
 
 	//テクスチャ座標
 	Out.TexUV = vTexUV;
@@ -268,7 +268,7 @@ PS_OUTPUT RenderScenePSLight3D(VS_OUTPUT In)
 
 		// 算出点がシャドウマップのZ値よりも大きければ影と判断
 		if (ZValue > SM_Z + 0.001f && SM_Z < 1.0) {	//シャドウマップのZ値が1.0だったら影ができないようにする
-			visibility -= 0.2;
+			visibility -= 0.1;
 		}
 	}
 
@@ -343,7 +343,7 @@ PS_OUTPUT RenderScenePSLightTex3D(VS_OUTPUT In)
 
 		// 算出点がシャドウマップのZ値よりも大きければ影と判断
 		if (ZValue > SM_Z + 0.001f && SM_Z < 1.0) {	//シャドウマップのZ値が1.0だったら影ができないようにする
-			visibility -= 0.2;
+			visibility -= 0.1;
 		}
 	}
 

@@ -23,17 +23,28 @@
 #include "wallCylinder.h"
 #include "pauseMenu.h"
 #include "balloon.h"
+#include "itemBox.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define GAME_TIME (300)
-#define TEXT_FILE_NAME_HISCORE "data/TEXT/save_hiscore.txt"
-#define TEXT_FILE_NAME_APPLETYPE "data/TEXT/save_appletype.txt"
-#define FOG_COLOR (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
-#define FOG_COLOR_GAMECLEAR (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
-#define GAME_STAGE_SIZE		 (700.0f)	//すてーじの大きさ
-#define GAME_BALLOON_CREATE_PLAYER_DIFFER		 (50.0f)	//プレイヤーからどれくらい離れた位置に生成するか
+#define TEXT_FILE_NAME_HISCORE					 "data/TEXT/save_hiscore.txt"
+#define TEXT_FILE_NAME_APPLETYPE				 "data/TEXT/save_appletype.txt"
+#define FOG_COLOR								 (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
+#define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
+#define GAME_STAGE_SIZE							 (700.0f)								//すてーじの大きさ
+#define GAME_BALLOON_CREATE_POS_Y				 (45.0f)								//風船の位置Y
+#define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
+#define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
+#define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
+#define GAME_BALLOON_INIT_CREATE_SPACE			 (300.0f)								//風船の初期生成間隔
+#define GAME_PLAYER_INIT_CREATE_SPACE			 (200.0f)								//プレイヤーの初期生成間隔
+#define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
+#define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
+#define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
+#define GAME_ITEM_BOX_CREATE_POS_X				 (1000.0f)								//アイテムボックスの生成位置X
+#define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -50,6 +61,7 @@ CGameScene::CGameScene()
 	m_nGameScore = 0;
 
 	m_nCntGameClear = 0;
+	m_nCreateItemBoxCounter = 0;
 }
 
 //=============================================================================
@@ -64,6 +76,9 @@ CGameScene::~CGameScene()
 // ゲームシーンの初期化処理
 //=============================================================================
 void CGameScene::Init(void) {
+	//変数初期化
+	m_nCreateItemBoxCounter = 0;
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -81,25 +96,21 @@ void CGameScene::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 800.0f, 5500.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLight = D3DXVECTOR3(0.0f, 4800.0f, -1920.0f);	//ライトの位置
-	D3DXVECTOR3 vecLight;	//ライトのベクトル
-	D3DXVec3Normalize(&vecLight, &posLight);
-	vecLight *= -1;
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
 	//ライトのビューマトリックスを生成
-	D3DXMatrixLookAtLH(&mtxLightView, &posLight, &D3DXVECTOR3(posLight + vecLight), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectLightMatrixView(mtxLightView);
 		pRenderer->SetEffectLightVector(D3DXVECTOR4(vecLight, 1.0f));
 		pRenderer->SetEffectLightMatrixProj(mtxLightProj);
 	}
-
-	//月のビルボード生成
-	CBillboard* pMoon = CBillboard::Create(D3DXVECTOR3(-800.0f, 1500.0f, -2000.0f), CTexture::TEXTURE_TYPE::MOON, 200.0f, 200.0f);
-	if (pMoon != nullptr) pMoon->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
 
 	//------------------------------
 	//フォグの初期設定
@@ -131,26 +142,25 @@ void CGameScene::Init(void) {
 
 	//円柱の壁の生成
 	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
+	CMeshcylinder::Create(D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE, GAME_STAGE_SIZE + 50.0f, 1, 0.0f, true, CTexture::TEXTURE_TYPE::NONE);
+
+	//風船を生成する
+	for (int nCntBalloon = 0; nCntBalloon < BALLOON_MAX_NUM; nCntBalloon++)
+	{
+		CBalloon::Create(false, D3DXVECTOR3(-GAME_BALLOON_INIT_CREATE_SPACE + GAME_BALLOON_INIT_CREATE_SPACE * nCntBalloon,
+			                                GAME_BALLOON_CREATE_POS_Y,
+			                                GAME_BALLOON_INIT_CREATE_POS_Z));
+	}
 
 	//プレイヤーの生成
-	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(400.0f, 0.0f, 0.0f));
-	//シーンのプレイヤーの設定
-	SetPlayer(pPlayer);
-
-	//プレイヤーの生成
-	pPlayer = CPlayer::Create(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
-	//シーンのプレイヤーの設定
-	SetPlayer(pPlayer);
-
-	//プレイヤーの生成
-	pPlayer = CPlayer::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f));
-	//シーンのプレイヤーの設定
-	SetPlayer(pPlayer);
-
-	//プレイヤーの生成
-	pPlayer = CPlayer::Create(D3DXVECTOR3(-200.0f, 0.0f, 0.0f));
-	//シーンのプレイヤーの設定
-	SetPlayer(pPlayer);
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	{
+		CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
+			                                           0.0f,
+			                                           GAME_PLAYER_INIT_CREATE_POS_Z));
+		//シーンのプレイヤーの設定
+		SetPlayer(pPlayer);
+	}
 
 	//タイマーの生成
 	m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
@@ -214,17 +224,20 @@ void CGameScene::Update(void) {
 	if (pInput == nullptr) return;
 
 	//ゲームオーバー
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_1)) {
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_1, 0)) {
 		GameOver();
 	}
 
 	//タイム追加
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_3)) {
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_3, 0)) {
 		if (m_pTimer != nullptr) m_pTimer->AddScore(50);
 	}
 
 	//風船の生成
 	CreateBalloon();
+
+	//アイテムボックスの生成
+	CreateItemBox();
 #endif
 
 	//ゲームオーバー時
@@ -266,7 +279,7 @@ void CGameScene::UpdateGame(void) {
 	if (pFade == nullptr) return;
 
 	//ポーズ
-	if (pInput->GetTrigger(CInput::CODE::PAUSE) && !pFade->GetFade()) {
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
 		//ポーズメニュークラスを生成
 		m_pMenuPause = CPauseMenu::Create();
 		//サウンドを再生
@@ -293,7 +306,7 @@ void CGameScene::UpdateGameOver(void) {
 	if (pSound == nullptr) return;
 
 	//選択時
-	if (pInput->GetTrigger(CInput::CODE::SELECT)) {
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
 		switch (m_pMenuGameEnd->GetIdxCurSelect())
 		{
 		case 0:
@@ -428,7 +441,7 @@ void CGameScene::CreateBalloon(void)
 		for (int nCntBalloon = 0; nCntBalloon < BALLOON_MAX_NUM; nCntBalloon++)
 		{
 			//位置
-			D3DXVECTOR3 balloonPos = { 0.0f, 45.0f, 0.0f };
+			D3DXVECTOR3 balloonPos = { 0.0f, GAME_BALLOON_CREATE_POS_Y, 0.0f };
 			//中心からの遠さ
 			float fDiffer = 0.0f;
 			//位置を変えるための向き
@@ -440,7 +453,7 @@ void CGameScene::CreateBalloon(void)
 			while (bLoop)
 			{
 				//遠さをランダムで決める
-				fDiffer = (rand() % (int)(GAME_STAGE_SIZE - BALLOON_SIZE) * 100.0f) / 100.0f;
+				fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
 				//向きをランダムで決める
 				fRot = (rand() % 629 + -314) / 100.0f;
 
@@ -461,7 +474,7 @@ void CGameScene::CreateBalloon(void)
 					float fCreateBalloonDiffer = D3DXVec2Length(&differVec);
 
 					//風船1個分以上間が空いていたら
-					if (fCreateBalloonDiffer > ((BALLOON_SIZE + BALLOON_SIZE) + BALLOON_SIZE * 2.0f))
+					if (fCreateBalloonDiffer > GAME_BALLOON_TO_BALLOON_DIFFER)
 					{
 						//クリアした数を増やす
 						nClearCount++;
@@ -484,7 +497,7 @@ void CGameScene::CreateBalloon(void)
 						float fToOlayerDiffer = D3DXVec2Length(&differPlayerVec);
 
 						//既定分間が空いていたら
-						if (fToOlayerDiffer > BALLOON_SIZE + GAME_BALLOON_CREATE_PLAYER_DIFFER)
+						if (fToOlayerDiffer > GAME_BALLOON_TO_PLAYER_DIFFER)
 						{
 							//クリアした数を増やす
 							nClearCount++;
@@ -518,6 +531,44 @@ void CGameScene::CreateBalloon(void)
 
 			//風船を生成する
 			CBalloon::Create(bGold, balloonPos);
+		}
+	}
+}
+
+//=============================================================================
+// アイテムボックス生成処理
+//=============================================================================
+void CGameScene::CreateItemBox(void){
+	
+	//アイテムが生成されていないなら
+	if (CItemBox::GetNum() == 0)
+	{
+		m_nCreateItemBoxCounter++;
+		//一定の値になったら
+		if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
+		{
+			m_nCreateItemBoxCounter = 0;
+
+			//生成位置
+			D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
+			//移動量
+			D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
+
+			//2分の1の確率で
+			if (rand() % 2 == 0)
+			{
+				//逆に生成
+				itemBoxPos.x *= -1.0f;
+				//逆に移動させる
+				itemBoxMove.x *= -1.0f;
+			}
+
+			//ランダムでZ位置を決める
+			itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
+
+			//アイテムボックスを生成する
+			CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
+			pItemBox->SetMove(itemBoxMove);
 		}
 	}
 }

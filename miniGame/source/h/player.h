@@ -8,11 +8,13 @@
 #define _PLAYER_H_
 
 #include "objectModel.h"
+#include "item.h"
 
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+#define MAX_PLAYER_NUM	(4)		//プレイヤーの最大数
 
 //*****************************************************************************
 //前方宣言
@@ -61,25 +63,33 @@ public:
 	int GetIndex(void) { return m_nIndex; }
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nPlayerNum; }
+	//アイテムタイプ取得処理
+	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
+	//アイテムタイプ設定処理
+	void SetItemType(CItem::ITEM_TYPE itemType) { m_itemType = itemType; }
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
-	void DecMove(void);	//移動量の減少
-	void DecBoundMove(void);	//バウンド時の移動量の減少
-	void Collision(D3DXVECTOR3& pos);	//当たり判定
-	void CollisionPlayer(void);	//プレイヤーとの当たり判定
-	void StateBound(void);				//バウンド状態の処理
+	void DecMove(void);								//移動量の減少
+	void DecBoundMove(void);						//バウンド時の移動量の減少
+	void Collision(D3DXVECTOR3& pos);				//当たり判定
+	void CollisionPlayer(void);						//プレイヤーとの当たり判定
+	void StateBound(void);							//バウンド状態の処理
+	void StateSpin(void);							//スピン状態の処理
+	void UseItem(void);								//アイテム使用処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
 	D3DXVECTOR3 m_destRot;	//目標の角度
 	D3DXVECTOR3 m_move;		//移動量
 
-	static int m_nPlayerNum;	//プレイヤーの数
-	int m_nIndex;				//プレイヤー番号
-	int m_nCntGameover;			//ゲームオーバー後のカウント
-	float m_fMoveSpeed;			//移動する速さ
-	float m_fBoundMoveSpeed;	//跳ね返るときの速さ
-	PLAYER_STATE m_state;		//状態
+	static int m_nPlayerNum;		//プレイヤーの数
+	int m_nIndex;					//プレイヤー番号
+	int m_nCntGameover;				//ゲームオーバー後のカウント
+	float m_fMoveSpeed;				//移動する速さ
+	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
+	PLAYER_STATE m_state;			//状態
+	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
+	int m_nSpinCounter;				//スピンする時間のカウンター
 };
 
 #endif // !_PLAYER_H_

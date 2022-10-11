@@ -100,12 +100,12 @@ void CSelectMenu::ChangeSelect(void) {
 		//上下
 	case CSelectMenu::SELECT_TYPE::VERTICAL:
 		//選択の変更の入力
-		if (pInput->GetTrigger(CInput::CODE::SELECT_UP)) {
+		if (pInput->GetTrigger(CInput::CODE::SELECT_UP, 0)) {
 			m_nIdxCurSelect--;	//選択を１つ前に
 			if (m_nIdxCurSelect < 0) m_nIdxCurSelect = m_nNumSelect - 1;	//０を下回った場合最大の番号
 			bChangeSelect = true;
 		}
-		if (pInput->GetTrigger(CInput::CODE::SELECT_DOWN)) {
+		if (pInput->GetTrigger(CInput::CODE::SELECT_DOWN, 0)) {
 			m_nIdxCurSelect++;	//選択を１つ後に
 			if (m_nIdxCurSelect >= m_nNumSelect) m_nIdxCurSelect = 0;	//最大を上回った場合０
 			bChangeSelect = true;
@@ -114,12 +114,12 @@ void CSelectMenu::ChangeSelect(void) {
 		//左右
 	case CSelectMenu::SELECT_TYPE::HORIZONTAL:
 		//選択の変更の入力
-		if (pInput->GetTrigger(CInput::CODE::SELECT_LFET)) {
+		if (pInput->GetTrigger(CInput::CODE::SELECT_LFET, 0)) {
 			m_nIdxCurSelect--;	//選択を１つ前に
 			if (m_nIdxCurSelect < 0) m_nIdxCurSelect = m_nNumSelect - 1;	//０を下回った場合最大の番号
 			bChangeSelect = true;
 		}
-		if (pInput->GetTrigger(CInput::CODE::SELECT_RIGHT)) {
+		if (pInput->GetTrigger(CInput::CODE::SELECT_RIGHT, 0)) {
 			m_nIdxCurSelect++;	//選択を１つ後に
 			if (m_nIdxCurSelect >= m_nNumSelect) m_nIdxCurSelect = 0;	//最大を上回った場合０
 			bChangeSelect = true;

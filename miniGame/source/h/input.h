@@ -12,7 +12,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_PAD_CONNECT_NUM	(4)		//マウスパッド接続数
+#define MAX_PAD_CONNECT_NUM	(4)		//ゲームパッド接続数
 
 //*****************************************************************************
 // インプットクラス
@@ -45,7 +45,7 @@ public:
 		//アクション
 		ACCELE,			//アクセル
 		REVERSE,		//バック
-		INTERACT,
+		USE_ITEM,		//アイテムの使用
 
 #ifdef _DEBUG
 		//デバッグ用
@@ -62,9 +62,9 @@ public:
 	virtual ~CInput();	//デストラクタ
 	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd);	//初期化処理
 	virtual void Uninit(void);		//終了処理
-	virtual void Update(void);		//更新処理
-	virtual bool GetPress(CODE code);	//入力判定（プレス）
-	virtual bool GetTrigger(CODE code);	//入力判定（トリガー）
+	virtual void Update(void) = 0;		//更新処理
+	virtual bool GetPress(CODE code, int nIdx) = 0;		//入力判定（プレス）
+	virtual bool GetTrigger(CODE code, int nIdx) = 0;	//入力判定（トリガー）
 
 protected:
 	LPDIRECTINPUTDEVICE8 m_pDevice;
@@ -82,10 +82,11 @@ public:
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd);
 	void Uninit(void);
 	void Update(void);
+	bool GetPress(CODE code, int nIdx);	//入力判定（プレス）
+	bool GetTrigger(CODE code, int nIdx);	//入力判定（トリガー）
+
 	bool GetPress(int nKey);
 	bool GetTrigger(int nKey);
-	bool GetPress(CODE code);	//入力判定（プレス）
-	bool GetTrigger(CODE code);	//入力判定（トリガー）
 
 private:
 	BYTE m_aKeyState[256];
@@ -119,24 +120,25 @@ public:
 	void Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
-	bool GetConnectGamepad(void);	//ゲームパッド接続の判定
-	bool GetButtonPress(int nButton, int nCntPad);		//ボタンのプレス判定
-	bool GetButtonTrigger(int nButton, int nCntPad);		//ボタンのトリガー判定
-	bool GetTriggerPress(TRIGGER_TYPE type, int nCntPad);		//トリガーのプレス判定
-	bool GetTriggerTrigger(TRIGGER_TYPE type, int nCntPad);	//トリガーのトリガー判定
-	bool GetLeftStick(STICK_TYPE type, int nCntPad);			//左スティックの判定
-	bool GetRightStick(STICK_TYPE type, int nCntPad);			//右スティックの判定
-	bool GetPress(CODE code, int nCntPad);	//入力判定（プレス）
-	bool GetTrigger(CODE code, int nCntPad);	//入力判定（トリガー）
-	void SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nCntPad);	//バイブレーションの設定
+	bool GetPress(CODE code, int nIdx);	//入力判定（プレス）
+	bool GetTrigger(CODE code, int nIdx);	//入力判定（トリガー）
+
+	bool GetConnectGamepad(int nIdx);	//ゲームパッド接続の判定
+	bool GetButtonPress(int nButton, int nIdx);		//ボタンのプレス判定
+	bool GetButtonTrigger(int nButton, int nIdx);		//ボタンのトリガー判定
+	bool GetTriggerPress(TRIGGER_TYPE type, int nIdx);		//トリガーのプレス判定
+	bool GetTriggerTrigger(TRIGGER_TYPE type, int nIdx);	//トリガーのトリガー判定
+	bool GetLeftStick(STICK_TYPE type, int nIdx);			//左スティックの判定
+	bool GetRightStick(STICK_TYPE type, int nIdx);			//右スティックの判定
+	void SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nIdx);	//バイブレーションの設定
 
 private:
-	XINPUT_STATE m_state[MAX_PAD_CONNECT_NUM];		//コントローラーの状態
-	XINPUT_STATE m_stateLast[MAX_PAD_CONNECT_NUM];	//コントローラーのひとつ前の状態（トリガー判定用）
-	XINPUT_VIBRATION m_vibration[MAX_PAD_CONNECT_NUM];	//バイブレーション
-	bool m_bConnect[MAX_PAD_CONNECT_NUM];		//接続確認
-	int m_nCntVibration[MAX_PAD_CONNECT_NUM];	//バイブレーション用のカウンター
-	bool m_bVibration[MAX_PAD_CONNECT_NUM];		//バイブレーションが実行中かどうか
+	XINPUT_STATE m_aState[MAX_PAD_CONNECT_NUM];		//コントローラーの状態
+	XINPUT_STATE m_aStateLast[MAX_PAD_CONNECT_NUM];	//コントローラーのひとつ前の状態（トリガー判定用）
+	XINPUT_VIBRATION m_aVibrationState[MAX_PAD_CONNECT_NUM];	//バイブレーション
+	bool m_abConnect[MAX_PAD_CONNECT_NUM];		//接続確認
+	int m_aCntVibration[MAX_PAD_CONNECT_NUM];	//バイブレーション用のカウンター
+	bool m_abVibration[MAX_PAD_CONNECT_NUM];	//バイブレーションが実行中かどうか
 };
 
 #endif // !_INPUT_H_
