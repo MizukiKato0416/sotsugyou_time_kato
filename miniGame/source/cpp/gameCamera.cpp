@@ -14,7 +14,7 @@
 // マクロ定義
 //=============================================================================
 #define MAX_DRAW_DISTANCE (5000.0f)		//描画可能な最大の距離
-#define DEFAULT_CAMERA_DISTANCE (1500.0f)	//視点と注視点の距離
+#define DEFAULT_CAMERA_DISTANCE (2000.0f)	//視点と注視点の距離
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -49,10 +49,11 @@ CGameCamera* CGameCamera::Create(void) {
 // ゲームカメラの初期化処理
 //=============================================================================
 HRESULT CGameCamera::Init(void) {
-	SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	SetRot(D3DXVECTOR3(D3DX_PI * -0.15f, D3DX_PI * -0.0f, 0.0f));
+	SetPos(D3DXVECTOR3(0.0f, 0.0f, -100.0f));
+	SetRot(D3DXVECTOR3(D3DX_PI * -0.35f, 0.0f, 0.0f));
 	//距離の設定
 	SetDistance(DEFAULT_CAMERA_DISTANCE);
+	SetLockControll(true);
 
 	CCamera::Init();
 

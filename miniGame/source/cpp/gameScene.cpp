@@ -78,15 +78,15 @@ void CGameScene::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 800.0f, 5500.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 4000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLight = D3DXVECTOR3(0.0f, 4800.0f, -1920.0f);	//ライトの位置
-	D3DXVECTOR3 vecLight;	//ライトのベクトル
-	D3DXVec3Normalize(&vecLight, &posLight);
-	vecLight *= -1;
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);	//ライトの視点の位置
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
 	//ライトのビューマトリックスを生成
-	D3DXMatrixLookAtLH(&mtxLightView, &posLight, &D3DXVECTOR3(posLight + vecLight), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 1, 0));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectLightMatrixView(mtxLightView);
@@ -94,15 +94,11 @@ void CGameScene::Init(void) {
 		pRenderer->SetEffectLightMatrixProj(mtxLightProj);
 	}
 
-	//月のビルボード生成
-	CBillboard* pMoon = CBillboard::Create(D3DXVECTOR3(-800.0f, 1500.0f, -2000.0f), CTexture::TEXTURE_TYPE::MOON, 200.0f, 200.0f);
-	if (pMoon != nullptr) pMoon->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
-
 	//------------------------------
 	//フォグの初期設定
 	//------------------------------
 	if (pRenderer != nullptr) {
-		pRenderer->SetEffectFogEnable(true);
+		pRenderer->SetEffectFogEnable(false);
 		pRenderer->SetEffectFogColor(FOG_COLOR);
 		pRenderer->SetEffectFogRange(800.0f, 4500.0f);
 		//バックバッファをフォグの色に合わせる
@@ -120,10 +116,10 @@ void CGameScene::Init(void) {
 	//ステージの生成
 	//if (m_pStage == nullptr) m_pStage = new CStage;
 	//if (m_pStage != nullptr) m_pStage->CreateStage(TEXT_FILE_NAME_STAGE_GAME);
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 1, 1, 3000.0f, 3000.0f, CTexture::TEXTURE_TYPE::ICON_INTERACT_KEYBOARD);
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 1, 1, 2000.0f, 2000.0f, CTexture::TEXTURE_TYPE::ICON_INTERACT_KEYBOARD);
 
 	//円柱の壁の生成
-	CWallCylinder::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 800.0f, 40.0f, CTexture::TEXTURE_TYPE::NONE, true);
+	CWallCylinder::Create(D3DXVECTOR3(0.0f, -100.0f, 0.0f), 800.0f, 200.0f, CTexture::TEXTURE_TYPE::NONE, true);
 
 	//プレイヤーの生成
 	CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));

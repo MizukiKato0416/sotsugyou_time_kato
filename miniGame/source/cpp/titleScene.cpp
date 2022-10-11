@@ -71,15 +71,12 @@ void CTitleScene::Init(void) {
 	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 200.0f, 1800.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLight = D3DXVECTOR3(0.0f, 1200.0f, -1000.0f);	//ライトの位置
-	D3DXVECTOR3 vecLight;	//ライトのベクトル
-	//正規化する
-	D3DXVec3Normalize(&vecLight, &posLight);
-	//逆向きにする
-	vecLight *= -1;
-
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(0.0f, 1200.0f, -1000.0f);	//ライトの視点の位置
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);		//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
 	//ライトのビューマトリックスを生成
-	D3DXMatrixLookAtLH(&mtxLightView, &posLight, &D3DXVECTOR3(posLight + vecLight), &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &D3DXVECTOR3(posLightV + vecLight), &D3DXVECTOR3(0, 1, 0));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectLightMatrixView(mtxLightView);

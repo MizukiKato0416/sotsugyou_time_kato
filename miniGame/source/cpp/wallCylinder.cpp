@@ -117,12 +117,12 @@ void CWallCylinder::Draw(void) {
 	if (pDevice == nullptr) return;
 
 	//Zテクスチャに書き込まない
-	if (pRenderer->GetDrawZTex()) return;
+	if (pRenderer->GetDrawZTex() && m_bClear) return;
 
 	//カリングなし
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	//ライトを無効
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	if(m_bClear) pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	//描画
 	CMeshcylinder::Draw();
@@ -130,7 +130,7 @@ void CWallCylinder::Draw(void) {
 	//カリングの設定を戻す
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	//ライトを有効
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	if (m_bClear) pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
 //=============================================================================
