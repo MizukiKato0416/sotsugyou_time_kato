@@ -42,6 +42,9 @@
 #define GAME_PLAYER_INIT_CREATE_SPACE			 (200.0f)								//プレイヤーの初期生成間隔
 #define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
+#define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
+#define GAME_ITEM_BOX_CREATE_POS_X				 (1000.0f)								//アイテムボックスの生成位置X
+#define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -548,14 +551,14 @@ void CGameScene::CreateItemBox(void){
 	{
 		m_nCreateItemBoxCounter++;
 		//一定の値になったら
-		if (m_nCreateItemBoxCounter > 180)
+		if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
 		{
 			m_nCreateItemBoxCounter = 0;
 
 			//生成位置
-			D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(1000.0f, GAME_BALLOON_CREATE_POS_Y, 0.0f);
+			D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
 			//移動量
-			D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-10.0f, 0.0f, 0.0f);
+			D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
 
 			//2分の1の確率で
 			if (rand() % 2 == 0)
@@ -567,7 +570,7 @@ void CGameScene::CreateItemBox(void){
 			}
 
 			//ランダムでZ位置を決める
-			itemBoxPos.z = float (rand() % 801 + -400);
+			itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
 
 			//アイテムボックスを生成する
 			CItemBox *pItemBox = CItemBox::Create(itemBoxPos);

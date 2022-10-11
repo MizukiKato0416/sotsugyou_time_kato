@@ -18,6 +18,7 @@
 #include "particleEffect.h"
 #include "object2D.h"
 #include "billboard.h"
+#include "item_banana.h"
 
 //=============================================================================
 // マクロ定義
@@ -51,13 +52,15 @@
 #define COLLISION_RADIUS (40.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
-//ゲームオーバー時
+//回転
 //--------------------------------
+#define PLAYER_SPIN_COUNT	(180)								//スピンする時間
+#define PLAYER_SPIN_SPEED	(0.08f)								//スピンする速さ
 
 //--------------------------------
 //その他
 //--------------------------------
-#define COLOR_OUTLINE (D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
+#define COLOR_OUTLINE		(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -86,6 +89,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = PLAYER_STATE::NONE;
 	m_itemType = CItem::ITEM_TYPE::NONE;
+	m_nSpinCounter = 0;
 }
 
 //=============================================================================
@@ -121,6 +125,7 @@ HRESULT CPlayer::Init(void) {
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = PLAYER_STATE::NOMAL;
 	m_itemType = CItem::ITEM_TYPE::NONE;
+	m_nSpinCounter = 0;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -191,6 +196,8 @@ void CPlayer::Update(void) {
 		//ゲームシーンの取得
 		pGame = pManager->GetGameScene();
 	}
+	CInputGamepadX *pPadX = static_cast<CInputGamepadX*>(pInput);
+
 
 	//位置情報のポインタの取得
 	D3DXVECTOR3 posPlayer = GetPos();
@@ -216,20 +223,19 @@ void CPlayer::Update(void) {
 		if (pInput != nullptr) {
 			Move(pInput, fRotCameraY);
 		}
+
 		break;
 	case CPlayer::PLAYER_STATE::BOUND:
 		//バウンド状態処理
 		StateBound();
 		break;
 	case CPlayer::PLAYER_STATE::SPIN:
+		//スピン処理
+		StateSpin();
 		break;
 	default:
 		break;
-	}
-
-	
-
-	
+	}	
 
 	//----------------------------
 	//移動の反映
@@ -240,6 +246,15 @@ void CPlayer::Update(void) {
 	posPlayer += m_move;
 	//位置設定
 	SetPos(posPlayer);
+
+
+
+	//L1ボタンを押したら
+	if (pPadX->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))
+	{
+		//アイテム使用
+		UseItem();
+	}
 
 	//----------------------------
 	//当たり判定
@@ -633,4 +648,57 @@ void CPlayer::StateBound(void)
 
 	//移動量の減少
 	DecBoundMove();
+}
+
+//=============================================================================
+//スピン状態の処理
+//=============================================================================
+void CPlayer::StateSpin(void)
+{
+	//カウンター加算
+	m_nSpinCounter++;
+	//既定の値より大きくなったら
+	if (m_nSpinCounter > PLAYER_SPIN_COUNT)
+	{
+		m_nSpinCounter = 0;
+		//状態を通常にする
+		m_state = PLAYER_STATE::NOMAL;
+	}
+	else
+	{
+		//向き取得
+		D3DXVECTOR3 rot = GetRot();
+
+		//回転させる
+		rot.y += PLAYER_SPIN_SPEED;
+
+		//向き設定
+		SetRot(rot);
+	}
+}
+
+//=============================================================================
+//アイテム使用処理
+//=============================================================================
+void CPlayer::UseItem(void)
+{
+	//アイテムを持っている状態なら
+	if (m_itemType == CItem::ITEM_TYPE::NONE || m_state == PLAYER_STATE::SPIN)
+	{
+		return;
+	}
+
+	//位置取得
+	D3DXVECTOR3 pos = GetPos();
+
+	//アイテムを生成する
+	switch (m_itemType)
+	{
+	case CItem::ITEM_TYPE::BANANA:
+		//バナナの生成
+		CItemBanana::Create(pos, this);
+		break;
+	default:
+		break;
+	}
 }

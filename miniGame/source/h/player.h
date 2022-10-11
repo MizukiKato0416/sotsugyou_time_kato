@@ -70,11 +70,13 @@ public:
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
-	void DecMove(void);	//移動量の減少
-	void DecBoundMove(void);	//バウンド時の移動量の減少
-	void Collision(D3DXVECTOR3& pos);	//当たり判定
-	void CollisionPlayer(void);	//プレイヤーとの当たり判定
-	void StateBound(void);				//バウンド状態の処理
+	void DecMove(void);								//移動量の減少
+	void DecBoundMove(void);						//バウンド時の移動量の減少
+	void Collision(D3DXVECTOR3& pos);				//当たり判定
+	void CollisionPlayer(void);						//プレイヤーとの当たり判定
+	void StateBound(void);							//バウンド状態の処理
+	void StateSpin(void);							//スピン状態の処理
+	void UseItem(void);								//アイテム使用処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
 	D3DXVECTOR3 m_destRot;	//目標の角度
@@ -87,6 +89,7 @@ private:
 	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
 	PLAYER_STATE m_state;			//状態
 	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
+	int m_nSpinCounter;				//スピンする時間のカウンター
 };
 
 #endif // !_PLAYER_H_

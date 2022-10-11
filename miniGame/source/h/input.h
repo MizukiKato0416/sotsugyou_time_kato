@@ -45,7 +45,7 @@ public:
 		//アクション
 		ACCELE,			//アクセル
 		REVERSE,		//バック
-		INTERACT,
+		USE_ITEM,		//アイテムの使用
 
 #ifdef _DEBUG
 		//デバッグ用

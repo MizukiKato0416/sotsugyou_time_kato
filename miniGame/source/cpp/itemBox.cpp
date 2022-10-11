@@ -172,10 +172,12 @@ bool CItemBox::CollisionPlayer(void)
 			//何もアイテムを持っていない状態なら
 			if (pPlayer->GetItemType() == CItem::ITEM_TYPE::NONE)
 			{
-				//バナナを取得させる
-				pPlayer->SetItemType(CItem::ITEM_TYPE::BANANA);
-			}
+				//アイテムの中からランダムで取得させる
+				int nRandItem = rand() % int(int(CItem::ITEM_TYPE::MAX) - 1) + 1;
 
+				//アイテムを取得させる
+				pPlayer->SetItemType((CItem::ITEM_TYPE)nRandItem);
+			}
 			return true;
 		}
 

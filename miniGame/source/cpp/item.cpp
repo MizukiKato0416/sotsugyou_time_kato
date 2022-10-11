@@ -24,7 +24,7 @@
 //=============================================================================
 CItem::CItem()
 {
-	
+	m_pPlayer = nullptr;
 }
 
 //=============================================================================
@@ -32,7 +32,7 @@ CItem::CItem()
 //=============================================================================
 CItem::CItem(CModel::MODELTYPE typeModel) : CObjectModel(typeModel, false)
 {
-	
+	m_pPlayer = nullptr;
 }
 
 //=============================================================================
@@ -46,7 +46,7 @@ CItem::~CItem()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItem* CItem::Create(D3DXVECTOR3 pos) {
+CItem* CItem::Create(D3DXVECTOR3 pos, const CPlayer *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_ITEM_BOX;
@@ -66,6 +66,9 @@ CItem* CItem::Create(D3DXVECTOR3 pos) {
 // 初期化処理
 //=============================================================================
 HRESULT CItem::Init(void) {
+
+	//何もアイテムを持っていない状態にする
+	m_pPlayer->SetItemType(ITEM_TYPE::NONE);
 
 	CObjectModel::Init();
 	return S_OK;
@@ -95,9 +98,16 @@ void CItem::Draw(void) {
 }
 
 //=============================================================================
+//プレイヤーにヒットしたときの処理
+//=============================================================================
+void CItem::HitPlayer(CPlayer * pPlayer)
+{
+}
+
+//=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CItem::CollisionPlayer(CPlayer *&pReturnPlayer, const float fMySize)
+bool CItem::CollisionPlayer(const float fMySize)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
 	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
@@ -105,18 +115,18 @@ bool CItem::CollisionPlayer(CPlayer *&pReturnPlayer, const float fMySize)
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
 
+		//プレイヤーにキャスト
+		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+
 		//オブジェクトタイプの確認
 		bool bMatchType = false;
-		if (pObject->GetObjType() & OBJTYPE_PLAYER) bMatchType = true;
+		if ((pObject->GetObjType() & OBJTYPE_PLAYER) && m_pPlayer != pPlayer) bMatchType = true;
 
-		if (!bMatchType)
+		if (!bMatchType || pPlayer == nullptr)
 		{
 			pObject = pObjNext;	//リストの次のオブジェクトを代入
 			continue;
 		}
-
-		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();
@@ -131,7 +141,8 @@ bool CItem::CollisionPlayer(CPlayer *&pReturnPlayer, const float fMySize)
 		//当たっていたら
 		if (fDiffer <= ITEM_PLAYER_COLL_SIZE + fMySize)
 		{
-			pReturnPlayer = pPlayer;
+			//ヒット時処理
+			HitPlayer(pPlayer);
 			return true;
 		}
 

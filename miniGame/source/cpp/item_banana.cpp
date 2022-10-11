@@ -8,11 +8,14 @@
 #include "manager.h"
 #include "sound.h"
 #include "player.h"
+#include "wallCylinder.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define ITEM_BANANA_SIZE				(30.0f)		//バナナのサイズ半径
+#define ITEM_BANANA_ROTATE_SPEED		(0.05f)		//バナナの回転の速さ
+#define ITEM_BANANA_MOVE_SPEED			(5.0f)		//バナナの移動の速さ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -23,7 +26,7 @@
 //=============================================================================
 CItemBanana::CItemBanana()
 {
-	
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //=============================================================================
@@ -45,7 +48,7 @@ CItemBanana::~CItemBanana()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos) {
+CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CPlayer *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CItemBanana* pItemBanana;
@@ -53,7 +56,7 @@ CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos) {
 	if (pItemBanana == nullptr) return nullptr;
 
 	pItemBanana->SetPos(pos);
-	
+	pItemBanana->m_pPlayer = pPlayer;
 	pItemBanana->Init();
 
 	return pItemBanana;
@@ -63,6 +66,13 @@ CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos) {
 // 初期化処理
 //=============================================================================
 HRESULT CItemBanana::Init(void) {
+
+	//プレイヤーの向き取得
+	float fRot = m_pPlayer->GetRot().y;
+
+	//移動量の設定
+	m_move.x = sinf(fRot + D3DX_PI) * ITEM_BANANA_MOVE_SPEED;
+	m_move.z = cosf(fRot + D3DX_PI) * ITEM_BANANA_MOVE_SPEED;
 
 	CItem::Init();
 	return S_OK;
@@ -81,11 +91,33 @@ void CItemBanana::Uninit(void) {
 //=============================================================================
 void CItemBanana::Update(void) {
 
-	//プレイヤーのポインタ
-	CPlayer *pPlayer = nullptr;
+	//向き取得
+	D3DXVECTOR3 rot = GetRot();
+	//回転させる
+	rot.y += ITEM_BANANA_ROTATE_SPEED;
+	//向き設定
+	SetRot(rot);
+
+
+	//位置取得
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 lastPos = GetPos();
+	//移動量を設定
+	pos += m_move;
+
+	//壁との当たり判定
+	if (CWallCylinder::Collision(&pos, lastPos, ITEM_BANANA_SIZE))
+	{
+		//当たっていたら消す
+		Uninit();
+		return;
+	}
+
+	//位置設定
+	SetPos(pos);
 
 	//プレイヤーとの当たり判定
-	if (CollisionPlayer(pPlayer, ITEM_BANANA_SIZE))
+	if (CollisionPlayer(ITEM_BANANA_SIZE))
 	{
 		//当たっていたら消す
 		Uninit();
@@ -100,4 +132,17 @@ void CItemBanana::Update(void) {
 //=============================================================================
 void CItemBanana::Draw(void) {
 	CItem::Draw();
+}
+
+//=============================================================================
+//プレイヤーにヒットしたときの処理
+//=============================================================================
+void CItemBanana::HitPlayer(CPlayer * pPlayer)
+{
+	//プレイヤーがスピン状態じゃなかったら
+	if (pPlayer->GetState() != CPlayer::PLAYER_STATE::SPIN)
+	{
+		//プレイヤーの状態をスピン状態にする
+		pPlayer->SetState(CPlayer::PLAYER_STATE::SPIN);
+	}
 }

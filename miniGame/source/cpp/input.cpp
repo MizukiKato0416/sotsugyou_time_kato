@@ -344,7 +344,7 @@ bool CInputKeyboard::GetTrigger(CODE code) {
 		}
 		break;
 		//インタラクト
-	case CODE::INTERACT:
+	case CODE::USE_ITEM:
 		if (GetTrigger(DIK_E)) {
 			return true;
 		}
@@ -743,9 +743,9 @@ bool CInputGamepadX::GetTrigger(CODE code, int nCntPad) {
 		break;
 
 
-		//インタラクト
-	case CODE::INTERACT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_X, nCntPad)) {
+		//アイテムの使用
+	case CODE::USE_ITEM:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_L, nCntPad)) {
 			return true;
 		}
 		break;
