@@ -1,12 +1,4 @@
-﻿  player.cpp
-  gameScene.cpp
-  コードを生成中...
-  コンパイル中...
-  scene.cpp
-  pauseMenu.cpp
-  manager.cpp
+﻿cl : コマンド ライン warning D9028: 簡易リビルド時のエラーです、通常のビルドに戻します
   gameCamera.cpp
-  camera.cpp
-  コードを生成中...
-  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\miniGame\Debug\miniGame.exe
-  miniGame.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\miniGame\Debug\miniGame.pdb (Full PDB)
+  miniGame.vcxproj -> C:\Users\student\OneDrive\デスクトップ\ローカルリポジトリ\sotsugyou_time_kato\miniGame\Debug\miniGame.exe
+  miniGame.vcxproj -> C:\Users\student\OneDrive\デスクトップ\ローカルリポジトリ\sotsugyou_time_kato\miniGame\Debug\miniGame.pdb (Full PDB)
