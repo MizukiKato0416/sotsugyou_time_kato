@@ -39,12 +39,10 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED			(0.15f)		//加速
-#define DEC_MOVE_SPEED			(0.93f)		//減速
-#define MAX_MOVE_SPEED			(9.0f)		//最大速度
-#define MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
-#define ROTATE_SPEED			(0.025f)	//回転速度
-#define PLAYER_BOUND_SPEED		(0.9f)		//バウンドする量
+#define ADD_MOVE_SPEED (1.0f)	//加速
+#define DEC_MOVE_SPEED (0.3f)	//減速
+#define MAX_MOVE_SPEED (15.0f)	//歩行速度
+#define ROTATE_SPEED (0.1f)		//回転速度
 
 //--------------------------------
 //当たり判定
