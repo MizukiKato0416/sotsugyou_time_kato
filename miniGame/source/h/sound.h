@@ -17,39 +17,14 @@ class CSound
 public:
 	enum class SOUND_LABEL {
 		NONE = 0,
-		BGM_TITLE,		//タイトルBGM
-		BGM_GAME,		//ゲームBGM
+		BGM_TITLE,				//タイトルBGM
+		BGM_GAME,				//ゲームBGM
 
-		TITLE_START,	//タイトル画面のゲームスタート時
-		TITLE_OPEN,		//タイトル画面のウィンドウを開いた音
-		TITLE_CLOSE,	//タイトル画面のウィンドウを閉じた音
-
-		SELECT_SWITCH,	//タイトル画面の選択切替時
-		CANSEL,			//キャンセル音
-		FOOTSTEP,		//足音
-		SWISH_PUNCH,	//拳を振る音
-		DAMAGE_PUNCH,	//拳によるダメージ音
-		SHOCK_PUNCH,	//パンチの衝撃音
-		SHOCK_STAMP,	//踏みつけ音
-
-		HEAL,			//回復音
-		GETEXP,			//経験値取得音
-		DRAIN,			//体力吸収音
-		SHOOT_BULLET,	//弾の発射音
-		DAMAGE_BULLET,	//弾のダメージ音
-		DAMAGE_FIRE,	//炎のダメージ音
-		STUN,			//気絶音
-		EXPLOSION,		//爆発音
-		REPULSIVE_WAVE,	//斥力波生成音
-		THUNDERBOLT,	//落雷音
-		DAMAGE_THUNDER,	//雷ダメージ音
-		SPAWN_ENEMY,	//敵のスポーン
-		GROW_UP,		//成長
-		CREATE_APPLE,	//林檎の生成音
-		DEAD_TREE,		//木の死亡音
-		ENDGAME,		//ゲームクリア時の衝撃波が起こるときの音
-		GAMEOVER,		//ゲームオーバー
-		GAMECLEAR,		//ゲームクリア
+		SE_POINT_1,				//1ポイント獲得SE
+		SE_POINT_3,				//3ポイント獲得SE
+		SE_BALLOON_BREAK,		//風船が割れるSE
+		SE_ITEM_GET,			//アイテム取得SE
+		SE_TIME_UP,				//タイムアップSE
 
 		ENUM_MAX
 	};
@@ -67,6 +42,7 @@ public:
 	void SetBGM(SOUND_LABEL label);			//再生中BGMの設定
 	SOUND_LABEL GetBGM(void);				//再生中BGMの取得
 	void ResetBeginPlay(void);	//再生開始時のフラグをすべてリセット
+	void ControllVoice(const SOUND_LABEL &label, const float &fVolume) { m_apSourceVoice[(int)label]->SetVolume(fVolume); }	//音量調整
 
 private:
 	// パラメータ構造体定義

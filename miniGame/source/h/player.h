@@ -32,8 +32,8 @@ public:
 	enum class PLAYER_STATE
 	{
 		NONE = 0,	//なし
-		NOMAL,		//通常
-		BOUND,		//バウンド
+		NORMAL,		//通常
+		INVINCIBLE,	//無敵
 		SPIN,		//スピン
 		MAX
 	};
@@ -76,6 +76,7 @@ private:
 	void CollisionPlayer(void);						//プレイヤーとの当たり判定
 	void StateBound(void);							//バウンド状態の処理
 	void StateSpin(void);							//スピン状態の処理
+	void StateInvincble(void);						//無敵状態の処理
 	void UseItem(void);								//アイテム使用処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
@@ -84,12 +85,15 @@ private:
 
 	static int m_nPlayerNum;		//プレイヤーの数
 	int m_nIndex;					//プレイヤー番号
-	int m_nCntGameover;				//ゲームオーバー後のカウント
 	float m_fMoveSpeed;				//移動する速さ
 	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
+	float m_fSpinSpeed;				//スピンのスピード
 	PLAYER_STATE m_state;			//状態
 	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
+	bool m_bBound;					//バウンドするかどうか
+
 	int m_nSpinCounter;				//スピンする時間のカウンター
+	int m_nInvincbleCounter;		//無敵時間のカウンター
 };
 
 #endif // !_PLAYER_H_

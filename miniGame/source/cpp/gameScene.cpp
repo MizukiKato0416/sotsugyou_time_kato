@@ -28,13 +28,14 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define GAME_TIME (300)
+#define GAME_TIME								 (60)									//ゲームの時間
+#define GAME_CREATE_ITEMBOX_TIME				 (30)									//アイテムを生成し始める時間										
 #define TEXT_FILE_NAME_HISCORE					 "data/TEXT/save_hiscore.txt"
 #define TEXT_FILE_NAME_APPLETYPE				 "data/TEXT/save_appletype.txt"
 #define FOG_COLOR								 (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 #define GAME_STAGE_SIZE							 (700.0f)								//すてーじの大きさ
-#define GAME_BALLOON_CREATE_POS_Y				 (45.0f)								//風船の位置Y
+#define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
 #define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
@@ -43,7 +44,7 @@
 #define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
 #define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
-#define GAME_ITEM_BOX_CREATE_POS_X				 (1000.0f)								//アイテムボックスの生成位置X
+#define GAME_ITEM_BOX_CREATE_POS_X				 (900.0f)								//アイテムボックスの生成位置X
 #define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
 
 //=============================================================================
@@ -77,7 +78,7 @@ CGameScene::~CGameScene()
 //=============================================================================
 void CGameScene::Init(void) {
 	//変数初期化
-	m_nCreateItemBoxCounter = 0;
+	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -233,12 +234,10 @@ void CGameScene::Update(void) {
 		if (m_pTimer != nullptr) m_pTimer->AddScore(50);
 	}
 
-	//風船の生成
-	CreateBalloon();
-
-	//アイテムボックスの生成
-	CreateItemBox();
 #endif
+
+	
+	
 
 	//ゲームオーバー時
 	if (m_bGameOver) {
@@ -263,7 +262,17 @@ void CGameScene::UpdateGame(void) {
 		if (m_pTimer->GetScore() <= 0) {
 			//ゲーム終了
 			GameOver();
+			return;
 		}
+	}
+
+	//風船の生成
+	CreateBalloon();
+
+	if (m_pTimer->GetScore() <= GAME_CREATE_ITEMBOX_TIME)
+	{
+		//アイテムボックスの生成
+		CreateItemBox();
 	}
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
@@ -283,7 +292,7 @@ void CGameScene::UpdateGame(void) {
 		//ポーズメニュークラスを生成
 		m_pMenuPause = CPauseMenu::Create();
 		//サウンドを再生
-		pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN);
+		//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN);
 	}
 }
 
@@ -320,7 +329,7 @@ void CGameScene::UpdateGameOver(void) {
 		}
 
 		//選択決定音の再生
-		pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
+		//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
 	}
 }
 
@@ -349,7 +358,7 @@ void CGameScene::GameOver(void) {
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//ゲームオーバー音を再生
-	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER);
+	if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
 
 	//プレイヤーの取得
 	CPlayer* pPlayer = GetPlayer();
@@ -539,36 +548,31 @@ void CGameScene::CreateBalloon(void)
 // アイテムボックス生成処理
 //=============================================================================
 void CGameScene::CreateItemBox(void){
-	
-	//アイテムが生成されていないなら
-	if (CItemBox::GetNum() == 0)
+	m_nCreateItemBoxCounter++;
+	//一定の値になったら
+	if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
 	{
-		m_nCreateItemBoxCounter++;
-		//一定の値になったら
-		if (m_nCreateItemBoxCounter > GAME_ITEM_BOX_CREATE_INTERVAL)
+		m_nCreateItemBoxCounter = 0;
+
+		//生成位置
+		D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
+		//移動量
+		D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
+
+		//2分の1の確率で
+		if (rand() % 2 == 0)
 		{
-			m_nCreateItemBoxCounter = 0;
-
-			//生成位置
-			D3DXVECTOR3 itemBoxPos = D3DXVECTOR3(GAME_ITEM_BOX_CREATE_POS_X, GAME_BALLOON_CREATE_POS_Y, 0.0f);
-			//移動量
-			D3DXVECTOR3 itemBoxMove = D3DXVECTOR3(-ITEM_BOX_MOVE_SPEED, 0.0f, 0.0f);
-
-			//2分の1の確率で
-			if (rand() % 2 == 0)
-			{
-				//逆に生成
-				itemBoxPos.x *= -1.0f;
-				//逆に移動させる
-				itemBoxMove.x *= -1.0f;
-			}
-
-			//ランダムでZ位置を決める
-			itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
-
-			//アイテムボックスを生成する
-			CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
-			pItemBox->SetMove(itemBoxMove);
+			//逆に生成
+			itemBoxPos.x *= -1.0f;
+			//逆に移動させる
+			itemBoxMove.x *= -1.0f;
 		}
+
+		//ランダムでZ位置を決める
+		itemBoxPos.z = GAME_ITEM_BOX_CREATE_POS_Z;
+
+		//アイテムボックスを生成する
+		CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
+		pItemBox->SetMove(itemBoxMove);
 	}
 }

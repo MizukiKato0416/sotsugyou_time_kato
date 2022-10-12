@@ -16,8 +16,8 @@
 #define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
 #define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
-#define BALLOON_UP_POS				(50.0f)		//風船の上がる位置
-#define BALLOON_DOWN_POS			(40.0f)		//風船の下がる位置
+#define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
+#define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -90,12 +90,6 @@ HRESULT CBalloon::Init(void) {
 	m_move = { 0.0f, 0.0f, 0.0f };
 	m_bUp = true;
 
-	//CModel *pModel = GetPtrModel();
-	//if (pModel!= nullptr)
-	//{
-	//	pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),0);
-	//}
-
 	CObjectModel::Init();
 	return S_OK;
 }
@@ -153,6 +147,27 @@ void CBalloon::Update(void) {
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer())
 	{
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BALLOON_BREAK);
+
+		//色によって変える
+		if (m_bGold)
+		{
+			//音再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_3);
+		}
+		else
+		{
+			//音再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_1);
+
+		}
+
 		//当たっていたら消す
 		Uninit();
 		return;
@@ -205,6 +220,7 @@ bool CBalloon::CollisionPlayer(void)
 		//当たっていたら
 		if (fDiffer <= BALLOON_PLAYER_COLL_SIZE + BALLOON_SIZE)
 		{
+			
 			return true;
 		}
 

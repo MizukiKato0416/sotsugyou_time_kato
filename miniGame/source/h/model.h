@@ -61,6 +61,7 @@ public:
 	static ModelData GetModelData(MODELTYPE type);	//モデルデータの取得
 	static char* GetPathName(MODELTYPE type);		//テクスチャのパスの文字列の取得
 	static D3DXCOLOR GetDefaultColor(MODELTYPE type, int nIdx);	//モデルのデフォルトの色を取得
+	static int GetNumMat(MODELTYPE type);		//マテリアル数取得
 
 	HRESULT Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
