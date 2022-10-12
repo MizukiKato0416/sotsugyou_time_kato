@@ -114,7 +114,7 @@ void CPauseMenu::Update(void) {
 				//ポーズのレベルを下げる
 				SubUpdatePauseLevel();
 				//サウンドを再生
-				pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE);
+				//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE);
 				return;
 				break;
 
@@ -125,7 +125,7 @@ void CPauseMenu::Update(void) {
 				//タイトルへシーン遷移
 				pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
 				//サウンドを再生
-				pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
+				//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
 				break;
 			}
 		}

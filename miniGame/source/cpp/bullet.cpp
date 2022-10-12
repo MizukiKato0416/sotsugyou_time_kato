@@ -251,14 +251,13 @@ bool CBullet::AttackCollision(void) {
 			//攻撃エフェクトの生成
 			CEffect::Create(posHit, CEffect::EFFECT_TYPE::DAMAGE_BULLET, 30.0f, 30.0f, false);
 			//ダメージ音の再生
-			if (pSound != nullptr) pSound->CSound::PlaySound(CSound::SOUND_LABEL::DAMAGE_BULLET);
+			if (pSound != nullptr) /*pSound->CSound::PlaySound(CSound::SOUND_LABEL::DAMAGE_BULLET)*/;
 
 			//オブジェクトが死亡していない場合攻撃済みリストに追加
 			if (!pObject->GetDeath()) {
 				if (m_pListAttacked != nullptr) m_pListAttacked->AppendNode(pObject);
 			}
 		}
-
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
 

@@ -9,6 +9,7 @@
 #include "sound.h"
 #include "objectList.h"
 #include "player.h"
+#include "sound.h"
 
 //=============================================================================
 // マクロ定義
@@ -17,6 +18,7 @@
 #define ITEMBOX_SIZE				(50.0f)		//アイテムボックスのサイズ半径
 #define ITEMBOX_UNINIT_POS_X		(1200.0f)	//消える位置
 #define ITEMBOX_UNINIT_POS_Z		(1200.0f)	//消える位置
+#define ITEMBOX_ROTATE_SPEED		(0.02f)		//回転スピード
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -112,11 +114,19 @@ void CItemBox::Update(void) {
 	SetPos(pos);
 
 	//回るようにする
-	SetRotSpeed(D3DXVECTOR3(0.0f, 0.01f, 0.0f));
+	SetRotSpeed(D3DXVECTOR3(0.0f, ITEMBOX_ROTATE_SPEED, 0.0f));
 
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer())
 	{
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if(pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
+
 		//当たっていたら消す
 		Uninit();
 		return;

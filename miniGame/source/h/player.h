@@ -87,6 +87,7 @@ private:
 	int m_nIndex;					//プレイヤー番号
 	float m_fMoveSpeed;				//移動する速さ
 	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
+	float m_fSpinSpeed;				//スピンのスピード
 	PLAYER_STATE m_state;			//状態
 	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
 	bool m_bBound;					//バウンドするかどうか
