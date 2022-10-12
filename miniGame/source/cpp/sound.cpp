@@ -156,9 +156,9 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.0f);		//1ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.0f);		//3ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 1.0f);		//風船が割れるSE
-	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.0f);		//アイテム取得SE
+	ControllVoice(SOUND_LABEL::SE_POINT_3			, 2.0f);		//3ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.5f);		//風船が割れるSE
+	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f);		//アイテム取得SE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f);		//タイムアップSE
 																	
 	return S_OK;

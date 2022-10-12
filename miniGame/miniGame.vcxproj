@@ -155,8 +155,8 @@
   <ItemGroup>
     <ClCompile Include="source\cpp\balloon.cpp" />
     <ClCompile Include="source\cpp\billboard.cpp" />
-    <ClCompile Include="source\cpp\bullet.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
+    <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
     <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
@@ -189,8 +189,6 @@
     <ClCompile Include="source\cpp\objectModel.cpp" />
     <ClCompile Include="source\cpp\objectModelUI.cpp" />
     <ClCompile Include="source\cpp\objectMotion.cpp" />
-    <ClCompile Include="source\cpp\particle.cpp" />
-    <ClCompile Include="source\cpp\particleEffect.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
     <ClCompile Include="source\cpp\player.cpp" />
     <ClCompile Include="source\cpp\renderer.cpp" />
@@ -212,8 +210,8 @@
     <ClInclude Include="source\h\balloon.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
-    <ClInclude Include="source\h\bullet.h" />
     <ClInclude Include="source\h\camera.h" />
+    <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\font.h" />
@@ -240,8 +238,6 @@
     <ClInclude Include="source\h\objectModel.h" />
     <ClInclude Include="source\h\objectModelUI.h" />
     <ClInclude Include="source\h\objectMotion.h" />
-    <ClInclude Include="source\h\particle.h" />
-    <ClInclude Include="source\h\particleEffect.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
     <ClInclude Include="source\h\plane.h" />
     <ClInclude Include="source\h\player.h" />

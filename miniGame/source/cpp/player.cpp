@@ -14,8 +14,6 @@
 
 #include "wallCylinder.h"
 #include "effect.h"
-#include "particle.h"
-#include "particleEffect.h"
 #include "object2D.h"
 #include "billboard.h"
 #include "item_banana.h"
@@ -278,9 +276,6 @@ void CPlayer::Update(void) {
 	//----------------------------
 	Collision(posPlayer);
 
-	//煙
-	CPresetEffect::SetEffect3D(0, GetPos(), {}, {});
-
 	//----------------------------
 	//モデルの更新
 	//----------------------------
@@ -388,6 +383,9 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
+
+		//煙
+		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
