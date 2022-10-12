@@ -19,6 +19,10 @@
 
 #include "gameScene.h"
 
+//エフェクト
+#include "LoadEffect.h"
+#include "plane.h"
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -120,6 +124,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	//モデルのロード
 	CModel::Load();
 
+	//エフェクト情報のロード
+	CLoadEffect::EffectStateLoad(LOAD_PRESET_TEXT);
+	CPlane::CreateTextureFile();
 
 	//シーンの生成
 	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::GAME);
