@@ -162,14 +162,16 @@ HRESULT CModel::Load(void) {
 			//デフォルトのマテリアルを取得
 			m_aMatDefault[nCntModel][nCntMat] = pMat[nCntMat];
 
-			if (pMat[nCntMat].pTextureFilename != nullptr) {
-				//テクスチャクラスのパスと比較
-				for (int nCntTex = 1; nCntTex < (int)CTexture::TEXTURE_TYPE::ENUM_MAX; nCntTex++) {
-					//文字列が一致でテクスチャの番号を決める
-					if (strcmp(pMat[nCntMat].pTextureFilename, CTexture::GetPathName((CTexture::TEXTURE_TYPE)nCntTex)) == 0) {
-						m_aTexType[nCntModel][nCntMat] = (CTexture::TEXTURE_TYPE)nCntTex;
-						break;
-					}
+			if (pMat[nCntMat].pTextureFilename == nullptr) {
+				continue;
+			}
+
+			//テクスチャクラスのパスと比較
+			for (int nCntTex = 1; nCntTex < (int)CTexture::TEXTURE_TYPE::ENUM_MAX; nCntTex++) {
+				//文字列が一致でテクスチャの番号を決める
+				if (strcmp(pMat[nCntMat].pTextureFilename, CTexture::GetPathName((CTexture::TEXTURE_TYPE)nCntTex)) == 0) {
+					m_aTexType[nCntModel][nCntMat] = (CTexture::TEXTURE_TYPE)nCntTex;
+					break;
 				}
 			}
 		}
@@ -219,6 +221,15 @@ D3DXCOLOR CModel::GetDefaultColor(MODELTYPE type, int nIdx) {
 	if (type < MODELTYPE(0) || type >= MODELTYPE::ENUM_MAX) return D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	if (nIdx < 0 || nIdx >= MAX_MATERIAL) return D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	return m_aMatDefault[(int)type][nIdx].MatD3D.Diffuse;
+}
+
+//=============================================================================
+// マテリアル数取得
+//=============================================================================
+int CModel::GetNumMat(MODELTYPE type)
+{
+	if (type < MODELTYPE(0) || type >= MODELTYPE::ENUM_MAX) return 0;
+	return m_aModelData[(int)type].nNumMat;
 }
 
 //=============================================================================

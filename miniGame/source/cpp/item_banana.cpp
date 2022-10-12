@@ -13,9 +13,9 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define ITEM_BANANA_SIZE				(30.0f)		//バナナのサイズ半径
+#define ITEM_BANANA_SIZE				(50.0f)		//バナナのサイズ半径
 #define ITEM_BANANA_ROTATE_SPEED		(0.08f)		//バナナの回転の速さ
-#define ITEM_BANANA_MOVE_SPEED			(20.0f)		//バナナの移動の速さ
+#define ITEM_BANANA_MOVE_SPEED			(25.0f)		//バナナの移動の速さ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -139,8 +139,8 @@ void CItemBanana::Draw(void) {
 //=============================================================================
 void CItemBanana::HitPlayer(CPlayer * pPlayer)
 {
-	//プレイヤーがスピン状態じゃなかったら
-	if (pPlayer->GetState() != CPlayer::PLAYER_STATE::SPIN)
+	//プレイヤーが通常状態だったら
+	if (pPlayer->GetState() == CPlayer::PLAYER_STATE::NORMAL)
 	{
 		//プレイヤーの状態をスピン状態にする
 		pPlayer->SetState(CPlayer::PLAYER_STATE::SPIN);

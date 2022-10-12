@@ -54,8 +54,15 @@
 //--------------------------------
 //回転
 //--------------------------------
-#define PLAYER_SPIN_COUNT	(120)								//スピンする時間
-#define PLAYER_SPIN_SPEED	(0.3f)								//スピンする速さ
+#define PLAYER_SPIN_COUNT	(90)		//スピンする時間
+#define PLAYER_SPIN_SPEED	(0.3f)		//スピンする速さ
+
+//--------------------------------
+//無敵
+//--------------------------------
+#define PLAYER_INVINCIBLE_COUNTER	(150)	//無敵時間
+#define PLAYER_INVINCIBLE_COL_ALPHA	(0.7f)	//無敵時のα値
+#define PLAYER_INVINCIBLE_COL_ADD	(0.3f)	//無敵時のカラー加算値
 
 //--------------------------------
 //その他
@@ -75,21 +82,22 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	//総数を加算
 	m_nPlayerNum++;
 
-	SetObjType(OBJTYPE_PLAYER);	//オブジェクトタイプの設定
-	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);	//更新順の設定
-	SetDrawPriority(DRAW_PRIORITY::CHARA);	//描画順の設定
+	SetObjType(OBJTYPE_PLAYER);						//オブジェクトタイプの設定
+	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
+	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
 
 	m_lastPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_nIndex = m_nPlayerNum;
-	m_nCntGameover = 0;
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = PLAYER_STATE::NONE;
 	m_itemType = CItem::ITEM_TYPE::NONE;
 	m_nSpinCounter = 0;
+	m_nInvincbleCounter = 0;
+	m_bBound = false;
 }
 
 //=============================================================================
@@ -123,9 +131,11 @@ HRESULT CPlayer::Init(void) {
 	m_destRot.y =  D3DX_PI;	//奥向き
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
-	m_state = PLAYER_STATE::NOMAL;
+	m_state = PLAYER_STATE::NORMAL;
 	m_itemType = CItem::ITEM_TYPE::NONE;
 	m_nSpinCounter = 0;
+	m_nInvincbleCounter = 0;
+	m_bBound = false;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -158,7 +168,7 @@ HRESULT CPlayer::Init(void) {
 	if (pModel!= nullptr)
 	{
 		//指定したマテリアルの色を設定
-		pModel->SetMaterialDiffuse(col,0);
+		pModel->SetMaterialDiffuse(col, 0);
 	}
 
 	return S_OK;
@@ -212,20 +222,20 @@ void CPlayer::Update(void) {
 	//状態分け
 	switch (m_state)
 	{
-	case CPlayer::PLAYER_STATE::NOMAL:
-		//----------------------------
-		//移動
-		//----------------------------
-
+	case CPlayer::PLAYER_STATE::NORMAL:
 		//移動と回転
-		if (pInput != nullptr) {
+		if (pInput != nullptr && !m_bBound) {
+			Move(pInput, fRotCameraY);
+		}
+		break;
+	case CPlayer::PLAYER_STATE::INVINCIBLE:
+		//移動と回転
+		if (pInput != nullptr && !m_bBound) {
 			Move(pInput, fRotCameraY);
 		}
 
-		break;
-	case CPlayer::PLAYER_STATE::BOUND:
-		//バウンド状態処理
-		StateBound();
+		//無敵処理
+		StateInvincble();
 		break;
 	case CPlayer::PLAYER_STATE::SPIN:
 		//スピン処理
@@ -234,6 +244,9 @@ void CPlayer::Update(void) {
 	default:
 		break;
 	}	
+
+	//バウンド処理
+	StateBound();
 
 	//----------------------------
 	//移動の反映
@@ -522,7 +535,7 @@ void CPlayer::DecBoundMove(void) {
 		m_fMoveSpeed = 0.0f;
 
 		//状態を通常にする
-		m_state = PLAYER_STATE::NOMAL;
+		m_bBound = false;
 	}
 }
 
@@ -540,13 +553,13 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 		//位置設定
 		SetPos(pos);
 
-		if (m_state == PLAYER_STATE::BOUND)
+		if (m_state == PLAYER_STATE::SPIN)
 		{
 			return;
 		}
 
 		//状態をBOUNDに設定
-		m_state = PLAYER_STATE::BOUND;
+		m_bBound = true;
 
 		//バウンド時の初速を設定
 		m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
@@ -558,7 +571,7 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 			m_fMoveSpeed = 0.0f;
 
 			//状態を通常にする
-			m_state = PLAYER_STATE::NOMAL;
+			m_state = PLAYER_STATE::NORMAL;
 		}
 	}
 }
@@ -608,26 +621,28 @@ void CPlayer::CollisionPlayer(void)
 			//位置設定
 			SetPos(myPos);
 
-			if (m_state == PLAYER_STATE::BOUND)
+			/*if (m_bBound || m_state == PLAYER_STATE::SPIN)
 			{
 				return;
 			}
+*/
 
-			//状態をBOUNDに設定
-			m_state = PLAYER_STATE::BOUND;
+			////状態をBOUNDに設定
+			//m_state = PLAYER_STATE::BOUND;
 
-			//バウンド時の初速を設定
-			m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
-			//最小値の範囲より小さくなったら
-			if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
-			{
-				//移動量を0にする
-				m_fBoundMoveSpeed = 0.0f;
-				m_fMoveSpeed = 0.0f;
+			////バウンド時の初速を設定
+			//m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
+			////最小値の範囲より小さくなったら
+			//if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
+			//{
+			//	//移動量を0にする
+			//	m_fBoundMoveSpeed = 0.0f;
+			//	m_fMoveSpeed = 0.0f;
 
-				//状態を通常にする
-				m_state = PLAYER_STATE::NOMAL;
-			}
+			//	//状態を通常にする
+			//	m_state = PLAYER_STATE::NORMAL;
+			//}
+
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
@@ -638,12 +653,15 @@ void CPlayer::CollisionPlayer(void)
 //=============================================================================
 void CPlayer::StateBound(void)
 {
-	//向いている方向と逆の方向に跳ね返す
-	m_move.x = sinf(GetRot().y) * m_fBoundMoveSpeed;
-	m_move.z = cosf(GetRot().y) * m_fBoundMoveSpeed;
+	if (m_bBound)
+	{
+		//向いている方向と逆の方向に跳ね返す
+		m_move.x = sinf(GetRot().y) * m_fBoundMoveSpeed;
+		m_move.z = cosf(GetRot().y) * m_fBoundMoveSpeed;
 
-	//移動量の減少
-	DecBoundMove();
+		//移動量の減少
+		DecBoundMove();
+	}
 }
 
 //=============================================================================
@@ -657,8 +675,8 @@ void CPlayer::StateSpin(void)
 	if (m_nSpinCounter > PLAYER_SPIN_COUNT)
 	{
 		m_nSpinCounter = 0;
-		//状態を通常にする
-		m_state = PLAYER_STATE::NOMAL;
+		//状態を無敵にする
+		m_state = PLAYER_STATE::INVINCIBLE;
 	}
 	else
 	{
@@ -670,6 +688,73 @@ void CPlayer::StateSpin(void)
 
 		//向き設定
 		SetRot(rot);
+	}
+}
+
+//=============================================================================
+//無敵状態の処理
+//=============================================================================
+void CPlayer::StateInvincble(void)
+{
+	//最初だけ
+	if (m_nInvincbleCounter == 0)
+	{
+		//モデル取得
+		CModel *pModel = GetPtrModel();
+		if (pModel != nullptr)
+		{
+			//マテリアル数取得
+			int nNumMat = CModel::GetNumMat(pModel->GetModelType());
+
+			for (int nCntMat = 0; nCntMat < nNumMat; nCntMat++)
+			{
+				//カラー取得
+				D3DXCOLOR col = pModel->GetMaterialDiffuse(nCntMat);
+
+				//薄くする
+				col.a = PLAYER_INVINCIBLE_COL_ALPHA;
+				//色を加算
+				col.r += PLAYER_INVINCIBLE_COL_ADD;
+				col.g += PLAYER_INVINCIBLE_COL_ADD;
+				col.b += PLAYER_INVINCIBLE_COL_ADD;
+
+				//色設定
+				pModel->SetMaterialDiffuse(col, nCntMat);
+			}
+		}
+	}
+
+	m_nInvincbleCounter++;
+	if (m_nInvincbleCounter > PLAYER_INVINCIBLE_COUNTER)
+	{
+		m_nInvincbleCounter = 0;
+
+		//モデル取得
+		CModel *pModel = GetPtrModel();
+		if (pModel != nullptr)
+		{
+			//マテリアル数取得
+			int nNumMat = CModel::GetNumMat(pModel->GetModelType());
+
+			for (int nCntMat = 0; nCntMat < nNumMat; nCntMat++)
+			{
+				//カラー取得
+				D3DXCOLOR col = pModel->GetMaterialDiffuse(nCntMat);
+
+				//元に戻す
+				col.a = 1.0f;
+				//色を減算
+				col.r -= PLAYER_INVINCIBLE_COL_ADD;
+				col.g -= PLAYER_INVINCIBLE_COL_ADD;
+				col.b -= PLAYER_INVINCIBLE_COL_ADD;
+
+				//色設定
+				pModel->SetMaterialDiffuse(col, nCntMat);
+			}
+		}
+
+		//通常状態にする
+		m_state = PLAYER_STATE::NORMAL;
 	}
 }
 

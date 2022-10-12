@@ -16,8 +16,8 @@
 #define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
 #define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
-#define BALLOON_UP_POS				(50.0f)		//風船の上がる位置
-#define BALLOON_DOWN_POS			(40.0f)		//風船の下がる位置
+#define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
+#define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
 
 //=============================================================================
 // 静的メンバ変数宣言
