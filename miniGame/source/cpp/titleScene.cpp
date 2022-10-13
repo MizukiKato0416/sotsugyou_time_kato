@@ -169,7 +169,7 @@ void CTitleScene::Update(void) {
 	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
-	D3DXCOLOR col = m_pNext->GetColor();
+	D3DXCOLOR col = m_pNext->GetColor(); // 次に行かせるロゴの色の取得
 
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
@@ -193,6 +193,7 @@ void CTitleScene::Update(void) {
 		}		
 		else
 		{
+			// 押されたとき
 			m_bPushKey = true;
 		}
 	}
@@ -203,14 +204,17 @@ void CTitleScene::Update(void) {
 		// 点滅処理(状態遷移)
 		if (m_bCol)
 		{
+			// α値の変更
 			col.a = m_fMaxCol;
 			m_bCol = false;
 		}
 		else
 		{
+			// α値の変更
 			col.a = m_fMaxCol / 2;
 			m_bCol = true;
 		}
+		// 次に行かせるロゴの色の設定
 		m_pNext->SetColor(col);
 
 		// 遷移する時間が0より小さくなっていたら
