@@ -155,9 +155,17 @@
   <ItemGroup>
     <ClCompile Include="source\cpp\balloon.cpp" />
     <ClCompile Include="source\cpp\billboard.cpp" />
-    <ClCompile Include="source\cpp\bullet.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
+    <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
+    <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
+    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\plane.cpp" />
+    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\Rotate3d.cpp" />
+    <ClCompile Include="source\cpp\Effect\scene3d.cpp" />
+    <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
     <ClCompile Include="source\cpp\font.cpp" />
     <ClCompile Include="source\cpp\gameCamera.cpp" />
@@ -181,8 +189,6 @@
     <ClCompile Include="source\cpp\objectModel.cpp" />
     <ClCompile Include="source\cpp\objectModelUI.cpp" />
     <ClCompile Include="source\cpp\objectMotion.cpp" />
-    <ClCompile Include="source\cpp\particle.cpp" />
-    <ClCompile Include="source\cpp\particleEffect.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
     <ClCompile Include="source\cpp\player.cpp" />
     <ClCompile Include="source\cpp\renderer.cpp" />
@@ -203,11 +209,13 @@
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h" />
     <ClInclude Include="source\h\billboard.h" />
-    <ClInclude Include="source\h\bullet.h" />
+    <ClInclude Include="source\h\billeffect.h" />
     <ClInclude Include="source\h\camera.h" />
+    <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\font.h" />
+    <ClInclude Include="source\h\Fountain.h" />
     <ClInclude Include="source\h\gameCamera.h" />
     <ClInclude Include="source\h\gameScene.h" />
     <ClInclude Include="source\h\gauge.h" />
@@ -217,6 +225,7 @@
     <ClInclude Include="source\h\item.h" />
     <ClInclude Include="source\h\itemBox.h" />
     <ClInclude Include="source\h\item_banana.h" />
+    <ClInclude Include="source\h\LoadEffect.h" />
     <ClInclude Include="source\h\main.h" />
     <ClInclude Include="source\h\manager.h" />
     <ClInclude Include="source\h\meshcylinder.h" />
@@ -229,18 +238,21 @@
     <ClInclude Include="source\h\objectModel.h" />
     <ClInclude Include="source\h\objectModelUI.h" />
     <ClInclude Include="source\h\objectMotion.h" />
-    <ClInclude Include="source\h\particle.h" />
-    <ClInclude Include="source\h\particleEffect.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
+    <ClInclude Include="source\h\plane.h" />
     <ClInclude Include="source\h\player.h" />
+    <ClInclude Include="source\h\PresetSetEffect.h" />
     <ClInclude Include="source\h\renderer.h" />
+    <ClInclude Include="source\h\Rotate3d.h" />
     <ClInclude Include="source\h\scene.h" />
+    <ClInclude Include="source\h\scene3d.h" />
     <ClInclude Include="source\h\score.h" />
     <ClInclude Include="source\h\selectMenu.h" />
     <ClInclude Include="source\h\selectMenu2D.h" />
     <ClInclude Include="source\h\selectMenu3D.h" />
     <ClInclude Include="source\h\sound.h" />
     <ClInclude Include="source\h\stage.h" />
+    <ClInclude Include="source\h\straight3d.h" />
     <ClInclude Include="source\h\terrain.h" />
     <ClInclude Include="source\h\texture.h" />
     <ClInclude Include="source\h\timer.h" />

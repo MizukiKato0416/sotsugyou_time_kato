@@ -209,7 +209,7 @@ void CTitleScene::Update(void) {
 			//選択のロックを解除
 			m_pSelectMenuTitle->SetLockChangeSelect(false);
 			//決定音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE);
+			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE)*/;
 		}
 		//クレジット画面が表示されているとき
 		else if (m_pCreadit != nullptr) {
@@ -219,7 +219,7 @@ void CTitleScene::Update(void) {
 			//選択のロックを解除
 			m_pSelectMenuTitle->SetLockChangeSelect(false);
 			//決定音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE);
+			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE)*/;
 		}
 		//他の画面が表示されていないとき
 		else {
@@ -233,7 +233,7 @@ void CTitleScene::Update(void) {
 				m_bBeginFade = true;
 				if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
 				//決定音の再生
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
+				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
 				//メニューの選択をロック
 				m_pSelectMenuTitle->SetLockChangeSelect(true);
 				break;
@@ -243,7 +243,7 @@ void CTitleScene::Update(void) {
 				//チュートリアル画面の生成
 				m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TUTORIAL, SCREEN_WIDTH, SCREEN_HEIGHT);
 				//決定音の再生
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN);
+				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN)*/;
 				//メニューの選択をロック
 				m_pSelectMenuTitle->SetLockChangeSelect(true);
 				break;
@@ -253,7 +253,7 @@ void CTitleScene::Update(void) {
 				//クレジット画面の生成
 				m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::CREDIT, SCREEN_WIDTH, SCREEN_HEIGHT);
 				//決定音の再生
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN);
+				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN)*/;
 				//メニューの選択をロック
 				m_pSelectMenuTitle->SetLockChangeSelect(true);
 				break;

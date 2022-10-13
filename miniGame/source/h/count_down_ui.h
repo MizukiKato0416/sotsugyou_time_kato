@@ -1,50 +1,42 @@
 //=============================================================================
 //
-// アイテムボックス処理 [itemBox.h]
+// カウントダウンUI処理 [count_down_ui.h]
 // Author : 加藤瑞葵
 //
 //=============================================================================
-#ifndef _ITEMBOX_H_
-#define _ITEMBOX_H_
+#ifndef _COUNT_DOWN_UI_H_
+#define _COUNT_DOWN_UI_H_
 
-#include "objectModel.h"
+#include "object.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define ITEM_BOX_MOVE_SPEED	(6.0f)		//アイテムの移動速度
 
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
+class CObject2D;
 
 //*****************************************************************************
-// アイテムボックスクラス
+// カウントダウンクラス
 //*****************************************************************************
-class CItemBox : public CObjectModel
+class CCountDownUi : public CObject
 {
 public:
-	CItemBox();	//デフォルトコンストラクタ
-	CItemBox(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
-	~CItemBox();	//デストラクタ
-	static CItemBox* Create(D3DXVECTOR3 pos);	//生成処理
+	CCountDownUi();		//デフォルトコンストラクタ
+	~CCountDownUi();	//デストラクタ
+	static CCountDownUi* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 size);	//生成処理
 	HRESULT Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
-	void Draw(void);	//描画処理
-
-	//総数取得処理
-	static int GetNum(void) { return m_nNum; }
-	//移動量取得処理
-	D3DXVECTOR3 GetMove(void) { return m_move; }
-	//移動量設定処理
-	void SetMove(D3DXVECTOR3 move) { m_move = move; }
+	void Draw(void) {}	//描画処理
 
 private:
-	bool CollisionPlayer(void);	//プレイヤーとの当たり判定
-
-	static int m_nNum;		//総数
-	D3DXVECTOR3 m_move;		//移動量
+	CObject2D *m_pCountUi;	//カウント用UIのポインタ
+	D3DXVECTOR3 m_pos;		//位置
+	D3DXVECTOR3 m_scale;	//スケール
+	int m_nCounter;			//Frameカウント用
 };
 
-#endif // !_ITEMBOX_H_
+#endif // !_COUNT_DOWN_UI_H_

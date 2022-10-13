@@ -40,6 +40,7 @@ private:
 	bool CollisionPlayer(void);	//プレイヤーとの当たり判定
 
 	static int m_nNum;	//総数
+
 	bool m_bGold;		//金色にするかどうか
 	D3DXVECTOR3 m_move;	//移動量
 	bool m_bUp;			//上昇しているかどうか

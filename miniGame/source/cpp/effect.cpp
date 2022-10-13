@@ -68,71 +68,71 @@ HRESULT CEffect::Init(void) {
 	switch (m_type)
 	{
 	case EFFECT_TYPE::EXPLOSION:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_EXPLOSION);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 2;
 		m_nPatternU = 7;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::DAMAGE_PLAYER:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_DAMAGE_PLAYER);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 1;
 		m_nPatternV = 15;
 		break;
 	case EFFECT_TYPE::DAMAGE_ENEMY:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_DAMAGE_ENEMY);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 13;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::DAMAGE_BULLET:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_DAMAGE_BULLET);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 12;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::DEATH:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_DEATH);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 2;
 		m_nPatternU = 8;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::HEAL_APPLE:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_HEAL_APPLE);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 9;
 		m_nPatternV = 1;
 		m_bDestBlendOne = true;	//â¡éZçáê¨
 		break;
 	case EFFECT_TYPE::DRAIN:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_DRAIN_APPLE);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 10;
 		m_nPatternV = 1;
 		m_bDestBlendOne = true;	//â¡éZçáê¨
 		break;
 	case EFFECT_TYPE::REPULSIVEWAVE:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_REPULSIVEWAVE_APPLE);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 10;
 		m_nPatternV = 1;
 		m_bDestBlendOne = true;	//â¡éZçáê¨
 		break;
 	case EFFECT_TYPE::FIRE:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_FIRE);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 2;
 		m_nPatternU = 8;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::FIRE_BOLL:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_FIRE_BOLL);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 2;
 		m_nPatternU = 5;
 		m_nPatternV = 2;
 		SetZtestAlways(false);	//ëºÇÃÉIÉuÉWÉFÉNÉgÇ…é’ÇÁÇÍÇÈ
 		break;
 	case EFFECT_TYPE::THUNDERBOLT:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_THUNDERBOLT);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 1;
 		m_nPatternU = 8;
 		m_nPatternV = 1;
@@ -140,13 +140,13 @@ HRESULT CEffect::Init(void) {
 		SetRotateYOnly(true);	//YâÒì]ÇÃÇ›
 		break;
 	case EFFECT_TYPE::THUNDER:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_THUNDER);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 3;
 		m_nPatternU = 8;
 		m_nPatternV = 1;
 		break;
 	case EFFECT_TYPE::WIND:
-		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_WIND);
+		SetTexType(CTexture::TEXTURE_TYPE::NONE);
 		m_nSpanAnim = 3;
 		m_nPatternU = 12;
 		m_nPatternV = 1;

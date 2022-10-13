@@ -15,36 +15,11 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/BGM/title.wav", -1 },
 	{ "data/SOUND/BGM/game.wav", -1 },
 
-	{ "data/SOUND/SE/title_gamestart.wav", 0 },
-	{ "data/SOUND/SE/title_open.wav", 0 },
-	{ "data/SOUND/SE/title_close.wav", 0 },
-
-	{ "data/SOUND/SE/select_switch.wav", 0 },
-	{ "data/SOUND/SE/cansel.wav", 0 },
-	{ "data/SOUND/SE/footstep.wav", 0 },
-	{ "data/SOUND/SE/swish_punch.wav", 0 },
-	{ "data/SOUND/SE/damage_punch.wav", 0 },
-	{ "data/SOUND/SE/shock_punch.wav", 0 },
-	{ "data/SOUND/SE/shock_stamp.wav", 0 },
-
-	{ "data/SOUND/SE/heal.wav", 0 },
-	{ "data/SOUND/SE/getEXP.wav", 0 },
-	{ "data/SOUND/SE/drain.wav", 0 },
-	{ "data/SOUND/SE/shoot_bullet.wav", 0 },
-	{ "data/SOUND/SE/damage_bullet.wav", 0 },
-	{ "data/SOUND/SE/damage_fire.wav", 0 },
-	{ "data/SOUND/SE/stun.wav", 0 },
-	{ "data/SOUND/SE/explosion.wav", 0 },
-	{ "data/SOUND/SE/repulsive_wave.wav", 0 },
-	{ "data/SOUND/SE/thunderbolt.wav", 0 },
-	{ "data/SOUND/SE/damage_thunder.wav", 0 },
-	{ "data/SOUND/SE/spawn_enemy.wav", 0 },
-	{ "data/SOUND/SE/grow_up2.wav", 0 },
-	{ "data/SOUND/SE/create_apple.wav", 0 },
-	{ "data/SOUND/SE/dead_tree.wav", 0 },
-	{ "data/SOUND/SE/endgame.wav", 0 },
-	{ "data/SOUND/SE/gameover.wav", 0 },
-	{ "data/SOUND/SE/gameclear.wav", 0 }
+	{ "data/SOUND/SE/1point.wav", 0 },
+	{ "data/SOUND/SE/3point.wav", 0 },
+	{ "data/SOUND/SE/balloonbreak.wav", 0 },
+	{ "data/SOUND/SE/itemget.wav", 0 },
+	{ "data/SOUND/SE/timeup.wav", 0 }
 };
 
 //=============================================================================
@@ -178,6 +153,14 @@ HRESULT CSound::Init(HWND hWnd)
 		CloseHandle(hFile);
 	}
 
+	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
+	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
+	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.0f);		//1ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_POINT_3			, 2.0f);		//3ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.5f);		//風船が割れるSE
+	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f);		//アイテム取得SE
+	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f);		//タイムアップSE
+																	
 	return S_OK;
 }
 

@@ -14,11 +14,11 @@
 
 #include "wallCylinder.h"
 #include "effect.h"
-#include "particle.h"
-#include "particleEffect.h"
 #include "object2D.h"
 #include "billboard.h"
 #include "item_banana.h"
+
+#include "PresetSetEffect.h"
 
 //=============================================================================
 // マクロ定義
@@ -54,8 +54,10 @@
 //--------------------------------
 //回転
 //--------------------------------
-#define PLAYER_SPIN_COUNT	(90)		//スピンする時間
-#define PLAYER_SPIN_SPEED	(0.3f)		//スピンする速さ
+#define PLAYER_SPIN_COUNT			(90)		//スピンする時間
+#define PLAYER_SPIN_SPEED			(0.3f)		//スピンする速さ
+#define PLAYER_SPIN_SPEED_DEC		(0.91f)		//スピンする速さ減算値
+#define PLAYER_SPIN_SPEED_DEC_COUNT	(60)		//スピンする速さ減速させる時間
 
 //--------------------------------
 //無敵
@@ -93,6 +95,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_nIndex = m_nPlayerNum;
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
+	m_fSpinSpeed = 0.0f;
 	m_state = PLAYER_STATE::NONE;
 	m_itemType = CItem::ITEM_TYPE::NONE;
 	m_nSpinCounter = 0;
@@ -136,6 +139,7 @@ HRESULT CPlayer::Init(void) {
 	m_nSpinCounter = 0;
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
+	m_fSpinSpeed = PLAYER_SPIN_SPEED;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -379,6 +383,9 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
+
+		//煙
+		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
@@ -555,6 +562,11 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 
 		if (m_state == PLAYER_STATE::SPIN)
 		{
+			//return;
+		}
+
+		if (m_bBound)
+		{
 			return;
 		}
 
@@ -571,7 +583,7 @@ void CPlayer::Collision(D3DXVECTOR3& pos) {
 			m_fMoveSpeed = 0.0f;
 
 			//状態を通常にする
-			m_state = PLAYER_STATE::NORMAL;
+			m_bBound = false;
 		}
 	}
 }
@@ -625,24 +637,7 @@ void CPlayer::CollisionPlayer(void)
 			{
 				return;
 			}
-*/
-
-			////状態をBOUNDに設定
-			//m_state = PLAYER_STATE::BOUND;
-
-			////バウンド時の初速を設定
-			//m_fBoundMoveSpeed = m_fMoveSpeed * PLAYER_BOUND_SPEED;
-			////最小値の範囲より小さくなったら
-			//if (m_fBoundMoveSpeed < MOVE_ZERO_RANGE && m_fBoundMoveSpeed > -MOVE_ZERO_RANGE)
-			//{
-			//	//移動量を0にする
-			//	m_fBoundMoveSpeed = 0.0f;
-			//	m_fMoveSpeed = 0.0f;
-
-			//	//状態を通常にする
-			//	m_state = PLAYER_STATE::NORMAL;
-			//}
-
+            */
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
@@ -683,8 +678,18 @@ void CPlayer::StateSpin(void)
 		//向き取得
 		D3DXVECTOR3 rot = GetRot();
 
+		if (m_nSpinCounter > PLAYER_SPIN_SPEED_DEC_COUNT)
+		{
+			//減速させる
+			m_fSpinSpeed *= PLAYER_SPIN_SPEED_DEC;
+		}
+		else
+		{
+			m_fSpinSpeed = PLAYER_SPIN_SPEED;
+		}
+
 		//回転させる
-		rot.y += PLAYER_SPIN_SPEED;
+		rot.y += m_fSpinSpeed;
 
 		//向き設定
 		SetRot(rot);
