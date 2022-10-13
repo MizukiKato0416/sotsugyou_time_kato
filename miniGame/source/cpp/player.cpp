@@ -101,6 +101,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_nSpinCounter = 0;
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
+	m_bUpdate = false;
 }
 
 //=============================================================================
@@ -140,6 +141,7 @@ HRESULT CPlayer::Init(void) {
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
 	m_fSpinSpeed = PLAYER_SPIN_SPEED;
+	m_bUpdate = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -192,6 +194,13 @@ void CPlayer::Uninit(void) {
 // プレイヤーの更新処理
 //=============================================================================
 void CPlayer::Update(void) {
+
+	//更新しない設定なら
+	if (!m_bUpdate)
+	{
+		return;
+	}
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 

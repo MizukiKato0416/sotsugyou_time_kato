@@ -67,6 +67,14 @@ CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CPlayer *pPlayer) {
 //=============================================================================
 HRESULT CItemBanana::Init(void) {
 
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound *pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//音再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BANANA_THROW);
+
 	//プレイヤーの向き取得
 	float fRot = m_pPlayer->GetRot().y;
 
@@ -119,6 +127,14 @@ void CItemBanana::Update(void) {
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer(ITEM_BANANA_SIZE))
 	{
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_SPIN);
+
 		//当たっていたら消す
 		Uninit();
 		return;

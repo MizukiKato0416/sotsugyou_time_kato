@@ -53,20 +53,29 @@ public:
 	void SetMove(D3DXVECTOR3 move);	//移動量の設定
 	D3DXVECTOR3 GetMove(void);		//移動量の取得
 	float GetRadius(void);			//当たり判定の半径の取得
+
 	//状態設定処理
 	void SetState(const PLAYER_STATE state) { m_state = state; }
 	//状態取得処理
 	PLAYER_STATE GetState(void) { return m_state; }
+
 	//プレイヤー番号設定処理
 	void SetIndex(const int nIndex) { m_nIndex = nIndex; }
 	//プレイヤー番号取得処理
 	int GetIndex(void) { return m_nIndex; }
+
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nPlayerNum; }
+
 	//アイテムタイプ取得処理
 	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
 	//アイテムタイプ設定処理
 	void SetItemType(CItem::ITEM_TYPE itemType) { m_itemType = itemType; }
+
+	//更新するかどうか取得処理
+	bool GetUpdate() { return m_bUpdate; }
+	//更新するかどうか設定処理
+	void SetUpdate(const bool bUpdate) { m_bUpdate = bUpdate; }
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
@@ -91,6 +100,7 @@ private:
 	PLAYER_STATE m_state;			//状態
 	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
 	bool m_bBound;					//バウンドするかどうか
+	bool m_bUpdate;					//更新処理をするかどうか
 
 	int m_nSpinCounter;				//スピンする時間のカウンター
 	int m_nInvincbleCounter;		//無敵時間のカウンター

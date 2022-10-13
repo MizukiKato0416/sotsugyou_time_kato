@@ -19,7 +19,9 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/3point.wav", 0 },
 	{ "data/SOUND/SE/balloonbreak.wav", 0 },
 	{ "data/SOUND/SE/itemget.wav", 0 },
-	{ "data/SOUND/SE/timeup.wav", 0 }
+	{ "data/SOUND/SE/timeup.wav", 0 },
+	{ "data/SOUND/SE/slip.wav", 0 },
+	{ "data/SOUND/SE/bananathrow.wav", 0 }
 };
 
 //=============================================================================
@@ -155,11 +157,13 @@ HRESULT CSound::Init(HWND hWnd)
 
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
-	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.0f);		//1ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_3			, 2.0f);		//3ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.5f);		//風船が割れるSE
+	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.6f);		//3ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f);		//風船が割れるSE
 	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f);		//アイテム取得SE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f);		//タイムアップSE
+	ControllVoice(SOUND_LABEL::SE_PLAYER_SPIN		, 0.7f);		//スピンSE
+	ControllVoice(SOUND_LABEL::SE_BANANA_THROW		, 1.6f);		//バナナを投げるSE
 																	
 	return S_OK;
 }

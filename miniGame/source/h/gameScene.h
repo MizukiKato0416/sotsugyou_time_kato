@@ -9,6 +9,7 @@
 
 #include "scene.h"
 #include "main.h"
+#include "player.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -24,6 +25,7 @@ class CObject2D;
 class CPauseMenu;
 class CSelectMenu2D;
 class CScore;
+class CCountDownUi;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -48,15 +50,18 @@ private:
 	void CreateMenuEndGame(void);	//ゲーム終了時の選択メニューの生成
 	void CreateBalloon(void);		//風船生成処理
 	void CreateItemBox(void);		//アイテムボックス生成処理
+	void CountDownUi(void);			//カウントダウンUIの処理
 
 	bool m_bGameOver;	//ゲームオーバー
 
-	CStage* m_pStage;				//ステージへのポインタ
-	CTimer* m_pTimer;				//ゲームのタイマー
-	CObject2D* m_pTimerFrame;		//タイマーの枠
-	int m_nGameScore;				//ゲーム終了時のスコア
-	CPauseMenu* m_pMenuPause;		//ポーズメニュー
-	CSelectMenu2D* m_pMenuGameEnd;	//ゲーム終了時の選択メニュー
+	CStage* m_pStage;						//ステージへのポインタ
+	CTimer* m_pTimer;						//ゲームのタイマー
+	CObject2D* m_pTimerFrame;				//タイマーの枠
+	int m_nGameScore;						//ゲーム終了時のスコア
+	CPauseMenu* m_pMenuPause;				//ポーズメニュー
+	CSelectMenu2D* m_pMenuGameEnd;			//ゲーム終了時の選択メニュー
+	CCountDownUi *m_pCountDownUi;			//カウントダウンUIのポインタ
+	CPlayer* m_apPlayer[MAX_PLAYER_NUM];	//プレイヤーのポインタ
 
 	int m_nCntGameClear;	//ゲームクリア後のカウント
 	int m_nCreateItemBoxCounter;	//アイテムボックスの生成カウンター

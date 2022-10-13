@@ -64,6 +64,8 @@ CGameScene::CGameScene()
 
 	m_nCntGameClear = 0;
 	m_nCreateItemBoxCounter = 0;
+	m_pCountDownUi = nullptr;
+	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_PLAYER_NUM]));
 }
 
 //=============================================================================
@@ -125,16 +127,8 @@ void CGameScene::Init(void) {
 		pRenderer->SetBackBuffColor(FOG_COLOR);
 	}
 
-	//------------------------------
-	//モーション情報のロード
-	//------------------------------
-
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
-
-	//ステージの生成
-	//if (m_pStage == nullptr) m_pStage = new CStage;
-	//if (m_pStage != nullptr) m_pStage->CreateStage(TEXT_FILE_NAME_STAGE_GAME);
 
 	//床の生成
 	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 1000.0f, 1000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
@@ -157,19 +151,18 @@ void CGameScene::Init(void) {
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
 	{
-		CPlayer* pPlayer = CPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
-			                                           0.0f,
-			                                           GAME_PLAYER_INIT_CREATE_POS_Z));
+		m_apPlayer[nCntPlayer] = CPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
+												 0.0f,
+												 GAME_PLAYER_INIT_CREATE_POS_Z));
 		//シーンのプレイヤーの設定
-		SetPlayer(pPlayer);
+		SetPlayer(m_apPlayer[nCntPlayer]);
+
+		//更新しないようにする
+		m_apPlayer[nCntPlayer]->SetUpdate(false);
 	}
 
-	//タイマーの生成
-	m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
-	m_pTimer = CTimer::Create(GAME_TIME, 3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
-
 	//カウントダウンUIの生成
-	CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+	m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -240,7 +233,12 @@ void CGameScene::Update(void) {
 
 #endif
 
-	
+	//カウントダウンUIが生成されていたら
+	if (m_pCountDownUi != nullptr)
+	{
+		//カウントダウンUIの処理
+		CountDownUi();
+	}
 	
 
 	//ゲームオーバー時
@@ -273,11 +271,16 @@ void CGameScene::UpdateGame(void) {
 	//風船の生成
 	CreateBalloon();
 
-	if (m_pTimer->GetScore() <= GAME_CREATE_ITEMBOX_TIME)
+	//タイマーが生成されていたら
+	if (m_pTimer != nullptr)
 	{
-		//アイテムボックスの生成
-		CreateItemBox();
+		if (m_pTimer->GetScore() <= GAME_CREATE_ITEMBOX_TIME)
+		{
+			//アイテムボックスの生成
+			CreateItemBox();
+		}
 	}
+	
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -578,5 +581,49 @@ void CGameScene::CreateItemBox(void){
 		//アイテムボックスを生成する
 		CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
 		pItemBox->SetMove(itemBoxMove);
+	}
+}
+
+//=============================================================================
+//カウントダウンUIの処理
+//=============================================================================
+void CGameScene::CountDownUi(void)
+{
+	//スタート状態なら
+	if (m_pCountDownUi->GetStart())
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+		{
+			//生成されていたら
+			if (m_apPlayer[nCntPlayer] == nullptr)
+			{
+				continue;
+			}
+
+			//更新されている状態なら
+			if (m_apPlayer[nCntPlayer]->GetUpdate())
+			{
+				continue;
+			}
+
+			//更新されている状態にする
+			m_apPlayer[nCntPlayer]->SetUpdate(true);
+		}
+
+		//生成されていなかったら
+		if (m_pTimerFrame == nullptr)
+		{
+			//タイマーの生成
+			m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
+			m_pTimer = CTimer::Create(GAME_TIME, 3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
+		}
+	}
+
+	//カウントUIが消えていたら
+	if (m_pCountDownUi->GetCountUi() == nullptr)
+	{
+		//カウントダウンUIを消す
+		m_pCountDownUi->Uninit();
+		m_pCountDownUi = nullptr;
 	}
 }
