@@ -2,6 +2,7 @@
 //
 // タイトルシーン処理 [titleScene.cpp]
 // Author : 鶴間俊樹
+// Author : 佐藤瞭平
 //
 //=============================================================================
 #include "titleScene.h"
@@ -22,21 +23,29 @@
 //=============================================================================
 #define FOG_COLOR (D3DXCOLOR(0.9f, 0.5f, 0.0f, 1.0f))	//フォグの色
 #define TEXT_FILE_NAME_APPLETYPE "data/TEXT/save_appletype.txt"
+#define ESC_POS (D3DXVECTOR3(120.0f, 40.0f, 0.0f))
+#define ESC_WIDTH (200.0f)
+#define ESC_HEIGHT (40.0f)
+#define TITLE_LOGO_POS (D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f - 100.0f, 0.0f))
+#define TITLE_LOGO_WIDTH (800.0f)
+#define TITLE_LOGO_HEIGHT (200.0f)
+#define NEXT_LOGO_POS (D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 550.0f, 0.0f))
+#define NEXT_LOGO_WIDTH (400.0f)
+#define NEXT_LOGO_HEIGHT (100.0f)
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
+CObject2D * CTitleScene::m_pNext = nullptr;
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleScene::CTitleScene()
+CTitleScene::CTitleScene():m_fMaxCol(1.0f)
 {
-	m_pSelectMenuTitle = nullptr;
-
-	m_pTutorial = nullptr;
-	m_pCreadit = nullptr;
 	m_bBeginFade = false;
+	m_bPushKey = false;
+	m_nFadeTime = 10;
 }
 
 //=============================================================================
@@ -59,7 +68,7 @@ void CTitleScene::Init(void) {
 	//サウンドの取得
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
-
+#if 0
 	//カメラの設定
 	if (pManager != nullptr) pManager->SetCamera(CTitleCamera::Create());
 
@@ -93,40 +102,20 @@ void CTitleScene::Init(void) {
 		pRenderer->SetEffectFogRange(200.0f, 4000.0f);
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(FOG_COLOR);
-	}
-
-	//------------------------------
-	//モーション情報のロード
-	//------------------------------
-
-	//------------------------------
-	//3Dモデルの生成
-	//------------------------------
-	//プレイヤー
-	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -350.0f));	
-
+	}	
+#endif // 0
 
 	//------------------------------
 	//UIの生成
 	//------------------------------
-	CObject2D::Create(D3DXVECTOR3(120.0f, 40.0f, 0.0f), CTexture::TEXTURE_TYPE::QUIT_GAME, 200.0f, 40.0f);
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f - 100.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 800.0f, 200.0f);
-
-	//タイトルの選択メニューの生成
-	m_pSelectMenuTitle = CSelectMenu2D::Create(3, false);
-
-	if (m_pSelectMenuTitle != nullptr) {
-		//縦選択
-		m_pSelectMenuTitle->SetSelectType(CSelectMenu::SELECT_TYPE::VERTICAL);
-		//選択肢UIの詳細設定
-		m_pSelectMenuTitle->SetSelectUI(0, D3DXVECTOR3(SCREEN_WIDTH - 200.0f, 500.0f, 0.0f), 350.0f, 70.0f, CTexture::TEXTURE_TYPE::TEXT_GAMESTART);
-		m_pSelectMenuTitle->SetSelectUI(1, D3DXVECTOR3(SCREEN_WIDTH - 160.0f, 580.0f, 0.0f), 350.0f, 70.0f, CTexture::TEXTURE_TYPE::TEXT_TUTORIAL);
-		m_pSelectMenuTitle->SetSelectUI(2, D3DXVECTOR3(SCREEN_WIDTH - 140.0f, 660.0f, 0.0f), 350.0f, 70.0f, CTexture::TEXTURE_TYPE::TEXT_CREDIT);
-		//選択肢アイコンの生成
-		m_pSelectMenuTitle->CreateSelectIcon(D3DXVECTOR3(-200.0f, 0.0f, 0.0f), 40.0f, 40.0f, CTexture::TEXTURE_TYPE::SELECT_ICON);
-		m_pSelectMenuTitle->SetIconPosOffset(1, D3DXVECTOR3(-160.0f, 0.0f, 0.0f));
-		m_pSelectMenuTitle->SetIconPosOffset(2, D3DXVECTOR3(-140.0f, 0.0f, 0.0f));
-	}
+	// 背景
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	// ゲーム終了UI
+	CObject2D::Create(ESC_POS, CTexture::TEXTURE_TYPE::QUIT_GAME, ESC_WIDTH, ESC_HEIGHT);
+	// タイトルロゴ
+	CObject2D::Create(TITLE_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, TITLE_LOGO_WIDTH, TITLE_LOGO_HEIGHT);
+	// 次に行かせるロゴ
+	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
 
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -152,8 +141,7 @@ void CTitleScene::Init(void) {
 //=============================================================================
 // タイトルシーンの終了処理
 //=============================================================================
-void CTitleScene::Uninit(void) {
-	//モーション情報のアンロード
+void CTitleScene::Uninit(void) {	
 
 	//シーンの終了処理
 	CScene::Uninit();
@@ -181,6 +169,7 @@ void CTitleScene::Update(void) {
 	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
+	D3DXCOLOR col = m_pNext->GetColor();
 
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
@@ -193,71 +182,52 @@ void CTitleScene::Update(void) {
 
 	if (pInput == nullptr || pFade == nullptr) return;
 
-
 	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && m_pSelectMenuTitle != nullptr) {
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) 
+	{		
 		//フェード中だった場合
-		if (pFade->GetFade()) {
+		if (pFade->GetFade()) 
+		{
 			//フェードをスキップ
 			pFade->SkipFade();
+		}		
+		else
+		{
+			m_bPushKey = true;
 		}
-		//チュートリアル画面が表示されているとき
-		else if (m_pTutorial != nullptr) {
-			//チュートリアル画面を閉じる
-			m_pTutorial->Uninit();
-			m_pTutorial = nullptr;
-			//選択のロックを解除
-			m_pSelectMenuTitle->SetLockChangeSelect(false);
-			//決定音の再生
-			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE)*/;
-		}
-		//クレジット画面が表示されているとき
-		else if (m_pCreadit != nullptr) {
-			//クレジット画面を閉じる
-			m_pCreadit->Uninit();
-			m_pCreadit = nullptr;
-			//選択のロックを解除
-			m_pSelectMenuTitle->SetLockChangeSelect(false);
-			//決定音の再生
-			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_CLOSE)*/;
-		}
-		//他の画面が表示されていないとき
-		else {
-			//選択メニューの現在の選択肢を取得
-			int nIdxSelect = m_pSelectMenuTitle->GetIdxCurSelect();
-			switch (nIdxSelect)
-			{
-				//ゲームスタート
-			case 0:
-				//シーン遷移開始
-				m_bBeginFade = true;
-				if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
-				//決定音の再生
-				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
-				//メニューの選択をロック
-				m_pSelectMenuTitle->SetLockChangeSelect(true);
-				break;
+	}
 
-				//チュートリアル画面
-			case 1:
-				//チュートリアル画面の生成
-				m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TUTORIAL, SCREEN_WIDTH, SCREEN_HEIGHT);
-				//決定音の再生
-				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN)*/;
-				//メニューの選択をロック
-				m_pSelectMenuTitle->SetLockChangeSelect(true);
-				break;
+	//決定キーが押されたとき
+	if (m_bPushKey)
+	{		
+		// 点滅処理(状態遷移)
+		if (m_bCol)
+		{
+			col.a = m_fMaxCol;
+			m_bCol = false;
+		}
+		else
+		{
+			col.a = m_fMaxCol / 2;
+			m_bCol = true;
+		}
+		m_pNext->SetColor(col);
 
-				//クレジット画面
-			case 2:
-				//クレジット画面の生成
-				m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::CREDIT, SCREEN_WIDTH, SCREEN_HEIGHT);
-				//決定音の再生
-				if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN)*/;
-				//メニューの選択をロック
-				m_pSelectMenuTitle->SetLockChangeSelect(true);
-				break;
-			}
+		// 遷移する時間が0より小さくなっていたら
+		if (m_nFadeTime < 0)
+		{
+			// 0を代入してマイナス値にならないようにする
+			m_nFadeTime = 0;	
+			//シーン遷移開始
+			m_bBeginFade = true;
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
+			//決定音の再生
+			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
+		}
+		else
+		{
+			// 遷移する時間が0より小さくなっていたら
+			m_nFadeTime--;
 		}
 	}
 }

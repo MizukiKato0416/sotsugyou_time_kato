@@ -16,7 +16,6 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CSelectMenu2D;
 class CObject2D;
 
 //*****************************************************************************
@@ -32,12 +31,12 @@ public:
 	void Update(void);	//更新処理
 
 private:
-	CSelectMenu2D* m_pSelectMenuTitle;	//タイトルの選択肢
-	CObject2D* m_pTutorial;	//チュートリアル画面
-	CObject2D* m_pCreadit;	//クレジット画面
-
+	static CObject2D * m_pNext;// オブジェクト2Dの静的ポインター生成
+	const float m_fMaxCol;	// 色の最大値
+	int m_nFadeTime;	// 遷移する時間
 	bool m_bBeginFade;	//シーン遷移開始したかどうか
-
+	bool m_bCol; // 色を変えるかどうか
+	bool m_bPushKey; // 押されたかどうか
 };
 
 #endif // !_TITLE_SCENE_H_
