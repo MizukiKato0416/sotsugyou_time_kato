@@ -15,8 +15,8 @@
 #define COUNT_DOWN_UI_START_SIZE_X			(434.0f * 0.8f)		//STARTのサイズX
 #define COUNT_DOWN_UI_START_SIZE_Y			(127.0f * 0.8f)		//STARTのサイズY
 
-#define COUNT_DOWN_UI_NUMBER_SIZE_ADD_X		(COUNT_DOWN_UI_NUMBER_SIZE_X / 37.0f)		//ナンバーサイズ加算値
-#define COUNT_DOWN_UI_NUMBER_SIZE_ADD_Y		(COUNT_DOWN_UI_NUMBER_SIZE_Y / 37.0f)		//ナンバーサイズ加算値
+#define COUNT_DOWN_UI_NUMBER_SIZE_ADD_X		(COUNT_DOWN_UI_NUMBER_SIZE_X / 38.0f)		//ナンバーサイズ加算値
+#define COUNT_DOWN_UI_NUMBER_SIZE_ADD_Y		(COUNT_DOWN_UI_NUMBER_SIZE_Y / 38.0f)		//ナンバーサイズ加算値
 #define COUNT_DOWN_UI_START_SIZE_ADD		(1.02f)										//スタートサイズ加算値
 #define COUNT_DOWN_UI_START_ADD_ALPHA		(0.1f)										//スタートα値加算値
 #define COUNT_DOWN_UI_START_DEC_ALPHA		(0.1f)										//スタートα値減算値
@@ -25,8 +25,6 @@
 #define COUNT_DOWN_UI_NUMBER_SIZE_DEC_COUNT			(10)		//ナンバーUIを小さくするタイミングのカウント 
 #define COUNT_DOWN_UI_NUMBER_SIZE_DEC_STOP_COUNT	(20)		//ナンバーUIを小さくするのをやめるタイミングのカウント 
 #define COUNT_DOWN_UI_START_ALPHA_DEC_COUNT			(30)		//スタートUIを薄くするタイミングのカウント 
-
-
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -37,6 +35,7 @@ CCountDownUi::CCountDownUi()
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
+	m_bStart = false;
 }
 //=============================================================================
 // デストラクタ
@@ -67,6 +66,9 @@ CCountDownUi* CCountDownUi::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scal
 //=============================================================================
 HRESULT CCountDownUi::Init(void) {
 	
+	//変数初期化
+	m_bStart = false;
+
 	//カウントダウンUIの生成
 	m_pCountUi = CObject2D::Create(m_pos, CTexture::TEXTURE_TYPE::COUNT_DOWN_3,
 		                           COUNT_DOWN_UI_NUMBER_SIZE_X * m_scale.x, COUNT_DOWN_UI_NUMBER_SIZE_Y * m_scale.y);
@@ -78,7 +80,12 @@ HRESULT CCountDownUi::Init(void) {
 // 終了処理
 //=============================================================================
 void CCountDownUi::Uninit(void) {
-	
+
+	if (m_pCountUi != nullptr)
+	{
+		m_pCountUi->Uninit();
+		m_pCountUi = nullptr;
+	}
 
 	//オブジェクトの破棄
 	Release();
@@ -121,6 +128,8 @@ void CCountDownUi::Update(void) {
 					m_pCountUi->SetColor(col);
 					//サイズを設定
 					m_pCountUi->SetSize(D3DXVECTOR3(COUNT_DOWN_UI_START_SIZE_X * m_scale.x, COUNT_DOWN_UI_START_SIZE_Y * m_scale.y, 0.0f));
+					//スタート状態にする
+					m_bStart = true;
 				}
 			}
 			else if (m_nCounter < COUNT_DOWN_UI_NUMBER_SIZE_DEC_STOP_COUNT)
