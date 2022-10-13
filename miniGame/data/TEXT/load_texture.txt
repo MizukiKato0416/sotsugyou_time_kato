@@ -21,6 +21,7 @@ data/TEXTURE/UI/count_down_ui_3.png
 data/TEXTURE/UI/count_down_ui_2.png
 data/TEXTURE/UI/count_down_ui_1.png
 data/TEXTURE/UI/count_down_ui_start.png
+data/TEXTURE/UI/text_finish.png
 
 data/TEXTURE/UI/timer_frame.png
 

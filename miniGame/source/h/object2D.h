@@ -29,18 +29,18 @@ public:
 	void Update(void);	//更新処理
 	void Draw(void);	//描画処理
 
-	void SetPos(D3DXVECTOR3 pos);	//位置座標の設定
-	D3DXVECTOR3 GetPos(void);		//位置座標の取得
-	void SetMove(D3DXVECTOR3 move);	//移動量の設定
-	D3DXVECTOR3 GetMove(void);		//移動量の取得
-	void SetSize(D3DXVECTOR3 size);	//サイズの設定
-	D3DXVECTOR3 GetSize(void);		//サイズの取得
+	void SetPos(D3DXVECTOR3 pos);		//位置座標の設定
+	D3DXVECTOR3 GetPos(void);			//位置座標の取得
+	void SetMove(D3DXVECTOR3 move);		//移動量の設定
+	D3DXVECTOR3 GetMove(void);			//移動量の取得
+	void SetSize(D3DXVECTOR3 size);		//サイズの設定
+	D3DXVECTOR3 GetSize(void);			//サイズの取得
 	void SetRatioWidth(float fRatio);	//幅の割合の設定
 	void SetRatioHeight(float fRatio);	//高さの割合の設定
-	void SetAngle(float fAngle);	//角度の設定
-	float GetAngle(void);			//角度の取得
-	void SetColor(D3DXCOLOR col);	//カラーの設定
-	D3DXCOLOR GetColor(void);		//カラーの取得
+	void SetAngle(float fAngle);		//角度の設定
+	float GetAngle(void);				//角度の取得
+	void SetColor(D3DXCOLOR col);		//カラーの設定
+	D3DXCOLOR GetColor(void);			//カラーの取得
 	void SetTexPos(float startU, float startV, float endU, float endV);	//テクスチャ座標の設定
 	void SetTexNumber(int nNumber);	//数字に対応したテクスチャ座標の設定
 
