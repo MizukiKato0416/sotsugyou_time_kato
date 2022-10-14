@@ -58,7 +58,7 @@ CPauseMenu* CPauseMenu::Create(void) {
 //=============================================================================
 HRESULT CPauseMenu::Init(void) {
 	//背景の設定
-	SetMenuBG(CTexture::TEXTURE_TYPE::PAUSE_BG, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);
+	SetMenuBG(CTexture::TEXTURE_TYPE::PAUSE_BG, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);	
 	//縦選択
 	SetSelectType(CSelectMenu::SELECT_TYPE::VERTICAL);
 	//選択肢UIの詳細設定
@@ -66,7 +66,7 @@ HRESULT CPauseMenu::Init(void) {
 	SetSelectUI(1, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 80.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::PAUSE_RESTATE);
 	SetSelectUI(2, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 160.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::PAUSE_CONTINUE);
 	//選択肢アイコンの生成
-	CreateSelectIcon(D3DXVECTOR3(-180.0f, 0.0f, 0.0f), 50.0f, 50.0f, CTexture::TEXTURE_TYPE::SELECT_ICON);
+	CreateSelectIcon(D3DXVECTOR3(-140.0f, 0.0f, 0.0f), 50.0f, 80.0f, CTexture::TEXTURE_TYPE::SELECT_ICON);
 	SetIconPosOffset(1, D3DXVECTOR3(-120.0f, 0.0f, 0.0f));
 
 	CSelectMenu2D::Init();
