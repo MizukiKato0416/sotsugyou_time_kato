@@ -57,6 +57,7 @@ private:
 	void StateDecAlpha();		//α値減算処理
 
 	D3DXVECTOR3 m_scale;							//スケール
+	D3DXVECTOR3 m_pos;								//位置
 	STATE m_state;									//状態
 
 	CTexture::TEXTURE_TYPE m_texTypeFrame;			//フレームのテクスチャ

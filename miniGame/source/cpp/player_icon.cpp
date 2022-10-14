@@ -13,7 +13,7 @@
 #define PLAYER_ICON_FRAME_SIZE			(D3DXVECTOR3(373.0f, 261.0f, 0.0f))		//フレームの大きさ
 #define PLAYER_ICON_PLAYER_NUM_SIZE		(D3DXVECTOR3(201.0f, 181.0f, 0.0f))		//プレイヤー番号の大きさ
 
-#define PLAYER_ICON_ADD_ALPHA			(0.05f)		//α値加算量
+#define PLAYER_ICON_ADD_ALPHA			(0.09f)		//α値加算量
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -21,6 +21,7 @@
 CPlayerIcon::CPlayerIcon()
 {
 	m_scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_texTypeFrame = CTexture::TEXTURE_TYPE::NONE;
 	m_texTypePlayerNum = CTexture::TEXTURE_TYPE::NONE;
 	m_pFrame = nullptr;
@@ -47,7 +48,7 @@ CPlayerIcon* CPlayerIcon::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
 	pPlayerIcon->m_texTypeFrame = texTypeFrame;
 	pPlayerIcon->m_texTypePlayerNum = texTypePlayerNum;
 	pPlayerIcon->m_scale = scale;
-	pPlayerIcon->SetPos(pos);
+	pPlayerIcon->m_pos = pos;
 	pPlayerIcon->Init();
 
 	return pPlayerIcon;
@@ -57,17 +58,15 @@ CPlayerIcon* CPlayerIcon::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
 // 初期化処理
 //=============================================================================
 HRESULT CPlayerIcon::Init(void) {
-	
-	//位置取得
-	D3DXVECTOR3 pos = GetPos();
-
 	//吹き出しの生成
-	m_pFrame = CObject2D::Create(pos, m_texTypeFrame, PLAYER_ICON_FRAME_SIZE.x * m_scale.x, PLAYER_ICON_FRAME_SIZE.y * m_scale.y);
+	m_pFrame = CObject2D::Create(m_pos, m_texTypeFrame, PLAYER_ICON_FRAME_SIZE.x * m_scale.x, PLAYER_ICON_FRAME_SIZE.y * m_scale.y);
 	//カラー設定
 	m_pFrame->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
+	//ちょっと右にずらすよ
+	m_pos.x += 10.0f;
 	//プレイヤー番号の生成
-	m_pPlayerNum = CObject2D::Create(pos, m_texTypePlayerNum, PLAYER_ICON_PLAYER_NUM_SIZE.x * m_scale.x, PLAYER_ICON_PLAYER_NUM_SIZE.y * m_scale.y);
+	m_pPlayerNum = CObject2D::Create(m_pos, m_texTypePlayerNum, PLAYER_ICON_PLAYER_NUM_SIZE.x * m_scale.x, PLAYER_ICON_PLAYER_NUM_SIZE.y * m_scale.y);
 	//カラー設定
 	m_pPlayerNum->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
@@ -220,6 +219,8 @@ void CPlayerIcon::StateDecAlpha(){
 		{
 			//薄くする
 			col.a -= PLAYER_ICON_ADD_ALPHA;
+			//色設定
+			m_pFrame->SetColor(col);
 			if (col.a < 0.0f)
 			{
 				col.a = 0.0f;
@@ -227,8 +228,6 @@ void CPlayerIcon::StateDecAlpha(){
 				m_pFrame->Uninit();
 				m_pFrame = nullptr;
 			}
-			//色設定
-			m_pFrame->SetColor(col);
 		}
 	}
 
@@ -242,6 +241,8 @@ void CPlayerIcon::StateDecAlpha(){
 		{
 			//薄くする
 			col.a -= PLAYER_ICON_ADD_ALPHA;
+			//色設定
+			m_pPlayerNum->SetColor(col);
 			if (col.a < 0.0f)
 			{
 				col.a = 0.0f;
@@ -249,8 +250,6 @@ void CPlayerIcon::StateDecAlpha(){
 				m_pPlayerNum->Uninit();
 				m_pPlayerNum = nullptr;
 			}
-			//色設定
-			m_pPlayerNum->SetColor(col);
 		}
 	}
 }
