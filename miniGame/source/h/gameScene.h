@@ -26,6 +26,7 @@ class CPauseMenu;
 class CSelectMenu2D;
 class CScore;
 class CCountDownUi;
+class CPlayerIcon;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -45,26 +46,28 @@ public:
 	CTimer* GetTimer(void) { return m_pTimer; }	//タイマーの取得
 
 private:
-	void UpdateGame(void);			//ゲーム中の更新
-	void UpdateGameOver(void);		//ゲームオーバー時の更新
-	void CreateMenuEndGame(void);	//ゲーム終了時の選択メニューの生成
-	void CreateBalloon(void);		//風船生成処理
-	void CreateItemBox(void);		//アイテムボックス生成処理
-	void CountDownUi(void);			//カウントダウンUIの処理
+	void UpdateGame(void);					//ゲーム中の更新
+	void UpdateGameOver(void);				//ゲームオーバー時の更新
+	void CreateMenuEndGame(void);			//ゲーム終了時の選択メニューの生成
+	void CreateBalloon(void);				//風船生成処理
+	void CreateItemBox(void);				//アイテムボックス生成処理
+	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
+	void CountDownUi(void);					//カウントダウンUIの処理
 
 	bool m_bGameOver;	//ゲームオーバー
 
-	CStage* m_pStage;						//ステージへのポインタ
-	CTimer* m_pTimer;						//ゲームのタイマー
-	CObject2D* m_pTimerFrame;				//タイマーの枠
-	int m_nGameScore;						//ゲーム終了時のスコア
-	CPauseMenu* m_pMenuPause;				//ポーズメニュー
-	CSelectMenu2D* m_pMenuGameEnd;			//ゲーム終了時の選択メニュー
-	CCountDownUi *m_pCountDownUi;			//カウントダウンUIのポインタ
-	CPlayer* m_apPlayer[MAX_PLAYER_NUM];	//プレイヤーのポインタ
+	CStage* m_pStage;								//ステージへのポインタ
+	CTimer* m_pTimer;								//ゲームのタイマー
+	CObject2D* m_pTimerFrame;						//タイマーの枠
+	int m_nGameScore;								//ゲーム終了時のスコア
+	CPauseMenu* m_pMenuPause;						//ポーズメニュー
+	CSelectMenu2D* m_pMenuGameEnd;					//ゲーム終了時の選択メニュー
+	CCountDownUi *m_pCountDownUi;					//カウントダウンUIのポインタ
+	CPlayer* m_apPlayer[MAX_PLAYER_NUM];			//プレイヤーのポインタ
+	CPlayerIcon *m_apPlayerIcon[MAX_PLAYER_NUM];	//プレイヤーアイコンのポインタ
 
-	int m_nCntGameClear;	//ゲームクリア後のカウント
-	int m_nCreateItemBoxCounter;	//アイテムボックスの生成カウンター
+	int m_nCntGameClear;					//ゲームクリア後のカウント
+	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター
 };
 
 #endif // !_GAME_SCENE_H_
