@@ -50,6 +50,9 @@ public:
 		TIMER_FRAME,
 
 		PAUSE_BG,
+		PAUSE_TITLE,
+		PAUSE_RESTATE,
+		PAUSE_CONTINUE,
 
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,		//砂漠
