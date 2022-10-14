@@ -25,6 +25,8 @@ public:
 		SE_BALLOON_BREAK,		//風船が割れるSE
 		SE_ITEM_GET,			//アイテム取得SE
 		SE_TIME_UP,				//タイムアップSE
+		SE_PLAYER_SPIN,			//スピンSE
+		SE_BANANA_THROW,		//バナナを投げるSE
 
 		ENUM_MAX
 	};

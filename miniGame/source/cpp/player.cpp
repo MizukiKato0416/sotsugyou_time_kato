@@ -14,8 +14,6 @@
 
 #include "wallCylinder.h"
 #include "effect.h"
-#include "particle.h"
-#include "particleEffect.h"
 #include "object2D.h"
 #include "billboard.h"
 #include "item_banana.h"
@@ -103,6 +101,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_nSpinCounter = 0;
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
+	m_bUpdate = false;
 }
 
 //=============================================================================
@@ -142,6 +141,7 @@ HRESULT CPlayer::Init(void) {
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
 	m_fSpinSpeed = PLAYER_SPIN_SPEED;
+	m_bUpdate = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -194,6 +194,13 @@ void CPlayer::Uninit(void) {
 // プレイヤーの更新処理
 //=============================================================================
 void CPlayer::Update(void) {
+
+	//更新しない設定なら
+	if (!m_bUpdate)
+	{
+		return;
+	}
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 
@@ -277,9 +284,6 @@ void CPlayer::Update(void) {
 	//当たり判定
 	//----------------------------
 	Collision(posPlayer);
-
-	//煙
-	CPresetEffect::SetEffect3D(0, GetPos(), {}, {});
 
 	//----------------------------
 	//モデルの更新
@@ -388,6 +392,9 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
+
+		//煙
+		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
