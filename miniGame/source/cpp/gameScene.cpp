@@ -26,9 +26,7 @@
 #include "itemBox.h"
 #include "count_down_ui.h"
 #include "finish_ui.h"
-
-//エフェクト
-#include "plane.h"
+#include "player_icon.h"
 
 //=============================================================================
 // マクロ定義
@@ -76,6 +74,7 @@ CGameScene::CGameScene()
 	m_nCreateItemBoxCounter = 0;
 	m_pCountDownUi = nullptr;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_PLAYER_NUM]));
+	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_PLAYER_NUM]));
 }
 
 //=============================================================================
@@ -169,6 +168,9 @@ void CGameScene::Init(void) {
 
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->SetUpdate(false);
+
+		//プレイヤーアイコンの生成処理
+		CreatePlayerIcon(nCntPlayer);
 	}
 
 	//カウントダウンUIの生成
@@ -201,6 +203,7 @@ void CGameScene::Uninit(void) {
 		delete m_pStage;
 		m_pStage = nullptr;
 	}
+
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);
 
@@ -374,7 +377,7 @@ void CGameScene::GameOver(void) {
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//ゲームオーバー音を再生
-	//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
+	if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
 
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
@@ -595,6 +598,22 @@ void CGameScene::CreateItemBox(void){
 		CItemBox *pItemBox = CItemBox::Create(itemBoxPos);
 		pItemBox->SetMove(itemBoxMove);
 	}
+}
+
+//=============================================================================
+//プレイヤーアイコン生成処理
+//=============================================================================
+void CGameScene::CreatePlayerIcon(int nCntPlayer){
+
+	//プレイヤーの位置取得
+	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
+	//アイコンの位置
+	D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+
+
+	//生成
+	//m_apPlayerIcon[nCntPlayer] = CPlayerIcon::Create();
 }
 
 //=============================================================================
