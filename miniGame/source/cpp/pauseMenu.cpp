@@ -15,7 +15,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define NUM_SELECT (2)
+#define NUM_SELECT (3)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -38,7 +38,7 @@ CPauseMenu::~CPauseMenu()
 }
 
 //=============================================================================
-// 林檎選択メニューの生成処理
+// ポーズメニューの生成処理
 //=============================================================================
 CPauseMenu* CPauseMenu::Create(void) {
 	CPauseMenu* pPauseMenu;
@@ -54,7 +54,7 @@ CPauseMenu* CPauseMenu::Create(void) {
 }
 
 //=============================================================================
-// 林檎選択メニューの初期化処理
+// ポーズメニューの初期化処理
 //=============================================================================
 HRESULT CPauseMenu::Init(void) {
 	//背景の設定
@@ -62,8 +62,9 @@ HRESULT CPauseMenu::Init(void) {
 	//縦選択
 	SetSelectType(CSelectMenu::SELECT_TYPE::VERTICAL);
 	//選択肢UIの詳細設定
-	SetSelectUI(0, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 400.0f - 60.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_CONTINUE);
-	SetSelectUI(1, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 400.0f + 60.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_TITLE);
+	SetSelectUI(0, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_CONTINUE);
+	SetSelectUI(1, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 60.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_CONTINUE);
+	SetSelectUI(2, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 120.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_TITLE);
 	//選択肢アイコンの生成
 	CreateSelectIcon(D3DXVECTOR3(-180.0f, 0.0f, 0.0f), 50.0f, 50.0f, CTexture::TEXTURE_TYPE::SELECT_ICON);
 	SetIconPosOffset(1, D3DXVECTOR3(-120.0f, 0.0f, 0.0f));
@@ -74,7 +75,7 @@ HRESULT CPauseMenu::Init(void) {
 }
 
 //=============================================================================
-// 林檎選択メニューの終了処理
+// ポーズメニューの終了処理
 //=============================================================================
 void CPauseMenu::Uninit(void) {
 	CSelectMenu2D::Uninit();
@@ -84,7 +85,7 @@ void CPauseMenu::Uninit(void) {
 }
 
 //=============================================================================
-// 林檎選択メニューの更新処理
+// ポーズメニューの更新処理
 //=============================================================================
 void CPauseMenu::Update(void) {
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
@@ -118,8 +119,18 @@ void CPauseMenu::Update(void) {
 				return;
 				break;
 
-				//タイトルに戻る
+				//リトライ
 			case 1:
+				//ゲームシーンのポーズメニューを破棄する
+				pGameScene->DeletePauseMenu();
+				//タイトルへシーン遷移
+				pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
+				//サウンドを再生
+				//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START);
+				break;
+
+				//タイトルに戻る
+			case 2:
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
 				//タイトルへシーン遷移

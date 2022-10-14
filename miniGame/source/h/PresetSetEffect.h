@@ -5,7 +5,7 @@
 #ifndef _PRESETEFFECT_H_
 #define _PRESETEFFECT_H_
 #include "main.h"
-#include "scene.h"
+#include "object.h"
 
 //*****************************************************************************
 // マクロ
@@ -15,7 +15,7 @@
 
 #define MAX_ORDER_3D (8)
 
-class CPresetEffect : CScene
+class CPresetEffect : CObject
 {
 public:
 	//2D用のエフェクトステータス集

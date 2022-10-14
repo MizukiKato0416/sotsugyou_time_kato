@@ -55,7 +55,7 @@ private:
 	static int m_Synthetic;
 	D3DXVECTOR3 m_rot;
 
-	D3DXVECTOR3 m_pos;
+	//カラー
 protected:
 	static LPDIRECT3DTEXTURE9 m_pTexture[MAX_TEXTURE];	//テクスチャへのポインタ
 
@@ -70,6 +70,8 @@ protected:
 	D3DXVECTOR2 m_nSplit;
 	D3DXVECTOR2 m_MaxSplit;
 
+	D3DXVECTOR3 m_pos;
+	D3DCOLORVALUE m_Color;
 };
 
 #endif

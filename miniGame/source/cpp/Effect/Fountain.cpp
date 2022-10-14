@@ -79,7 +79,7 @@ HRESULT CFountain::Init(D3DXVECTOR3 pos,
 	m_pos = pos;
 
 	m_nSynthenic = Synhetic;
-	SetPos(m_pos);
+	//SetPos(m_pos);
 	return S_OK;
 }
 
@@ -102,7 +102,6 @@ void CFountain::Update()
 
 	m_move.y += m_move.z;
 
-	SetPos(m_pos);
 	ChangeSize(m_Size);
 	CBillEffect::Update();
 }

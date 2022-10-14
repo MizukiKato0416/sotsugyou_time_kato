@@ -25,6 +25,9 @@
 #include "balloon.h"
 #include "itemBox.h"
 
+//エフェクト
+#include "plane.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -194,7 +197,6 @@ void CGameScene::Uninit(void) {
 		delete m_pStage;
 		m_pStage = nullptr;
 	}
-
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);
 
@@ -358,7 +360,7 @@ void CGameScene::GameOver(void) {
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//ゲームオーバー音を再生
-	if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
+	//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
 
 	//プレイヤーの取得
 	CPlayer* pPlayer = GetPlayer();

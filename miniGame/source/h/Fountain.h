@@ -61,7 +61,7 @@ public:
 		HIGHT_PATTERN HigthPattrn);
 
 private:
-	D3DXVECTOR3 m_pos;	//出現位置
+	//D3DXVECTOR3 m_pos;	//出現位置
 	D3DXVECTOR3 m_move;	//移動値
 	float m_fAngle;
 };
