@@ -9,6 +9,8 @@
 CScene3D::CScene3D() : CObject::CObject()
 {
 
+	SetDrawPriority(DRAW_PRIORITY::EFFECT);	//•`‰æ‡‚Ìİ’è
+
 }
 
 CScene3D::~CScene3D()

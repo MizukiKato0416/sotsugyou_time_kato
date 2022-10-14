@@ -39,9 +39,9 @@ HRESULT CPlane::Init(D3DXVECTOR3 size, D3DXVECTOR3 pos, D3DXVECTOR2 Tex)
 	m_pos = pos;
 
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D_EFFECT) * 4,
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
 		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
+		0,
 		D3DPOOL_MANAGED,
 		&m_pVtxBuff,
 		NULL);
@@ -51,7 +51,7 @@ HRESULT CPlane::Init(D3DXVECTOR3 size, D3DXVECTOR3 pos, D3DXVECTOR2 Tex)
 
 	m_size = size;
 
-	VERTEX_3D_EFFECT *pVtx; //頂点情報へのポインタ
+	VERTEX_3D *pVtx; //頂点情報へのポインタ
 					 //頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void **)&pVtx, 0);
 	//頂点座標の設定
@@ -65,12 +65,6 @@ HRESULT CPlane::Init(D3DXVECTOR3 size, D3DXVECTOR3 pos, D3DXVECTOR2 Tex)
 	pVtx[1].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	pVtx[2].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	pVtx[3].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-	//頂点カラー
-	pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[1].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[2].col = D3DCOLOR_RGBA(255, 255, 255, 255);
-	pVtx[3].col = D3DCOLOR_RGBA(255, 255, 255, 255);
 
 	//テクスチャ座標
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
@@ -105,17 +99,18 @@ void CPlane::Update()
 void CPlane::Draw()
 {
 	D3DXMATRIX mtxRot, mtxTrans, mtxWorld; //計算用マトリックス
-										   //マネージャーの取得
+	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	if (pManager == nullptr) return;	//nullの場合終了
-										//レンダラーの取得
+	//レンダラーの取得
 	CRenderer* pRenderer = pManager->GetRenderer();
 	if (pRenderer == nullptr) return;	//nullの場合終了
-										//デバイスの取得
+	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 	if (pDevice == nullptr) return;		//nullの場合終了
-										//ラインティングを無視する
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	//エフェクトはZテクスチャに書き込まない
+	if (pRenderer->GetDrawZTex()) return;
 
 	//透明な部分を描画しないようにする
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -133,25 +128,43 @@ void CPlane::Draw()
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTrans);
 	//ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+	//シェーダにマトリックスを設定
+	pRenderer->SetEffectMatrixWorld(mtxWorld);
 	SetMatrix(mtxWorld);
+
+	//シェーダにテクスチャを設定
+	if (m_nTexType >= 0 && m_nTexType < MAX_TEXTURE) {
+		pRenderer->SetEffectTexture(m_pTexture[m_nTexType]);
+	}
+	else {
+		pRenderer->SetEffectTexture(nullptr);
+	}
+
+	//頂点定義を設定
+	pRenderer->SetVtxDecl3D();
+
+	//モデルが設定したマテリアルの影響を受けないようにマテリアルの設定
+	pRenderer->SetEffectMaterialDiffuse(m_Color);
+	pRenderer->SetEffectMaterialEmissive(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	pRenderer->SetEffectMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	pRenderer->SetEffectMaterialPower(2.0f);
+	//輪郭の発光色の設定
+	pRenderer->SetEffectColorGlow(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
-	//頂点フォーマット
-	pDevice->SetFVF(FVF_VERTEX_3D);
-	if (m_nTexType != -1)
-	{
-		pDevice->SetTexture(0, m_pTexture[m_nTexType]);    //テクスチャの設定
-	}
-	else
-	{
-		pDevice->SetTexture(0, NULL);    //テクスチャの設定
-	}
+
+	DWORD dwPassFlag = PASS_3D | PASS_TEXTURE;
+
+	//パスの開始
+	pRenderer->BeginPassEffect(dwPassFlag);
+
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
 		0,  //開始する始点のインデックス
 		2); //描画するプリミティブ数
-			//ラインティングを有効にする
 
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	pRenderer->EndPassEffect();//エフェクト終了
+
 	//デフォルトに戻す
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
@@ -179,7 +192,7 @@ void CPlane::UninitTexture()
 void CPlane::SetSize(D3DXVECTOR3 size)
 {
 	//m_size = size;
-	VERTEX_3D_EFFECT *pVtx; //頂点情報へのポインタ
+	VERTEX_3D *pVtx; //頂点情報へのポインタ
 					 //頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void **)&pVtx, 0);
 	//頂点座標の設定
@@ -187,23 +200,6 @@ void CPlane::SetSize(D3DXVECTOR3 size)
 	pVtx[1].pos = D3DXVECTOR3(size.x, size.y, size.z);
 	pVtx[2].pos = D3DXVECTOR3(-size.x, -size.y, -size.z);
 	pVtx[3].pos = D3DXVECTOR3(size.x, -size.y, -size.z);
-	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-}
-
-//=============================================================================
-// 色セット
-//=============================================================================
-void CPlane::ChangeColor(D3DXCOLOR col)
-{
-	VERTEX_3D_EFFECT *pVtx; //頂点情報へのポインタ
-					 //頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void **)&pVtx, 0);
-	//頂点座標の設定
-	pVtx[0].col = col;
-	pVtx[1].col = col;
-	pVtx[2].col = col;
-	pVtx[3].col = col;
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
@@ -256,26 +252,6 @@ void CPlane::CreateTextureFile()
 		}
 	}
 	fclose(pFile);
-}
-
-//=============================================================================
-//カラー変更
-//=============================================================================
-void CPlane::ColorChange(D3DCOLORVALUE color)
-{
-	VERTEX_3D_EFFECT*pVtx;//頂点情報へのポインタ
-
-				   //頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	//頂点の色
-	pVtx[0].col = D3DCOLOR_RGBA((int)color.r, (int)color.g, (int)color.b, (int)color.a);
-	pVtx[1].col = D3DCOLOR_RGBA((int)color.r, (int)color.g, (int)color.b, (int)color.a);
-	pVtx[2].col = D3DCOLOR_RGBA((int)color.r, (int)color.g, (int)color.b, (int)color.a);
-	pVtx[3].col = D3DCOLOR_RGBA((int)color.r, (int)color.g, (int)color.b, (int)color.a);
-
-	//頂点バッファをアンロック
-	m_pVtxBuff->Unlock();
 }
 
 //=============================================================================

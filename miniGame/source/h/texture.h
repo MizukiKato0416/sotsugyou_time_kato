@@ -37,7 +37,7 @@ public:
 		COUNT_DOWN_2,
 		COUNT_DOWN_1,
 		COUNT_DOWN_START,
-
+		FINISH,
 		
 		TIMER_FRAME,
 

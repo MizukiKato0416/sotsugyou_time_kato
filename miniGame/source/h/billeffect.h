@@ -49,8 +49,7 @@ protected:
 	ANIMPATTERN m_AnimPattern;	//アニメーションパターンの動き
 private:
 
-	//カラー
-	D3DCOLORVALUE m_Color;
+
 
 	//カラー減衰
 	D3DCOLORVALUE m_MinColor;

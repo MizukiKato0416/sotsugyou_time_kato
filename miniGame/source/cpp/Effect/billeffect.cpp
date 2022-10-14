@@ -88,7 +88,6 @@ HRESULT CBillEffect::Init(D3DXVECTOR3 Size,
 	m_nLife = nLife;
 	m_bUninit = false;
 
-	CPlane::ColorChange(m_Color);
 	CPlane::TexturMove(m_TexSize);
 	CPlane::SetTexAnim(m_nSplit, m_PatternSize);
 
@@ -214,7 +213,6 @@ void CBillEffect::Update()
 	}
 
 	//それぞれ適応
-	CPlane::ColorChange(m_Color);
 	CPlane::TexturMove(m_TexSize);
 	CPlane::SetTexAnim(m_nSplit, m_PatternSize);
 
@@ -238,7 +236,7 @@ void CBillEffect::Update()
 void CBillEffect::Draw()
 {
 	D3DXMATRIX mtxView;
-	D3DXMATRIX mtxTrans, mtxWorld; //計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxWorld; //計算用マトリックス
 	CManager* pManager = CManager::GetManager();
 	if (pManager == nullptr) return;	//nullの場合終了
 										//レンダラーの取得
@@ -285,8 +283,6 @@ void CBillEffect::Draw()
 		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 	}
-	//ラインティングを無視する
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	//ビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
@@ -298,6 +294,9 @@ void CBillEffect::Draw()
 	mtxWorld._42 = 0.0f;
 	mtxWorld._43 = 0.0f;
 
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, GetRot().y, GetRot().x, GetRot().z);
+	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRot);
 	//位置を反映
 	D3DXMatrixTranslation(&mtxTrans, GetPos().x, GetPos().y, GetPos().z);
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTrans);
@@ -305,17 +304,10 @@ void CBillEffect::Draw()
 	//ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 	SetMatrix(mtxWorld);
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, GetVtx(), 0, sizeof(VERTEX_3D));
 
-	//頂点フォーマット
-	pDevice->SetFVF(FVF_VERTEX_3D);
+	pRenderer->SetEffectMatrixWorld(mtxWorld);
 
-	pDevice->SetTexture(0, m_pTexture[m_nTexType]);    //テクスチャの設定
-
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-		0,  //開始する始点のインデックス
-		2); //描画するプリミティブ数
+	CPlane::Draw();
 
 	//Zテスト関係
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -329,13 +321,6 @@ void CBillEffect::Draw()
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-	//ラインティングを有効にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-	//位置によっては映らないようにする
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
 }
 

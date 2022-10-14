@@ -25,6 +25,10 @@
 #include "balloon.h"
 #include "itemBox.h"
 #include "count_down_ui.h"
+#include "finish_ui.h"
+
+//エフェクト
+#include "plane.h"
 
 //=============================================================================
 // マクロ定義
@@ -35,18 +39,24 @@
 #define TEXT_FILE_NAME_APPLETYPE				 "data/TEXT/save_appletype.txt"
 #define FOG_COLOR								 (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
+
 #define GAME_STAGE_SIZE							 (700.0f)								//すてーじの大きさ
+
+#define GAME_PLAYER_INIT_CREATE_SPACE			 (300.0f)								//プレイヤーの初期生成間隔
+#define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
+
 #define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
 #define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
-#define GAME_BALLOON_INIT_CREATE_SPACE			 (300.0f)								//風船の初期生成間隔
-#define GAME_PLAYER_INIT_CREATE_SPACE			 (200.0f)								//プレイヤーの初期生成間隔
-#define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
+#define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
+
 #define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
 #define GAME_ITEM_BOX_CREATE_POS_X				 (900.0f)								//アイテムボックスの生成位置X
 #define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
+
+#define GAME_FINISH_UI_NUM						 (5)									//フィニッシュUIの数
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -191,7 +201,6 @@ void CGameScene::Uninit(void) {
 		delete m_pStage;
 		m_pStage = nullptr;
 	}
-
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);
 
@@ -365,17 +374,21 @@ void CGameScene::GameOver(void) {
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//ゲームオーバー音を再生
-	if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
+	//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
 
-	//プレイヤーの取得
-	CPlayer* pPlayer = GetPlayer();
-	if (pPlayer != nullptr) {
-		//プレイヤーのゲームオーバー時の処理
-		pPlayer->GameOver();
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	{
+		//更新しないようにする
+		m_apPlayer[nCntPlayer]->SetUpdate(false);
 	}
 
-	//ゲームオーバーテキストの表示
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 600.0f, 150.0f);
+	//フィニッシュUI生成
+	CFinishUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), 0, 1.0f);
+	for (int nCntFinish = 0; nCntFinish < GAME_FINISH_UI_NUM; nCntFinish++)
+	{
+		CFinishUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), nCntFinish + 1, 0.4f);
+	}
 
 	//ゲーム終了メニューの生成
 	CreateMenuEndGame();

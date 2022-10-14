@@ -1,0 +1,359 @@
+//-----------------------------------------------
+//ÉÇÉfÉãÇÃîzíuèàóù
+//Author: â¡ì°êêà®
+//-----------------------------------------------
+SET_MODEL
+pas = outer_wall000.x
+pos = -1788.54 -1353.09 3931.80
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = 2603.75 -60.60 3900.66
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = -1637.39 0.00 -3703.56
+rot = 0.00 -3.09 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = 2062.49 0.00 -3705.87
+rot = 0.00 -3.18 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = 3808.94 0.00 -2534.60
+rot = 0.00 -1.62 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = 3819.85 0.00 1270.58
+rot = 0.00 -1.59 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = -3643.60 0.00 2234.21
+rot = 0.00 -1.53 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = -3871.94 -20.10 -2093.30
+rot = 0.00 -1.56 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = wood_tree_trunk.x
+pos = 0.00 0.00 0.00
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = wood_leaf.x
+pos = 0.00 147.72 0.00
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_01.x
+pos = -1516.87 420.29 -1753.84
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_03_vertical.x
+pos = -23.75 126.83 -2436.13
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_03_vertical.x
+pos = 7.15 133.87 -979.64
+rot = 0.00 -0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_03_beside.x
+pos = 108.14 81.92 -888.82
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_01.x
+pos = 1285.99 462.82 -2509.73
+rot = 0.00 -1.59 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = 322.12 49.00 -2245.08
+rot = 0.00 -1.59 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = -2812.69 -30.30 -2238.26
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = -780.21 -22.25 -788.14
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = -1148.51 -30.30 -492.15
+rot = 0.00 -1.56 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box.x
+pos = -2587.46 -20.71 -1818.95
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box.x
+pos = -2589.51 -20.71 -1649.62
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = -2230.22 0.00 -1273.40
+rot = 0.00 0.03 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box_vertical.x
+pos = 532.63 -125.82 -1328.48
+rot = 0.00 -1.05 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = drumcan.x
+pos = 2359.51 61.97 -2274.94
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = drumcan.x
+pos = 2470.26 77.69 -2343.49
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = drumcan.x
+pos = 2475.60 82.23 -2214.28
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_blue.x
+pos = 2681.94 127.71 1325.81
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_blue.x
+pos = 2679.33 116.37 1006.76
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_000.x
+pos = 1905.35 -29.69 1030.10
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_000.x
+pos = 1542.91 -20.31 1040.06
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_001.x
+pos = 1726.02 329.83 1032.63
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container.x
+pos = 1041.12 154.88 701.26
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container.x
+pos = 1043.37 436.84 703.15
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_blue.x
+pos = 2692.32 398.35 1143.19
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_000.x
+pos = 1388.90 0.00 213.22
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_blue.x
+pos = 2017.77 129.07 1907.96
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_blue.x
+pos = 2037.85 131.11 2559.22
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container.x
+pos = 780.02 157.10 1641.58
+rot = 0.00 -0.81 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container.x
+pos = 658.47 153.45 2238.48
+rot = 0.00 0.81 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box.x
+pos = 1104.61 102.02 1292.41
+rot = 0.00 0.78 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = container_000.x
+pos = -72.64 41.83 2789.05
+rot = 0.00 -0.78 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box_vertical.x
+pos = 2494.26 -95.29 308.11
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_01.x
+pos = -2408.26 418.38 866.65
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_03_vertical.x
+pos = -933.39 135.94 1799.94
+rot = 0.00 2.37 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = home_03_beside.x
+pos = -941.50 82.86 1656.43
+rot = 0.00 -3.93 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = dannbo-ru.x
+pos = -208.84 26.90 1859.21
+rot = 0.00 0.84 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box_vertical.x
+pos = -286.29 -149.47 1000.70
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = outer_wall000.x
+pos = -1151.19 -196.76 3977.16
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = 2393.26 81.83 -1199.78
+rot = 0.00 -2.31 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = rennga_white.x
+pos = 1949.32 65.15 -713.79
+rot = 0.00 -5.46 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = box.x
+pos = 2052.82 84.57 -1095.82
+rot = 0.00 -0.78 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = -1790.67 16.58 -460.58
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = -2193.26 21.32 -470.44
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = -2411.62 72.05 -467.43
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = -1996.05 82.86 -459.79
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = sandbag.x
+pos = -2343.50 136.53 -473.12
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = drumcan.x
+pos = -1317.76 57.04 2196.11
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = drumcan.x
+pos = -2279.14 83.25 2014.53
+rot = 0.00 0.00 0.00
+coll = 1
+END_SET_MODEL
+SET_MODEL
+pas = dannbo-ru.x
+pos = -317.61 -43.71 1874.28
+rot = 0.00 -0.78 0.00
+coll = 1
+END_SET_MODEL
+END_SCRIPT
