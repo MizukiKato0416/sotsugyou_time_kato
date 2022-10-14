@@ -226,7 +226,7 @@ void CTitleScene::Update(void) {
 			m_bBeginFade = true;
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
 			//Œˆ’è‰¹‚ÌÄ¶
-			if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
+			//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
 		}
 		else
 		{
