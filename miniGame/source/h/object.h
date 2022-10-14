@@ -93,6 +93,7 @@ public:
 	virtual void SetMove(D3DXVECTOR3 move) {}	//移動量の設定
 	virtual D3DXVECTOR3 GetMove(void) { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }		//移動量の取得
 	virtual float GetRadius(void) { return 0.0f; }		//当たり判定の半径の取得
+	virtual D3DXMATRIX GetMtxWorld(void) { return D3DXMATRIX(); }		//ワールドマトリックスの取得
 						
 	virtual int GetNumCollisionParts(void) { return 1; }	//当たり判定があるパーツの数の取得(基本は１つとする)
 	virtual void GetCollisionInfo(int nIdxColParts, int* const pNumCol, D3DXVECTOR3** const ppPosCol, float* const pRadiusCol) {}	//当たり判定の情報の取得
