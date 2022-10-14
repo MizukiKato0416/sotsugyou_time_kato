@@ -27,6 +27,7 @@
 #include "count_down_ui.h"
 #include "finish_ui.h"
 #include "player_icon.h"
+#include "ToScreen.h"
 
 //=============================================================================
 // マクロ定義
@@ -39,6 +40,7 @@
 #define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 
 #define GAME_STAGE_SIZE							 (700.0f)								//すてーじの大きさ
+#define GAME_PLAYER_ICON_SCALE					 (0.35f)								//プレイヤーアイコンのスケール
 
 #define GAME_PLAYER_INIT_CREATE_SPACE			 (300.0f)								//プレイヤーの初期生成間隔
 #define GAME_PLAYER_INIT_CREATE_POS_Z			 (-400.0f)								//プレイヤーの初期生成位置Z
@@ -293,6 +295,21 @@ void CGameScene::UpdateGame(void) {
 		}
 	}
 	
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	{
+		//生成されていたら
+		if (m_apPlayerIcon[nCntPlayer] != nullptr)
+		{
+			//UIが消えていたら
+			if (m_apPlayerIcon[nCntPlayer]->GetFrame() == nullptr && m_apPlayerIcon[nCntPlayer]->GetPlayerNum() == nullptr)
+			{
+				//消す
+				m_apPlayerIcon[nCntPlayer]->Uninit();
+				m_apPlayerIcon[nCntPlayer] = nullptr;
+			}
+		}
+	}
+
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -607,13 +624,21 @@ void CGameScene::CreatePlayerIcon(int nCntPlayer){
 
 	//プレイヤーの位置取得
 	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
+
+	playerPos.x += 150.0f;
+	playerPos.z -= 100.0f;
+
 	//アイコンの位置
 	D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-
+	//ワールド座標からスクリーン座標に変換
+	iconPos = WorldToScreen(playerPos);
+	iconPos.z = 0.0f;
 
 	//生成
-	//m_apPlayerIcon[nCntPlayer] = CPlayerIcon::Create();
+	m_apPlayerIcon[nCntPlayer] = CPlayerIcon::Create(iconPos, D3DXVECTOR3(GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE),
+		                                             CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer),
+													 CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_1)        + nCntPlayer));
 }
 
 //=============================================================================
@@ -640,6 +665,13 @@ void CGameScene::CountDownUi(void)
 
 			//更新されている状態にする
 			m_apPlayer[nCntPlayer]->SetUpdate(true);
+
+			//生成されていたら
+			if (m_apPlayerIcon[nCntPlayer] != nullptr)
+			{
+				//消えるように設定する
+				m_apPlayerIcon[nCntPlayer]->SetState(CPlayerIcon::STATE::DEC_ALPHA);
+			}
 		}
 
 		//生成されていなかったら
