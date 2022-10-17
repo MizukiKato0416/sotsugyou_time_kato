@@ -41,10 +41,11 @@ CObject2D * CTitleScene::m_pNext = nullptr;
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2)
+CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(5)
 {	
 	m_bPushKey = false;
 	m_nFadeTime = 10;
+	m_nColorTime = 0;
 }
 
 //=============================================================================
@@ -197,19 +198,18 @@ void CTitleScene::Update(void) {
 	//決定キーが押されたとき
 	if (m_bPushKey)
 	{		
+		m_bCol = ChangeColTime(m_bCol);
 		// 点滅処理(状態遷移)
 		if (m_bCol)
 		{
 			// α値の変更
-			col.a = m_fMaxCol;
-			m_bCol = false;
+			col.a = m_fMaxCol;		
 		}
 		else
 		{
 			// α値の変更
-			col.a = m_fMaxCol / m_nDivideNum;
-			m_bCol = true;
-		}
+			col.a = m_fMaxCol / m_nDivideNum;			
+		}		
 		// 次に行かせるロゴの色の設定
 		m_pNext->SetColor(col);
 
@@ -229,4 +229,29 @@ void CTitleScene::Update(void) {
 			m_nFadeTime--;
 		}
 	}
+}
+
+//=============================================================================
+// タイトルシーンの色が変わる時間の処理
+//=============================================================================
+bool CTitleScene::ChangeColTime(bool bCol)
+{
+	m_nColorTime++;
+
+	// 時間が最大時間に行ったら
+	if (m_nColorTime > m_nMaxColTime)
+	{
+		if (bCol)
+		{
+			bCol = false;
+		}
+		else
+		{
+			bCol = true;
+		}
+		// 色を変える時間を初期化
+		m_nColorTime = 0;
+	}
+
+	return bCol;
 }

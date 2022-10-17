@@ -29,12 +29,15 @@ public:
 	void Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
+	bool ChangeColTime(bool bCol);	// タイトルシーンの色が変わる時間の処理
 
 private:
 	static CObject2D * m_pNext;// オブジェクト2Dの静的ポインター生成
 	const int m_nDivideNum;	// 割る数
+	const int m_nMaxColTime;	// 色が変わる時間の最大値
 	const float m_fMaxCol;	// 色の最大値
 	int m_nFadeTime;	// 遷移する時間	
+	int m_nColorTime;	// 色を変える時間	
 	bool m_bCol; // 色を変えるかどうか
 	bool m_bPushKey; // 押されたかどうか
 };
