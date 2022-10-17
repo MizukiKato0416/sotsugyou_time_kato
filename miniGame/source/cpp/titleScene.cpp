@@ -41,7 +41,7 @@ CObject2D * CTitleScene::m_pNext = nullptr;
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(5)
+CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
 {	
 	m_bPushKey = false;
 	m_nFadeTime = 10;
