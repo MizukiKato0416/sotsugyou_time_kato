@@ -392,9 +392,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
-
+		//---------------------------------
 		//煙
 		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
+		//---------------------------------
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
@@ -518,6 +519,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 		//角度の設定
 		CObjectModel::SetRot(rotPlayer);
+		//---------------------------------
+		//土埃
+		CPresetEffect::SetEffect3D(1, GetPos(), {}, {});
+		//---------------------------------
 	}
 }
 
@@ -678,6 +683,8 @@ void CPlayer::StateSpin(void)
 	//既定の値より大きくなったら
 	if (m_nSpinCounter > PLAYER_SPIN_COUNT)
 	{
+
+
 		m_nSpinCounter = 0;
 		//状態を無敵にする
 		m_state = PLAYER_STATE::INVINCIBLE;

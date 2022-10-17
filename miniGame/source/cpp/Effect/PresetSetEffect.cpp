@@ -14,7 +14,7 @@
 
 //#include "Trajectory.h"
 #include "straight3d.h"
-//#include "FieldEffect.h"
+#include "FieldEffect.h"
 #include "Rotate3d.h"
 //#include "sphereEffect.h"
 //#include "ThunderBill.h"
@@ -43,15 +43,15 @@ int CPresetEffect::m_nMaxOrderCount = 0;	//呼び出す最大数カウント
 CPresetEffect::EFFECT_STATE2D CPresetEffect::m_EffectState2D[MAX_EFFECTPATTERN_2D] = {};
 CPresetEffect::EFFECT_STATE3D CPresetEffect::m_EffectState3D[MAX_EFFECTPATTERN_3D] = {};
 
-CPresetEffect::ORDER_PRESET CPresetEffect::m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
+//CPresetEffect::ORDER_PRESET CPresetEffect::m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
 
 //=============================================================================
 // コンストラクタ
 //=============================================================================
 CPresetEffect::CPresetEffect()
 {
-	m_EffectState2D[MAX_EFFECTPATTERN_2D] = {};
-	m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
+	//m_EffectState2D[MAX_EFFECTPATTERN_2D] = {};
+	//m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
 }
 
 //=============================================================================
@@ -536,65 +536,65 @@ void CPresetEffect::SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpo
 		}
 		break;
 	case(3):	//フィールド
-		//CFieldEffect::Create(
-		//	D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, 0.0f, m_EffectState3D[nPattern].m_fSizeY),
-		//	pos,
-		//	m_EffectState3D[nPattern].m_Col,
-		//	m_EffectState3D[nPattern].m_Changecolor,
-		//	m_EffectState3D[nPattern].m_fRotate,
-		//	m_EffectState3D[nPattern].m_Active,
-		//	m_EffectState3D[nPattern].m_MaxSize,
-		//	m_EffectState3D[nPattern].m_fAddSize + 0.1,
-		//	m_EffectState3D[nPattern].Synthetic,
-		//	m_EffectState3D[nPattern].m_nDensity,
-		//	m_EffectState3D[nPattern].m_nDistance,
-		//	m_EffectState3D[nPattern].m_SecondCol,
-		//	m_EffectState3D[nPattern].m_SecondChangecolor,
-		//	m_EffectState3D[nPattern].nTexture,
-		//	m_EffectState3D[nPattern].m_nLife,
-		//	m_EffectState3D[nPattern].m_ParticleSynthetic,
-		//	m_EffectState3D[nPattern].m_move,
-		//	m_EffectState3D[nPattern].m_fParticleAddSize,
-		//	m_EffectState3D[nPattern].m_fParticleSize,
-		//	m_EffectState3D[nPattern].ParticleTime,
-		//	m_EffectState3D[nPattern].m_fActiveAddSize,
-		//	m_EffectState3D[nPattern].m_FieldTime,
-		//	m_EffectState3D[nPattern].m_fieldCreate,
-		//	m_EffectState3D[nPattern].mCreatePreset,
-		//	(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
-		//	m_EffectState3D[nPattern].m_nSecondTime);
+		CFieldEffect::Create(
+			D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, 0.0f, m_EffectState3D[nPattern].m_fSize),
+			pos,
+			m_EffectState3D[nPattern].m_Col,
+			m_EffectState3D[nPattern].m_Changecolor,
+			m_EffectState3D[nPattern].m_fRotate,
+			m_EffectState3D[nPattern].m_Active,
+			m_EffectState3D[nPattern].m_MaxSize,
+			m_EffectState3D[nPattern].m_fAddSize + 0.1,
+			m_EffectState3D[nPattern].Synthetic,
+			m_EffectState3D[nPattern].m_nDensity,
+			m_EffectState3D[nPattern].m_nDistance,
+			m_EffectState3D[nPattern].m_SecondCol,
+			m_EffectState3D[nPattern].m_SecondChangecolor,
+			m_EffectState3D[nPattern].nTexture,
+			m_EffectState3D[nPattern].m_nLife,
+			m_EffectState3D[nPattern].m_ParticleSynthetic,
+			m_EffectState3D[nPattern].m_move,
+			m_EffectState3D[nPattern].m_fParticleAddSize,
+			m_EffectState3D[nPattern].m_fParticleSize,
+			m_EffectState3D[nPattern].ParticleTime,
+			m_EffectState3D[nPattern].m_fActiveAddSize,
+			m_EffectState3D[nPattern].m_FieldTime,
+			m_EffectState3D[nPattern].m_fieldCreate,
+			m_EffectState3D[nPattern].mCreatePreset,
+			(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
+			m_EffectState3D[nPattern].m_nSecondTime);
 
 		break;
 	case(4):
 		a = 1;
 		break;
 	case(5):
-		//for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
-		//{
+		for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
+		{
 
-		//	RandAngle = CIRCLE;
+			RandAngle = CIRCLE;
 
-		//	CRotate3D::Create(
-		//		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		//		D3DXVECTOR3(pos.x, pos.y, pos.z), {},
-		//		D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
-		//		D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
-		//		m_EffectState3D[nPattern].m_Col,
-		//		m_EffectState3D[nPattern].m_Changecolor,
-		//		m_EffectState3D[nPattern].m_nDistance,
-		//		m_EffectState3D[nPattern].m_move,
-		//		RandAngle,
-		//		m_EffectState3D[nPattern].m_fRotate,
-		//		m_EffectState3D[nPattern].nTexture,
-		//		m_EffectState3D[nPattern].Synthetic,
-		//		m_EffectState3D[nPattern].m_nLife,
-		//		m_EffectState3D[nPattern].ParticleTime,
-		//		m_EffectState3D[nPattern].m_nSecondTime,
-		//		m_EffectState3D[nPattern].m_MaxSize,
-		//		(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
-		//		(CRotate3D::EFFECT_TYPE)m_EffectState3D[nPattern].m_nType,
-		//		(CRotate3D::MOVE_TYPE)m_EffectState3D[nPattern].m_SecondType);
-		//}
+			CRotate3D::Create(
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+				D3DXVECTOR3(pos.x, pos.y, pos.z), {},
+				D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
+				D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
+				m_EffectState3D[nPattern].m_Col,
+				m_EffectState3D[nPattern].m_Changecolor,
+				m_EffectState3D[nPattern].m_nDistance,
+				m_EffectState3D[nPattern].m_move,
+				RandAngle,
+				m_EffectState3D[nPattern].m_fRotate,
+				m_EffectState3D[nPattern].nTexture,
+				m_EffectState3D[nPattern].Synthetic,
+				m_EffectState3D[nPattern].m_nLife,
+				m_EffectState3D[nPattern].ParticleTime,
+				m_EffectState3D[nPattern].m_nSecondTime,
+				m_EffectState3D[nPattern].m_MaxSize,
+				(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
+				(CRotate3D::EFFECT_TYPE)m_EffectState3D[nPattern].m_nType,
+				(CRotate3D::MOVE_TYPE)m_EffectState3D[nPattern].m_SecondType);
+		}
 		break;
 	case(6):
 		//CSphereEffect::Create(

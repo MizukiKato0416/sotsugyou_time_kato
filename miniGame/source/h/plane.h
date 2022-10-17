@@ -72,6 +72,8 @@ protected:
 
 	D3DXVECTOR3 m_pos;
 	D3DCOLORVALUE m_Color;
+	int m_nSynthenic;	//çáê¨
+
 };
 
 #endif

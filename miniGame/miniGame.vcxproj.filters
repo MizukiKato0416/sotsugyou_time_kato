@@ -183,6 +183,9 @@
     <ClCompile Include="source\cpp\player_icon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\billboard.h">
@@ -346,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="source\h\player_icon.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\FieldEffect.h">
+      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

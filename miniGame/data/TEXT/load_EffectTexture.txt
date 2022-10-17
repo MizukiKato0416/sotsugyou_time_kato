@@ -6,8 +6,11 @@
 # テクスチャファイル名
 #*********************************************************
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect000.jpg				//０パーティクル
-TEXTURE_FILENAME = data/TEXTURE/EFFECT/BrownSmokeSphere.png				//１土埃
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/BrownSmoke2.png				//１土埃
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/CycleEffect00.png				//２衝撃波
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect001.jpg				//３キラキラ
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/Filed_Frost.png				//４もわもわ
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/GraySmoke.png				//５灰煙
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/spin.png				//６スピン
 
 END_SCRIPT

@@ -43,16 +43,18 @@ public:
 
 protected:
 	bool m_bUninit;	//抹消フラグ
-	int m_nSynthenic;	//合成
 	D3DXVECTOR3 m_MinSize;		//大きさ変動値
 	D3DXVECTOR3 m_Size;			//サイズ
 	ANIMPATTERN m_AnimPattern;	//アニメーションパターンの動き
 private:
 
-
-
 	//カラー減衰
 	D3DCOLORVALUE m_MinColor;
+
+	bool m_bConversion;	//変換の終了
+
+
+
 
 	int m_nLife;	//寿命
 };

@@ -166,9 +166,12 @@ HRESULT CStraight3D::Init(D3DXVECTOR3 pos,
 	case(OTHERS):
 		m_pos = pos;
 		break;
+	default:
+		m_pos = pos;
+		break;
+	
 	}
 
-	SetPos(m_pos);
 
 	return S_OK;
 }
@@ -186,7 +189,6 @@ void CStraight3D::Uninit()
 //=============================================================================
 void CStraight3D::Update()
 {
-	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR3 v;	//åvéZ
 	float r;	//íºê¸ãóó£
 
@@ -200,17 +202,17 @@ void CStraight3D::Update()
 
 	if (m_Pattern == STRAIGHT)
 	{
-		pos += m_move;
+		m_pos += m_move;
 	}
 	else if(m_Pattern == TARGET)
 	{
-		v = pos - m_Target;
+		v = m_pos - m_Target;
 		r = sqrtf(v.x * v.x + v.z * v.z);
 
 		m_XZr = (float)atan2(v.x, v.z);		//äpìxÇòÇö
 		m_Yr = (float)atan2(v.x, v.y);		//äpìxÇô
 
-		pos += D3DXVECTOR3(
+		m_pos += D3DXVECTOR3(
 			sinf(m_XZr) * -m_move.x,	//X
 			-m_move.x * sinf(m_Yr + D3DX_PI / 2),	//Çö(Çô)
 			cosf(m_XZr) * -m_move.x);	//z
@@ -221,7 +223,6 @@ void CStraight3D::Update()
 		}
 	}
 
-	SetPos(pos);
 	ChangeSize(m_Size);
 	CBillEffect::Update();
 }
