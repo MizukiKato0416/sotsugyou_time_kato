@@ -10,6 +10,7 @@
 #include "objectList.h"
 #include "player.h"
 #include "sound.h"
+#include "gameScene.h"
 
 //=============================================================================
 // マクロ定義
@@ -94,6 +95,14 @@ void CItemBox::Uninit(void) {
 // 更新処理
 //=============================================================================
 void CItemBox::Update(void) {
+
+	//ゲームオーバーなら
+	if (CManager::GetManager()->GetGameScene()->GetGameOver())
+	{
+		//消す
+		Uninit();
+		return;
+	}
 
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();

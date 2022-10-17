@@ -10,6 +10,8 @@
 #include "objectList.h"
 #include "player.h"
 #include "score.h"
+#include "score_ui.h"
+#include "gameScene.h"
 
 //エフェクト
 #include "PresetSetEffect.h"
@@ -113,6 +115,14 @@ void CBalloon::Uninit(void) {
 //=============================================================================
 void CBalloon::Update(void) {
 	
+	//ゲームオーバーなら
+	if (CManager::GetManager()->GetGameScene()->GetGameOver())
+	{
+		//消す
+		Uninit();
+		return;
+	}
+
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();
 
@@ -243,11 +253,11 @@ bool CBalloon::CollisionPlayer(void)
 			//色によってスコアを増やす
 			if (m_bGold)
 			{
-				pPlayer->GetScore()->AddScore(BALLOON_GOLD_SCORE);
+				pPlayer->GetScoreUi()->GetScore()->AddScore(BALLOON_GOLD_SCORE);
 			}
 			else
 			{
-				pPlayer->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+				pPlayer->GetScoreUi()->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
 			}
 			return true;
 		}

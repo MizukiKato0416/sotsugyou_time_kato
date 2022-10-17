@@ -192,6 +192,9 @@ void CTitleScene::Update(void) {
 		{
 			// 押されたとき
 			m_bPushKey = true;
+
+			//決定音の再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 		}
 	}
 
@@ -220,12 +223,10 @@ void CTitleScene::Update(void) {
 			m_nFadeTime = 0;	
 			//シーン遷移開始			
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
-			//決定音の再生
-			//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
 		}
 		else
 		{
-			// 遷移する時間が0より小さくなっていたら
+			//遷移する時間が0より小さくなっていたら
 			m_nFadeTime--;
 		}
 	}

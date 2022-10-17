@@ -137,7 +137,7 @@ void CSelectMenu::ChangeSelect(void) {
 		//サウンドの取得
 		if (pManager != nullptr) pSound = pManager->GetSound();
 		//選択変更音の再生
-		if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::SELECT_SWITCH)*/;
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CURSOR);
 	}
 }
 

@@ -22,7 +22,7 @@
 class CObject2D;
 class CWeapon;
 class CInput;
-class CScore;
+class CScoreUi;
 
 //*****************************************************************************
 // プレイヤークラス
@@ -78,10 +78,13 @@ public:
 	//更新するかどうか設定処理
 	void SetUpdate(const bool bUpdate) { m_bUpdate = bUpdate; }
 
-	//スコア取得処理
-	CScore *GetScore(void) { return m_pSocre; }
+	//スコアUI取得処理
+	CScoreUi *GetScoreUi(void) { return m_pSocreUi; }
 	//スコア生成処理
 	void CreateScore();
+
+	//アイテムUIのフレーム生成処理
+	void CreateItemUiFrame();
 
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
@@ -93,6 +96,7 @@ private:
 	void StateSpin(void);							//スピン状態の処理
 	void StateInvincble(void);						//無敵状態の処理
 	void UseItem(void);								//アイテム使用処理
+	void ItemUi(void);								//アイテムUi処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
 	D3DXVECTOR3 m_destRot;	//目標の角度
@@ -111,7 +115,8 @@ private:
 	int m_nSpinCounter;				//スピンする時間のカウンター
 	int m_nInvincbleCounter;		//無敵時間のカウンター
 
-	CScore *m_pSocre;				//スコアのポインタ
+	CScoreUi *m_pSocreUi;			//スコアのポインタ
+	CObject2D *m_pItemUi;			//アイテムのUI
 };
 
 #endif // !_PLAYER_H_

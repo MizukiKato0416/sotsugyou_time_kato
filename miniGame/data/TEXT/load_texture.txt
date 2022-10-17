@@ -49,7 +49,11 @@ data/TEXTURE/UI/2P_frame_score.png
 data/TEXTURE/UI/3P_frame_score.png
 data/TEXTURE/UI/4P_frame_score.png
 
-
+data/TEXTURE/UI/banana_bark.png
+data/TEXTURE/UI/1P_frame_item.png
+data/TEXTURE/UI/2P_frame_item.png
+data/TEXTURE/UI/3P_frame_item.png
+data/TEXTURE/UI/4P_frame_item.png
 
 data/TEXTURE/UI/timer_frame.png
 
