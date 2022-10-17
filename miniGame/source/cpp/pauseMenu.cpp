@@ -16,6 +16,14 @@
 // マクロ定義
 //=============================================================================
 #define NUM_SELECT (3)
+#define SELECT_TITLE_POS (D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f))
+#define SELECT_RESTATE_POS (D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 450.0f, 0.0f))
+#define SELECT_CONTINUE_POS (D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f))
+#define SELECT_UI_WIDTH (500.0f)
+#define SELECT_UI_HEIGHT (100.0f)
+#define SELECT_ICON_POS (D3DXVECTOR3(-250.0f, 0.0f, 0.0f))
+#define SELECT_ICON_WIDTH (50.0f)
+#define SELECT_ICON_HEIGHT (100.0f)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -58,16 +66,16 @@ CPauseMenu* CPauseMenu::Create(void) {
 //=============================================================================
 HRESULT CPauseMenu::Init(void) {
 	//背景の設定
-	SetMenuBG(CTexture::TEXTURE_TYPE::PAUSE_BG, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);
+	SetMenuBG(CTexture::TEXTURE_TYPE::PAUSE_BG, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);	
 	//縦選択
 	SetSelectType(CSelectMenu::SELECT_TYPE::VERTICAL);
 	//選択肢UIの詳細設定
-	SetSelectUI(0, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_GAMESTART);
-	SetSelectUI(1, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 80.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_GAMESTART);
-	SetSelectUI(2, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f + 160.0f, 0.0f), 280.0f, 60.0f, CTexture::TEXTURE_TYPE::TEXT_TITLENAME);
+	SetSelectUI(0, SELECT_TITLE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_CONTINUE);
+	SetSelectUI(1, SELECT_RESTATE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_RESTATE);
+	SetSelectUI(2, SELECT_CONTINUE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_TITLE);
 	//選択肢アイコンの生成
-	CreateSelectIcon(D3DXVECTOR3(-180.0f, 0.0f, 0.0f), 50.0f, 50.0f, CTexture::TEXTURE_TYPE::SELECT_ICON);
-	SetIconPosOffset(1, D3DXVECTOR3(-120.0f, 0.0f, 0.0f));
+	CreateSelectIcon(SELECT_ICON_POS, SELECT_ICON_WIDTH, SELECT_ICON_HEIGHT, CTexture::TEXTURE_TYPE::SELECT_ICON);
+	SetIconPosOffset(1, D3DXVECTOR3(-230.0f, 0.0f, 0.0f));
 
 	CSelectMenu2D::Init();
 

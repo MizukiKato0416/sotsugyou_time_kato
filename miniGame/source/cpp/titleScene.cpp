@@ -41,11 +41,11 @@ CObject2D * CTitleScene::m_pNext = nullptr;
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleScene::CTitleScene():m_fMaxCol(1.0f)
-{
-	m_bBeginFade = false;
+CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
+{	
 	m_bPushKey = false;
 	m_nFadeTime = 10;
+	m_nColorTime = 0;
 }
 
 //=============================================================================
@@ -109,13 +109,13 @@ void CTitleScene::Init(void) {
 	//UIの生成
 	//------------------------------
 	// 背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / m_nDivideNum, SCREEN_HEIGHT / m_nDivideNum, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
 	// ゲーム終了UI
 	CObject2D::Create(ESC_POS, CTexture::TEXTURE_TYPE::QUIT_GAME, ESC_WIDTH, ESC_HEIGHT);
 	// タイトルロゴ
 	CObject2D::Create(TITLE_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, TITLE_LOGO_WIDTH, TITLE_LOGO_HEIGHT);
 	// 次に行かせるロゴ
-	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
+	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_GAMESTART, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
 
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -161,10 +161,7 @@ void CTitleScene::Uninit(void) {
 //=============================================================================
 // タイトルシーンの更新処理
 //=============================================================================
-void CTitleScene::Update(void) {
-	//シーン遷移開始後は更新なし
-	if (m_bBeginFade) return;
-
+void CTitleScene::Update(void) {		
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ
@@ -201,19 +198,18 @@ void CTitleScene::Update(void) {
 	//決定キーが押されたとき
 	if (m_bPushKey)
 	{		
+		m_bCol = ChangeColTime(m_bCol);
 		// 点滅処理(状態遷移)
 		if (m_bCol)
 		{
 			// α値の変更
-			col.a = m_fMaxCol;
-			m_bCol = false;
+			col.a = m_fMaxCol;		
 		}
 		else
 		{
 			// α値の変更
-			col.a = m_fMaxCol / 2;
-			m_bCol = true;
-		}
+			col.a = m_fMaxCol / m_nDivideNum;			
+		}		
 		// 次に行かせるロゴの色の設定
 		m_pNext->SetColor(col);
 
@@ -222,8 +218,7 @@ void CTitleScene::Update(void) {
 		{
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;	
-			//シーン遷移開始
-			m_bBeginFade = true;
+			//シーン遷移開始			
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
 			//決定音の再生
 			//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
@@ -234,4 +229,29 @@ void CTitleScene::Update(void) {
 			m_nFadeTime--;
 		}
 	}
+}
+
+//=============================================================================
+// タイトルシーンの色が変わる時間の処理
+//=============================================================================
+bool CTitleScene::ChangeColTime(bool bCol)
+{
+	m_nColorTime++;
+
+	// 時間が最大時間に行ったら
+	if (m_nColorTime > m_nMaxColTime)
+	{
+		if (bCol)
+		{
+			bCol = false;
+		}
+		else
+		{
+			bCol = true;
+		}
+		// 色を変える時間を初期化
+		m_nColorTime = 0;
+	}
+
+	return bCol;
 }

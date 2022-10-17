@@ -177,6 +177,8 @@ HRESULT CPlayer::Init(void) {
 		pModel->SetMaterialDiffuse(col, 0);
 	}
 
+	
+
 	return S_OK;
 }
 
@@ -194,7 +196,6 @@ void CPlayer::Uninit(void) {
 // プレイヤーの更新処理
 //=============================================================================
 void CPlayer::Update(void) {
-
 	//更新しない設定なら
 	if (!m_bUpdate)
 	{
@@ -270,8 +271,6 @@ void CPlayer::Update(void) {
 	posPlayer += m_move;
 	//位置設定
 	SetPos(posPlayer);
-
-
 
 	//L1ボタンを押したら
 	if (pInput->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))

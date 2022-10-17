@@ -31,6 +31,7 @@ public:
 	D3DXVECTOR3 GetPos(void);		//位置座標の取得
 	void SetRot(D3DXVECTOR3 rot);	//角度の設定
 	D3DXVECTOR3 GetRot(void);		//角度の取得
+	D3DXMATRIX GetMtxWorld(void) { return m_mtxWorld; }		//ワールドマトリックスの取得
 	LPDIRECT3DVERTEXBUFFER9* GetPtrVtxBuff(void);	//頂点バッファのポインタのポインタを取得
 	LPDIRECT3DINDEXBUFFER9* GetPtrIdxBuff(void);	//インデックスバッファのポインタのポインタを取得
 	void SetNumVtx(int nNumVtx);	//頂点数の設定

@@ -24,6 +24,14 @@ class CObject2D;
 class CPlayerIcon : public CObject
 {
 public:
+	enum class STATE
+	{
+		ADD_ALPHA = 0,	//α値加算
+		NONE,			//何もしない
+		DEC_ALPHA,		//α値減算
+		MAX
+	};
+
 	CPlayerIcon();		//デフォルトコンストラクタ
 	~CPlayerIcon();	//デストラクタ
 	static CPlayerIcon* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
@@ -33,10 +41,31 @@ public:
 	void Update(void);	//更新処理
 	void Draw(void) {}	//描画処理
 
+	//状態取得処理
+	STATE GetState(void) { return m_state; }
+	//状態設定処理
+	void SetState(STATE state) { m_state = state; }
+
+	//フレームのポインタ取得処理
+	CObject2D *GetFrame(void) { return m_pFrame; }
+	//プレイヤー番号のポインタ取得処理
+	CObject2D *GetPlayerNum(void) { return m_pPlayerNum; }
+
 private:
-	D3DXVECTOR3 m_scale;								//スケール
-	CTexture::TEXTURE_TYPE m_texTypeFrame;				//フレームのテクスチャ
-	CTexture::TEXTURE_TYPE m_texTypePlayerNum;			//プレイヤー番号のテクスチャ
+	void StateAddAlpha();		//α値加算処理
+	void StateNone();			//何もしない処理
+	void StateDecAlpha();		//α値減算処理
+
+	D3DXVECTOR3 m_scale;							//スケール
+	D3DXVECTOR3 m_pos;								//位置
+	STATE m_state;									//状態
+
+	CTexture::TEXTURE_TYPE m_texTypeFrame;			//フレームのテクスチャ
+	CObject2D *m_pFrame;							//フレームのポインタ
+
+	CTexture::TEXTURE_TYPE m_texTypePlayerNum;		//プレイヤー番号のテクスチャ
+	CObject2D *m_pPlayerNum;						//プレイヤー番号のポインタ
+
 };
 
 #endif // !_PLAYER_ICON_H_

@@ -58,6 +58,18 @@ HRESULT CGameCamera::Init(void) {
 	//ãóó£ÇÃê›íË
 	SetDistance(DEFAULT_CAMERA_DISTANCE);
 
+	//------------------------------------
+	//éãì_Ç∆íçéãì_ÇÃê›íË
+	//------------------------------------
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	float fDist = DEFAULT_CAMERA_DISTANCE;
+
+	SetPosR(pos);
+	SetPosV(pos + D3DXVECTOR3(sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
+		sinf(rot.x + D3DX_PI) * fDist,
+		cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));
+
 	CCamera::Init();
 
 	return S_OK;

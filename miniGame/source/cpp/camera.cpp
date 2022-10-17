@@ -95,6 +95,7 @@ HRESULT CCamera::Init(void) {
 		m_fMaxDrawDist);							//奥の位置
 
 	//プロジェクションマトリックスの設定
+	pDevice->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
 	pRenderer->SetEffectMatrixProj(m_mtxProjection);
 
 	//上ベクトルの設定

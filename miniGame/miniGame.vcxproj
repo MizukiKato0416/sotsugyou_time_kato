@@ -208,6 +208,7 @@
     <ClCompile Include="source\cpp\titleCamera.cpp" />
     <ClCompile Include="source\cpp\titleScene.cpp" />
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
+    <ClCompile Include="ToScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h" />
@@ -264,6 +265,7 @@
     <ClInclude Include="source\h\timer.h" />
     <ClInclude Include="source\h\titleCamera.h" />
     <ClInclude Include="source\h\titleScene.h" />
+    <ClInclude Include="source\h\ToScreen.h" />
     <ClInclude Include="source\h\wallCylinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
