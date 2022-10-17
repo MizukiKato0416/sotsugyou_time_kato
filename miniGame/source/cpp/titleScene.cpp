@@ -115,7 +115,7 @@ void CTitleScene::Init(void) {
 	// タイトルロゴ
 	CObject2D::Create(TITLE_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, TITLE_LOGO_WIDTH, TITLE_LOGO_HEIGHT);
 	// 次に行かせるロゴ
-	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_TITLENAME, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
+	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_GAMESTART, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
 
 	//BGMの再生
 	if (pSound != nullptr) {
