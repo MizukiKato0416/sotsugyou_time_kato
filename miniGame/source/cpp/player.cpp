@@ -402,9 +402,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
-
+		//---------------------------------
 		//‰Œ
-		//CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
+		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
+		//---------------------------------
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚ç
@@ -528,6 +529,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 		//Šp“x‚Ìİ’è
 		CObjectModel::SetRot(rotPlayer);
+		//---------------------------------
+		//“yšº
+		CPresetEffect::SetEffect3D(1, GetPos(), {}, {});
+		//---------------------------------
 	}
 }
 

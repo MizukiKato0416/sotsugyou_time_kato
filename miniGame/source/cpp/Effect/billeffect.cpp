@@ -10,7 +10,7 @@
 //=============================================================================
 // マク
 //=============================================================================
-#define MAX_COLOR (255)
+#define MAX_COLOR (1.0f)
 
 
 //=============================================================================
@@ -20,6 +20,7 @@ CBillEffect::CBillEffect() : CPlane::CPlane()
 {
 	m_Color = {};
 	m_MinColor = {};
+	m_bConversion = false;
 }
 
 //=============================================================================
@@ -80,10 +81,103 @@ HRESULT CBillEffect::Init(D3DXVECTOR3 Size,
 		m_nSplit.x = SplitU;
 		m_nSplit.y = SplitV;
 	}
+	if (m_bConversion == false)
+	{
+		//カラー値の255→1.0表記への変換
+		if (m_Color.r > MAX_COLOR)
+		{
+			m_Color.r = m_Color.r / 1000;
+		}
+		if (m_Color.g > MAX_COLOR)
+		{
+			m_Color.g = m_Color.g / 1000;
+		}
+		if (m_Color.b > MAX_COLOR)
+		{
+			m_Color.b = m_Color.b / 1000;
+		}
+		if (m_Color.a > MAX_COLOR)
+		{
+			m_Color.a = m_Color.a / 1000;
+		}
+		m_bConversion = true;
+	}
 
+	//255→1.0表記への変換に使う
+	bool ColorBoolR = false;
+	bool ColorBoolG = false;
+	bool ColorBoolB = false;
+	bool ColorBoolA = false;
 
 	//カラー変動
 	m_MinColor = Mincolor;
+
+
+	//カラー減算値の255→1.0表記への変換
+	if (m_MinColor.r >= MAX_COLOR || m_MinColor.r <= -MAX_COLOR)	//赤
+	{
+		if (m_MinColor.r< 0)
+		{
+			ColorBoolR = true;
+			m_MinColor.r *= -1;
+		}
+
+		m_MinColor.r = m_MinColor.r / 1000;
+
+		if (ColorBoolR = true)
+		{
+			m_MinColor.r *= -1;
+		}
+
+	}
+	if (m_MinColor.g >= MAX_COLOR || m_MinColor.g <= -MAX_COLOR)	//緑
+	{
+		if (m_MinColor.g < 0)
+		{
+			ColorBoolG = true;
+			m_MinColor.g *= -1;
+		}
+
+		m_MinColor.g = m_MinColor.g / 1000;
+
+		if (ColorBoolG = true)
+		{
+			m_MinColor.g *= -1;
+		}
+
+	}
+	if (m_MinColor.b >= MAX_COLOR || m_MinColor.b <= -MAX_COLOR)	//青
+	{
+		if (m_MinColor.b < 0)
+		{
+			ColorBoolB = true;
+			m_MinColor.b *= -1;
+		}
+
+		m_MinColor.b = m_MinColor.b / 1000;
+
+		if (ColorBoolB = true)
+		{
+			m_MinColor.b *= -1;
+		}
+
+	}
+	if (m_MinColor.a >= MAX_COLOR || m_MinColor.a <= -MAX_COLOR)	//透明度
+	{
+		if (m_MinColor.a < 0)
+		{
+			ColorBoolA = true;
+			m_MinColor.a *= -1;
+		}
+
+		m_MinColor.a = m_MinColor.a / 1000;
+
+		if (ColorBoolA = true)
+		{
+			m_MinColor.a *= -1;
+		}
+	}
+
 
 	m_nLife = nLife;
 	m_bUninit = false;
@@ -108,12 +202,24 @@ void CBillEffect::Uninit()
 void CBillEffect::Update()
 {
 
-	//カラー変更
-	m_Color.r += m_MinColor.r;
-	m_Color.g += m_MinColor.g;
-	m_Color.b += m_MinColor.b;
-	m_Color.a += m_MinColor.a;
 
+	//1.0を上回る
+	if (m_Color.r >= MAX_COLOR)
+	{
+		m_Color.r = MAX_COLOR;
+	}
+	if (m_Color.g >= MAX_COLOR)
+	{
+		m_Color.g = MAX_COLOR;
+	}
+	if (m_Color.b >= MAX_COLOR)
+	{
+		m_Color.b = MAX_COLOR;
+	}
+	if (m_Color.a >= MAX_COLOR)
+	{
+		m_Color.a = MAX_COLOR;
+	}
 
 	//カラー値が0を下回りそう
 	if (m_Color.r <= 0)
@@ -133,25 +239,12 @@ void CBillEffect::Update()
 		m_Color.a = 0;
 	}
 
-	
+	//カラー変更
+	m_Color.r += m_MinColor.r;
+	m_Color.g += m_MinColor.g;
+	m_Color.b += m_MinColor.b;
+	m_Color.a += m_MinColor.a;
 
-	//カラー値がMAX_COLORを上回りそう
-	if (m_Color.r >= MAX_COLOR)
-	{
-		m_Color.r = MAX_COLOR;
-	}
-	if (m_Color.g >= MAX_COLOR)
-	{
-		m_Color.g = MAX_COLOR;
-	}
-	if (m_Color.b >= MAX_COLOR)
-	{
-		m_Color.b = MAX_COLOR;
-	}
-	if (m_Color.a >= MAX_COLOR)
-	{
-		m_Color.a = MAX_COLOR;
-	}
 
 	switch (m_AnimPattern)
 	{

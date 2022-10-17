@@ -88,7 +88,6 @@ public:
 		D3DXVECTOR2 nSplit,
 		ANIMPATTERN AnimPattern);
 private:
-	D3DXVECTOR3 m_pos;	//出現位置
 	D3DXVECTOR3 m_move;	//移動値
 	D3DXVECTOR3 m_rot;	//移動値
 

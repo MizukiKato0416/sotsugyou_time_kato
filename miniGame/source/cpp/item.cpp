@@ -10,6 +10,9 @@
 #include "objectList.h"
 #include "player.h"
 
+//エフェクト
+#include "PresetSetEffect.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -143,6 +146,12 @@ bool CItem::CollisionPlayer(const float fMySize)
 		{
 			//ヒット時処理
 			HitPlayer(pPlayer);
+
+			//ーーーーーーーーーーーーーーーーーーー
+			//スピン(バナナヒット)
+			CPresetEffect::SetEffect3D(8, D3DXVECTOR3(GetPos().x, GetPos().y + 10, GetPos().z), {}, {});		//回るやつ
+			//ーーーーーーーーーーーーーーーーーーー
+
 			return true;
 		}
 

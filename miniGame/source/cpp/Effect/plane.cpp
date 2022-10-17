@@ -117,6 +117,33 @@ void CPlane::Draw()
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 
+	if (m_nSynthenic == 0)
+	{
+		//加算合成関係
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+	else if (m_nSynthenic == 1)
+	{
+		//減算合成の設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+	else if (m_nSynthenic == 2)
+	{
+		//合成使用無し
+	}
+	//それ以外の数値は加算合成に
+	else
+	{
+		//加算合成関係
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&mtxWorld);
 	//向きを反映
@@ -169,6 +196,12 @@ void CPlane::Draw()
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
+
+	//通常合成に戻す
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 }
 //=============================================================================
 // テクスチャ破棄
@@ -285,10 +318,10 @@ void CPlane::SetPosField(D3DXVECTOR3 pos, D3DXVECTOR3 Size, float Rotate, float 
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(pos.x + (cosf(Rotate2)) * Size.x, Size.y, pos.z + (sinf(Rotate))* Size.x);
-	pVtx[1].pos = D3DXVECTOR3(pos.x + (sinf(Rotate))  * Size.x, Size.y, pos.z - (cosf(Rotate2))* Size.x);
-	pVtx[2].pos = D3DXVECTOR3(pos.x - (sinf(Rotate))  * Size.x, Size.y, pos.z + (cosf(Rotate2))* Size.x);
-	pVtx[3].pos = D3DXVECTOR3(pos.x - (cosf(Rotate2)) * Size.x, Size.y, pos.z - (sinf(Rotate))* Size.x);
+	pVtx[0].pos = D3DXVECTOR3(pos.x / 2 + (cosf(Rotate2)) * Size.x, Size.y, pos.z / 2 + (sinf(Rotate))* Size.x);
+	pVtx[1].pos = D3DXVECTOR3(pos.x / 2 + (sinf(Rotate))  * Size.x, Size.y, pos.z / 2 - (cosf(Rotate2))* Size.x);
+	pVtx[2].pos = D3DXVECTOR3(pos.x / 2 - (sinf(Rotate))  * Size.x, Size.y, pos.z / 2 + (cosf(Rotate2))* Size.x);
+	pVtx[3].pos = D3DXVECTOR3(pos.x / 2 - (cosf(Rotate2)) * Size.x, Size.y, pos.z / 2 - (sinf(Rotate))* Size.x);
 
 
 	//頂点バッファをアンロック

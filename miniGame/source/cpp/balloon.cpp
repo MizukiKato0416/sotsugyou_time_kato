@@ -11,6 +11,9 @@
 #include "player.h"
 #include "score.h"
 
+//エフェクト
+#include "PresetSetEffect.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -147,6 +150,14 @@ void CBalloon::Update(void) {
 
 	SetPos(pos);
 
+	//ーーーーーーーーーーーーーーーーーーー
+	//金風船のキラキラ
+	if (m_bGold)
+	{
+		CPresetEffect::SetEffect3D(7, D3DXVECTOR3(pos.x, pos.y + 70, pos.z), {}, {});		//落ちる塵
+	}
+	//ーーーーーーーーーーーーーーーーーーー
+
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer())
 	{
@@ -171,6 +182,12 @@ void CBalloon::Update(void) {
 
 		}
 
+		//ーーーーーーーーーーーーーーーーーーー
+		//風船取得エフェクト
+		CPresetEffect::SetEffect3D(2, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//衝撃波
+		CPresetEffect::SetEffect3D(3, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//塵
+		CPresetEffect::SetEffect3D(4, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//落ちる塵
+		//ーーーーーーーーーーーーーーーーーーー
 		//当たっていたら消す
 		Uninit();
 		return;

@@ -196,18 +196,18 @@ public:
 		D3DCOLORVALUE TherdChangecolor,
 		int SecondTex);
 
-	//オーダー処理
-	typedef struct
-	{
-		int nDeley;
-		int nPresetNum;
-		int m_nOrder[MAX_ORDER_3D];
-		D3DXVECTOR3 pos[MAX_ORDER_3D];
-		D3DXVECTOR3 Endpos[MAX_ORDER_3D];
-		bool bOne[MAX_ORDER_3D];
-	} ORDER_PRESET;
+	////オーダー処理
+	//typedef struct
+	//{
+	//	int nDeley;
+	//	int nPresetNum;
+	//	int m_nOrder[MAX_ORDER_3D];
+	//	D3DXVECTOR3 pos[MAX_ORDER_3D];
+	//	D3DXVECTOR3 Endpos[MAX_ORDER_3D];
+	//	bool bOne[MAX_ORDER_3D];
+	//} ORDER_PRESET;
 
-	static void SetEffect2D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 PlayerPos, D3DXVECTOR3 rot);	//パターン番号、出現位置、比較位置、位置
+	//static void SetEffect2D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 PlayerPos, D3DXVECTOR3 rot);	//パターン番号、出現位置、比較位置、位置
 	static void SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot);	//パターン、出現位置、目標地点、回転
 	static void ResetPattern() {
 		m_nEffectPattern2d = 0;
@@ -235,7 +235,7 @@ public:
 private:
 	static EFFECT_STATE2D m_EffectState2D[MAX_EFFECTPATTERN_2D];
 	static EFFECT_STATE3D m_EffectState3D[MAX_EFFECTPATTERN_3D];
-	static ORDER_PRESET m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D];
+	//static ORDER_PRESET m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D];
 
 	static int m_nEffectPattern2d;	//複数のやつ読み込めるようにするやつ
 	static int m_nEffectPattern3d;	//複数のやつ読み込めるようにするやつ

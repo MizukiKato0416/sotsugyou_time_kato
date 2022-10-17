@@ -26,6 +26,11 @@
 #include "itemBox.h"
 #include "count_down_ui.h"
 #include "finish_ui.h"
+
+//エフェクト
+#include "plane.h"
+#include "PresetSetEffect.h"
+
 #include "player_icon.h"
 #include "ToScreen.h"
 #include "check_icon.h"
@@ -642,6 +647,13 @@ void CGameScene::CreateBalloon(void)
 
 			//風船を生成する
 			CBalloon::Create(bGold, balloonPos);
+
+			//ーーーーーーーーーーーーーーーーーーー
+			//風船出現エフェクト
+			CPresetEffect::SetEffect3D(5, D3DXVECTOR3(balloonPos.x, balloonPos.y + 130, balloonPos.z - 90), {}, {});		//デカ円
+			CPresetEffect::SetEffect3D(6, D3DXVECTOR3(balloonPos.x, balloonPos.y + 140, balloonPos.z - 90), {}, {});		//回ってる塵
+			//ーーーーーーーーーーーーーーーーーーー
+
 		}
 	}
 }

@@ -91,8 +91,7 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 		pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));;
 
 	m_Oldpos = m_pos;
-
-	SetPos(m_pos);
+	m_posIndividual = pos;
 	return S_OK;
 }
 
@@ -109,7 +108,7 @@ void CRotate3D::Uninit()
 //*****************************************************************************
 void CRotate3D::Update()
 {
-	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 pos = m_posIndividual;
 
 
 	switch (m_EffectTime)

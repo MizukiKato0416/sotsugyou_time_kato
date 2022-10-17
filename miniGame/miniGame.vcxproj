@@ -160,6 +160,7 @@
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
     <ClCompile Include="source\cpp\Effect\LoadEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\plane.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
+    <ClInclude Include="source\h\FieldEffect.h" />
     <ClInclude Include="source\h\finish_ui.h" />
     <ClInclude Include="source\h\font.h" />
     <ClInclude Include="source\h\Fountain.h" />
