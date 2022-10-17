@@ -34,8 +34,7 @@ private:
 	static CObject2D * m_pNext;// オブジェクト2Dの静的ポインター生成
 	const int m_nDivideNum;	// 割る数
 	const float m_fMaxCol;	// 色の最大値
-	int m_nFadeTime;	// 遷移する時間
-	bool m_bBeginFade;	//シーン遷移開始したかどうか
+	int m_nFadeTime;	// 遷移する時間	
 	bool m_bCol; // 色を変えるかどうか
 	bool m_bPushKey; // 押されたかどうか
 };

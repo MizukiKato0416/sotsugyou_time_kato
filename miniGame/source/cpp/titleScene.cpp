@@ -42,8 +42,7 @@ CObject2D * CTitleScene::m_pNext = nullptr;
 // デフォルトコンストラクタ
 //=============================================================================
 CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2)
-{
-	m_bBeginFade = false;
+{	
 	m_bPushKey = false;
 	m_nFadeTime = 10;
 }
@@ -161,10 +160,7 @@ void CTitleScene::Uninit(void) {
 //=============================================================================
 // タイトルシーンの更新処理
 //=============================================================================
-void CTitleScene::Update(void) {
-	//シーン遷移開始後は更新なし
-	if (m_bBeginFade) return;
-
+void CTitleScene::Update(void) {		
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ
@@ -222,8 +218,7 @@ void CTitleScene::Update(void) {
 		{
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;	
-			//シーン遷移開始
-			m_bBeginFade = true;
+			//シーン遷移開始			
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
 			//決定音の再生
 			//if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::TITLE_START)*/;
