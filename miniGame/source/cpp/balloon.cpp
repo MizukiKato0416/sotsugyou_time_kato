@@ -9,6 +9,7 @@
 #include "sound.h"
 #include "objectList.h"
 #include "player.h"
+#include "score.h"
 
 //=============================================================================
 // マクロ定義
@@ -18,6 +19,8 @@
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
 #define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
 #define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
+#define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
+#define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -220,7 +223,15 @@ bool CBalloon::CollisionPlayer(void)
 		//当たっていたら
 		if (fDiffer <= BALLOON_PLAYER_COLL_SIZE + BALLOON_SIZE)
 		{
-			
+			//色によってスコアを増やす
+			if (m_bGold)
+			{
+				pPlayer->GetScore()->AddScore(BALLOON_GOLD_SCORE);
+			}
+			else
+			{
+				pPlayer->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+			}
 			return true;
 		}
 

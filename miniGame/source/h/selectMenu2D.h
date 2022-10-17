@@ -47,7 +47,7 @@ private:
 
 	CObject2D** m_ppSelectUIArray;	//選択肢のUIの動的配列
 
-	CObject2D* m_pSelectIcon;	//選択中の選択肢の隣に生成されるアイコン
+	CObject2D* m_pSelectIcon;					//選択中の選択肢の隣に生成されるアイコン
 	D3DXVECTOR3* m_pPosSelectIconOffsetArray;	//選択中アイコンの選択肢からのオフセット位置の動的配列のポインタ
 };
 

@@ -31,6 +31,26 @@ data/TEXTURE/UI/fukidashi_2p.png
 data/TEXTURE/UI/fukidashi_3p.png
 data/TEXTURE/UI/fukidashi_4p.png
 
+data/TEXTURE/UI/tex01.png
+data/TEXTURE/UI/tex02.png
+data/TEXTURE/UI/tex03.png
+data/TEXTURE/UI/tex04.png
+data/TEXTURE/UI/Button_X.png
+data/TEXTURE/UI/Button_B.png
+data/TEXTURE/UI/Button_A.png
+data/TEXTURE/UI/Button_Y.png
+data/TEXTURE/UI/OK01.png
+data/TEXTURE/UI/OK02.png
+data/TEXTURE/UI/OK03.png
+data/TEXTURE/UI/OK04.png
+
+data/TEXTURE/UI/1P_frame_score.png
+data/TEXTURE/UI/2P_frame_score.png
+data/TEXTURE/UI/3P_frame_score.png
+data/TEXTURE/UI/4P_frame_score.png
+
+
+
 data/TEXTURE/UI/timer_frame.png
 
 data/TEXTURE/UI/pause_bg.png

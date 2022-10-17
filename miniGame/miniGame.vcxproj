@@ -156,6 +156,7 @@
     <ClCompile Include="source\cpp\balloon.cpp" />
     <ClCompile Include="source\cpp\billboard.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
+    <ClCompile Include="source\cpp\check_icon.cpp" />
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
     <ClInclude Include="source\h\camera.h" />
+    <ClInclude Include="source\h\check_icon.h" />
     <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />

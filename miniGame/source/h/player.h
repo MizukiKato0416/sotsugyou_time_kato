@@ -22,6 +22,7 @@
 class CObject2D;
 class CWeapon;
 class CInput;
+class CScore;
 
 //*****************************************************************************
 // プレイヤークラス
@@ -77,6 +78,11 @@ public:
 	//更新するかどうか設定処理
 	void SetUpdate(const bool bUpdate) { m_bUpdate = bUpdate; }
 
+	//スコア取得処理
+	CScore *GetScore(void) { return m_pSocre; }
+	//スコア生成処理
+	void CreateScore();
+
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
 	void DecMove(void);								//移動量の減少
@@ -104,6 +110,8 @@ private:
 
 	int m_nSpinCounter;				//スピンする時間のカウンター
 	int m_nInvincbleCounter;		//無敵時間のカウンター
+
+	CScore *m_pSocre;				//スコアのポインタ
 };
 
 #endif // !_PLAYER_H_

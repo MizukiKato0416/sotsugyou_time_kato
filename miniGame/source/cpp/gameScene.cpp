@@ -28,6 +28,7 @@
 #include "finish_ui.h"
 #include "player_icon.h"
 #include "ToScreen.h"
+#include "check_icon.h"
 
 //=============================================================================
 // マクロ定義
@@ -77,6 +78,8 @@ CGameScene::CGameScene()
 	m_pCountDownUi = nullptr;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_PLAYER_NUM]));
+	memset(m_apCheckIcon, NULL, sizeof(m_apCheckIcon[MAX_PLAYER_NUM]));
+	m_bAllCheck = false;
 }
 
 //=============================================================================
@@ -93,6 +96,7 @@ CGameScene::~CGameScene()
 void CGameScene::Init(void) {
 	//変数初期化
 	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
+	m_bAllCheck = false;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -171,12 +175,11 @@ void CGameScene::Init(void) {
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->SetUpdate(false);
 
-		//プレイヤーアイコンの生成処理
-		CreatePlayerIcon(nCntPlayer);
+		//チェックアイコンの生成
+		m_apCheckIcon[nCntPlayer] = CCheckIcon::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.0f * (nCntPlayer + 1), SCREEN_HEIGHT / 2.0f, 0.0f),
+			                                           D3DXVECTOR3(0.7f, 0.7f, 0.7f), nCntPlayer + 1);
 	}
-
-	//カウントダウンUIの生成
-	m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+	
 
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -247,22 +250,74 @@ void CGameScene::Update(void) {
 
 #endif
 
-	//カウントダウンUIが生成されていたら
-	if (m_pCountDownUi != nullptr)
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
 	{
-		//カウントダウンUIの処理
-		CountDownUi();
-	}
-	
+		int nCheck = 0;
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+		{
+			//アイコンが生成されていたら
+			if (m_apCheckIcon[nCntPlayer] == nullptr)
+			{
+				continue;
+			}
 
-	//ゲームオーバー時
-	if (m_bGameOver) {
-		UpdateGameOver();
+			if (m_apCheckIcon[nCntPlayer]->GetCheck())
+			{
+				//増やす
+				nCheck++;
+			}
+		}
+
+		//全員がチェック出来たら
+		if (nCheck == 1)
+		{
+			int nUninit = 0;
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+			{
+				//消さない状態なら
+				if (!m_apCheckIcon[nCntPlayer]->GetUninit())
+				{
+					//消す
+					m_apCheckIcon[nCntPlayer]->SetUninit(true, 30);
+				}
+
+				//UIが消えたなら
+				if (m_apCheckIcon[nCntPlayer]->GetFrame() == nullptr &&m_apCheckIcon[nCntPlayer]->GetButton() == nullptr)
+				{
+					//消す
+					m_apCheckIcon[nCntPlayer]->Uninit();
+					m_apCheckIcon[nCntPlayer] = nullptr;
+
+					nUninit++;
+				}
+			}
+
+			if (nUninit == MAX_PLAYER_NUM)
+			{
+				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+				{
+					//プレイヤーアイコンの生成処理
+					CreatePlayerIcon(nCntPlayer);
+				}
+				//全員がチェック出来た状態にする
+				m_bAllCheck = true;
+				//カウントダウンUIの生成
+				m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+			}
+		}
 	}
-	//ゲーム中
 	else
 	{
-		UpdateGame();
+		//ゲームオーバー時
+		if (m_bGameOver) {
+			UpdateGameOver();
+		}
+		//ゲーム中
+		else
+		{
+			UpdateGame();
+		}
 	}
 }
 
@@ -284,6 +339,13 @@ void CGameScene::UpdateGame(void) {
 
 	//風船の生成
 	CreateBalloon();
+
+	//カウントダウンUIが生成されていたら
+	if (m_pCountDownUi != nullptr)
+	{
+		//カウントダウンUIの処理
+		CountDownUi();
+	}
 
 	//タイマーが生成されていたら
 	if (m_pTimer != nullptr)
@@ -671,6 +733,12 @@ void CGameScene::CountDownUi(void)
 			{
 				//消えるように設定する
 				m_apPlayerIcon[nCntPlayer]->SetState(CPlayerIcon::STATE::DEC_ALPHA);
+			}
+
+			//スコアが生成されていなかったら
+			if (m_apPlayer[nCntPlayer]->GetScore() == nullptr)
+			{
+				m_apPlayer[nCntPlayer]->
 			}
 		}
 

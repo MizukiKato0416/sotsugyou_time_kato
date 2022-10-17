@@ -46,6 +46,11 @@ public:
 		ACCELE,			//アクセル
 		REVERSE,		//バック
 		USE_ITEM,		//アイテムの使用
+		//チェック
+		CHECK_X,		//Xボタン
+		CHECK_B,		//Bボタン
+		CHECK_A,		//Aボタン
+		CHECK_Y,		//Yボタン
 
 #ifdef _DEBUG
 		//デバッグ用
