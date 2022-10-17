@@ -41,7 +41,7 @@ CObject2D * CTitleScene::m_pNext = nullptr;
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleScene::CTitleScene():m_fMaxCol(1.0f)
+CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2)
 {
 	m_bBeginFade = false;
 	m_bPushKey = false;
@@ -109,7 +109,7 @@ void CTitleScene::Init(void) {
 	//UIの生成
 	//------------------------------
 	// 背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / m_nDivideNum, SCREEN_HEIGHT / m_nDivideNum, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
 	// ゲーム終了UI
 	CObject2D::Create(ESC_POS, CTexture::TEXTURE_TYPE::QUIT_GAME, ESC_WIDTH, ESC_HEIGHT);
 	// タイトルロゴ
@@ -211,7 +211,7 @@ void CTitleScene::Update(void) {
 		else
 		{
 			// α値の変更
-			col.a = m_fMaxCol / 2;
+			col.a = m_fMaxCol / m_nDivideNum;
 			m_bCol = true;
 		}
 		// 次に行かせるロゴの色の設定
