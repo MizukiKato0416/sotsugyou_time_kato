@@ -748,6 +748,28 @@ bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 		}
 		break;
 
+		//チェック
+	case CODE::CHECK_X:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_X, nIdx)) {
+			return true;
+		}
+		break;
+	case CODE::CHECK_B:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_B, nIdx)) {
+			return true;
+		}
+		break;
+	case CODE::CHECK_A:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_A, nIdx)) {
+			return true;
+		}
+		break;
+	case CODE::CHECK_Y:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_Y, nIdx)) {
+			return true;
+		}
+		break;
+
 	}
 	return false;
 }

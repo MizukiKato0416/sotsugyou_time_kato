@@ -19,6 +19,7 @@
 #include "item_banana.h"
 
 #include "PresetSetEffect.h"
+#include "score.h"
 
 //=============================================================================
 // マクロ定義
@@ -102,6 +103,7 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
 	m_bUpdate = false;
+	m_pSocre = nullptr;
 }
 
 //=============================================================================
@@ -176,8 +178,6 @@ HRESULT CPlayer::Init(void) {
 		//指定したマテリアルの色を設定
 		pModel->SetMaterialDiffuse(col, 0);
 	}
-
-	
 
 	return S_OK;
 }
@@ -338,6 +338,17 @@ float CPlayer::GetRadius(void) {
 }
 
 //=============================================================================
+//スコア生成処理
+//=============================================================================
+void CPlayer::CreateScore()
+{
+	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.0f * m_nIndex, 640.0f, 0.0f), CTexture::TEXTURE_TYPE::NUMBER_003, );
+
+	//スコアの生成
+	m_pSocre = CScore::Create(2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 5.0f * m_nIndex, 640.0f, 0.0f), 60.0f);
+}
+
+//=============================================================================
 // 移動
 //=============================================================================
 void CPlayer::Move(CInput* pInput, float fRotCameraY) {
@@ -391,9 +402,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 		{
 			m_fMoveSpeed = MAX_MOVE_SPEED;
 		}
-
+		//---------------------------------
 		//煙
 		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
+		//---------------------------------
 	}
 	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
 	{//Bボタンを押したら
@@ -517,6 +529,10 @@ void CPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 		//角度の設定
 		CObjectModel::SetRot(rotPlayer);
+		//---------------------------------
+		//土埃
+		CPresetEffect::SetEffect3D(1, GetPos(), {}, {});
+		//---------------------------------
 	}
 }
 

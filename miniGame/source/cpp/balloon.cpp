@@ -9,6 +9,10 @@
 #include "sound.h"
 #include "objectList.h"
 #include "player.h"
+#include "score.h"
+
+//エフェクト
+#include "PresetSetEffect.h"
 
 //=============================================================================
 // マクロ定義
@@ -18,6 +22,8 @@
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
 #define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
 #define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
+#define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
+#define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -144,6 +150,14 @@ void CBalloon::Update(void) {
 
 	SetPos(pos);
 
+	//ーーーーーーーーーーーーーーーーーーー
+	//金風船のキラキラ
+	if (m_bGold)
+	{
+		CPresetEffect::SetEffect3D(7, D3DXVECTOR3(pos.x, pos.y + 70, pos.z), {}, {});		//落ちる塵
+	}
+	//ーーーーーーーーーーーーーーーーーーー
+
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer())
 	{
@@ -168,6 +182,12 @@ void CBalloon::Update(void) {
 
 		}
 
+		//ーーーーーーーーーーーーーーーーーーー
+		//風船取得エフェクト
+		CPresetEffect::SetEffect3D(2, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//衝撃波
+		CPresetEffect::SetEffect3D(3, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//塵
+		CPresetEffect::SetEffect3D(4, D3DXVECTOR3(pos.x,pos.y + 30,pos.z), {}, {});		//落ちる塵
+		//ーーーーーーーーーーーーーーーーーーー
 		//当たっていたら消す
 		Uninit();
 		return;
@@ -220,7 +240,15 @@ bool CBalloon::CollisionPlayer(void)
 		//当たっていたら
 		if (fDiffer <= BALLOON_PLAYER_COLL_SIZE + BALLOON_SIZE)
 		{
-			
+			//色によってスコアを増やす
+			if (m_bGold)
+			{
+				pPlayer->GetScore()->AddScore(BALLOON_GOLD_SCORE);
+			}
+			else
+			{
+				pPlayer->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+			}
 			return true;
 		}
 

@@ -27,6 +27,7 @@ class CSelectMenu2D;
 class CScore;
 class CCountDownUi;
 class CPlayerIcon;
+class CCheckIcon;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -55,6 +56,7 @@ private:
 	void CountDownUi(void);					//カウントダウンUIの処理
 
 	bool m_bGameOver;	//ゲームオーバー
+	bool m_bAllCheck;	//全員がチェックできたかどうか
 
 	CStage* m_pStage;								//ステージへのポインタ
 	CTimer* m_pTimer;								//ゲームのタイマー
@@ -65,6 +67,7 @@ private:
 	CCountDownUi *m_pCountDownUi;					//カウントダウンUIのポインタ
 	CPlayer* m_apPlayer[MAX_PLAYER_NUM];			//プレイヤーのポインタ
 	CPlayerIcon *m_apPlayerIcon[MAX_PLAYER_NUM];	//プレイヤーアイコンのポインタ
+	CCheckIcon *m_apCheckIcon[MAX_PLAYER_NUM];		//チェックアイコンのポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター
