@@ -38,7 +38,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define GAME_TIME								 (60)									//ゲームの時間
+#define GAME_TIME								 (30)									//ゲームの時間
 #define GAME_CREATE_ITEMBOX_TIME				 (30)									//アイテムを生成し始める時間										
 #define TEXT_FILE_NAME_HISCORE					 "data/TEXT/save_hiscore.txt"
 #define TEXT_FILE_NAME_APPLETYPE				 "data/TEXT/save_appletype.txt"
@@ -395,7 +395,7 @@ void CGameScene::UpdateGame(void) {
 		//ポーズメニュークラスを生成
 		m_pMenuPause = CPauseMenu::Create();
 		//サウンドを再生
-		//pSound->PlaySound(CSound::SOUND_LABEL::TITLE_OPEN);
+		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}
 }
 
@@ -461,7 +461,7 @@ void CGameScene::GameOver(void) {
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//ゲームオーバー音を再生
-	if (pSound != nullptr) /*pSound->PlaySound(CSound::SOUND_LABEL::GAMEOVER)*/;
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TIME_UP);
 
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
@@ -747,10 +747,14 @@ void CGameScene::CountDownUi(void)
 				m_apPlayerIcon[nCntPlayer]->SetState(CPlayerIcon::STATE::DEC_ALPHA);
 			}
 
-			//スコアが生成されていなかったら
-			if (m_apPlayer[nCntPlayer]->GetScore() == nullptr)
+			//スコアUIが生成されていなかったら
+			if (m_apPlayer[nCntPlayer]->GetScoreUi() == nullptr)
 			{
-				m_apPlayer[nCntPlayer]->
+				//生成する
+				m_apPlayer[nCntPlayer]->CreateScore();
+
+				//アイテムのUIのフレームを生成
+				m_apPlayer[nCntPlayer]->CreateItemUiFrame();
 			}
 		}
 
@@ -759,7 +763,7 @@ void CGameScene::CountDownUi(void)
 		{
 			//タイマーの生成
 			m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
-			m_pTimer = CTimer::Create(GAME_TIME, 3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
+			m_pTimer = CTimer::Create(GAME_TIME, 2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
 		}
 	}
 

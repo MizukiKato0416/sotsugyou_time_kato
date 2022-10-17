@@ -42,8 +42,7 @@ CScore::CScore(int nNumDigit, CTexture::TEXTURE_TYPE type, D3DXVECTOR3 pos, floa
 		m_vNumberPtr[nCnt]->SetSize(D3DXVECTOR3(m_fSize, m_fSize, 0.0f));
 	}
 
-	m_nDigitMin = 1;
-	//m_nDigitMin = nNumDigit;
+	m_nDigitMin = nNumDigit;
 }
 
 //=============================================================================

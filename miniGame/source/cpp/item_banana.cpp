@@ -9,6 +9,7 @@
 #include "sound.h"
 #include "player.h"
 #include "wallCylinder.h"
+#include "object2D.h"
 
 //=============================================================================
 // É}ÉNÉçíËã`
@@ -83,6 +84,7 @@ HRESULT CItemBanana::Init(void) {
 	m_move.z = cosf(fRot + D3DX_PI) * ITEM_BANANA_MOVE_SPEED;
 
 	CItem::Init();
+
 	return S_OK;
 }
 

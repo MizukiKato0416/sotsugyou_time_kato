@@ -27,6 +27,13 @@ public:
 		SE_TIME_UP,				//タイムアップSE
 		SE_PLAYER_SPIN,			//スピンSE
 		SE_BANANA_THROW,		//バナナを投げるSE
+		SE_COUNT_DOWN,			//カウントダウンSE
+		SE_START,				//スタートSE
+		SE_PLAYER_OK,			//プレイヤーOKSE
+		SE_DECIDE,				//決定SE
+		SE_CANCEL,				//キャンセルSE
+		SE_PAUSE_OPEN,			//ポーズ開くSE
+		SE_CURSOR,				//カーソルSE
 
 		ENUM_MAX
 	};

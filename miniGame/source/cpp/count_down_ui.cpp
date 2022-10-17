@@ -6,6 +6,8 @@
 //=============================================================================
 #include "count_down_ui.h"
 #include "object2D.h"
+#include "manager.h"
+#include "sound.h"
 
 //=============================================================================
 // マクロ定義
@@ -73,6 +75,14 @@ HRESULT CCountDownUi::Init(void) {
 	m_pCountUi = CObject2D::Create(m_pos, CTexture::TEXTURE_TYPE::COUNT_DOWN_3,
 		                           COUNT_DOWN_UI_NUMBER_SIZE_X * m_scale.x, COUNT_DOWN_UI_NUMBER_SIZE_Y * m_scale.y);
 
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//音を再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_COUNT_DOWN);
+
 	return S_OK;
 }
 
@@ -103,6 +113,12 @@ void CCountDownUi::Update(void) {
 		{
 			if (m_nCounter >= COUNT_DOWN_UI_NEXT_UI_COUNT)
 			{
+				//マネージャーの取得
+				CManager* pManager = CManager::GetManager();
+				//サウンドの取得
+				CSound* pSound = nullptr;
+				if (pManager != nullptr) pSound = pManager->GetSound();
+
 				//サイズを元に戻す
 				m_pCountUi->SetSize(D3DXVECTOR3(COUNT_DOWN_UI_NUMBER_SIZE_X * m_scale.x, COUNT_DOWN_UI_NUMBER_SIZE_Y * m_scale.y, 0.0f));
 				m_nCounter = 0;
@@ -111,14 +127,23 @@ void CCountDownUi::Update(void) {
 				if (m_pCountUi->GetTexType() == CTexture::TEXTURE_TYPE::COUNT_DOWN_3)
 				{
 					m_pCountUi->SetTexType(CTexture::TEXTURE_TYPE::COUNT_DOWN_2);
+
+					//音を再生
+					if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_COUNT_DOWN);
 				}
 				else if (m_pCountUi->GetTexType() == CTexture::TEXTURE_TYPE::COUNT_DOWN_2)
 				{
 					m_pCountUi->SetTexType(CTexture::TEXTURE_TYPE::COUNT_DOWN_1);
+
+					//音を再生
+					if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_COUNT_DOWN);
 				}
 				else
 				{
 					m_pCountUi->SetTexType(CTexture::TEXTURE_TYPE::COUNT_DOWN_START);
+
+					//音を再生
+					if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_START);
 
 					//色取得
 					D3DXCOLOR col = m_pCountUi->GetColor();
