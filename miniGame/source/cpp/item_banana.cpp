@@ -7,9 +7,11 @@
 #include "item_banana.h"
 #include "manager.h"
 #include "sound.h"
-#include "player.h"
+#include "object_player.h"
 #include "wallCylinder.h"
 #include "object2D.h"
+//エフェクト
+#include "PresetSetEffect.h"
 
 //=============================================================================
 // マクロ定義
@@ -49,7 +51,7 @@ CItemBanana::~CItemBanana()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CPlayer *pPlayer) {
+CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CObjectPlayer *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CItemBanana* pItemBanana;
@@ -155,12 +157,17 @@ void CItemBanana::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItemBanana::HitPlayer(CPlayer * pPlayer)
+void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
 {
 	//プレイヤーが通常状態だったら
-	if (pPlayer->GetState() == CPlayer::PLAYER_STATE::NORMAL)
+	if (pPlayer->GetState() == CObjectPlayer::OBJECT_PLAYER_STATE::NORMAL)
 	{
 		//プレイヤーの状態をスピン状態にする
-		pPlayer->SetState(CPlayer::PLAYER_STATE::SPIN);
+		pPlayer->SetState(CObjectPlayer::OBJECT_PLAYER_STATE::SPIN);
+
+		//ーーーーーーーーーーーーーーーーーーー
+		//スピン(バナナヒット)
+		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pPlayer->GetPos().x, pPlayer->GetPos().y + 10, pPlayer->GetPos().z), {}, {});		//回るやつ
+		//ーーーーーーーーーーーーーーーーーーー
 	}
 }

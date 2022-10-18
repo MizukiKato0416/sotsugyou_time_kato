@@ -8,7 +8,7 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "player.h"
+#include "object_player.h"
 #include "score.h"
 #include "score_ui.h"
 #include "gameScene.h"
@@ -235,7 +235,7 @@ bool CBalloon::CollisionPlayer(void)
 		}
 
 		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();

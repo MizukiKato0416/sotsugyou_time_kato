@@ -22,8 +22,8 @@
 #define SELECT_UI_WIDTH (500.0f)
 #define SELECT_UI_HEIGHT (100.0f)
 #define SELECT_ICON_POS (D3DXVECTOR3(-250.0f, 0.0f, 0.0f))
-#define SELECT_ICON_WIDTH (50.0f)
-#define SELECT_ICON_HEIGHT (100.0f)
+#define SELECT_ICON_WIDTH (70.0f)
+#define SELECT_ICON_HEIGHT (50.0f)
 
 //=============================================================================
 // ê√ìIÉÅÉìÉoïœêîêÈåæ

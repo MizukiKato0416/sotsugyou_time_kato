@@ -193,7 +193,8 @@
     <ClCompile Include="source\cpp\objectModelUI.cpp" />
     <ClCompile Include="source\cpp\objectMotion.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
-    <ClCompile Include="source\cpp\player.cpp" />
+    <ClCompile Include="source\cpp\object_player.cpp" />
+    <ClCompile Include="source\cpp\player_balloon_game.cpp" />
     <ClCompile Include="source\cpp\player_icon.cpp" />
     <ClCompile Include="source\cpp\renderer.cpp" />
     <ClCompile Include="source\cpp\resultScene.cpp" />
@@ -251,7 +252,8 @@
     <ClInclude Include="source\h\objectMotion.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
     <ClInclude Include="source\h\plane.h" />
-    <ClInclude Include="source\h\player.h" />
+    <ClInclude Include="source\h\object_player.h" />
+    <ClInclude Include="source\h\player_balloon_game.h" />
     <ClInclude Include="source\h\player_icon.h" />
     <ClInclude Include="source\h\PresetSetEffect.h" />
     <ClInclude Include="source\h\renderer.h" />

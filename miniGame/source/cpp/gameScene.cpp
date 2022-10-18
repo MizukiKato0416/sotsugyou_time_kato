@@ -16,7 +16,7 @@
 #include "score.h"
 #include "stage.h"
 #include "object2D.h"
-#include "player.h"
+#include "object_player.h"
 #include "effect.h"
 #include "terrain.h"
 #include "meshwall.h"
@@ -81,9 +81,9 @@ CGameScene::CGameScene()
 	m_nCntGameClear = 0;
 	m_nCreateItemBoxCounter = 0;
 	m_pCountDownUi = nullptr;
-	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_PLAYER_NUM]));
-	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_PLAYER_NUM]));
-	memset(m_apCheckIcon, NULL, sizeof(m_apCheckIcon[MAX_PLAYER_NUM]));
+	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_apCheckIcon, NULL, sizeof(m_apCheckIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bAllCheck = false;
 }
 
@@ -169,9 +169,9 @@ void CGameScene::Init(void) {
 	}
 
 	//プレイヤーの生成
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		m_apPlayer[nCntPlayer] = CPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
+		m_apPlayer[nCntPlayer] = CObjectPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_OBJECT_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
 												 0.0f,
 												 GAME_PLAYER_INIT_CREATE_POS_Z));
 		//シーンのプレイヤーの設定
@@ -259,7 +259,7 @@ void CGameScene::Update(void) {
 	if (!m_bAllCheck)
 	{
 		int nCheck = 0;
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//アイコンが生成されていたら
 			if (m_apCheckIcon[nCntPlayer] == nullptr)
@@ -278,7 +278,7 @@ void CGameScene::Update(void) {
 		if (nCheck == 1)
 		{
 			int nUninit = 0;
-			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+			for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 			{
 				//消さない状態なら
 				if (!m_apCheckIcon[nCntPlayer]->GetUninit())
@@ -298,9 +298,9 @@ void CGameScene::Update(void) {
 				}
 			}
 
-			if (nUninit == MAX_PLAYER_NUM)
+			if (nUninit == MAX_OBJECT_PLAYER_NUM)
 			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 				{
 					//プレイヤーアイコンの生成処理
 					CreatePlayerIcon(nCntPlayer);
@@ -362,7 +362,7 @@ void CGameScene::UpdateGame(void) {
 		}
 	}
 	
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//生成されていたら
 		if (m_apPlayerIcon[nCntPlayer] != nullptr)
@@ -464,7 +464,7 @@ void CGameScene::GameOver(void) {
 	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TIME_UP);
 
 
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->SetUpdate(false);
@@ -523,7 +523,7 @@ void CGameScene::CreateBalloon(void)
 		std::vector<D3DXVECTOR3> playerPos;
 		playerPos.clear();
 
-		for (int nCntPlayer = 0; nCntPlayer < CPlayer::GetNum(); nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < CObjectPlayer::GetNum(); nCntPlayer++)
 		{
 			playerPos.push_back(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		}
@@ -544,7 +544,7 @@ void CGameScene::CreateBalloon(void)
 			}
 
 			//プレイヤーにキャスト
-			CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+			CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
 
 			//プレイヤーの位置を取得
 			playerPos[pPlayer->GetIndex() - 1] = pPlayer->GetPos();
@@ -604,7 +604,7 @@ void CGameScene::CreateBalloon(void)
 				//クリア数が条件を回した数と一致していたら
 				if (nClearCount == nCntBalloon)
 				{
-					for (int nCntPlayer = 0; nCntPlayer < CPlayer::GetNum(); nCntPlayer++)
+					for (int nCntPlayer = 0; nCntPlayer < CObjectPlayer::GetNum(); nCntPlayer++)
 					{
 						//今生成しようとしている風船からプレイヤーまでの距離ベクトルを求める
 						D3DXVECTOR2 differPlayerVec = D3DXVECTOR2(balloonPos.x - playerPos[nCntPlayer].x,
@@ -625,7 +625,7 @@ void CGameScene::CreateBalloon(void)
 					}
 
 					//クリア数が条件を回した数と一致していたら
-					if (nClearCount == nCntBalloon + CPlayer::GetNum())
+					if (nClearCount == nCntBalloon + CObjectPlayer::GetNum())
 					{
 						bLoop = false;
 					}
@@ -710,9 +710,9 @@ void CGameScene::CreatePlayerIcon(int nCntPlayer){
 	iconPos.z = 0.0f;
 
 	//生成
-	m_apPlayerIcon[nCntPlayer] = CPlayerIcon::Create(iconPos, D3DXVECTOR3(GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE),
+	m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE, GAME_PLAYER_ICON_SCALE),
 		                                             CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer),
-													 CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_1)        + nCntPlayer));
+													 CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
 }
 
 //=============================================================================
@@ -723,7 +723,7 @@ void CGameScene::CountDownUi(void)
 	//スタート状態なら
 	if (m_pCountDownUi->GetStart())
 	{
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER_NUM; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//生成されていたら
 			if (m_apPlayer[nCntPlayer] == nullptr)
@@ -744,7 +744,7 @@ void CGameScene::CountDownUi(void)
 			if (m_apPlayerIcon[nCntPlayer] != nullptr)
 			{
 				//消えるように設定する
-				m_apPlayerIcon[nCntPlayer]->SetState(CPlayerIcon::STATE::DEC_ALPHA);
+				m_apPlayerIcon[nCntPlayer]->SetState(CObjectPlayerIcon::STATE::DEC_ALPHA);
 			}
 
 			//スコアUIが生成されていなかったら
