@@ -26,6 +26,7 @@
 #include "itemBox.h"
 #include "count_down_ui.h"
 #include "finish_ui.h"
+#include "player.h"
 
 //エフェクト
 #include "plane.h"
@@ -523,7 +524,7 @@ void CGameScene::CreateBalloon(void)
 		std::vector<D3DXVECTOR3> playerPos;
 		playerPos.clear();
 
-		for (int nCntPlayer = 0; nCntPlayer < CObjectPlayer::GetNum(); nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < CPlayer::GetNum(); nCntPlayer++)
 		{
 			playerPos.push_back(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		}
@@ -547,7 +548,7 @@ void CGameScene::CreateBalloon(void)
 			CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
 
 			//プレイヤーの位置を取得
-			playerPos[pPlayer->GetIndex() - 1] = pPlayer->GetPos();
+			playerPos[pPlayer->GetPlayer()->GetIndex() - 1] = pPlayer->GetPos();
 
 			pObject = pObjNext;	//リストの次のオブジェクトを代入
 		}
@@ -604,7 +605,7 @@ void CGameScene::CreateBalloon(void)
 				//クリア数が条件を回した数と一致していたら
 				if (nClearCount == nCntBalloon)
 				{
-					for (int nCntPlayer = 0; nCntPlayer < CObjectPlayer::GetNum(); nCntPlayer++)
+					for (int nCntPlayer = 0; nCntPlayer < CPlayer::GetNum(); nCntPlayer++)
 					{
 						//今生成しようとしている風船からプレイヤーまでの距離ベクトルを求める
 						D3DXVECTOR2 differPlayerVec = D3DXVECTOR2(balloonPos.x - playerPos[nCntPlayer].x,
@@ -625,7 +626,7 @@ void CGameScene::CreateBalloon(void)
 					}
 
 					//クリア数が条件を回した数と一致していたら
-					if (nClearCount == nCntBalloon + CObjectPlayer::GetNum())
+					if (nClearCount == nCntBalloon + CPlayer::GetNum())
 					{
 						bLoop = false;
 					}

@@ -175,10 +175,10 @@
     <ClCompile Include="source\cpp\resultScene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\player_balloon_game.cpp">
+    <ClCompile Include="source\cpp\object_player.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\object_player.cpp">
+    <ClCompile Include="source\cpp\player.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
   </ItemGroup>
@@ -357,10 +357,10 @@
     <ClInclude Include="resultScene.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\player_balloon_game.h">
+    <ClInclude Include="source\h\object_player.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\object_player.h">
+    <ClInclude Include="source\h\player.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

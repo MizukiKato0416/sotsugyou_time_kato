@@ -20,14 +20,11 @@
 
 #include "PresetSetEffect.h"
 #include "score_ui.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
-//--------------------------------
-//ファイル名
-//--------------------------------
-#define TEXT_FILE_NAME_LOAD_MOTION "data/MOTION/motion_player.txt"
 
 //--------------------------------
 //移動
@@ -62,25 +59,17 @@
 //--------------------------------
 //その他
 //--------------------------------
-#define COLOR_OUTLINE			(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
-#define SCORE_UI_POS_Y			(650.0f)							//スコアUIの位置Y
-#define OBJECT_PLAYER_ITEM_UI_POS_Y	(580.0f)							//アイテムUIの位置Y
-#define OBJECT_PLAYER_ITEM_UI_POS_X	(90.0f)								//アイテムUIの位置X調整値
+#define COLOR_OUTLINE					(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
+#define SCORE_UI_POS_Y					(650.0f)							//スコアUIの位置Y
+#define OBJECT_PLAYER_ITEM_UI_POS_Y		(580.0f)							//アイテムUIの位置Y
+#define OBJECT_PLAYER_ITEM_UI_POS_X		(90.0f)								//アイテムUIの位置X調整値
 #define OBJECT_PLAYER_ITEM_UI_SIZE		(50.0f)								//アイテムUIのサイズ
-
-//=============================================================================
-// 静的メンバ変数宣言
-//=============================================================================
-int CObjectPlayer::m_nObjectPlayerNum = 0;
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
 CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 {
-	//総数を加算
-	m_nObjectPlayerNum++;
-
 	SetObjType(OBJTYPE_PLAYER);						//オブジェクトタイプの設定
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
 	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
@@ -89,7 +78,6 @@ CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	m_nIndex = m_nObjectPlayerNum;
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
 	m_fSpinSpeed = 0.0f;
@@ -101,6 +89,7 @@ CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_bUpdate = false;
 	m_pSocreUi = nullptr;
 	m_pItemUi = nullptr;
+	m_pPlayer = nullptr;
 }
 
 //=============================================================================
@@ -150,8 +139,12 @@ HRESULT CObjectPlayer::Init(void) {
 
 	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 
+	//プレイヤーの生成
+	m_pPlayer = CPlayer::Create();
+
+
 	//プレイヤー番号によって色を変える
-	switch (m_nIndex)
+	switch (m_pPlayer->GetIndex())
 	{
 	case 1:
 		col = OBJECT_PLAYER_COLOR_1P;
@@ -184,8 +177,6 @@ HRESULT CObjectPlayer::Init(void) {
 // プレイヤーの終了処理
 //=============================================================================
 void CObjectPlayer::Uninit(void) {
-	m_nObjectPlayerNum--;
-
 	//終了処理
 	CObjectModel::Uninit();
 }
@@ -271,7 +262,7 @@ void CObjectPlayer::Update(void) {
 	SetPos(posObjectPlayer);
 
 	//L1ボタンを押したら
-	if (pInput->GetTrigger(CInput::CODE::USE_ITEM, m_nIndex - 1))
+	if (pInput->GetTrigger(CInput::CODE::USE_ITEM, m_pPlayer->GetIndex() - 1))
 	{
 		//アイテム使用
 		UseItem();
@@ -344,8 +335,8 @@ float CObjectPlayer::GetRadius(void) {
 void CObjectPlayer::CreateScore()
 {
 	//スコアUIの生成 
-	m_pSocreUi = CScoreUi::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_nIndex, SCORE_UI_POS_Y, 0.0f),
-		                          D3DXVECTOR3(0.5f, 0.5f, 0.5f), m_nIndex);
+	m_pSocreUi = CScoreUi::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_pPlayer->GetIndex(), SCORE_UI_POS_Y, 0.0f),
+		                          D3DXVECTOR3(0.5f, 0.5f, 0.5f), m_pPlayer->GetIndex());
 }
 
 //=============================================================================
@@ -353,8 +344,8 @@ void CObjectPlayer::CreateScore()
 //=============================================================================
 void CObjectPlayer::CreateItemUiFrame()
 {
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_nIndex - OBJECT_PLAYER_ITEM_UI_POS_X, OBJECT_PLAYER_ITEM_UI_POS_Y, 0.0f),
-		              CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + m_nIndex - 1), OBJECT_PLAYER_ITEM_UI_SIZE, OBJECT_PLAYER_ITEM_UI_SIZE);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_pPlayer->GetIndex() - OBJECT_PLAYER_ITEM_UI_POS_X, OBJECT_PLAYER_ITEM_UI_POS_Y, 0.0f),
+		              CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + m_pPlayer->GetIndex() - 1), OBJECT_PLAYER_ITEM_UI_SIZE, OBJECT_PLAYER_ITEM_UI_SIZE);
 }
 
 //=============================================================================
@@ -364,10 +355,10 @@ void CObjectPlayer::Move(CInput* pInput, float fRotCameraY) {
 	if (pInput == nullptr) return;
 
 	//上下左右キー入力状態の取得
-	const bool bPressUp = pInput->GetPress(CInput::CODE::MOVE_UP, m_nIndex - 1);
-	const bool bPressDown = pInput->GetPress(CInput::CODE::MOVE_DOWN, m_nIndex - 1);
-	const bool bPressLeft = pInput->GetPress(CInput::CODE::MOVE_LEFT, m_nIndex - 1);
-	const bool bPressRight = pInput->GetPress(CInput::CODE::MOVE_RIGHT, m_nIndex - 1);
+	const bool bPressUp = pInput->GetPress(CInput::CODE::MOVE_UP, m_pPlayer->GetIndex() - 1);
+	const bool bPressDown = pInput->GetPress(CInput::CODE::MOVE_DOWN, m_pPlayer->GetIndex() - 1);
+	const bool bPressLeft = pInput->GetPress(CInput::CODE::MOVE_LEFT, m_pPlayer->GetIndex() - 1);
+	const bool bPressRight = pInput->GetPress(CInput::CODE::MOVE_RIGHT, m_pPlayer->GetIndex() - 1);
 
 	bool bDiagonalMove = (bPressUp != bPressDown) && (bPressLeft != bPressRight);	//斜め移動
 	bool bRotateUp, bRotateDown, bRotateLeft, bRotateRight;	//回転する方向
@@ -402,7 +393,7 @@ void CObjectPlayer::Move(CInput* pInput, float fRotCameraY) {
 
 
 	//Aボタンを押している間向いている方向に進む
-	if (pInput->GetPress(CInput::CODE::ACCELE, m_nIndex - 1))
+	if (pInput->GetPress(CInput::CODE::ACCELE, m_pPlayer->GetIndex() - 1))
 	{
 		//加速させる
 		m_fMoveSpeed += ADD_MOVE_SPEED;
@@ -416,7 +407,7 @@ void CObjectPlayer::Move(CInput* pInput, float fRotCameraY) {
 		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
 		//---------------------------------
 	}
-	else if (pInput->GetPress(CInput::CODE::REVERSE, m_nIndex - 1))
+	else if (pInput->GetPress(CInput::CODE::REVERSE, m_pPlayer->GetIndex() - 1))
 	{//Bボタンを押したら
 		//加速させる
 		m_fMoveSpeed -= ADD_MOVE_SPEED;
@@ -841,7 +832,7 @@ void CObjectPlayer::ItemUi(void)
 	}
 	
 	//アイテムのUI生成
-	m_pItemUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_nIndex - OBJECT_PLAYER_ITEM_UI_POS_X, OBJECT_PLAYER_ITEM_UI_POS_Y, 0.0f),
+	m_pItemUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * m_pPlayer->GetIndex() - OBJECT_PLAYER_ITEM_UI_POS_X, OBJECT_PLAYER_ITEM_UI_POS_Y, 0.0f),
 		                          CTexture::TEXTURE_TYPE::NONE, OBJECT_PLAYER_ITEM_UI_SIZE, OBJECT_PLAYER_ITEM_UI_SIZE);
 
 	//テクスチャを変更

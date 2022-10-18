@@ -31,6 +31,7 @@ class CObject2D;
 class CWeapon;
 class CInput;
 class CScoreUi;
+class CPlayer;
 
 //*****************************************************************************
 // プレイヤークラス
@@ -68,13 +69,8 @@ public:
 	//状態取得処理
 	OBJECT_PLAYER_STATE GetState(void) { return m_state; }
 
-	//プレイヤー番号設定処理
-	void SetIndex(const int nIndex) { m_nIndex = nIndex; }
-	//プレイヤー番号取得処理
-	int GetIndex(void) { return m_nIndex; }
-
-	//プレイヤーの総数取得処理
-	static int GetNum(void) { return m_nObjectPlayerNum; }
+	//プレイヤー取得処理
+	CPlayer *GetPlayer(void) { return m_pPlayer; }
 
 	//アイテムタイプ取得処理
 	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
@@ -99,7 +95,7 @@ private:
 	void DecMove(void);								//移動量の減少
 	void DecBoundMove(void);						//バウンド時の移動量の減少
 	void Collision(D3DXVECTOR3& pos);				//当たり判定
-	void CollisionObjectPlayer(void);						//プレイヤーとの当たり判定
+	void CollisionObjectPlayer(void);				//プレイヤーとの当たり判定
 	void StateBound(void);							//バウンド状態の処理
 	void StateSpin(void);							//スピン状態の処理
 	void StateInvincble(void);						//無敵状態の処理
@@ -110,12 +106,10 @@ private:
 	D3DXVECTOR3 m_destRot;	//目標の角度
 	D3DXVECTOR3 m_move;		//移動量
 
-	static int m_nObjectPlayerNum;		//プレイヤーの数
-	int m_nIndex;					//プレイヤー番号
 	float m_fMoveSpeed;				//移動する速さ
 	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
 	float m_fSpinSpeed;				//スピンのスピード
-	OBJECT_PLAYER_STATE m_state;			//状態
+	OBJECT_PLAYER_STATE m_state;	//状態
 	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
 	bool m_bBound;					//バウンドするかどうか
 	bool m_bUpdate;					//更新処理をするかどうか
@@ -125,6 +119,7 @@ private:
 
 	CScoreUi *m_pSocreUi;			//スコアのポインタ
 	CObject2D *m_pItemUi;			//アイテムのUI
+	CPlayer *m_pPlayer;				//プレイヤーのポインタ
 };
 
 #endif // !_OBJECT_PLAYER_H_
