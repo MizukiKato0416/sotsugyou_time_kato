@@ -180,7 +180,7 @@ void CTitleScene::Update(void) {
 	if (pInput == nullptr || pFade == nullptr) return;
 
 	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) 
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey) 
 	{		
 		//フェード中だった場合
 		if (pFade->GetFade()) 
