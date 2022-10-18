@@ -7,7 +7,7 @@
 #include "scene.h"
 #include "titleScene.h"
 #include "gameScene.h"
-
+#include "resultScene.h"
 #include "object.h"	
 
 //=============================================================================
@@ -77,6 +77,11 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	case CScene::SCENE_TYPE::GAME:
 		pScene = new CGameScene;
+		if (pScene != nullptr) pScene->Init();
+		break;
+
+	case CScene::SCENE_TYPE::RESULT:
+		pScene = new CResultScene;
 		if (pScene != nullptr) pScene->Init();
 		break;
 	}

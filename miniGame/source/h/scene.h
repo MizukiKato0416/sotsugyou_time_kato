@@ -28,6 +28,7 @@ public:
 	enum class SCENE_TYPE {
 		TITLE = 0,
 		GAME,
+		RESULT,
 		ENUM_MAX
 	};
 
