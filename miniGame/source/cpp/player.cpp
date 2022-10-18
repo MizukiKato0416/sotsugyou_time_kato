@@ -30,14 +30,6 @@
 #define TEXT_FILE_NAME_LOAD_MOTION "data/MOTION/motion_player.txt"
 
 //--------------------------------
-//プレイヤーカラー
-//--------------------------------
-#define PLAYER_COLOR_1P		(D3DXCOLOR(0.1f, 0.3f, 1.0f, 1.0f))	//1pのカラー
-#define PLAYER_COLOR_2P		(D3DXCOLOR(1.0f, 0.2f, 0.0f, 1.0f))	//2pのカラー
-#define PLAYER_COLOR_3P		(D3DXCOLOR(0.1f, 0.7f, 0.0f, 1.0f))	//3pのカラー
-#define PLAYER_COLOR_4P		(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f))	//4pのカラー
-
-//--------------------------------
 //移動
 //--------------------------------
 #define ADD_MOVE_SPEED			(0.15f)		//加速

@@ -129,7 +129,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	CPlane::CreateTextureFile();
 
 	//ÉVÅ[ÉìÇÃê∂ê¨
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::GAME);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::RESULT);
 
 	return S_OK;
 }

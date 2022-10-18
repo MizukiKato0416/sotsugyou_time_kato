@@ -196,6 +196,7 @@
     <ClCompile Include="source\cpp\player.cpp" />
     <ClCompile Include="source\cpp\player_icon.cpp" />
     <ClCompile Include="source\cpp\renderer.cpp" />
+    <ClCompile Include="source\cpp\resultScene.cpp" />
     <ClCompile Include="source\cpp\scene.cpp" />
     <ClCompile Include="source\cpp\score.cpp" />
     <ClCompile Include="source\cpp\score_ui.cpp" />
@@ -209,10 +210,11 @@
     <ClCompile Include="source\cpp\timer.cpp" />
     <ClCompile Include="source\cpp\titleCamera.cpp" />
     <ClCompile Include="source\cpp\titleScene.cpp" />
+    <ClCompile Include="source\cpp\ToScreen.cpp" />
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
-    <ClCompile Include="ToScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resultScene.h" />
     <ClInclude Include="source\h\balloon.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />

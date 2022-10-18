@@ -122,14 +122,14 @@ void CObjectModelUI::Draw(void) {
 	if (pDevice == nullptr) return;
 	//カメラの取得
 	CCamera* pCamera = pManager->GetCamera();
-	if (pCamera == nullptr) return;
 
 	//Zテクスチャに書き込まない
 	if (pRenderer->GetDrawZTex()) return;
 
 	D3DXMATRIX mtxViewDef;	//通常のビューマトリックス
 	pDevice->GetTransform(D3DTS_VIEW, &mtxViewDef);	//通常のビューマトリックスを取得
-	D3DXVECTOR4 posVDef = pCamera->GetPosV();	//通常のカメラ視点を取得
+	D3DXVECTOR4 posVDef;
+	if(pCamera != nullptr) posVDef = D3DXVECTOR4(pCamera->GetPosV(), 0.0f);	//通常のカメラ視点を取得
 
 	//フォグ無効
 	pRenderer->SetEffectFogEnable(false);
@@ -146,5 +146,19 @@ void CObjectModelUI::Draw(void) {
 	//ビューマトリックスを戻す
 	pRenderer->SetEffectMatrixView(mtxViewDef);
 	//視点の設定を戻す
-	pRenderer->SetEffectPosView(posVDef);
+	if (pCamera != nullptr) pRenderer->SetEffectPosView(posVDef);
+}
+
+//=============================================================================
+// UIオブジェクトに対応したカメラの設定
+//=============================================================================
+void CObjectModelUI::SetViewCamera(D3DXVECTOR3 posV, D3DXVECTOR3 posR) {
+	//ビューマトリックスの作成
+	D3DXMatrixLookAtLH(&m_mtxView,
+		&posV,
+		&posR,
+		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+
+	//視点の設定
+	m_posV = posV;
 }
