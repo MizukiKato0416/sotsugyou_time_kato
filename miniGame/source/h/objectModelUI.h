@@ -32,6 +32,7 @@ public:
 
 	void SetViewCamera(D3DXVECTOR3 posV, D3DXVECTOR3 posR);	//UIオブジェクトに対応したカメラの設定
 	void SetViewMatrix(D3DXMATRIX mtxView) { m_mtxView = mtxView; }	//ビューマトリックスの設定
+	D3DXMATRIX GetViewMatrix(void) { return m_mtxView; }			//ビューマトリックスの取得
 	void SetViewPos(D3DXVECTOR3 posV) { m_posV = posV; }	//カメラの視点設定
 	void SetRotSpeed(D3DXVECTOR3 rotSpeed) { m_rotSpeed = rotSpeed; }	//回転速度の設定
 private:

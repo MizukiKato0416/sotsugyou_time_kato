@@ -14,8 +14,8 @@
 #include "object2D.h"
 #include "objectModelUI.h"
 #include "player.h"
+#include "ToScreen.h"
 
-#include "selectMenu3D.h"
 #include "gameCamera.h"
 
 //=============================================================================
@@ -94,13 +94,16 @@ void CResultScene::Init(void) {
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER_NUM; nCnt++)
 	{
-		const float fDist = 150.0f;
+		const float fDist = 180.0f;
 		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_PLAYER_NUM / 2.0f) + fDist / 2.0f + nCnt * fDist, 0.0f, 0.0f);
 		CObjectModelUI* pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (pPlayerModel == nullptr) continue;
 		pPlayerModel->SetViewCamera(D3DXVECTOR3(0.0f, 400.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		CModel* pModel = pPlayerModel->GetPtrModel();
+
+		D3DXVECTOR3 posRankUI = WorldToScreen(posModel, pPlayerModel->GetViewMatrix());
+		CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 100.0f, 50.0f);
 
 		if (pModel == nullptr) continue;
 		D3DXCOLOR colModel;
