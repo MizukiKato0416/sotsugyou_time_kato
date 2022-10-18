@@ -27,14 +27,14 @@ public:
 	CItemBanana();	//デフォルトコンストラクタ
 	CItemBanana(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
 	virtual ~CItemBanana();	//デストラクタ
-	static CItemBanana* Create(D3DXVECTOR3 pos, CPlayer *pPlayer);	//生成処理
+	static CItemBanana* Create(D3DXVECTOR3 pos, CObjectPlayer *pPlayer);	//生成処理
 	virtual HRESULT Init(void);				//初期化処理
 	virtual void Uninit(void);				//終了処理
 	virtual void Update(void);				//更新処理
 	virtual void Draw(void);				//描画処理
 
 	//プレイヤーにヒットしたときの処理
-	virtual void HitPlayer(CPlayer *pPlayer);
+	virtual void HitPlayer(CObjectPlayer *pPlayer);
 
 private:
 	D3DXVECTOR3 m_move;		//移動量

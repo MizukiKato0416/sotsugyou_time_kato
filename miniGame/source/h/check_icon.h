@@ -8,7 +8,7 @@
 #define _CHECK_ICON_H_
 
 #include "object.h"
-#include "player.h"
+#include "object_player.h"
 
 //*****************************************************************************
 // É}ÉNÉçíËã`

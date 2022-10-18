@@ -8,7 +8,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "gameScene.h"
-#include "player.h"
+#include "object_player.h"
 
 //=============================================================================
 // ƒ}ƒNƒ’è‹`

@@ -16,7 +16,7 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CPlayer;
+class CObjectPlayer;
 
 //*****************************************************************************
 // シーンクラス
@@ -40,10 +40,10 @@ public:
 	static void ChangeScene(CScene*& pScene, SCENE_TYPE typeScene);	//シーンの変更
 
 	//プレイヤーのセッター・ゲッター
-	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
-	CPlayer* GetPlayer(void) { return m_pPlayer; }
+	void SetPlayer(CObjectPlayer* pPlayer) { m_pPlayer = pPlayer; }
+	CObjectPlayer* GetPlayer(void) { return m_pPlayer; }
 private:
-	CPlayer* m_pPlayer;	//プレイヤーへのポインタ
+	CObjectPlayer* m_pPlayer;	//プレイヤーへのポインタ
 
 };
 
