@@ -8,6 +8,7 @@
 #include "resultScene.h"
 #include "manager.h"
 #include "renderer.h"
+#include "fade.h"
 #include "input.h"
 #include "sound.h"
 #include "object2D.h"
@@ -161,8 +162,11 @@ void CResultScene::Update(void) {
 	CInput* pInput = pManager->GetInputCur();
 	if (pInput == nullptr) return;
 
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_1, 0)) {
-		//GameOver();
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_0, 0)) {
+		//フェードの取得
+		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+		if (pFade == nullptr) return;
+		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
 	}
 
 #endif
