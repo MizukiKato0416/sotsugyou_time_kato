@@ -9,6 +9,7 @@
 #include "sound.h"
 #include "objectList.h"
 #include "player.h"
+#include "object2D.h"
 
 //エフェクト
 #include "PresetSetEffect.h"

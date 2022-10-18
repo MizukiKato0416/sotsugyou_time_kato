@@ -19,7 +19,7 @@
 #include "item_banana.h"
 
 #include "PresetSetEffect.h"
-#include "score.h"
+#include "score_ui.h"
 
 //=============================================================================
 // マクロ定義
@@ -70,7 +70,11 @@
 //--------------------------------
 //その他
 //--------------------------------
-#define COLOR_OUTLINE		(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
+#define COLOR_OUTLINE			(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
+#define SCORE_UI_POS_Y			(650.0f)							//スコアUIの位置Y
+#define PLAYER_ITEM_UI_POS_Y	(580.0f)							//アイテムUIの位置Y
+#define PLAYER_ITEM_UI_POS_X	(90.0f)								//アイテムUIの位置X調整値
+#define PLAYER_ITEM_UI_SIZE		(50.0f)								//アイテムUIのサイズ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -103,7 +107,8 @@ CPlayer::CPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
 	m_bUpdate = false;
-	m_pSocre = nullptr;
+	m_pSocreUi = nullptr;
+	m_pItemUi = nullptr;
 }
 
 //=============================================================================
@@ -144,6 +149,7 @@ HRESULT CPlayer::Init(void) {
 	m_bBound = false;
 	m_fSpinSpeed = PLAYER_SPIN_SPEED;
 	m_bUpdate = true;
+	m_pItemUi = nullptr;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -279,6 +285,9 @@ void CPlayer::Update(void) {
 		UseItem();
 	}
 
+	//アイテムUIの処理
+	ItemUi();
+
 	//----------------------------
 	//当たり判定
 	//----------------------------
@@ -342,10 +351,18 @@ float CPlayer::GetRadius(void) {
 //=============================================================================
 void CPlayer::CreateScore()
 {
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.0f * m_nIndex, 640.0f, 0.0f), CTexture::TEXTURE_TYPE::NUMBER_003, );
+	//スコアUIの生成 
+	m_pSocreUi = CScoreUi::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_PLAYER_NUM + 1) * m_nIndex, SCORE_UI_POS_Y, 0.0f),
+		                          D3DXVECTOR3(0.5f, 0.5f, 0.5f), m_nIndex);
+}
 
-	//スコアの生成
-	m_pSocre = CScore::Create(2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 5.0f * m_nIndex, 640.0f, 0.0f), 60.0f);
+//=============================================================================
+//アイテムUIのフレーム生成処理
+//=============================================================================
+void CPlayer::CreateItemUiFrame()
+{
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_PLAYER_NUM + 1) * m_nIndex - PLAYER_ITEM_UI_POS_X, PLAYER_ITEM_UI_POS_Y, 0.0f),
+		              CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + m_nIndex - 1), PLAYER_ITEM_UI_SIZE, PLAYER_ITEM_UI_SIZE);
 }
 
 //=============================================================================
@@ -807,6 +824,39 @@ void CPlayer::UseItem(void)
 	case CItem::ITEM_TYPE::BANANA:
 		//バナナの生成
 		CItemBanana::Create(pos, this);
+		break;
+	default:
+		break;
+	}
+
+	//アイテムUIを消す
+	if (m_pItemUi != nullptr)
+	{
+		m_pItemUi->Uninit();
+		m_pItemUi = nullptr;
+	}
+}
+
+//=============================================================================
+//アイテムUi処理
+//=============================================================================
+void CPlayer::ItemUi(void)
+{
+	//アイテムを持っていない状態またはアイテムUIが生成されているなら
+	if (m_itemType == CItem::ITEM_TYPE::NONE || m_pItemUi != nullptr)
+	{
+		return;
+	}
+	
+	//アイテムのUI生成
+	m_pItemUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_PLAYER_NUM + 1) * m_nIndex - PLAYER_ITEM_UI_POS_X, PLAYER_ITEM_UI_POS_Y, 0.0f),
+		                          CTexture::TEXTURE_TYPE::NONE, PLAYER_ITEM_UI_SIZE, PLAYER_ITEM_UI_SIZE);
+
+	//テクスチャを変更
+	switch (m_itemType)
+	{
+	case CItem::ITEM_TYPE::BANANA:
+		m_pItemUi->SetTexType(CTexture::TEXTURE_TYPE::ITEM_BANANA);
 		break;
 	default:
 		break;

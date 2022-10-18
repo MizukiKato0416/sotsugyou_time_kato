@@ -21,7 +21,14 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/itemget.wav", 0 },
 	{ "data/SOUND/SE/timeup.wav", 0 },
 	{ "data/SOUND/SE/slip.wav", 0 },
-	{ "data/SOUND/SE/bananathrow.wav", 0 }
+	{ "data/SOUND/SE/bananathrow.wav", 0 },
+	{ "data/SOUND/SE/countdown.wav", 0 },
+	{ "data/SOUND/SE/start.wav", 0 },
+	{ "data/SOUND/SE/player_ok.wav", 0 },
+	{ "data/SOUND/SE/decide.wav", 0 },
+	{ "data/SOUND/SE/cancel.wav", 0 },
+	{ "data/SOUND/SE/pause_open.wav", 0 },
+	{ "data/SOUND/SE/cursor.wav", 0 }
 };
 
 //=============================================================================
@@ -155,15 +162,24 @@ HRESULT CSound::Init(HWND hWnd)
 		CloseHandle(hFile);
 	}
 
+	//音量調整
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.6f);		//3ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f);		//3ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f);		//風船が割れるSE
 	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f);		//アイテム取得SE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f);		//タイムアップSE
 	ControllVoice(SOUND_LABEL::SE_PLAYER_SPIN		, 0.7f);		//スピンSE
 	ControllVoice(SOUND_LABEL::SE_BANANA_THROW		, 1.6f);		//バナナを投げるSE
+	ControllVoice(SOUND_LABEL::SE_COUNT_DOWN		, 1.2f);		//バナナを投げるカウントダウンSE
+	ControllVoice(SOUND_LABEL::SE_START				, 0.5f);		//スタートSE
+	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 0.8f);		//タイムアップSE
+	ControllVoice(SOUND_LABEL::SE_PLAYER_OK			, 1.0f);		//プレイヤーOKSE
+	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f);		//決定SE
+	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f);		//キャンセルSE
+	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f);		//ポーズ開くSE
+	ControllVoice(SOUND_LABEL::SE_CURSOR			, 3.0f);		//カーソルSE
 																	
 	return S_OK;
 }
