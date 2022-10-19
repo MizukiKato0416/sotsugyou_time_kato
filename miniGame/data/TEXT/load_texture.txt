@@ -75,7 +75,7 @@ data/TEXTURE/MESH/black00.png
 data/TEXTURE/MESH/doorway.png
 data/TEXTURE/MESH/wall.png
 data/TEXTURE/MESH/ItemBOX.jpg
-data/TEXTURE/MESH/kinn.jpg
+data/TEXTURE/MESH/gold.jpg
 data/TEXTURE/MESH/tire.png
 data/TEXTURE/MESH/wheel.png
 
