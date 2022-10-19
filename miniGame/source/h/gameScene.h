@@ -28,6 +28,7 @@ class CScore;
 class CCountDownUi;
 class CObjectPlayerIcon;
 class CCheckIcon;
+class CObjectPlayerBalloonCar;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -58,16 +59,16 @@ private:
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか
 
-	CStage* m_pStage;								//ステージへのポインタ
-	CTimer* m_pTimer;								//ゲームのタイマー
-	CObject2D* m_pTimerFrame;						//タイマーの枠
-	int m_nGameScore;								//ゲーム終了時のスコア
-	CPauseMenu* m_pMenuPause;						//ポーズメニュー
-	CSelectMenu2D* m_pMenuGameEnd;					//ゲーム終了時の選択メニュー
-	CCountDownUi *m_pCountDownUi;					//カウントダウンUIのポインタ
-	CObjectPlayer* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
-	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
-	CCheckIcon *m_apCheckIcon[MAX_OBJECT_PLAYER_NUM];		//チェックアイコンのポインタ
+	CStage* m_pStage;													//ステージへのポインタ
+	CTimer* m_pTimer;													//ゲームのタイマー
+	CObject2D* m_pTimerFrame;											//タイマーの枠
+	int m_nGameScore;													//ゲーム終了時のスコア
+	CPauseMenu* m_pMenuPause;											//ポーズメニュー
+	CSelectMenu2D* m_pMenuGameEnd;										//ゲーム終了時の選択メニュー
+	CCountDownUi *m_pCountDownUi;										//カウントダウンUIのポインタ
+	CObjectPlayerBalloonCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
+	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
+	CCheckIcon *m_apCheckIcon[MAX_OBJECT_PLAYER_NUM];					//チェックアイコンのポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター

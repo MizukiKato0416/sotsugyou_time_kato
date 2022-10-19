@@ -8,7 +8,7 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "object_player.h"
+#include "object_player_balloon_car.h"
 #include "score.h"
 #include "score_ui.h"
 #include "gameScene.h"
@@ -219,7 +219,6 @@ void CBalloon::Draw(void) {
 bool CBalloon::CollisionPlayer(void)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
-	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
 
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
@@ -235,7 +234,7 @@ bool CBalloon::CollisionPlayer(void)
 		}
 
 		//プレイヤーにキャスト
-		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
+		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();

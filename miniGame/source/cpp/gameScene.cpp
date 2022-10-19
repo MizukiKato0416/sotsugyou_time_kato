@@ -16,7 +16,7 @@
 #include "score.h"
 #include "stage.h"
 #include "object2D.h"
-#include "object_player.h"
+#include "object_player_balloon_car.h"
 #include "effect.h"
 #include "terrain.h"
 #include "meshwall.h"
@@ -172,14 +172,14 @@ void CGameScene::Init(void) {
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		m_apPlayer[nCntPlayer] = CObjectPlayer::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_OBJECT_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
-												 0.0f,
-												 GAME_PLAYER_INIT_CREATE_POS_Z));
+		m_apPlayer[nCntPlayer] = CObjectPlayerBalloonCar::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_OBJECT_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
+												                 0.0f,
+												                 GAME_PLAYER_INIT_CREATE_POS_Z));
 		//シーンのプレイヤーの設定
 		SetPlayer(m_apPlayer[nCntPlayer]);
 
 		//更新しないようにする
-		m_apPlayer[nCntPlayer]->SetUpdate(false);
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 
 		//チェックアイコンの生成
 		m_apCheckIcon[nCntPlayer] = CCheckIcon::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.0f * (nCntPlayer + 1), SCREEN_HEIGHT / 2.0f, 0.0f),
@@ -468,7 +468,7 @@ void CGameScene::GameOver(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//更新しないようにする
-		m_apPlayer[nCntPlayer]->SetUpdate(false);
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
 
 	//フィニッシュUI生成
@@ -733,13 +733,13 @@ void CGameScene::CountDownUi(void)
 			}
 
 			//更新されている状態なら
-			if (m_apPlayer[nCntPlayer]->GetUpdate())
+			if (m_apPlayer[nCntPlayer]->GetPlayer()->GetUpdate())
 			{
 				continue;
 			}
 
 			//更新されている状態にする
-			m_apPlayer[nCntPlayer]->SetUpdate(true);
+			m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(true);
 
 			//生成されていたら
 			if (m_apPlayerIcon[nCntPlayer] != nullptr)
