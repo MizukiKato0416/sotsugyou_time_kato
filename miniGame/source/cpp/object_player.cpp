@@ -40,10 +40,6 @@ CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
 	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
 
-	m_lastPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
 	m_pPlayer = nullptr;
 }
 
@@ -75,7 +71,6 @@ CObjectPlayer* CObjectPlayer::Create(D3DXVECTOR3 pos) {
 HRESULT CObjectPlayer::Init(void) {
 	//プレイヤーの初期設定
 	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
-	m_destRot.y =  D3DX_PI;	//奥向き
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -130,57 +125,16 @@ void CObjectPlayer::Uninit(void) {
 // プレイヤーの更新処理
 //=============================================================================
 void CObjectPlayer::Update(void) {
-	////更新しない設定なら
-	//if (!m_pPlayer->GetUpdate())
-	//{
-	//	return;
-	//}
+	//更新しない設定なら
+	if (!m_pPlayer->GetUpdate())
+	{
+		return;
+	}
 
-	////マネージャーの取得
-	//CManager* pManager = CManager::GetManager();
-
-	//CInput* pInput = nullptr;
-	//CSound *pSound = nullptr;
-	//CCamera* pCamera = nullptr;
-	//CGameScene* pGame = nullptr;
-
-	//if (pManager != nullptr) {
-	//	//現在の入力デバイスの取得
-	//	pInput = pManager->GetInputCur();
-	//	//サウンドの取得
-	//	pSound = pManager->GetSound();
-	//	//カメラの取得
-	//	pCamera = pManager->GetCamera();
-	//	//ゲームシーンの取得
-	//	pGame = pManager->GetGameScene();
-	//}
-
-	////位置情報のポインタの取得
-	//D3DXVECTOR3 posObjectPlayer = GetPos();
-
-
-	////----------------------------
-	////カメラの設定
-	////----------------------------
-	//float fRotCameraY = 0.0f;	//カメラの角度
-	//if (pCamera != nullptr) {
-	//	fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
-	//}
-
-	////----------------------------
-	////移動の反映
-	////----------------------------
-	////最後の位置座標の保存
-	//m_lastPos = posObjectPlayer;
-	////移動
-	//posObjectPlayer += m_move;
-	////位置設定
-	//SetPos(posObjectPlayer);
-
-	////----------------------------
-	////モデルの更新
-	////----------------------------
-	//CObjectModel::Update();
+	//----------------------------
+	//モデルの更新
+	//----------------------------
+	CObjectModel::Update();
 }
 
 //=============================================================================
@@ -197,23 +151,6 @@ void CObjectPlayer::Draw(void) {
 void CObjectPlayer::GameOver(void) {
 	
 }
-
-//=============================================================================
-// プレイヤーの最後の位置座標の取得
-//=============================================================================
-//D3DXVECTOR3 CObjectPlayer::GetLastPos(void) {
-//	return m_lastPos;
-//}
-
-//=============================================================================
-// プレイヤーの移動量の設定
-//=============================================================================
-//void CObjectPlayer::SetMove(D3DXVECTOR3 move) { m_move = move; }
-
-//=============================================================================
-// プレイヤーの移動量の取得
-//=============================================================================
-//D3DXVECTOR3 CObjectPlayer::GetMove(void) { return m_move; }
 
 //=============================================================================
 // プレイヤーの当たり判定の半径の取得

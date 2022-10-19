@@ -209,6 +209,16 @@ void CGameScene::Init(void) {
 // ゲームシーンの終了処理
 //=============================================================================
 void CGameScene::Uninit(void) {
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		if (m_apPlayer[nCntPlayer] != nullptr)
+		{
+			//m_apPlayer[nCntPlayer]->Uninit();
+			m_apPlayer[nCntPlayer] = nullptr;
+		}
+	}
+
 	//ステージの破棄
 	if (m_pStage != nullptr) {
 		delete m_pStage;

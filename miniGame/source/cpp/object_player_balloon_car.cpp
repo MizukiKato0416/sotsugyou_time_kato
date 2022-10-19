@@ -154,8 +154,6 @@ void CObjectPlayerBalloonCar::Update(void) {
 		return;
 	}
 
-	//CObjectPlayer::Update();
-
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 
@@ -241,10 +239,7 @@ void CObjectPlayerBalloonCar::Update(void) {
 	//----------------------------
 	Collision(posObjectPlayer);
 
-	//----------------------------
-	//モデルの更新
-	//----------------------------
-	CObjectModel::Update();
+	CObjectPlayer::Update();
 }
 
 //=============================================================================
@@ -260,7 +255,7 @@ void CObjectPlayerBalloonCar::Draw(void) {
 //=============================================================================
 void CObjectPlayerBalloonCar::GameOver(void) {
 	
-	
+	CObjectPlayer::GameOver();
 }
 
 //=============================================================================

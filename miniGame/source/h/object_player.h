@@ -45,18 +45,12 @@ public:
 	virtual void Update(void);		//更新処理
 	virtual void Draw(void);		//描画処理
 	virtual void GameOver(void);	//ゲームオーバー時の処理
-	//D3DXVECTOR3 GetLastPos(void);	//最後の位置座標の取得
-	//void SetMove(D3DXVECTOR3 move);	//移動量の設定
-	//D3DXVECTOR3 GetMove(void);		//移動量の取得
 	float GetRadius(void);			//当たり判定の半径の取得
 
 	//プレイヤー取得処理
 	CPlayer *GetPlayer(void) { return m_pPlayer; }
 
 private:
-	D3DXVECTOR3	m_lastPos;	//最後の位置座標
-	D3DXVECTOR3 m_destRot;	//目標の角度
-	D3DXVECTOR3 m_move;		//移動量
 
 	CPlayer *m_pPlayer;				//プレイヤーのポインタ
 };
