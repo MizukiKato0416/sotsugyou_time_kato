@@ -192,6 +192,7 @@
     <ClCompile Include="source\cpp\objectModel.cpp" />
     <ClCompile Include="source\cpp\objectModelUI.cpp" />
     <ClCompile Include="source\cpp\objectMotion.cpp" />
+    <ClCompile Include="source\cpp\object_player_balloon_car.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
     <ClCompile Include="source\cpp\object_player.cpp" />
     <ClCompile Include="source\cpp\player.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="source\h\objectModel.h" />
     <ClInclude Include="source\h\objectModelUI.h" />
     <ClInclude Include="source\h\objectMotion.h" />
+    <ClInclude Include="source\h\object_player_balloon_car.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
     <ClInclude Include="source\h\plane.h" />
     <ClInclude Include="source\h\object_player.h" />

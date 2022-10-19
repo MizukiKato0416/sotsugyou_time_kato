@@ -7,7 +7,7 @@
 #include "item_banana.h"
 #include "manager.h"
 #include "sound.h"
-#include "object_player.h"
+#include "object_player_balloon_car.h"
 #include "wallCylinder.h"
 #include "object2D.h"
 //エフェクト
@@ -51,7 +51,7 @@ CItemBanana::~CItemBanana()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CObjectPlayer *pPlayer) {
+CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CObjectPlayerBalloonCar *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CItemBanana* pItemBanana;
@@ -157,13 +157,13 @@ void CItemBanana::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
+void CItemBanana::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
 {
 	//プレイヤーが通常状態だったら
-	if (pPlayer->GetState() == CObjectPlayer::OBJECT_PLAYER_STATE::NORMAL)
+	if (pPlayer->GetState() == CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::NORMAL)
 	{
 		//プレイヤーの状態をスピン状態にする
-		pPlayer->SetState(CObjectPlayer::OBJECT_PLAYER_STATE::SPIN);
+		pPlayer->SetState(CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN);
 
 		//ーーーーーーーーーーーーーーーーーーー
 		//スピン(バナナヒット)

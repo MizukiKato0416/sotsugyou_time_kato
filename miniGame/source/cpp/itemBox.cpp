@@ -8,7 +8,7 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "object_player.h"
+#include "object_player_balloon_car.h"
 #include "sound.h"
 #include "gameScene.h"
 
@@ -173,7 +173,7 @@ bool CItemBox::CollisionPlayer(void)
 		}
 
 		//プレイヤーにキャスト
-		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
+		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();
