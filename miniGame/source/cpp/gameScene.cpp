@@ -173,9 +173,9 @@ void CGameScene::Init(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		m_apPlayer[nCntPlayer] = CObjectPlayerBalloonCar::Create(D3DXVECTOR3(-GAME_PLAYER_INIT_CREATE_SPACE * (MAX_OBJECT_PLAYER_NUM / 2.5f) + GAME_PLAYER_INIT_CREATE_SPACE * nCntPlayer,
-												                             0.0f,
-												                             GAME_PLAYER_INIT_CREATE_POS_Z));
-		//シーンのプレイヤーの設定				                            
+												                 0.0f,
+												                 GAME_PLAYER_INIT_CREATE_POS_Z));
+		//シーンのプレイヤーの設定
 		SetPlayer(m_apPlayer[nCntPlayer]);
 
 		//更新しないようにする

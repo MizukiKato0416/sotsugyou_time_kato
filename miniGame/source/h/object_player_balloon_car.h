@@ -16,14 +16,6 @@
 //*****************************************************************************
 #define MAX_OBJECT_PLAYER_BALLOON_CAR_NUM	(4)		//プレイヤーの最大数
 
-//--------------------------------
-//プレイヤーカラー
-//--------------------------------
-#define OBJECT_PLAYER_BALLOON_CAR_COLOR_1P		(D3DXCOLOR(0.1f, 0.3f, 1.0f, 1.0f))	//1pのカラー
-#define OBJECT_PLAYER_BALLOON_CAR_COLOR_2P		(D3DXCOLOR(1.0f, 0.2f, 0.0f, 1.0f))	//2pのカラー
-#define OBJECT_PLAYER_BALLOON_CAR_COLOR_3P		(D3DXCOLOR(0.1f, 0.7f, 0.0f, 1.0f))	//3pのカラー
-#define OBJECT_PLAYER_BALLOON_CAR_COLOR_4P		(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f))	//4pのカラー
-
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
@@ -31,7 +23,6 @@ class CObject2D;
 class CWeapon;
 class CInput;
 class CScoreUi;
-class CPlayer;
 
 //*****************************************************************************
 // クラス
@@ -67,6 +58,7 @@ public:
 	void SetState(const OBJECT_PLAYER_BALLOON_CAR_STATE state) { m_state = state; }
 	//状態取得処理
 	OBJECT_PLAYER_BALLOON_CAR_STATE GetState(void) { return m_state; }
+
 
 	//アイテムタイプ取得処理
 	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }

@@ -133,40 +133,6 @@ HRESULT CObjectPlayerBalloonCar::Init(void) {
 	m_fSpinSpeed = OBJECT_PLAYER_BALLOON_CAR_SPIN_SPEED;
 	m_pItemUi = nullptr;
 
-	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();
-
-	CObjectModel::Init();
-
-	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-
-	//プレイヤー番号によって色を変える
-	switch (GetPlayer()->GetIndex())
-	{
-	case 1:
-		col = OBJECT_PLAYER_BALLOON_CAR_COLOR_1P;
-		break;
-	case 2:
-		col = OBJECT_PLAYER_BALLOON_CAR_COLOR_2P;
-		break;
-	case 3:
-		col = OBJECT_PLAYER_BALLOON_CAR_COLOR_3P;
-		break;
-	case 4:
-		col = OBJECT_PLAYER_BALLOON_CAR_COLOR_4P;
-		break;
-	default:
-		break;
-	}
-
-	//モデル取得
-	CModel *pModel = GetPtrModel();
-	if (pModel!= nullptr)
-	{
-		//指定したマテリアルの色を設定
-		pModel->SetMaterialDiffuse(col, 0);
-	}
-
 	return S_OK;
 }
 
@@ -188,7 +154,7 @@ void CObjectPlayerBalloonCar::Update(void) {
 		return;
 	}
 
-//	CObjectPlayer::Update();
+	//CObjectPlayer::Update();
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -287,8 +253,6 @@ void CObjectPlayerBalloonCar::Update(void) {
 void CObjectPlayerBalloonCar::Draw(void) {
 	
 	CObjectPlayer::Draw();
-
-	CObjectModel::Draw();
 }
 
 //=============================================================================
@@ -416,8 +380,6 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 		//減速
 		DecMove();
 	}
-
-	D3DXVECTOR3 r = GetRot();
 
 	m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 	m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
