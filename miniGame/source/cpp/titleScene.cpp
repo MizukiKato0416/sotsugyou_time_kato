@@ -201,6 +201,7 @@ void CTitleScene::Update(void) {
 	//決定キーが押されたとき
 	if (m_bPushKey)
 	{		
+		// 色の状態を取得
 		m_bCol = ChangeColTime(m_bCol);
 		// 点滅処理(状態遷移)
 		if (m_bCol)
@@ -237,16 +238,18 @@ void CTitleScene::Update(void) {
 //=============================================================================
 bool CTitleScene::ChangeColTime(bool bCol)
 {
+	// 色を変える時間を加算
 	m_nColorTime++;
 
 	// 時間が最大時間に行ったら
 	if (m_nColorTime > m_nMaxColTime)
 	{
+		// bCol = trueのとき
 		if (bCol)
 		{
 			bCol = false;
 		}
-		else
+		else // それ以外
 		{
 			bCol = true;
 		}

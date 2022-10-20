@@ -156,6 +156,7 @@
     <ClCompile Include="source\cpp\balloon.cpp" />
     <ClCompile Include="source\cpp\billboard.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
+    <ClCompile Include="source\cpp\check.cpp" />
     <ClCompile Include="source\cpp\check_icon.cpp" />
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="source\cpp\objectModel.cpp" />
     <ClCompile Include="source\cpp\objectModelUI.cpp" />
     <ClCompile Include="source\cpp\objectMotion.cpp" />
+    <ClCompile Include="source\cpp\object_player_balloon_car.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
     <ClCompile Include="source\cpp\object_player.cpp" />
     <ClCompile Include="source\cpp\player.cpp" />
@@ -220,6 +222,7 @@
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
     <ClInclude Include="source\h\camera.h" />
+    <ClInclude Include="source\h\check.h" />
     <ClInclude Include="source\h\check_icon.h" />
     <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\effect.h" />
@@ -250,6 +253,7 @@
     <ClInclude Include="source\h\objectModel.h" />
     <ClInclude Include="source\h\objectModelUI.h" />
     <ClInclude Include="source\h\objectMotion.h" />
+    <ClInclude Include="source\h\object_player_balloon_car.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
     <ClInclude Include="source\h\plane.h" />
     <ClInclude Include="source\h\object_player.h" />

@@ -181,6 +181,12 @@
     <ClCompile Include="source\cpp\player.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\object_player_balloon_car.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\check.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -361,6 +367,12 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\player.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_balloon_car.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\check.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

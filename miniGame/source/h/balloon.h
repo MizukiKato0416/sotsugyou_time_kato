@@ -36,8 +36,9 @@ public:
 	//総数取得処理
 	static int GetNum(void) { return m_nNum; }
 
+	bool CollisionPlayer();	//プレイヤーとの当たり判定
+
 private:
-	bool CollisionPlayer(void);	//プレイヤーとの当たり判定
 
 	static int m_nNum;	//総数
 

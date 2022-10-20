@@ -35,6 +35,8 @@ data/TEXTURE/UI/fukidashi_2p.png
 data/TEXTURE/UI/fukidashi_3p.png
 data/TEXTURE/UI/fukidashi_4p.png
 
+data/TEXTURE/UI/GameStart.png
+
 data/TEXTURE/UI/tex01.png
 data/TEXTURE/UI/tex02.png
 data/TEXTURE/UI/tex03.png
@@ -75,7 +77,7 @@ data/TEXTURE/MESH/black00.png
 data/TEXTURE/MESH/doorway.png
 data/TEXTURE/MESH/wall.png
 data/TEXTURE/MESH/ItemBOX.jpg
-data/TEXTURE/MESH/kinn.jpg
+data/TEXTURE/MESH/gold.jpg
 data/TEXTURE/MESH/tire.png
 data/TEXTURE/MESH/wheel.png
 

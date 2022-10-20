@@ -8,7 +8,7 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "object_player.h"
+#include "object_player_balloon_car.h"
 #include "object2D.h"
 
 //=============================================================================
@@ -47,7 +47,7 @@ CItem::~CItem()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItem* CItem::Create(D3DXVECTOR3 pos, const CObjectPlayer *pPlayer) {
+CItem* CItem::Create(D3DXVECTOR3 pos, const CObjectPlayerBalloonCar *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_ITEM_BOX;
@@ -101,7 +101,7 @@ void CItem::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItem::HitPlayer(CObjectPlayer * pPlayer)
+void CItem::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
 {
 }
 
@@ -117,7 +117,7 @@ bool CItem::CollisionPlayer(const float fMySize)
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
 
 		//プレイヤーにキャスト
-		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
+		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
 
 		//オブジェクトタイプの確認
 		bool bMatchType = false;

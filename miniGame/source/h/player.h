@@ -39,9 +39,16 @@ public:
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nObjectPlayerNum; }
 
+	//更新するかどうか取得処理
+	bool GetUpdate() { return m_bUpdate; }
+	//更新するかどうか設定処理
+	void SetUpdate(const bool bUpdate) { m_bUpdate = bUpdate; }
+
+
 private:
 	static int m_nObjectPlayerNum;	//プレイヤーの数
 	int m_nIndex;					//プレイヤー番号
+	bool m_bUpdate;					//更新処理をするかどうか
 };
 
 #endif // !_PLAYER_H_

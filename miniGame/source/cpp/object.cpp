@@ -126,9 +126,18 @@ void CObject::ReleaseAll(void) {
 		CObject* pObjectNext = pObjectAll->m_pNextAll;
 		//終了処理を行う
 		if (!pObjectAll->m_bDeath) pObjectAll->Uninit();
+		delete pObjectAll;
 		//次のオブジェクトを代入
 		pObjectAll = pObjectNext;
 	}
+
+	m_pTopAll = nullptr;
+	m_pCurAll = nullptr;
+
+	memset(&m_apTopUpdate, NULL, sizeof(m_apTopUpdate));
+	memset(&m_apCurUpdate, NULL, sizeof(m_apCurUpdate));
+	memset(&m_apTopDraw, NULL, sizeof(m_apTopDraw));
+	memset(&m_apCurDraw, NULL, sizeof(m_apCurDraw));
 }
 
 //=============================================================================

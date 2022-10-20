@@ -352,7 +352,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/kinn.jpg";
+    "data/TEXTURE/MESH/gold.jpg";
    }
   }
   Material {

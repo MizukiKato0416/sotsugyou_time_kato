@@ -23,6 +23,8 @@ CPlayer::CPlayer()
 	//総数を加算
 	m_nObjectPlayerNum++;
 	m_nIndex = m_nObjectPlayerNum;
+	m_bUpdate = false;
+
 }
 //=============================================================================
 // デストラクタ
@@ -50,7 +52,9 @@ CPlayer* CPlayer::Create() {
 //=============================================================================
 HRESULT CPlayer::Init(void) {
 	
-	
+	//変数初期化
+	m_bUpdate = true;
+
 	return S_OK;
 }
 
