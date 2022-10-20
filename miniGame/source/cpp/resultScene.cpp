@@ -158,20 +158,17 @@ void CResultScene::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CResultScene::Update(void) {
-#ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
 	CInput* pInput = pManager->GetInputCur();
 	if (pInput == nullptr) return;
 
-	if (pInput->GetTrigger(CInput::CODE::DEBUG_0, 0)) {
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 		if (pFade == nullptr) return;
 		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
 	}
-
-#endif
 
 }

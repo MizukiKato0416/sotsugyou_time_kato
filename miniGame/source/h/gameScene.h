@@ -70,7 +70,7 @@ private:
 	CCheck *m_pCheck;													//チェッククラスのポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
-	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター
+	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンタ
 };
 
 #endif // !_GAME_SCENE_H_

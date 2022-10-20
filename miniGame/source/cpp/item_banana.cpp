@@ -167,7 +167,7 @@ void CItemBanana::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
 
 		//ーーーーーーーーーーーーーーーーーーー
 		//スピン(バナナヒット)
-		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pPlayer->GetPos().x, pPlayer->GetPos().y + 10, pPlayer->GetPos().z), {}, {});		//回るやつ
+		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pPlayer->GetPos().x, pPlayer->GetPos().y + 1, pPlayer->GetPos().z), {}, {});		//回るやつ
 		//ーーーーーーーーーーーーーーーーーーー
 	}
 }
