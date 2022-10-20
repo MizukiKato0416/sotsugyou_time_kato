@@ -27,7 +27,7 @@ class CSelectMenu2D;
 class CScore;
 class CCountDownUi;
 class CObjectPlayerIcon;
-class CCheckIcon;
+class CCheck;
 class CObjectPlayerBalloonCar;
 
 //*****************************************************************************
@@ -65,10 +65,9 @@ private:
 	int m_nGameScore;													//ゲーム終了時のスコア
 	CPauseMenu* m_pMenuPause;											//ポーズメニュー
 	CSelectMenu2D* m_pMenuGameEnd;										//ゲーム終了時の選択メニュー
-	CCountDownUi *m_pCountDownUi;										//カウントダウンUIのポインタ
 	CObjectPlayerBalloonCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
-	CCheckIcon *m_apCheckIcon[MAX_OBJECT_PLAYER_NUM];					//チェックアイコンのポインタ
+	CCheck *m_pCheck;													//チェッククラスのポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター
