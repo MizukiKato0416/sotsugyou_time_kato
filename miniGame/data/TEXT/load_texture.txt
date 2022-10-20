@@ -35,6 +35,8 @@ data/TEXTURE/UI/fukidashi_2p.png
 data/TEXTURE/UI/fukidashi_3p.png
 data/TEXTURE/UI/fukidashi_4p.png
 
+data/TEXTURE/UI/GameStart.png
+
 data/TEXTURE/UI/tex01.png
 data/TEXTURE/UI/tex02.png
 data/TEXTURE/UI/tex03.png
