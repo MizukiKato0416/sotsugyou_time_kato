@@ -64,7 +64,7 @@ HRESULT CFieldEffect::Init(D3DXVECTOR3 size,
 	SizeY = pos.y;
 	fRotate = 0;
 	fAddRotate = Rotate;
-	SetPosField(pos, D3DXVECTOR3(m_size, SizeY, {}), fRotate, fRotate);
+	//SetPosField(pos, D3DXVECTOR3(m_size, SizeY, {}), fRotate, fRotate);
 
 	m_Color = FieldColor;
 	m_FieldAddColor = FieldAddColor;
@@ -408,10 +408,10 @@ void CFieldEffect::Update()
 
 	//SetPosField(m_pos, D3DXVECTOR3(m_size, SizeY, {}), fRotate, -fRotate);
 	SetPosBill(
-		D3DXVECTOR3(m_pos.x / 8 + (cosf(-fRotate)) * m_size, SizeY, m_pos.z / 8 + (sinf(fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x / 8 + (sinf(fRotate))  * m_size, SizeY, m_pos.z / 8 - (cosf(-fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x / 8 - (sinf(fRotate))  * m_size, SizeY, m_pos.z / 8 + (cosf(-fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x / 8 - (cosf(-fRotate)) * m_size, SizeY, m_pos.z / 8 - (sinf(fRotate))* m_size));
+		D3DXVECTOR3(m_pos.x - m_pos.x + (cosf(-fRotate)) * m_size, SizeY, m_pos.z - m_pos.z + (sinf(fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x + (sinf(fRotate))  * m_size, SizeY, m_pos.z - m_pos.z - (cosf(-fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x - (sinf(fRotate))  * m_size, SizeY, m_pos.z - m_pos.z + (cosf(-fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x - (cosf(-fRotate)) * m_size, SizeY, m_pos.z - m_pos.z - (sinf(fRotate))* m_size));
 
 	if (bUninit == true)
 	{
@@ -422,77 +422,77 @@ void CFieldEffect::Update()
 //描画処理
 void CFieldEffect::Draw()
 {
-	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();
-	if (pManager == nullptr) return;	//nullの場合終了
-										//レンダラーの取得
-	CRenderer* pRenderer = pManager->GetRenderer();
-	if (pRenderer == nullptr) return;	//nullの場合終了
-										//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-	if (pDevice == nullptr) return;		//nullの場合終了
+	////マネージャーの取得
+	//CManager* pManager = CManager::GetManager();
+	//if (pManager == nullptr) return;	//nullの場合終了
+	//									//レンダラーの取得
+	//CRenderer* pRenderer = pManager->GetRenderer();
+	//if (pRenderer == nullptr) return;	//nullの場合終了
+	//									//デバイスの取得
+	//LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	//if (pDevice == nullptr) return;		//nullの場合終了
 
-	//Zテスト関係
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	////Zテスト関係
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 
-	//アルファテスト関係
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	////アルファテスト関係
+	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	//pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 
 
-	if (m_nSynsetic == 0)
-	{
-		//加算合成関係
-		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-	}
-	else if (m_nSynsetic == 1)
-	{
-		//減算合成の設定
-		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
-		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-	}
-	//それ以外の数値は加算合成に
-	else
-	{
-		//加算合成関係
-		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-	}
-	//ラインティングを無視する
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	//カリングオフ
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	//if (m_nSynsetic == 0)
+	//{
+	//	//加算合成関係
+	//	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	//}
+	//else if (m_nSynsetic == 1)
+	//{
+	//	//減算合成の設定
+	//	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+	//	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	//}
+	////それ以外の数値は加算合成に
+	//else
+	//{
+	//	//加算合成関係
+	//	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	//}
+	////ラインティングを無視する
+	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	////カリングオフ
+	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	CPlane::Draw();
 	//カリングオン
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-	//Zテスト関係
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	////Zテスト関係
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
-	//アルファテスト関係
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
+	////アルファテスト関係
+	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
+	//pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
 
-	//通常合成に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	////通常合成に戻す
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-	//ラインティングを有効にする
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	////ラインティングを有効にする
+	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
-	//位置によっては映らないようにする
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	////位置によっては映らないようにする
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
 }
 
