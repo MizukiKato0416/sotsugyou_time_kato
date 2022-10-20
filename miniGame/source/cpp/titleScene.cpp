@@ -223,7 +223,7 @@ void CTitleScene::Update(void) {
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;	
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME_02, 0.02f, 60);
 		}
 		else
 		{

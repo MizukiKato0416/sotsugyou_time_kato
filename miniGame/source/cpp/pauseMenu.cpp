@@ -132,7 +132,7 @@ void CPauseMenu::Update(void) {
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
 				//タイトルへシーン遷移
-				pFade->SetFade(CScene::SCENE_TYPE::GAME, 0.02f, 60);
+				pFade->SetFade(CScene::SCENE_TYPE::GAME_01, 0.02f, 60);
 				//サウンドを再生
 				pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 				break;

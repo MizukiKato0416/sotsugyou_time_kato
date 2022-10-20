@@ -1,0 +1,428 @@
+//=============================================================================
+//
+// ゲームシーン01処理 [gameScene01.cpp]
+// Author : 鶴間俊樹
+//
+//=============================================================================
+#include "gameScene02.h"
+#include "manager.h"
+#include "input.h"
+#include "sound.h"
+#include "gameCamera.h"
+#include "fade.h"
+#include "timer.h"
+#include "object2D.h"
+#include "object_player_attack_car.h"
+#include "pauseMenu.h"
+#include "count_down_ui.h"
+#include "finish_ui.h"
+#include "player.h"
+
+//エフェクト
+#include "plane.h"
+#include "PresetSetEffect.h"
+
+#include "player_icon.h"
+#include "ToScreen.h"
+#include "check.h"
+
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define GAME_02_TIME							(30)								//ゲームの時間
+
+#define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
+
+#define GAME_02_STAGE_SIZE						(700.0f)							//すてーじの大きさ
+#define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
+
+#define GAME_02_PLAYER_INIT_CREATE_SPACE		(300.0f)							//プレイヤーの初期生成間隔
+#define GAME_02_PLAYER_INIT_CREATE_POS_Z		(-400.0f)							//プレイヤーの初期生成位置Z
+
+#define GAME_02_FINISH_UI_NUM					(5)									//フィニッシュUIの数
+
+#define GAME_02_NEX_SCENE_COUNT					(180)								//次のシーンまでのカウント
+
+//=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+
+//=============================================================================
+// デフォルトコンストラクタ
+//=============================================================================
+CGameScene02::CGameScene02()
+{
+	m_nCntGameClear = 0;
+	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
+}
+
+//=============================================================================
+// デストラクタ
+//=============================================================================
+CGameScene02::~CGameScene02()
+{
+
+}
+
+//=============================================================================
+// ゲームシーンの初期化処理
+//=============================================================================
+void CGameScene02::Init(void) {
+
+	//変数初期化
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//レンダラーの取得
+	CRenderer* pRenderer = nullptr;
+	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
+	//カメラの設定
+	if (pManager != nullptr) pManager->SetCamera(CGameCamera::Create());
+
+	//------------------------------
+	//ライトの初期設定
+	//------------------------------
+	D3DXMATRIX mtxLightProj;   // ライトの射影変換
+	//ライトのプロジェクションマトリックスを生成
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
+
+	D3DXMATRIX mtxLightView;   // ライトビュー変換
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
+	//ライトのビューマトリックスを生成
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
+	//シェーダのライトを設定
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectLightMatrixView(mtxLightView);
+		pRenderer->SetEffectLightVector(D3DXVECTOR4(vecLight, 1.0f));
+		pRenderer->SetEffectLightMatrixProj(mtxLightProj);
+	}
+
+	//------------------------------
+	//フォグの初期設定
+	//------------------------------
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectFogEnable(false);
+		pRenderer->SetEffectFogColor(GAME_02_FOG_COLOR);
+		pRenderer->SetEffectFogRange(800.0f, 4500.0f);
+		//バックバッファをフォグの色に合わせる
+		pRenderer->SetBackBuffColor(GAME_02_FOG_COLOR);
+	}
+
+	//オブジェクトのポーズが無いように設定
+	CObject::SetUpdatePauseLevel(0);
+
+	//スタジアムの生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//プレイヤーの生成
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		m_apPlayer[nCntPlayer] = CObjectPlayerAttackCar::Create(D3DXVECTOR3(sinf(D3DX_PI / 2.0f * nCntPlayer) * 500.0f,
+			                                                                0.0f, 
+			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer) * 500.0f),
+			                                                    D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer, 0.0f));
+		//シーンのプレイヤーの設定
+		SetPlayer(m_apPlayer[nCntPlayer]);
+
+		//更新しないようにする
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
+	}
+	
+	//BGMの再生
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+	}
+
+#ifdef _DEBUG
+	//Zバッファテクスチャの表示
+	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 70.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
+	if (pZBuff != nullptr) {
+		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
+		pZBuff->SetUseZBuffTexture(true);
+	}
+#endif
+
+	//ゲームシーンの初期化処理
+	CGameScene::Init();
+
+}
+
+//=============================================================================
+// ゲームシーンの終了処理
+//=============================================================================
+void CGameScene02::Uninit(void) {
+
+	//ゲームシーンの終了処理
+	CGameScene::Uninit();
+}
+
+//=============================================================================
+// ゲームシーンの更新処理
+//=============================================================================
+void CGameScene02::Update(void) {
+#ifdef _DEBUG
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//現在の入力デバイスの取得
+	CInput* pInput = pManager->GetInputCur();
+	if (pInput == nullptr) return;
+
+	//ゲームオーバー
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_1, 0)) {
+		GameOver();
+	}
+
+	//タイム追加
+	if (pInput->GetTrigger(CInput::CODE::DEBUG_3, 0)) {
+		if (m_pTimer != nullptr) m_pTimer->AddScore(50);
+	}
+
+#endif
+
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck != nullptr)
+		{
+			//全員がチェック出来たら
+			if (m_pCheck->GetUninitAll())
+			{
+				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+				{
+					//プレイヤーアイコンの生成処理
+					CreatePlayerIcon(nCntPlayer);
+				}
+				//全員がチェック出来た状態にする
+				m_bAllCheck = true;
+			}
+		}
+		
+	}
+	else
+	{
+		//ゲームオーバー時
+		if (m_bGameOver) {
+			UpdateGameOver();
+		}
+		//ゲーム中
+		else
+		{
+			UpdateGame();
+		}
+	}
+
+	//ゲームシーンの更新処理
+	CGameScene::Update();
+}
+
+//=============================================================================
+// ゲーム中の更新
+//=============================================================================
+void CGameScene02::UpdateGame(void) {
+	//ポーズメニューがある場合は更新なし
+	if (m_pMenuPause != nullptr) return;
+
+	//ゲーム終了していないときにタイマーが０になった場合
+	if (m_pTimer != nullptr && !m_bGameOver) {
+		if (m_pTimer->GetScore() <= 0) {
+			//ゲーム終了
+			GameOver();
+			return;
+		}
+	}
+
+	if (m_pCheck != nullptr)
+	{
+		//カウントダウンUIが生成されていたら
+		if (m_pCheck->GetCountDownUi() != nullptr)
+		{
+			//カウントダウンUIの処理
+			CountDownUi();
+		}
+		else
+		{
+			//チェックアイコンを消す
+			m_pCheck->Uninit();
+			m_pCheck = nullptr;
+		}
+	}
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		//生成されていたら
+		if (m_apPlayerIcon[nCntPlayer] != nullptr)
+		{
+			//UIが消えていたら
+			if (m_apPlayerIcon[nCntPlayer]->GetFrame() == nullptr && m_apPlayerIcon[nCntPlayer]->GetPlayerNum() == nullptr)
+			{
+				//消す
+				m_apPlayerIcon[nCntPlayer]->Uninit();
+				m_apPlayerIcon[nCntPlayer] = nullptr;
+			}
+		}
+	}
+
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//現在の入力デバイスの取得
+	CInput* pInput = pManager->GetInputCur();
+	if (pInput == nullptr) return;
+	//サウンドの取得
+	CSound* pSound = pManager->GetSound();	//サウンドへのポインタ
+	if (pSound == nullptr) return;
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();	//フェードのポインタ
+	if (pFade == nullptr) return;
+
+	//ポーズ
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
+		//ポーズメニュークラスを生成
+		m_pMenuPause = CPauseMenu::Create();
+		//サウンドを再生
+		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
+	}
+}
+
+//=============================================================================
+// ゲームオーバー時の更新
+//=============================================================================
+void CGameScene02::UpdateGameOver(void) {
+	m_nCntGameClear++;
+
+	if (m_nCntGameClear > GAME_02_NEX_SCENE_COUNT)
+	{
+		m_nCntGameClear = 0;
+
+		CManager* pManager = CManager::GetManager();	//マネージャーの取得
+		if (pManager == nullptr) return;
+		//フェードの取得
+		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+		if (pFade == nullptr) return;
+		//タイトルへシーン遷移
+		pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 60);
+	}
+}
+
+
+//=============================================================================
+// ゲームオーバー
+//=============================================================================
+void CGameScene02::GameOver(void) {
+	if (m_bGameOver) return;
+
+	m_bGameOver = true;
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//ゲームオーバー音を再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TIME_UP);
+
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		//更新しないようにする
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
+	}
+
+	//フィニッシュUI生成
+	CFinishUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), 0, 1.0f);
+	for (int nCntFinish = 0; nCntFinish < GAME_02_FINISH_UI_NUM; nCntFinish++)
+	{
+		CFinishUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), nCntFinish + 1, 0.4f);
+	}
+
+	//タイマーを停止
+	if (m_pTimer != nullptr) {
+		m_pTimer->SetStop(true);
+	}
+
+	//オブジェクトのポーズが無いように設定（念のため）
+	CObject::SetUpdatePauseLevel(0);
+}
+
+//=============================================================================
+//プレイヤーアイコン生成処理
+//=============================================================================
+void CGameScene02::CreatePlayerIcon(int nCntPlayer){
+
+	//生成されていたら
+	if (m_apPlayerIcon[nCntPlayer] != nullptr)
+	{
+		return;
+	}
+
+	//プレイヤーの位置取得
+	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
+
+	playerPos.x += 150.0f;
+	playerPos.z -= 100.0f;
+
+	//アイコンの位置
+	D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	//ワールド座標からスクリーン座標に変換
+	iconPos = WorldToScreen(playerPos);
+	iconPos.z = 0.0f;
+
+	//生成
+	m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(GAME_02_PLAYER_ICON_SCALE, GAME_02_PLAYER_ICON_SCALE, GAME_02_PLAYER_ICON_SCALE),
+		                                             CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer),
+													 CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
+}
+
+//=============================================================================
+//カウントダウンUIの処理
+//=============================================================================
+void CGameScene02::CountDownUi(void)
+{
+	//スタート状態なら
+	if (m_pCheck->GetCountDownUi()->GetStart())
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//生成されていたら
+			if (m_apPlayer[nCntPlayer] == nullptr)
+			{
+				continue;
+			}
+
+			//更新されている状態なら
+			if (m_apPlayer[nCntPlayer]->GetPlayer()->GetUpdate())
+			{
+				continue;
+			}
+
+			//更新されている状態にする
+			m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(true);
+
+			//生成されていたら
+			if (m_apPlayerIcon[nCntPlayer] != nullptr)
+			{
+				//消えるように設定する
+				m_apPlayerIcon[nCntPlayer]->SetState(CObjectPlayerIcon::STATE::DEC_ALPHA);
+			}
+		}
+
+		//生成されていなかったら
+		if (m_pTimerFrame == nullptr)
+		{
+			//タイマーの生成
+			m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
+			m_pTimer = CTimer::Create(GAME_02_TIME, 2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
+		}
+	}
+}

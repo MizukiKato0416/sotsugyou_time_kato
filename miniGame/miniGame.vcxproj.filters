@@ -187,6 +187,15 @@
     <ClCompile Include="source\cpp\check.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\gameScene01.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene02.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player_attack_car.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -373,6 +382,15 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\check.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene01.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene02.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_attack_car.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

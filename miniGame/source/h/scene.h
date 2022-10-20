@@ -27,7 +27,8 @@ public:
 	//ƒV[ƒ“‚Ìí—Ş
 	enum class SCENE_TYPE {
 		TITLE = 0,
-		GAME,
+		GAME_01,
+		GAME_02,
 		RESULT,
 		ENUM_MAX
 	};

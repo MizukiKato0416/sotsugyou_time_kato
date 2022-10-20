@@ -7,6 +7,8 @@
 #include "scene.h"
 #include "titleScene.h"
 #include "gameScene.h"
+#include "gameScene01.h"
+#include "gameScene02.h"
 #include "resultScene.h"
 #include "object.h"	
 
@@ -72,17 +74,20 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 	{
 	case CScene::SCENE_TYPE::TITLE:
 		pScene = new CTitleScene;
-		if (pScene != nullptr) pScene->Init();
 		break;
 
-	case CScene::SCENE_TYPE::GAME:
-		pScene = new CGameScene;
-		if (pScene != nullptr) pScene->Init();
+	case CScene::SCENE_TYPE::GAME_01:
+		pScene = new CGameScene01;
+		break;
+
+	case CScene::SCENE_TYPE::GAME_02:
+		pScene = new CGameScene02;
 		break;
 
 	case CScene::SCENE_TYPE::RESULT:
 		pScene = new CResultScene;
-		if (pScene != nullptr) pScene->Init();
 		break;
 	}
+
+	if (pScene != nullptr) pScene->Init();
 }
