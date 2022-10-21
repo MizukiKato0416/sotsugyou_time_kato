@@ -13,6 +13,7 @@ data/MODEL/OBJECT/balloon_pink.x
 data/MODEL/OBJECT/balloon_gold.x	
 data/MODEL/OBJECT/itemBox.x	
 data/MODEL/OBJECT/banana.x	
+data/MODEL/OBJECT/attack_car_stage.x	
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	

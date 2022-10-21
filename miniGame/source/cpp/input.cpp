@@ -748,6 +748,13 @@ bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 		}
 		break;
 
+		//アタック
+	case CODE::CAR_ATTACK:
+		if (GetButtonTrigger(XINPUT_GAMEPAD_R, nIdx)) {
+			return true;
+		}
+		break;
+
 		//チェック
 	case CODE::CHECK_X:
 		if (GetButtonTrigger(XINPUT_GAMEPAD_X, nIdx)) {

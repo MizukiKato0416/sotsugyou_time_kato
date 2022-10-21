@@ -42,16 +42,23 @@ public:
 	D3DXVECTOR3 GetMove(void);		//移動量の取得
 	float GetRadius(void);			//当たり判定の半径の取得
 
+	//バウンド移動量取得処理
+	D3DXVECTOR3 GetBoundMove() { return m_boundMove; }
+	//バウンド移動量設定処理
+	void SetBoundMove(const D3DXVECTOR3 boundMove) { m_boundMove = boundMove; }
+
 private:
 
 	void Move(CInput* pInput, float fRotCameraY);	//移動
 	void DecMove(void);								//移動量の減少
+	void DecBoundMove(void);						//バウンド移動量の減少
 	void Collision(D3DXVECTOR3& pos);				//当たり判定
 	void CollisionObjectPlayer(void);				//プレイヤーとの当たり判定
 
-	D3DXVECTOR3	m_lastPos;	//最後の位置座標
-	D3DXVECTOR3 m_destRot;	//目標の角度
-	D3DXVECTOR3 m_move;		//移動量
+	D3DXVECTOR3	m_lastPos;			//最後の位置座標
+	D3DXVECTOR3 m_destRot;			//目標の角度
+	D3DXVECTOR3 m_move;				//移動量
+	D3DXVECTOR3 m_boundMove;		//バウンド移動量
 
 	float m_fMoveSpeed;				//移動する速さ
 };
