@@ -179,7 +179,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f);		//決定SE
 	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f);		//キャンセルSE
 	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f);		//ポーズ開くSE
-	ControllVoice(SOUND_LABEL::SE_CURSOR			, 3.0f);		//カーソルSE
+	ControllVoice(SOUND_LABEL::SE_CURSOR			, 5.0f);		//カーソルSE
 																	
 	return S_OK;
 }

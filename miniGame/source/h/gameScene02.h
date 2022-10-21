@@ -14,6 +14,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+#define GAME_02_STAGE_SIZE				(700.0f)				//すてーじの大きさ
 
 //*****************************************************************************
 // 前方宣言
@@ -40,6 +41,7 @@ private:
 
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
 	void CountDownUi(void);					//カウントダウンUIの処理
+	bool Finish(void);						//フィニッシュするか確認処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ

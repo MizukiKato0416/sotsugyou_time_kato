@@ -12,6 +12,7 @@
 #include "input.h"
 #include "PresetSetEffect.h"
 #include "player.h"
+#include "gameScene02.h"
 
 //=============================================================================
 // マクロ定義
@@ -24,6 +25,7 @@
 #define ATTACK_CAR_DEC_MOVE_SPEED			(0.93f)		//減速
 #define ATTACK_CAR_MAX_MOVE_SPEED			(7.0f)		//最大速度
 #define ATTACK_CAR_MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
+#define ATTACK_CAR_ATTACK_MOVE_SPEED		(40.0f)		//アタック時の移動量
 
 #define ATTACK_CAR_ROTATE_SPEED				(0.025f)	//回転速度
 
@@ -33,8 +35,18 @@
 #define COLLISION_RADIUS	(40.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
+//バウンド
+//--------------------------------
+#define ATTACK_CAR_NORMAL_MY_BOUND		(1.0f)		//相手に当たったとき自身が跳ね返る量の倍率
+#define ATTACK_CAR_NORMAL_ENEMY_BOUND	(1.5f)		//相手に当たったとき相手が跳ね返る量の倍率
+#define ATTACK_CAR_ATTACK_MY_BOUND		(1.0f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率
+#define ATTACK_CAR_ATTACK_ENEMY_BOUND	(1.5f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率
+#define ATTACK_CAR_BOUND_DEC			(0.9f)		//バウンドの移動量減少量
+
+//--------------------------------
 //その他
 //--------------------------------
+#define ATTACK_CAR_GRAVITY				(0.5f)		//重力
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -51,6 +63,7 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_fMoveSpeed = 0.0f;
+	m_bAttack = false;
 }
 
 //=============================================================================
@@ -89,6 +102,7 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 	m_destRot.y =  D3DX_PI;	//奥向き
 	m_fMoveSpeed = 0.0f;
 	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bAttack = false;
 
 	return S_OK;
 }
@@ -105,9 +119,40 @@ void CObjectPlayerAttackCar::Uninit(void) {
 // プレイヤーの更新処理
 //=============================================================================
 void CObjectPlayerAttackCar::Update(void) {
+
 	//更新しない設定なら
 	if (!GetPlayer()->GetUpdate())
 	{
+		//一位なら
+		if (GetPlayer()->GetRanking() == 1)
+		{
+			return;
+		}
+
+		//重力処理
+		Gravity();
+
+		//減速
+		DecBoundMove();
+
+		//移動量設定
+		m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
+		m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
+
+		//----------------------------
+		//移動の反映
+		//----------------------------
+		//位置情報のポインタの取得
+		D3DXVECTOR3 posObjectPlayer = GetPos();
+		//最後の位置座標の保存
+		m_lastPos = posObjectPlayer;
+		//移動
+		posObjectPlayer += m_move + m_boundMove;
+		//位置設定
+		SetPos(posObjectPlayer);
+
+		CObjectPlayer::Update();
+
 		return;
 	}
 
@@ -140,10 +185,18 @@ void CObjectPlayerAttackCar::Update(void) {
 		fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
 	}
 
-	//移動と回転
-	if (pInput != nullptr) {
-		Move(pInput, fRotCameraY);
+	//落ちていなかったら
+	if (GetPos().y >= 0.0f)
+	{
+		//移動と回転
+		if (pInput != nullptr) {
+			Move(pInput, fRotCameraY);
+		}
 	}
+	
+
+	//重力処理
+	Gravity();
 
 	//----------------------------
 	//移動の反映
@@ -246,30 +299,37 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 		}
 	}
 
-
-	//Aボタンを押している間向いている方向に進む
-	if (pInput->GetPress(CInput::CODE::ACCELE, GetPlayer()->GetIndex() - 1))
+	if (!m_bAttack)
 	{
-		//加速させる
-		m_fMoveSpeed += ATTACK_CAR_ADD_MOVE_SPEED;
-		//最大値よりも大きくなったら
-		if (m_fMoveSpeed > ATTACK_CAR_MAX_MOVE_SPEED)
+		//Aボタンを押している間向いている方向に進む
+		if (pInput->GetPress(CInput::CODE::ACCELE, GetPlayer()->GetIndex() - 1))
 		{
-			m_fMoveSpeed = ATTACK_CAR_MAX_MOVE_SPEED;
+			//加速させる
+			m_fMoveSpeed += ATTACK_CAR_ADD_MOVE_SPEED;
+			//最大値よりも大きくなったら
+			if (m_fMoveSpeed > ATTACK_CAR_MAX_MOVE_SPEED)
+			{
+				m_fMoveSpeed = ATTACK_CAR_MAX_MOVE_SPEED;
+			}
+			//---------------------------------
+			//煙
+			CPresetEffect::SetEffect3D(0, GetPos(), {}, {});
+			//---------------------------------
 		}
-		//---------------------------------
-		//煙
-		CPresetEffect::SetEffect3D(0, GetPos() , {}, {});
-		//---------------------------------
-	}
-	else if (pInput->GetPress(CInput::CODE::REVERSE, GetPlayer()->GetIndex() - 1))
-	{//Bボタンを押したら
-		//加速させる
-		m_fMoveSpeed -= ATTACK_CAR_ADD_MOVE_SPEED;
-		//最大値よりも大きくなったら
-		if (m_fMoveSpeed < -ATTACK_CAR_MAX_MOVE_SPEED)
+		else if (pInput->GetPress(CInput::CODE::REVERSE, GetPlayer()->GetIndex() - 1))
+		{//Bボタンを押したら
+		 //加速させる
+			m_fMoveSpeed -= ATTACK_CAR_ADD_MOVE_SPEED;
+			//最大値よりも大きくなったら
+			if (m_fMoveSpeed < -ATTACK_CAR_MAX_MOVE_SPEED)
+			{
+				m_fMoveSpeed = -ATTACK_CAR_MAX_MOVE_SPEED;
+			}
+		}
+		else
 		{
-			m_fMoveSpeed = -ATTACK_CAR_MAX_MOVE_SPEED;
+			//減速
+			DecMove();
 		}
 	}
 	else
@@ -281,18 +341,18 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 	//減速
 	DecBoundMove();
 
+	//アタック処理
+	Attack();
+
+	//移動量設定
 	m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 	m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 
-	//------------------------
-	//カメラの角度に合わせて移動量の最大量を設定
-	//------------------------
-	D3DXVECTOR3 moveMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//移動の最大量
-	moveMax.x += moveMaxSpeed.x * sinf(fRotCameraY + 0.5f * D3DX_PI);
-	moveMax.x += moveMaxSpeed.z * sinf(fRotCameraY);
-
-	moveMax.z += moveMaxSpeed.x * -sinf(fRotCameraY);
-	moveMax.z += moveMaxSpeed.z * cosf(fRotCameraY);
+	//アタック状態なら
+	if (m_bAttack)
+	{
+		return;
+	}
 
 	//------------------------
 	//回転方向の決定
@@ -406,6 +466,15 @@ void CObjectPlayerAttackCar::DecMove(void) {
 	{
 		//移動量を0にする
 		m_fMoveSpeed = 0.0f;
+
+		//アタックしていない状態なら
+		if (!m_bAttack)
+		{
+			return;
+		}
+
+		//アタックしていない状態にする
+		m_bAttack = false;
 	}
 }
 
@@ -414,7 +483,8 @@ void CObjectPlayerAttackCar::DecMove(void) {
 //=============================================================================
 void CObjectPlayerAttackCar::DecBoundMove(void)
 {
-	m_boundMove *= 0.93f;
+	//減速
+	m_boundMove *= ATTACK_CAR_BOUND_DEC;
 
 	//既定の値の誤差になったら
 	if (m_boundMove.x < ATTACK_CAR_MOVE_ZERO_RANGE && m_boundMove.x > -ATTACK_CAR_MOVE_ZERO_RANGE,
@@ -426,9 +496,80 @@ void CObjectPlayerAttackCar::DecBoundMove(void)
 }
 
 //=============================================================================
+//アタック処理
+//=============================================================================
+void CObjectPlayerAttackCar::Attack(void)
+{
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	CInput* pInput = nullptr;
+	if (pManager != nullptr) {
+		//現在の入力デバイスの取得
+		pInput = pManager->GetInputCur();
+	}
+
+	//ボタンを押したら
+	if (pInput->GetTrigger(CInput::CODE::CAR_ATTACK, GetPlayer()->GetIndex() - 1))
+	{
+		//アタックしている状態なら
+		if (m_bAttack)
+		{
+			return;
+		}
+
+		//アタックしている状態にする
+		m_bAttack = true;
+		//移動量設定
+		m_fMoveSpeed = ATTACK_CAR_ATTACK_MOVE_SPEED;
+	}
+}
+
+//=============================================================================
+//重力処理
+//=============================================================================
+void CObjectPlayerAttackCar::Gravity(void)
+{
+	//重力加算
+	m_move.y -= ATTACK_CAR_GRAVITY;
+
+	//位置取得
+	D3DXVECTOR3 pos = GetPos();
+	//高さを0にする
+	pos.y = 0.0f;
+
+	//ステージの中心からプレイヤーまでの距離を算出
+	float fDiffer = D3DXVec3Length(&pos);
+
+	//ステージ外に出たら
+	if (fDiffer - GetRadius() > GAME_02_STAGE_SIZE)
+	{
+		//減速
+		DecMove();
+
+		//ランキングが設定されていなかったら
+		if (GetPlayer()->GetRanking() == 0)
+		{
+			//ランキング設定
+			GetPlayer()->SetRanking();
+		}
+
+		return;
+	}
+
+	//重力を0にする
+	m_move.y = 0.0f;
+}
+
+//=============================================================================
 // 当たり判定
 //=============================================================================
 void CObjectPlayerAttackCar::Collision(D3DXVECTOR3& pos) {
+
+	//落ちているなら
+	if (GetPos().y < 0.0f)
+	{
+		return;
+	}
 
 	//プレイヤーとの当たり判定
 	CollisionObjectPlayer();
@@ -459,6 +600,14 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pObjectPlayer->GetPos();
+
+		//落ちていたら
+		if (playerPos.y < 0.0f)
+		{
+			pObject = pObjNext;	//リストの次のオブジェクトを代入
+			continue;
+		}
+
 		D3DXVECTOR3 myPos = GetPos();
 
 		//二点の距離ベクトル
@@ -484,17 +633,29 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 				fRot += D3DX_PI;
 			}
 
+
+			float fBoundPlayer = ATTACK_CAR_NORMAL_MY_BOUND;
+			float fBoundEnemy = ATTACK_CAR_NORMAL_ENEMY_BOUND;
+
+			if (m_bAttack)
+			{
+				fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND;
+				fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND;
+			}
+
 			//相手のバウンド移動量取得
 			D3DXVECTOR3 move = pObjectPlayer->GetBoundMove();
 			//跳ね返させる
-			move.x += sinf(fRot) * m_fMoveSpeed * 1.5f;
-			move.z += cosf(fRot) * m_fMoveSpeed * 1.5f;
+			move.x += sinf(fRot) * m_fMoveSpeed * fBoundEnemy;
+			move.z += cosf(fRot) * m_fMoveSpeed * fBoundEnemy;
 			//相手のバウンド移動量設定
 			pObjectPlayer->SetBoundMove(move);
 
 			//自身も跳ね返させる
-			m_boundMove.x += sinf(fRot + D3DX_PI) * m_fMoveSpeed * 1.0f;
-			m_boundMove.z += cosf(fRot + D3DX_PI) * m_fMoveSpeed * 1.0f;
+			m_boundMove.x += sinf(fRot + D3DX_PI) * m_fMoveSpeed * fBoundPlayer;
+			m_boundMove.z += cosf(fRot + D3DX_PI) * m_fMoveSpeed * fBoundPlayer;
+
+			m_fMoveSpeed = 0.0f;
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}

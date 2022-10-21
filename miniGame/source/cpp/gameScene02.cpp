@@ -34,7 +34,6 @@
 #define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 
-#define GAME_02_STAGE_SIZE						(700.0f)							//すてーじの大きさ
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
 
 #define GAME_02_PLAYER_INIT_CREATE_SPACE		(300.0f)							//プレイヤーの初期生成間隔
@@ -121,7 +120,7 @@ void CGameScene02::Init(void) {
 	CObject::SetUpdatePauseLevel(0);
 
 	//スタジアムの生成
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
@@ -231,6 +230,12 @@ void CGameScene02::Update(void) {
 void CGameScene02::UpdateGame(void) {
 	//ポーズメニューがある場合は更新なし
 	if (m_pMenuPause != nullptr) return;
+
+	//終了するか確認処理
+	if (Finish())
+	{
+		return;
+	}
 
 	//ゲーム終了していないときにタイマーが０になった場合
 	if (m_pTimer != nullptr && !m_bGameOver) {
@@ -368,7 +373,14 @@ void CGameScene02::CreatePlayerIcon(int nCntPlayer){
 	//プレイヤーの位置取得
 	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
 
-	playerPos.x += 150.0f;
+	if (nCntPlayer < 2)
+	{
+		playerPos.x += 150.0f;
+	}
+	else
+	{
+		playerPos.x -= 150.0f;
+	}
 	playerPos.z -= 100.0f;
 
 	//アイコンの位置
@@ -378,10 +390,17 @@ void CGameScene02::CreatePlayerIcon(int nCntPlayer){
 	iconPos = WorldToScreen(playerPos);
 	iconPos.z = 0.0f;
 
+	int nTexCount = nCntPlayer;
+
+	if (nCntPlayer >= 2)
+	{
+		nTexCount += 4;
+	}
+
 	//生成
 	m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(GAME_02_PLAYER_ICON_SCALE, GAME_02_PLAYER_ICON_SCALE, GAME_02_PLAYER_ICON_SCALE),
-		                                             CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer),
-													 CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
+		                                                   CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nTexCount),
+													       CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
 }
 
 //=============================================================================
@@ -425,4 +444,42 @@ void CGameScene02::CountDownUi(void)
 			m_pTimer = CTimer::Create(GAME_02_TIME, 2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
 		}
 	}
+}
+
+//=============================================================================
+//フィニッシュするか確認処理
+//=============================================================================
+bool CGameScene02::Finish(void)
+{
+	int nCntGameOver = 0;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		//生成されてなかったら
+		if (m_apPlayer[nCntPlayer] == nullptr)
+		{
+			continue;
+		}
+
+		//二位が決まっていなかったら
+		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 2)
+		{
+			continue;
+		}
+
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//ランキングが決まっていない人を1位にする
+			if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 0)
+			{
+				continue;
+			}
+
+			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking();
+			//ゲーム終了
+			GameOver();
+			return true;
+		}
+	}
+	return false;
 }
