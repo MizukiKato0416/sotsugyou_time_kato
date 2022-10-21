@@ -25,12 +25,13 @@ public:
 	//モデルの種類
 	enum class MODELTYPE{
 		//オブジェクト
-		OBJ_CAR = 0,		//車
-		OBJ_STADIUM,		//スタジアム
-		OBJ_BALLOON_PINK,	//風船(ピンク)
-		OBJ_BALLOON_GOLD,	//風船(ゴールド)
-		OBJ_ITEM_BOX,		//アイテムボックス
-		OBJ_BANANA,			//バナナ
+		OBJ_CAR = 0,			//車
+		OBJ_STADIUM,			//スタジアム
+		OBJ_BALLOON_PINK,		//風船(ピンク)
+		OBJ_BALLOON_GOLD,		//風船(ゴールド)
+		OBJ_ITEM_BOX,			//アイテムボックス
+		OBJ_BANANA,				//バナナ
+		OBJ_ATTACK_CAR_STAGE,	//衝突ゲーム用ステージ
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 

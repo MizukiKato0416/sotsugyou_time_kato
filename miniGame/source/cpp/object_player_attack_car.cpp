@@ -20,17 +20,17 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ATTACK_CAR_ADD_MOVE_SPEED			(0.15f)		//加速
+#define ATTACK_CAR_ADD_MOVE_SPEED			(0.1f)		//加速
 #define ATTACK_CAR_DEC_MOVE_SPEED			(0.93f)		//減速
-#define ATTACK_CAR_MAX_MOVE_SPEED			(9.0f)		//最大速度
+#define ATTACK_CAR_MAX_MOVE_SPEED			(7.0f)		//最大速度
 #define ATTACK_CAR_MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
 
-#define ATTACK_CAR_ROTATE_SPEED			(0.025f)	//回転速度
+#define ATTACK_CAR_ROTATE_SPEED				(0.025f)	//回転速度
 
 //--------------------------------
 //当たり判定
 //--------------------------------
-#define COLLISION_RADIUS (40.0f)		//当たり判定の半径	壁とかに使う
+#define COLLISION_RADIUS	(40.0f)		//当たり判定の半径	壁とかに使う
 
 //--------------------------------
 //その他
@@ -48,6 +48,7 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 	m_lastPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_fMoveSpeed = 0.0f;
 }
@@ -87,6 +88,7 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
 	m_destRot.y =  D3DX_PI;	//奥向き
 	m_fMoveSpeed = 0.0f;
+	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	return S_OK;
 }
@@ -149,7 +151,7 @@ void CObjectPlayerAttackCar::Update(void) {
 	//最後の位置座標の保存
 	m_lastPos = posObjectPlayer;
 	//移動
-	posObjectPlayer += m_move;
+	posObjectPlayer += m_move + m_boundMove;
 	//位置設定
 	SetPos(posObjectPlayer);
 
@@ -275,6 +277,9 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 		//減速
 		DecMove();
 	}
+
+	//減速
+	DecBoundMove();
 
 	m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 	m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
@@ -405,6 +410,22 @@ void CObjectPlayerAttackCar::DecMove(void) {
 }
 
 //=============================================================================
+//バウンド移動量の減少
+//=============================================================================
+void CObjectPlayerAttackCar::DecBoundMove(void)
+{
+	m_boundMove *= 0.93f;
+
+	//既定の値の誤差になったら
+	if (m_boundMove.x < ATTACK_CAR_MOVE_ZERO_RANGE && m_boundMove.x > -ATTACK_CAR_MOVE_ZERO_RANGE,
+		m_boundMove.z < ATTACK_CAR_MOVE_ZERO_RANGE && m_boundMove.z > -ATTACK_CAR_MOVE_ZERO_RANGE)
+	{
+		//移動量を0にする
+		m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
+}
+
+//=============================================================================
 // 当たり判定
 //=============================================================================
 void CObjectPlayerAttackCar::Collision(D3DXVECTOR3& pos) {
@@ -450,14 +471,30 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 		{
 			//自身と対象のオブジェクトの角度を求める
 			float fRot = atan2((playerPos.x - myPos.x), (playerPos.z - myPos.z));
-
 			//相手の位置を押し出す
 			playerPos.x = myPos.x + (sinf(fRot) * (COLLISION_RADIUS * 2.0f));
 			playerPos.z = myPos.z + (cosf(fRot) * (COLLISION_RADIUS * 2.0f));
-
 			//位置設定
 			pObjectPlayer->SetPos(playerPos);
 
+			//移動量がマイナスなら
+			if (m_fMoveSpeed < 0)
+			{
+				//逆向きにする
+				fRot += D3DX_PI;
+			}
+
+			//相手のバウンド移動量取得
+			D3DXVECTOR3 move = pObjectPlayer->GetBoundMove();
+			//跳ね返させる
+			move.x += sinf(fRot) * m_fMoveSpeed * 1.5f;
+			move.z += cosf(fRot) * m_fMoveSpeed * 1.5f;
+			//相手のバウンド移動量設定
+			pObjectPlayer->SetBoundMove(move);
+
+			//自身も跳ね返させる
+			m_boundMove.x += sinf(fRot + D3DX_PI) * m_fMoveSpeed * 1.0f;
+			m_boundMove.z += cosf(fRot + D3DX_PI) * m_fMoveSpeed * 1.0f;
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}

@@ -29,7 +29,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define GAME_02_TIME							(30)								//ゲームの時間
+#define GAME_02_TIME							(60)								//ゲームの時間
 
 #define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
@@ -126,10 +126,10 @@ void CGameScene02::Init(void) {
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		m_apPlayer[nCntPlayer] = CObjectPlayerAttackCar::Create(D3DXVECTOR3(sinf(D3DX_PI / 2.0f * nCntPlayer) * 500.0f,
+		m_apPlayer[nCntPlayer] = CObjectPlayerAttackCar::Create(D3DXVECTOR3(sinf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f,
 			                                                                0.0f, 
-			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer) * 500.0f),
-			                                                    D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer, 0.0f));
+			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f),
+			                                                    D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f, 0.0f));
 		//シーンのプレイヤーの設定
 		SetPlayer(m_apPlayer[nCntPlayer]);
 

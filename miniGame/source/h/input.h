@@ -46,6 +46,7 @@ public:
 		ACCELE,			//アクセル
 		REVERSE,		//バック
 		USE_ITEM,		//アイテムの使用
+		CAR_ATTACK,		//アタック
 		//チェック
 		CHECK_X,		//Xボタン
 		CHECK_B,		//Bボタン
