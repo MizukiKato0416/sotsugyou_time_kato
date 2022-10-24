@@ -569,7 +569,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\black.PNG";
+    "data/TEXTURE/MESH/black.PNG";
    }
   }
   Material {
@@ -578,7 +578,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\Camera Roll\\kinn.jpg";
+    "data/TEXTURE/MESH/gold.jpg";
    }
   }
   Material {
@@ -587,7 +587,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\red.jpg";
+    "data/TEXTURE/MESH/red.jpg";
    }
   }
  }
