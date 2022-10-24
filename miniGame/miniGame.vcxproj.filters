@@ -196,6 +196,12 @@
     <ClCompile Include="source\cpp\object_player_attack_car.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\bom.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\create_bom_manager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -391,6 +397,12 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\object_player_attack_car.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\bom.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\create_bom_manager.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

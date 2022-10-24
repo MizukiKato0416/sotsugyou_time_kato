@@ -84,6 +84,9 @@ data/TEXTURE/MESH/ItemBOX.jpg
 data/TEXTURE/MESH/gold.jpg
 data/TEXTURE/MESH/tire.png
 data/TEXTURE/MESH/wheel.png
+data/TEXTURE/MESH/rubble.jpeg
+data/TEXTURE/MESH/circle.png
+data/TEXTURE/MESH/brick.jpg
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png
