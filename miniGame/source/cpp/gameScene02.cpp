@@ -18,6 +18,7 @@
 #include "finish_ui.h"
 #include "player.h"
 #include "create_bom_manager.h"
+#include "meshwall.h"
 
 //エフェクト
 #include "plane.h"
@@ -31,9 +32,9 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(59)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR						(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 #define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
@@ -41,12 +42,20 @@
 #define GAME_02_PLAYER_INIT_CREATE_SPACE		(300.0f)							//プレイヤーの初期生成間隔
 #define GAME_02_PLAYER_INIT_CREATE_POS_Z		(-400.0f)							//プレイヤーの初期生成位置Z
 
-#define GAME_02_FINISH_UI_NUM					(5)									//フィニッシュUIの数
+#define GAME_02_FINISH_UI_NUM		(5)			//フィニッシュUIの数
 
-#define GAME_02_NEX_SCENE_COUNT					(180)								//次のシーンまでのカウント
+#define GAME_02_NEX_SCENE_COUNT		(300)		//次のシーンまでのカウント
 
-#define GAME_02_BOM_CREATE_COUNT				(20)								//ボムを生成する間隔
-#define GAME_02_BOM_NUM							(5)									//ボムを生成する個数
+#define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
+#define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
+
+#define GAME_02_CLOUD_NUM					(2)											//雲の数
+#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -500.0f, -2000.0f))		//雲の位置
+#define GAME_02_CLOUD_SIZE					(3500.0f)									//雲のサイズ
+#define GAME_02_CLOUD_MESH_NUM				(2)											//メッシュを敷き詰める数
+#define GAME_02_CLOUD_MOVE_SPEED			(0.0007f)									//テクスチャを動かす速さ
+#define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.0005f)									//次の雲のテクスチャを動かす速さの間隔
+#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
 
 //=============================================================================
@@ -63,6 +72,7 @@ CGameScene02::CGameScene02()
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
+	m_pCloud.clear();
 }
 
 //=============================================================================
@@ -119,11 +129,11 @@ void CGameScene02::Init(void) {
 	//フォグの初期設定
 	//------------------------------
 	if (pRenderer != nullptr) {
-		pRenderer->SetEffectFogEnable(false);
+		pRenderer->SetEffectFogEnable(true);
 		pRenderer->SetEffectFogColor(GAME_02_FOG_COLOR);
-		pRenderer->SetEffectFogRange(800.0f, 4500.0f);
+		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
 		//バックバッファをフォグの色に合わせる
-		pRenderer->SetBackBuffColor(GAME_02_FOG_COLOR);
+		pRenderer->SetBackBuffColor(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f));
 	}
 
 	//オブジェクトのポーズが無いように設定
@@ -131,6 +141,22 @@ void CGameScene02::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//雲の生成
+	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
+	{
+		m_pCloud.push_back(CMeshwall::Create(GAME_02_CLOUD_POS, D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
+			                                 GAME_02_CLOUD_MESH_NUM, GAME_02_CLOUD_MESH_NUM, GAME_02_CLOUD_SIZE, GAME_02_CLOUD_SIZE,
+			                                 CTexture::TEXTURE_TYPE::MESH_CLOUD));
+		//加算合成をする
+		m_pCloud[nCntCloud]->SetAlphaBlend(true);
+		//描画順の設定
+		m_pCloud[nCntCloud]->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+		//ライトをオフにする
+		m_pCloud[nCntCloud]->SetLight(false);
+		//色の設定
+		m_pCloud[nCntCloud]->SetColor(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+	}
 
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
@@ -163,7 +189,6 @@ void CGameScene02::Init(void) {
 
 	//ゲームシーンの初期化処理
 	CGameScene::Init();
-
 }
 
 //=============================================================================
@@ -229,6 +254,9 @@ void CGameScene02::Update(void) {
 			UpdateGame();
 		}
 	}
+
+	//雲の処理
+	Cloud();
 
 	//ゲームシーンの更新処理
 	CGameScene::Update();
@@ -302,7 +330,6 @@ void CGameScene02::UpdateGame(void) {
 			}
 		}
 	}
-
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -533,5 +560,22 @@ void CGameScene02::HurryUp(void)
 	if (m_pCreateBomManager == nullptr)
 	{
 		m_pCreateBomManager = CCreateBomManager::Create(GAME_02_BOM_CREATE_COUNT, GAME_02_BOM_NUM);
+	}
+}
+
+//=============================================================================
+//雲の処理
+//=============================================================================
+void CGameScene02::Cloud(void)
+{
+	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
+	{
+		if (m_pCloud[nCntCloud] == nullptr)
+		{
+			continue;
+		}
+
+		//テクスチャ座標移動処理
+		m_pCloud[nCntCloud]->SetMoveTex(GAME_02_CLOUD_MOVE_SPEED + GAME_02_CLOUD_MOVE_SPEED_INTERVAL * nCntCloud, 0.0f);
 	}
 }

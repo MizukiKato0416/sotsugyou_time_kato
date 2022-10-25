@@ -108,6 +108,9 @@ HRESULT CObjectPlayer::Init(void) {
 	{
 		//指定したマテリアルの色を設定
 		pModel->SetMaterialDiffuse(col, 0);
+		pModel->SetMaterialSpecular(col / 2.0f + D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);
+		pModel->SetMaterialPower(2.0f, 0);
+
 	}
 
 	return S_OK;

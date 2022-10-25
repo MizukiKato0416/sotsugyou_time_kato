@@ -160,7 +160,7 @@ VS_OUTPUT RenderSceneVSLight(
 	float3 vecHarf = normalize(-light + vecView);	//ハーフベクトル
 
 	//色と掛け合わせる
-	Out.Diffuse.xyz = g_matDiffuse.xyz * col;// +pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
+	Out.Diffuse.xyz = g_matDiffuse.xyz * col + pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
 	Out.Diffuse.w = g_matDiffuse.w;
 
 	//輪郭を光らせる
