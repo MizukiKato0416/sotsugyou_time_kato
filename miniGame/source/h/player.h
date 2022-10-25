@@ -41,6 +41,7 @@ public:
 
 	//ランキング設定処理
 	void SetRanking();
+	void SetRanking(const int nRank) { m_nRanking = nRank; }
 
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nObjectPlayerNum; }

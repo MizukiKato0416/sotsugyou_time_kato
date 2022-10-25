@@ -64,6 +64,7 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 
 	m_fMoveSpeed = 0.0f;
 	m_bAttack = false;
+	memset(m_bCollOld, false, sizeof(m_bCollOld[MAX_OBJECT_PLAYER_NUM]));
 }
 
 //=============================================================================
@@ -103,6 +104,7 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 	m_fMoveSpeed = 0.0f;
 	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bAttack = false;
+	memset(m_bCollOld, FALSE, sizeof(m_bCollOld[MAX_OBJECT_PLAYER_NUM]));
 
 	return S_OK;
 }
@@ -551,6 +553,14 @@ void CObjectPlayerAttackCar::Gravity(void)
 		{
 			//ランキング設定
 			GetPlayer()->SetRanking();
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//サウンドを再生
+			pSound->PlaySound(CSound::SOUND_LABEL::SE_FALL);
 		}
 
 		return;
@@ -618,6 +628,18 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 		//当たっていたら
 		if (fDiffer <= COLLISION_RADIUS * 2.0f)
 		{
+			//前のフレーム当たっていなかったら
+			if (!m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1])
+			{
+				//マネージャーの取得
+				CManager* pManager = CManager::GetManager();
+				//サウンドの取得
+				CSound* pSound = nullptr;
+				if (pManager != nullptr) pSound = pManager->GetSound();
+				//サウンドを再生
+				pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
+			}
+
 			//自身と対象のオブジェクトの角度を求める
 			float fRot = atan2((playerPos.x - myPos.x), (playerPos.z - myPos.z));
 			//相手の位置を押し出す
@@ -656,6 +678,15 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			m_boundMove.z += cosf(fRot + D3DX_PI) * m_fMoveSpeed * fBoundPlayer;
 
 			m_fMoveSpeed = 0.0f;
+
+			//当たった状態にする
+			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
+			return;
+		}
+		else
+		{
+			//当たった状態にする
+			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = false;
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}

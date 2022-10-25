@@ -21,6 +21,7 @@
 //*****************************************************************************
 class CObjectPlayerIcon;
 class CObjectPlayerAttackCar;
+class CCreateBomManager;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -42,11 +43,14 @@ private:
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
 	void CountDownUi(void);					//カウントダウンUIの処理
 	bool Finish(void);						//フィニッシュするか確認処理
+	void HurryUp(void);						//急げ処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
+	CCreateBomManager *m_pCreateBomManager;								//ボム生成のポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
+	bool m_bHurryUp;						//急ぐかどうか
 };
 
 #endif // !_GAME_SCENE01_H_

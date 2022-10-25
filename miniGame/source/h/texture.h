@@ -102,6 +102,9 @@ public:
 		MESH_GOLD,				//金
 		MESH_CAR_TIRE,			//タイヤ
 		MESH_CAR_WHEEL,			//ホイール
+		MESH_RUBBLE,			//がれき
+		MESH_STAGE_02_GROUND,	//ステージの地面
+		MESH_STAGE_02_WALL,		//ステージの壁
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

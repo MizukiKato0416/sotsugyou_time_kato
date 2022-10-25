@@ -17,6 +17,7 @@
 #include "count_down_ui.h"
 #include "finish_ui.h"
 #include "player.h"
+#include "create_bom_manager.h"
 
 //エフェクト
 #include "plane.h"
@@ -30,6 +31,7 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
+#define GAME_02_HURRY_UP_TIME					(59)								//ハリーアップの時間
 
 #define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
@@ -43,6 +45,10 @@
 
 #define GAME_02_NEX_SCENE_COUNT					(180)								//次のシーンまでのカウント
 
+#define GAME_02_BOM_CREATE_COUNT				(20)								//ボムを生成する間隔
+#define GAME_02_BOM_NUM							(5)									//ボムを生成する個数
+
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -55,6 +61,8 @@ CGameScene02::CGameScene02()
 	m_nCntGameClear = 0;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
+	m_bHurryUp = false;
+	m_pCreateBomManager = nullptr;
 }
 
 //=============================================================================
@@ -71,6 +79,8 @@ CGameScene02::~CGameScene02()
 void CGameScene02::Init(void) {
 
 	//変数初期化
+	m_bHurryUp = false;
+	m_pCreateBomManager = nullptr;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -138,8 +148,8 @@ void CGameScene02::Init(void) {
 	
 	//BGMの再生
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_02);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
 	}
 
 #ifdef _DEBUG
@@ -277,6 +287,22 @@ void CGameScene02::UpdateGame(void) {
 		}
 	}
 
+	//タイマーが生成されていたら
+	if (m_pTimer != nullptr)
+	{
+		if (m_pTimer->GetScore() == GAME_02_HURRY_UP_TIME)
+		{
+			//急ぐ状態でないなら
+			if (!m_bHurryUp)
+			{
+				//急ぐ状態にする
+				m_bHurryUp = true;
+				//急ぐ処理
+				HurryUp();
+			}
+		}
+	}
+
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -339,6 +365,13 @@ void CGameScene02::GameOver(void) {
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
+		//ランキングが設定されていないなら
+		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() == 0)
+		{
+			//一位に設定
+			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking(1);
+		}
+
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
@@ -353,6 +386,13 @@ void CGameScene02::GameOver(void) {
 	//タイマーを停止
 	if (m_pTimer != nullptr) {
 		m_pTimer->SetStop(true);
+	}
+
+	//ボムを消す
+	if (m_pCreateBomManager != nullptr)
+	{
+		m_pCreateBomManager->Uninit();
+		m_pCreateBomManager = nullptr;
 	}
 
 	//オブジェクトのポーズが無いように設定（念のため）
@@ -482,4 +522,16 @@ bool CGameScene02::Finish(void)
 		}
 	}
 	return false;
+}
+
+//=============================================================================
+//急げ処理
+//=============================================================================
+void CGameScene02::HurryUp(void)
+{
+	//ボム生成処理
+	if (m_pCreateBomManager == nullptr)
+	{
+		m_pCreateBomManager = CCreateBomManager::Create(GAME_02_BOM_CREATE_COUNT, GAME_02_BOM_NUM);
+	}
 }
