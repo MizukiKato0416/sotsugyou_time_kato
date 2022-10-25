@@ -105,6 +105,7 @@ public:
 		MESH_RUBBLE,			//がれき
 		MESH_STAGE_02_GROUND,	//ステージの地面
 		MESH_STAGE_02_WALL,		//ステージの壁
+		MESH_CLOUD,				//雲
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

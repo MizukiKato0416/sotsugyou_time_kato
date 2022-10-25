@@ -98,6 +98,15 @@ HRESULT CBalloon::Init(void) {
 	m_move = { 0.0f, 0.0f, 0.0f };
 	m_bUp = true;
 
+	CModel *pModel = GetPtrModel();
+	if (pModel != nullptr)
+	{
+		//指定したマテリアルの色を設定
+		pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 0);
+		pModel->SetMaterialPower(8.0f, 0);
+
+	}
+
 	CObjectModel::Init();
 	return S_OK;
 }

@@ -41,6 +41,17 @@ public:
 	void SetColor(D3DXCOLOR col) { m_col = col; }	//色の設定
 	void AddColor(D3DXCOLOR col) { m_col += col; }	//色の加算
 	D3DXCOLOR GetColor(void) { return m_col; }	//色の取得
+	void SetMoveTex(float fMoveTexU, float fMoveTexV);		//テクスチャ移動設定処理
+
+	//加算合成設定処理
+	void SetAlphaBlend(const bool bAlphaBlend) { m_bAlphaBlend = bAlphaBlend; }
+	//加算合成取得処理
+	bool GetAlphaBlend() { return m_bAlphaBlend; }
+
+	//ライト設定処理
+	void SetLight(const bool bEnableLight) { m_bEnableLight = bEnableLight; }
+	//ライト取得処理
+	bool GetLight() { return m_bEnableLight; }
 
 private:
 	D3DXVECTOR3	m_pos;	//ポリゴンの中心座標
@@ -51,6 +62,8 @@ private:
 	int m_nNumVtx;	//頂点数
 	int m_nNumIdx;	//インデックス数
 	D3DXCOLOR m_col;	//マテリアルの色
+	bool m_bAlphaBlend;		//加算合成するかどうか
+	bool m_bEnableLight;	//ライト使うかどうか
 };
 
 #endif // !_OBJECT3D_H_

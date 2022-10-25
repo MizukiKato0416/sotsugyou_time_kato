@@ -22,6 +22,7 @@
 class CObjectPlayerIcon;
 class CObjectPlayerAttackCar;
 class CCreateBomManager;
+class CMeshwall;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -44,10 +45,12 @@ private:
 	void CountDownUi(void);					//カウントダウンUIの処理
 	bool Finish(void);						//フィニッシュするか確認処理
 	void HurryUp(void);						//急げ処理
+	void Cloud(void);						//雲の処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
 	CCreateBomManager *m_pCreateBomManager;								//ボム生成のポインタ
+	std::vector<CMeshwall*> m_pCloud;									//雲のポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	bool m_bHurryUp;						//急ぐかどうか
