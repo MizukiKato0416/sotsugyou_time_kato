@@ -979,7 +979,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\stone_wall_diff_1k.png";
+    "data/TEXTURE/MESH/towerwall.png";
    }
   }
   Material {
@@ -988,7 +988,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\stone_wall_diff_1k.png";
+    "data/TEXTURE/MESH/towerwall.png";
    }
   }
   Material {
@@ -997,7 +997,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\stone04\\stone04.jpg";
+    "data/TEXTURE/MESH/tower_object.jpg";
    }
   }
   Material {
@@ -1006,7 +1006,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\stone_wall_diff_1k.png";
+    "data/TEXTURE/MESH/towerwall.png";
    }
   }
  }
