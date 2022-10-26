@@ -33,6 +33,8 @@ public:
 		OBJ_BANANA,				//バナナ
 		OBJ_ATTACK_CAR_STAGE,	//衝突ゲーム用ステージ
 		OBJ_BOM,				//爆弾
+		OBJ_BROKEN_TOWER,		//壊れた塔
+		OBJ_BROKEN_GATE,		//壊れた門
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 

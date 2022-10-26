@@ -125,17 +125,14 @@ void CObjectPlayerAttackCar::Update(void) {
 	//更新しない設定なら
 	if (!GetPlayer()->GetUpdate())
 	{
-		//一位なら
-		if (GetPlayer()->GetRanking() == 1)
-		{
-			return;
-		}
-
 		//重力処理
 		Gravity();
 
 		//減速
 		DecBoundMove();
+
+		//減速
+		DecMove();
 
 		//移動量設定
 		m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
@@ -195,7 +192,6 @@ void CObjectPlayerAttackCar::Update(void) {
 			Move(pInput, fRotCameraY);
 		}
 	}
-	
 
 	//重力処理
 	Gravity();
@@ -469,14 +465,12 @@ void CObjectPlayerAttackCar::DecMove(void) {
 		//移動量を0にする
 		m_fMoveSpeed = 0.0f;
 
-		//アタックしていない状態なら
-		if (!m_bAttack)
+		//アタックしている状態なら
+		if (m_bAttack && m_boundMove.x == 0.0f && m_boundMove.y == 0.0f && m_boundMove.z == 0.0f)
 		{
-			return;
+			//アタックしていない状態にする
+			m_bAttack = false;
 		}
-
-		//アタックしていない状態にする
-		m_bAttack = false;
 	}
 }
 

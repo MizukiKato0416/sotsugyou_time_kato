@@ -19,6 +19,7 @@
 #include "player.h"
 #include "create_bom_manager.h"
 #include "meshwall.h"
+#include "float_object.h"
 
 //エフェクト
 #include "plane.h"
@@ -34,8 +35,8 @@
 #define GAME_02_TIME							(60)								//ゲームの時間
 #define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR						(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
-#define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR						(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
 
@@ -44,14 +45,14 @@
 
 #define GAME_02_FINISH_UI_NUM		(5)			//フィニッシュUIの数
 
-#define GAME_02_NEX_SCENE_COUNT		(300)		//次のシーンまでのカウント
+#define GAME_02_NEX_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
 #define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
 #define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
 
 #define GAME_02_CLOUD_NUM					(2)											//雲の数
-#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -500.0f, -2000.0f))		//雲の位置
-#define GAME_02_CLOUD_SIZE					(3500.0f)									//雲のサイズ
+#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -800.0f, -2000.0f))		//雲の位置
+#define GAME_02_CLOUD_SIZE					(4000.0f)									//雲のサイズ
 #define GAME_02_CLOUD_MESH_NUM				(2)											//メッシュを敷き詰める数
 #define GAME_02_CLOUD_MOVE_SPEED			(0.0007f)									//テクスチャを動かす速さ
 #define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.0005f)									//次の雲のテクスチャを動かす速さの間隔
@@ -141,6 +142,16 @@ void CGameScene02::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//門の生成
+	CFloatObject::Create(D3DXVECTOR3(1800.0f, -200.0f, 1900.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.001f, -0.003f, 0.002f), CModel::MODELTYPE::OBJ_BROKEN_GATE);
+
+	//塔の生成
+	CFloatObject::Create(D3DXVECTOR3(-1800.0f, -400.0f, 1800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.001f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
+	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_CAR);
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
