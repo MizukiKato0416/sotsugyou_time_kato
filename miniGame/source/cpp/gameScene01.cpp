@@ -21,6 +21,7 @@
 #include "count_down_ui.h"
 #include "finish_ui.h"
 #include "player.h"
+#include "float_object.h"
 
 //エフェクト
 #include "plane.h"
@@ -143,6 +144,10 @@ void CGameScene01::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//観客席の風船
+	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_BALLOON_PINK);
 
 	//円柱の壁の生成
 	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
