@@ -44,7 +44,7 @@
 
 #define GAME_02_FINISH_UI_NUM		(5)			//フィニッシュUIの数
 
-#define GAME_02_NEX_SCENE_COUNT		(300)		//次のシーンまでのカウント
+#define GAME_02_NEX_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
 #define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
 #define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
@@ -141,6 +141,12 @@ void CGameScene02::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//門の生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_BROKEN_GATE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//塔の生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_BROKEN_TOWER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)

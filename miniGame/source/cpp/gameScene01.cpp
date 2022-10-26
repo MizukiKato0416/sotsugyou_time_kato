@@ -52,7 +52,7 @@
 #define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
 
-#define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
+#define GAME_ITEM_BOX_CREATE_INTERVAL			 (140)									//アイテムボックスの生成間隔
 #define GAME_ITEM_BOX_CREATE_POS_X				 (900.0f)								//アイテムボックスの生成位置X
 #define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
 
