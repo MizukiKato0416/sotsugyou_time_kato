@@ -178,6 +178,9 @@ void CGameScene02::Init(void) {
 	//ìÉÇÃê∂ê¨
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
+	//Ç™ÇÍÇ´ÇÃê∂ê¨
+	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.002f, 0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
 
 	//â_ÇÃê∂ê¨
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)

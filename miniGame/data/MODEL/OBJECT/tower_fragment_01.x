@@ -558,7 +558,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Downloads\\stone_wall_diff_1k.png";
+    "data/TEXTURE/MESH/towerwall.png";
    }
   }
   Material {
