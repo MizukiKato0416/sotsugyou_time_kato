@@ -53,7 +53,7 @@
 #define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
 
 #define GAME_02_CLOUD_NUM					(2)											//雲の数
-#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1000.0f, -6000.0f))		//雲の位置
+#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1500.0f, -6000.0f))		//雲の位置
 #define GAME_02_CLOUD_SIZE					(12000.0f)									//雲のサイズ
 #define GAME_02_CLOUD_MESH_NUM				(8)											//メッシュを敷き詰める数
 #define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
@@ -114,10 +114,10 @@ void CGameScene02::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 1000.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(800.0f, 2000.0f, -800.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
@@ -178,9 +178,29 @@ void CGameScene02::Init(void) {
 	//塔の生成
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
+
+	//塔の生成
+	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -500.0f, 2500.0f), D3DXVECTOR3(0.1f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0030f, -0.004f, 0.0f), CModel::MODELTYPE::OBJ_CAR);
+
 	//がれきの生成
-	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.002f, 0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.001f, -0.002f, 0.005f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
+
+	CFloatObject::Create(D3DXVECTOR3(-300.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.001f, -0.003f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_03);
+
+	CFloatObject::Create(D3DXVECTOR3(300.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, 0.002f, 0.009f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_04);
+
+	CFloatObject::Create(D3DXVECTOR3(1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0005f, -0.001f, -0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_05);
+
+	CFloatObject::Create(D3DXVECTOR3(1500.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0025f, 0.0f, 0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06);
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)

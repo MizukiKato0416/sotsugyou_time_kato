@@ -635,7 +635,7 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			}
 
 			//ˆÚ“®—Ê‚ª­‚È‚©‚Á‚½‚ç
-			if (m_fMoveSpeed < ATTACK_CAR_BOUND_MIN_SPEED)
+			if (m_fMoveSpeed < ATTACK_CAR_BOUND_MIN_SPEED && m_fMoveSpeed > -ATTACK_CAR_BOUND_MIN_SPEED)
 			{
 				return;
 			}
