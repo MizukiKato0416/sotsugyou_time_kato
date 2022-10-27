@@ -221,10 +221,20 @@ void CGameScene02::Init(void) {
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
+		D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f, 0.0f);
+
+		if (rot.y > D3DX_PI)
+		{
+			rot.y -= D3DX_PI * 2.0f;
+		}
+		else if (rot.y < -D3DX_PI)
+		{
+			rot.y += D3DX_PI * 2.0f;
+		}
+
 		m_apPlayer[nCntPlayer] = CObjectPlayerAttackCar::Create(D3DXVECTOR3(sinf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f,
 			                                                                0.0f, 
-			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f),
-			                                                    D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f, 0.0f));
+			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f), rot);
 		//シーンのプレイヤーの設定
 		SetPlayer(m_apPlayer[nCntPlayer]);
 

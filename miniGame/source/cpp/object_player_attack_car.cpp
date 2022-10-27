@@ -37,8 +37,8 @@
 //--------------------------------
 //バウンド
 //--------------------------------
-#define ATTACK_CAR_NORMAL_MY_BOUND		(1.0f)		//相手に当たったとき自身が跳ね返る量の倍率
-#define ATTACK_CAR_NORMAL_ENEMY_BOUND	(1.5f)		//相手に当たったとき相手が跳ね返る量の倍率
+#define ATTACK_CAR_NORMAL_MY_BOUND		(1.8f)		//相手に当たったとき自身が跳ね返る量の倍率
+#define ATTACK_CAR_NORMAL_ENEMY_BOUND	(3.0f)		//相手に当たったとき相手が跳ね返る量の倍率
 #define ATTACK_CAR_ATTACK_MY_BOUND		(1.0f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率
 #define ATTACK_CAR_ATTACK_ENEMY_BOUND	(1.5f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率
 #define ATTACK_CAR_BOUND_DEC			(0.9f)		//バウンドの移動量減少量
