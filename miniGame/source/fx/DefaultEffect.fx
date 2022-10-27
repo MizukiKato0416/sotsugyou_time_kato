@@ -78,8 +78,9 @@ struct VS_OUTPUT
 	float4 Diffuse : COLOR0;//色
 	float4 TexUV : TEXCOORD0;	//テクスチャ座標
 	float4 PosWVP : TEXCOORD1;	//変換後の位置
+	float4 Specular : TEXCOORD2;//スペキュラーの割合
 
-	float4 ZCalcTex : TEXCOORD2;   	// Z値算出用テクスチャ
+	float4 ZCalcTex : TEXCOORD3;   	// Z値算出用テクスチャ
 	float4 ColShadow : COLOR2;		//影ができる場合の色
 };
 
@@ -98,6 +99,8 @@ VS_OUTPUT RenderSceneVSDefault(
 	Out.Pos = mul(Out.Pos, g_mProj);
 
 	Out.PosWVP = Out.Pos;
+
+	Out.Specular = float4(0.0, 0.0, 0.0, 0.0);
 
 	//色
 	Out.Diffuse = g_matDiffuse;
@@ -160,8 +163,11 @@ VS_OUTPUT RenderSceneVSLight(
 	float3 vecHarf = normalize(-light + vecView);	//ハーフベクトル
 
 	//色と掛け合わせる
-	Out.Diffuse.xyz = g_matDiffuse.xyz * col + pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
+	Out.Diffuse.xyz = g_matDiffuse.xyz * col;	//ディフューズ + スペキュラー
 	Out.Diffuse.w = g_matDiffuse.w;
+
+	//スペキュラーの割合
+	Out.Specular = saturate(dot(nor, vecHarf));
 
 	//輪郭を光らせる
 	if(g_colGlow.w) Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
@@ -272,8 +278,14 @@ PS_OUTPUT RenderScenePSLight3D(VS_OUTPUT In)
 		}
 	}
 
-	//影の色を描画
-	Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	if (visibility == 0.0) {
+		//スペキュラーの描画
+		Out.RGB.xyz += pow(g_matSpecular.xyz * In.Specular, g_matPower);
+	}
+	else {
+		//影の色を描画
+		Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	}
 
 	//-----------------------------
 	//エミッシブを加算
@@ -347,8 +359,14 @@ PS_OUTPUT RenderScenePSLightTex3D(VS_OUTPUT In)
 		}
 	}
 
-	//影の色を描画
-	Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	if (visibility == 0.0) {
+		//スペキュラーの描画
+		Out.RGB.xyz += pow(g_matSpecular.xyz * In.Specular, g_matPower);
+	}
+	else {
+		//影の色を描画
+		Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	}
 
 	//-----------------------------
 	//エミッシブを加算
