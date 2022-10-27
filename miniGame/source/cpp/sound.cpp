@@ -169,7 +169,7 @@ HRESULT CSound::Init(HWND hWnd)
 	//音量調整
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
-	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 1.0f);		//ゲーム02BGM
+	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 0.8f);		//ゲーム02BGM
 
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f);		//3ポイント獲得SE
@@ -185,7 +185,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f);		//決定SE
 	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f);		//キャンセルSE
 	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f);		//ポーズ開くSE
-	ControllVoice(SOUND_LABEL::SE_CURSOR			, 5.0f);		//カーソルSE
+	ControllVoice(SOUND_LABEL::SE_CURSOR			, 8.0f);		//カーソルSE
 	ControllVoice(SOUND_LABEL::SE_CRASH				, 4.0f);		//衝突SE
 	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
 	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE

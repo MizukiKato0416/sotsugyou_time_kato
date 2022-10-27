@@ -38,6 +38,14 @@ public:
 	void GameOver(void);	//ゲームオーバー
 
 private:
+	//天候の状態
+	enum class WEATHER_STATE
+	{
+		CLOUDY = 0,		//曇り
+		SUNNY,			//晴れ
+		MAX
+	};
+
 	void UpdateGame(void);					//ゲーム中の更新
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
 
@@ -54,6 +62,7 @@ private:
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	bool m_bHurryUp;						//急ぐかどうか
+	WEATHER_STATE m_weatherState;			//天候の状態
 };
 
 #endif // !_GAME_SCENE01_H_

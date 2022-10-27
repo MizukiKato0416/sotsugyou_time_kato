@@ -42,6 +42,7 @@
 #define ATTACK_CAR_ATTACK_MY_BOUND		(1.0f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率
 #define ATTACK_CAR_ATTACK_ENEMY_BOUND	(1.5f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率
 #define ATTACK_CAR_BOUND_DEC			(0.9f)		//バウンドの移動量減少量
+#define ATTACK_CAR_BOUND_MIN_SPEED		(2.0f)		//バウンドするのに必要な最小移動量
 
 //--------------------------------
 //その他
@@ -445,10 +446,6 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 
 		//角度の設定
 		CObjectModel::SetRot(rotObjectPlayer);
-		//---------------------------------
-		//土埃
-		CPresetEffect::SetEffect3D(1, GetPos(), {}, {});
-		//---------------------------------
 	}
 }
 
@@ -622,18 +619,6 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 		//当たっていたら
 		if (fDiffer <= COLLISION_RADIUS * 2.0f)
 		{
-			//前のフレーム当たっていなかったら
-			if (!m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1])
-			{
-				//マネージャーの取得
-				CManager* pManager = CManager::GetManager();
-				//サウンドの取得
-				CSound* pSound = nullptr;
-				if (pManager != nullptr) pSound = pManager->GetSound();
-				//サウンドを再生
-				pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
-			}
-
 			//自身と対象のオブジェクトの角度を求める
 			float fRot = atan2((playerPos.x - myPos.x), (playerPos.z - myPos.z));
 			//相手の位置を押し出す
@@ -647,6 +632,12 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			{
 				//逆向きにする
 				fRot += D3DX_PI;
+			}
+
+			//移動量が少なかったら
+			if (m_fMoveSpeed < ATTACK_CAR_BOUND_MIN_SPEED)
+			{
+				return;
 			}
 
 
@@ -673,13 +664,25 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 
 			m_fMoveSpeed = 0.0f;
 
+			//前のフレーム当たっていなかったら
+			if (!m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1])
+			{
+				//マネージャーの取得
+				CManager* pManager = CManager::GetManager();
+				//サウンドの取得
+				CSound* pSound = nullptr;
+				if (pManager != nullptr) pSound = pManager->GetSound();
+				//サウンドを再生
+				pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
+			}
+
 			//当たった状態にする
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
 			return;
 		}
 		else
 		{
-			//当たった状態にする
+			//当たっていない状態にする
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = false;
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
