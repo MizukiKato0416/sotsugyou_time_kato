@@ -109,6 +109,7 @@ public:
 		MESH_STAGE_02_WALL_02,		//ステージの壁2
 		MESH_STAGE_02_WALL_03,		//ステージの壁3
 		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
+		MESH_TOWER_PILLAR,			//タワーの柱
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

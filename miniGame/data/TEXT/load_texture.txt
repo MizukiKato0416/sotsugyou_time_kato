@@ -91,6 +91,7 @@ data/TEXTURE/MESH/cloud.jpg
 data/TEXTURE/MESH/towerwall2.png
 data/TEXTURE/MESH/towerwall.png
 data/TEXTURE/MESH/stone_ground.png
+data/TEXTURE/MESH/tower_object.jpg
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png

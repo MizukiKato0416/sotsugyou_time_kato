@@ -35,8 +35,10 @@
 #define GAME_02_TIME							(60)								//ゲームの時間
 #define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR						(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色
-#define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
+#define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
+#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f))	//バックバッファーの色晴れ
+#define GAME_02_BACK_BUFF_COLOR_CLOUDY			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//バックバッファーの色曇り
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
 
@@ -51,11 +53,11 @@
 #define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
 
 #define GAME_02_CLOUD_NUM					(2)											//雲の数
-#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -800.0f, -2000.0f))		//雲の位置
-#define GAME_02_CLOUD_SIZE					(4000.0f)									//雲のサイズ
-#define GAME_02_CLOUD_MESH_NUM				(2)											//メッシュを敷き詰める数
-#define GAME_02_CLOUD_MOVE_SPEED			(0.0007f)									//テクスチャを動かす速さ
-#define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.0005f)									//次の雲のテクスチャを動かす速さの間隔
+#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1000.0f, -6000.0f))		//雲の位置
+#define GAME_02_CLOUD_SIZE					(12000.0f)									//雲のサイズ
+#define GAME_02_CLOUD_MESH_NUM				(8)											//メッシュを敷き詰める数
+#define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
+#define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
 #define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
 
@@ -74,6 +76,7 @@ CGameScene02::CGameScene02()
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
 	m_pCloud.clear();
+	m_weatherState = WEATHER_STATE::CLOUDY;
 }
 
 //=============================================================================
@@ -92,6 +95,7 @@ void CGameScene02::Init(void) {
 	//変数初期化
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
+	m_weatherState = WEATHER_STATE::CLOUDY;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -131,10 +135,34 @@ void CGameScene02::Init(void) {
 	//------------------------------
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(true);
-		pRenderer->SetEffectFogColor(GAME_02_FOG_COLOR);
-		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
+
+		//フォグの色
+		D3DXCOLOR fogColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+		//バックバッファーの色
+		D3DXCOLOR backBuffColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+
+		//ランダムで状態を指定
+		m_weatherState = WEATHER_STATE(rand() % (int)WEATHER_STATE::MAX);
+
+		switch (m_weatherState)
+		{
+		case CGameScene02::WEATHER_STATE::CLOUDY:
+			fogColor = GAME_02_FOG_COLOR_CLOUDY;
+			backBuffColor = GAME_02_BACK_BUFF_COLOR_CLOUDY;
+			break;
+		case CGameScene02::WEATHER_STATE::SUNNY:
+			fogColor = GAME_02_FOG_COLOR_SUNNY;
+			backBuffColor = GAME_02_BACK_BUFF_COLOR_SUNNY;
+			break;
+		default:
+			break;
+		}
+
 		//バックバッファをフォグの色に合わせる
-		pRenderer->SetBackBuffColor(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f));
+		pRenderer->SetBackBuffColor(backBuffColor);
+		pRenderer->SetEffectFogColor(fogColor);
+		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
+		
 	}
 
 	//オブジェクトのポーズが無いように設定
@@ -148,10 +176,8 @@ void CGameScene02::Init(void) {
 		                 D3DXVECTOR3(-0.001f, -0.003f, 0.002f), CModel::MODELTYPE::OBJ_BROKEN_GATE);
 
 	//塔の生成
-	CFloatObject::Create(D3DXVECTOR3(-1800.0f, -400.0f, 1800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.001f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
-	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_CAR);
+	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
