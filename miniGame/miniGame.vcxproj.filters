@@ -7,7 +7,16 @@
     <ClCompile Include="source\cpp\billboard.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\billeffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\bom.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\camera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\check.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\check_icon.cpp">
@@ -16,22 +25,40 @@
     <ClCompile Include="source\cpp\count_down_ui.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\create_bom_manager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\effect.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\fade.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\finish_ui.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\float_object.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\font.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Fountain.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\gameCamera.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\gameScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene01.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene02.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\gauge.cpp">
@@ -55,6 +82,9 @@
     <ClCompile Include="source\cpp\itemBox.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\main.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -71,6 +101,15 @@
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\object.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player_attack_car.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player_balloon_car.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\object2D.cpp">
@@ -94,16 +133,40 @@
     <ClCompile Include="source\cpp\pauseMenu.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\plane.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\player.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\player_icon.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\renderer.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\resultScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Rotate3d.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\scene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\score.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\score_ui.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\selectMenu.cpp">
@@ -118,7 +181,16 @@
     <ClCompile Include="source\cpp\sound.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Sphere.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\SphereEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\stage.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\straight3d.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\terrain.cpp">
@@ -136,85 +208,11 @@
     <ClCompile Include="source\cpp\titleScene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\wallCylinder.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\score_ui.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\ToScreen.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\resultScene.cpp">
+    <ClCompile Include="source\cpp\wallCylinder.cpp">
       <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\object_player.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\player.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\object_player_balloon_car.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\check.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\gameScene01.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\gameScene02.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\object_player_attack_car.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\bom.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\create_bom_manager.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="source\cpp\Effect\billeffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\Fountain.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\plane.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\Rotate3d.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\straight3d.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\Sphere.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\SphereEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
-      <Filter>cpp\effect</Filter>
-=======
-    <ClCompile Include="source\cpp\float_object.cpp">
-      <Filter>cpp</Filter>
->>>>>>> 0a2c7cc71b9297a1c4b0b3584ab7944c0e283190
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,13 +222,25 @@
     <ClInclude Include="source\h\billboard.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\billeffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\bom.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\camera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\check.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\check_icon.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\count_down_ui.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\create_bom_manager.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\effect.h">
@@ -245,13 +255,25 @@
     <ClInclude Include="source\h\finish_ui.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\float_object.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\font.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Fountain.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\gameCamera.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\gameScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene01.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene02.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\gauge.h">
@@ -275,6 +297,9 @@
     <ClInclude Include="source\h\itemBox.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\LoadEffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\main.h">
       <Filter>h</Filter>
     </ClInclude>
@@ -291,6 +316,15 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\object.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_attack_car.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_balloon_car.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\object2D.h">
@@ -314,16 +348,40 @@
     <ClInclude Include="source\h\pauseMenu.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\plane.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\player.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\player_icon.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetDelaySet.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetSetEffect.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\renderer.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="resultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Rotate3d.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\scene.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\scene3d.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\score.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\score_ui.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\selectMenu.h">
@@ -338,7 +396,16 @@
     <ClInclude Include="source\h\sound.h">
       <Filter>h</Filter>
     </ClInclude>
+    <ClInclude Include="source\h\Sphere.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\SphereEffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
     <ClInclude Include="source\h\stage.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\straight3d.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\terrain.h">
@@ -362,90 +429,13 @@
     <ClInclude Include="source\h\wallCylinder.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\score_ui.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="resultScene.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\object_player.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\player.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\object_player_balloon_car.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\check.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\gameScene01.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\gameScene02.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\object_player_attack_car.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\bom.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\create_bom_manager.h">
-      <Filter>h</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="source\h\billeffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\LoadEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetSetEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\straight3d.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\Fountain.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\Rotate3d.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\scene3d.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetDelaySet.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\Sphere.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\SphereEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\plane.h">
-      <Filter>h\effect</Filter>
-=======
-    <ClInclude Include="source\h\float_object.h">
-      <Filter>h</Filter>
->>>>>>> 0a2c7cc71b9297a1c4b0b3584ab7944c0e283190
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cpp">
-      <UniqueIdentifier>{adf2bb87-94b3-4512-a76c-8574ba0bd041}</UniqueIdentifier>
+      <UniqueIdentifier>{0ba48985-2167-4dd7-af15-a4aae12c98b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="h">
-      <UniqueIdentifier>{20d9c940-83d3-4133-bdf4-c44f8448c5a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="cpp\effect">
-      <UniqueIdentifier>{c90ec0e2-efc1-4a1e-8a12-e00cba8e62c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="h\effect">
-      <UniqueIdentifier>{03e06aae-605c-4a59-ba96-14d450fec577}</UniqueIdentifier>
+      <UniqueIdentifier>{77ed2eff-3ded-47f0-8c2a-de37e572edf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
