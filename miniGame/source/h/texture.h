@@ -50,6 +50,11 @@ public:
 		PLAYER_ICON_FRAME_2,
 		PLAYER_ICON_FRAME_3,
 		PLAYER_ICON_FRAME_4,
+		PLAYER_ICON_FRAME_1_REVERSE,
+		PLAYER_ICON_FRAME_2_REVERSE,
+		PLAYER_ICON_FRAME_3_REVERSE,
+		PLAYER_ICON_FRAME_4_REVERSE,
+
 
 		CHECK_BG,
 
@@ -86,17 +91,25 @@ public:
 		PAUSE_CONTINUE,
 
 		//メッシュのテクスチャ
-		MESH_FLOOR_DESERT,		//砂漠
-		MESH_STAGE_AUDIENCE,	//観衆
-		MESH_BALLOON_GOLD,		//風船金
-		MESH_BALLOON_PINK,		//風船ピンク
-		MESH_CAR_BLACK,			//黒
-		MESH_STAGE_DOOR_WAY,	//ゲート
-		MESH_STAGE_WALL,		//ステージの壁
-		MESH_ITEM_BOX,			//アイテム
-		MESH_GOLD,				//金
-		MESH_CAR_TIRE,			//タイヤ
-		MESH_CAR_WHEEL,			//ホイール
+		MESH_FLOOR_DESERT,			//砂漠
+		MESH_STAGE_AUDIENCE,		//観衆
+		MESH_BALLOON_GOLD,			//風船金
+		MESH_BALLOON_PINK,			//風船ピンク
+		MESH_CAR_BLACK,				//黒
+		MESH_STAGE_DOOR_WAY,		//ゲート
+		MESH_STAGE_WALL,			//ステージの壁
+		MESH_ITEM_BOX,				//アイテム
+		MESH_GOLD,					//金
+		MESH_CAR_TIRE,				//タイヤ
+		MESH_CAR_WHEEL,				//ホイール
+		MESH_RUBBLE,				//がれき
+		MESH_STAGE_02_GROUND,		//ステージの地面
+		MESH_STAGE_02_WALL,			//ステージの壁
+		MESH_CLOUD,					//雲
+		MESH_STAGE_02_WALL_02,		//ステージの壁2
+		MESH_STAGE_02_WALL_03,		//ステージの壁3
+		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
+		MESH_TOWER_PILLAR,			//タワーの柱
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

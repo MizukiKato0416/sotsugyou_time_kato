@@ -175,7 +175,7 @@ void CCheck::Check()
 		}
 
 		//チェック数がプレイヤーの数と一致していたら
-		if (nCheck == 1)
+		if (nCheck == 3)
 		{
 			//全員がチェック出来た状態にする
 			m_bCheckAll = true;

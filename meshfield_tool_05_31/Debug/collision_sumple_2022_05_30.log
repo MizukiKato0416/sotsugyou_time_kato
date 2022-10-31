@@ -1,9 +1,42 @@
-﻿  renderer.cpp
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
+﻿  x_load.cpp
+  texture.cpp
+  sound.cpp
+  shadow.cpp
+  renderer.cpp
+  object3D.cpp
+  object2D.cpp
   object.cpp
+  model_single.cpp
+  model.cpp
+  meshsphere.cpp
   meshfield.cpp
   manager.cpp
+  main.cpp
+  light.cpp
+  input_pad_x.cpp
+  input_pad_d.cpp
+  input_mouse.cpp
+  input_keyboard.cpp
+  input.cpp
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\input.cpp(32): warning C4100: 'hWnd': 引数は関数の本体部で 1 度も参照されません。
+  コードを生成中...
+  コンパイル中...
   game01.cpp
-  collision_sumple_2022_05_30.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\meshfield_tool_05_31\Debug\collision_sumple_2022_05_30.exe
-  collision_sumple_2022_05_30.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\meshfield_tool_05_31\Debug\collision_sumple_2022_05_30.pdb (Full PDB)
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(454): warning C4800: 'int': ブール値を 'true' または 'false' に強制的に設定します (警告の処理)
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(733): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(1037): warning C4238: 非標準の拡張機能が使用されています: 右辺値のクラスが左辺値に使用されます。
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(1108): warning C4244: '引数': 'int' から 'FLOAT' への変換です。データが失われる可能性があります。
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(1108): warning C4238: 非標準の拡張機能が使用されています: 右辺値のクラスが左辺値に使用されます。
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(1136): warning C4238: 非標準の拡張機能が使用されています: 右辺値のクラスが左辺値に使用されます。
+c:\users\student\documents\visual studio 2015\projects\sotsugyou_time_kato\meshfield_tool_05_31\game01.cpp(1137): warning C4238: 非標準の拡張機能が使用されています: 右辺値のクラスが左辺値に使用されます。
+  floor.cpp
+  fileload.cpp
+  fade.cpp
+  effect3D.cpp
+  effect2D.cpp
+  camera.cpp
+  billboard.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\meshfield_tool_05_31\Debug\collision_sumple_2022_05_30.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  collision_sumple_2022_05_30.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\meshfield_tool_05_31\Debug\collision_sumple_2022_05_30.exe
+  collision_sumple_2022_05_30.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\meshfield_tool_05_31\Debug\collision_sumple_2022_05_30.pdb (Full PDB)

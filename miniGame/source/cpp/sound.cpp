@@ -14,6 +14,7 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 
 	{ "data/SOUND/BGM/title.wav", -1 },
 	{ "data/SOUND/BGM/game.wav", -1 },
+	{ "data/SOUND/BGM/game2.wav", -1 },
 
 	{ "data/SOUND/SE/1point.wav", 0 },
 	{ "data/SOUND/SE/3point.wav", 0 },
@@ -28,7 +29,10 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/decide.wav", 0 },
 	{ "data/SOUND/SE/cancel.wav", 0 },
 	{ "data/SOUND/SE/pause_open.wav", 0 },
-	{ "data/SOUND/SE/cursor.wav", 0 }
+	{ "data/SOUND/SE/cursor.wav", 0 },
+	{ "data/SOUND/SE/clash.wav", 0 },
+	{ "data/SOUND/SE/fall.wav", 0 },
+	{ "data/SOUND/SE/explosion.wav", 0 }
 };
 
 //=============================================================================
@@ -165,6 +169,8 @@ HRESULT CSound::Init(HWND hWnd)
 	//音量調整
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
+	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 0.8f);		//ゲーム02BGM
+
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f);		//3ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f);		//風船が割れるSE
@@ -179,8 +185,11 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f);		//決定SE
 	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f);		//キャンセルSE
 	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f);		//ポーズ開くSE
-	ControllVoice(SOUND_LABEL::SE_CURSOR			, 3.0f);		//カーソルSE
-																	
+	ControllVoice(SOUND_LABEL::SE_CURSOR			, 8.0f);		//カーソルSE
+	ControllVoice(SOUND_LABEL::SE_CRASH				, 4.0f);		//衝突SE
+	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
+	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE
+
 	return S_OK;
 }
 

@@ -19,6 +19,7 @@ public:
 		NONE = 0,
 		BGM_TITLE,				//タイトルBGM
 		BGM_GAME,				//ゲームBGM
+		BGM_GAME_02,			//ゲーム02BGM
 
 		SE_POINT_1,				//1ポイント獲得SE
 		SE_POINT_3,				//3ポイント獲得SE
@@ -34,6 +35,9 @@ public:
 		SE_CANCEL,				//キャンセルSE
 		SE_PAUSE_OPEN,			//ポーズ開くSE
 		SE_CURSOR,				//カーソルSE
+		SE_CRASH,				//衝突SE
+		SE_FALL,				//落下SE
+		SE_EXPLOSION,			//爆発SE
 
 		ENUM_MAX
 	};
