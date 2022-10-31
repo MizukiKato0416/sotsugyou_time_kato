@@ -32,6 +32,14 @@ public:
 		MOVETYPE_MAX,
 	} MOVE_TYPE;
 
+	typedef enum
+	{
+		TYPE_EIGHT,	//八の字
+		TYPE_VERTICAL,	//縦回転
+		TYPE_BESIDE,	//横回転
+		MOVINGTYPE_MAX,
+	} TYPE_MOVING;
+
 	CRotate3D();
 	~CRotate3D();
 
@@ -54,7 +62,8 @@ public:
 		float fActive,
 		int AnimPattern,
 		EFFECT_TYPE EffectType,
-		MOVE_TYPE MoveType);
+		MOVE_TYPE MoveType,
+		TYPE_MOVING MovingType);
 
 	void Uninit();
 	void Update();
@@ -78,12 +87,14 @@ public:
 		float fActive,
 		int AnimPattern,
 		EFFECT_TYPE EffectType,
-		MOVE_TYPE MoveType);
+		MOVE_TYPE MoveType,
+		TYPE_MOVING MovingType);
 
 private:
 	EFFECT_TIME m_EffectTime;
 	EFFECT_TYPE m_EffectType;
 	MOVE_TYPE m_MoveType;
+	TYPE_MOVING m_MoveingType;	//動きタイプ
 
 	bool m_bUninit;
 
@@ -93,11 +104,12 @@ private:
 
 	D3DXVECTOR3 m_Size;
 	D3DXVECTOR3 m_AddSize;
+	D3DXVECTOR3 m_Pos;
 	D3DCOLORVALUE m_Color;
 	D3DCOLORVALUE m_MinColor;
 
 	float m_nDistanse;
-	float m_nBuckDistanse;
+	float m_nDefaultDistanse;	//デフォルト
 
 	float m_nAddDistance;
 	float m_fAngle;

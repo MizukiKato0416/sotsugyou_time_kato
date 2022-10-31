@@ -12,6 +12,9 @@
 #include "sound.h"
 #include "gameScene.h"
 
+//エフェクト
+#include "PresetDelaySet.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -98,6 +101,7 @@ void CBom::Update(void) {
 	{
 		//消す
 		Uninit();
+
 		return;
 	}
 
@@ -115,6 +119,10 @@ void CBom::Update(void) {
 	{
 		//爆発音再生
 		ExplosionSound();
+
+		//爆発エフェクト
+		CPresetDelaySet::Create(0, pos);
+
 		//消す
 		Uninit();
 		return;
@@ -128,6 +136,8 @@ void CBom::Update(void) {
 	{
 		//爆発音再生
 		ExplosionSound();
+
+
 		//消す
 		Uninit();
 		return;

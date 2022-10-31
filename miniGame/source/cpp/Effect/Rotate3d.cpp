@@ -47,7 +47,8 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 	float fActive,
 	int AnimPattern,
 	EFFECT_TYPE EffectType,
-	MOVE_TYPE MoveType)
+	MOVE_TYPE MoveType,
+	TYPE_MOVING MovingType)
 {
 	CPlane::Init(SetSize, pos, Tex);
 
@@ -56,21 +57,24 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 	m_AddSize = AddSize;
 	m_Color = Color;
 	m_MinColor = AddColor;
-	m_nDistanse = Distance;
-	m_nBuckDistanse = -Distance;
+	m_nDistanse = 0;
+	m_MoveingType = MovingType;
 
-	switch (MoveType)
-	{
-	case(TYPE_NOMAL):
-		m_nAddDistance = AddDistance;
-		break;
-	case(TYPE_MOVERAND):
-		m_nAddDistance = float(rand() % (int)AddDistance) + 1.0f;
-		break;
-	default:
-		m_nAddDistance = AddDistance;
-		break;
-	}
+	//switch (MoveType)
+	//{
+	//case(TYPE_NOMAL):
+	//	m_nAddDistance = AddDistance;
+	//	break;
+	//case(TYPE_MOVERAND):
+	//	m_nAddDistance = float(rand() % (int)AddDistance) + 1.0f;
+	//	break;
+	//default:
+	//	m_nAddDistance = AddDistance;
+	//	break;
+	//}
+	m_nAddDistance = AddDistance;
+
+
 	m_fAngle = fAngle;
 	m_fAddAngle = fAddAngle;
 	m_nTex = nTex;
@@ -91,7 +95,11 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 		pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));;
 
 	m_Oldpos = m_pos;
+
+	m_nDistanse += m_nDefaultDistanse;
+
 	m_posIndividual = pos;
+	m_Pos = m_pos;
 	return S_OK;
 }
 
@@ -140,11 +148,34 @@ void CRotate3D::Update()
 
 	m_fAngle += m_fAddAngle;
 
-	m_pos = D3DXVECTOR3(
-		pos.x + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * cosf(m_fRandAngle2 + m_fAngle),
-		pos.y + m_nDistanse * cosf(m_fRandAngle + m_fAngle),
-		pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));
-
+	if (m_MoveingType == CRotate3D::TYPE_EIGHT)
+	{
+		m_pos = D3DXVECTOR3(
+			pos.x + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * cosf(m_fRandAngle2 + m_fAngle),
+			pos.y + m_nDistanse * cosf(m_fRandAngle + m_fAngle),
+			pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));
+	}
+	else if (m_MoveingType == CRotate3D::TYPE_VERTICAL)
+	{
+		m_pos = D3DXVECTOR3(
+			pos.x + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * cosf(m_fRandAngle2),
+			pos.y + m_nDistanse * cosf(m_fRandAngle + m_fAngle),
+			pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2));
+	}
+	else if (m_MoveingType == CRotate3D::TYPE_BESIDE)
+	{
+		m_pos = D3DXVECTOR3(
+			pos.x + m_nDistanse * sinf(m_fRandAngle) * cosf(m_fRandAngle2 + m_fAngle),
+			pos.y + m_nDistanse * cosf(m_fRandAngle),
+			pos.z + m_nDistanse * sinf(m_fRandAngle) * sinf(m_fRandAngle2 + m_fAngle));
+	}
+	else
+	{
+		m_pos = D3DXVECTOR3(
+			pos.x + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * cosf(m_fRandAngle2 + m_fAngle),
+			pos.y + m_nDistanse * cosf(m_fRandAngle + m_fAngle),
+			pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));
+	}
 
 	if (m_nDistanse < 0)
 	{
@@ -225,7 +256,8 @@ CRotate3D *CRotate3D::Create(D3DXVECTOR3 SetSize,
 	float fActive,
 	int AnimPattern,
 	EFFECT_TYPE EffectType,
-	MOVE_TYPE MoveType)
+	MOVE_TYPE MoveType,
+	TYPE_MOVING MovingType)
 {
 	CRotate3D * pRotate3D = NULL;
 	pRotate3D = new CRotate3D();
@@ -247,7 +279,8 @@ CRotate3D *CRotate3D::Create(D3DXVECTOR3 SetSize,
 			fActive,
 			AnimPattern,
 			EffectType,
-			MoveType);
+			MoveType,
+			MovingType);
 	}
 	return pRotate3D;
 }

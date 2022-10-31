@@ -14,6 +14,7 @@
 #include "player.h"
 #include "gameScene02.h"
 
+#include "PresetDelaySet.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -681,6 +682,10 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 
 			//当たった状態にする
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
+
+			//衝突エフェクト
+			CPresetDelaySet::Create(1, playerPos);
+
 			return;
 		}
 		else

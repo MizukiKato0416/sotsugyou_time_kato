@@ -167,9 +167,12 @@
     <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
     <ClCompile Include="source\cpp\Effect\LoadEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\plane.cpp" />
+    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp" />
     <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\Rotate3d.cpp" />
     <ClCompile Include="source\cpp\Effect\scene3d.cpp" />
+    <ClCompile Include="source\cpp\Effect\Sphere.cpp" />
+    <ClCompile Include="source\cpp\Effect\SphereEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
@@ -269,6 +272,7 @@
     <ClInclude Include="source\h\object_player.h" />
     <ClInclude Include="source\h\player.h" />
     <ClInclude Include="source\h\player_icon.h" />
+    <ClInclude Include="source\h\PresetDelaySet.h" />
     <ClInclude Include="source\h\PresetSetEffect.h" />
     <ClInclude Include="source\h\renderer.h" />
     <ClInclude Include="source\h\Rotate3d.h" />
@@ -280,6 +284,8 @@
     <ClInclude Include="source\h\selectMenu2D.h" />
     <ClInclude Include="source\h\selectMenu3D.h" />
     <ClInclude Include="source\h\sound.h" />
+    <ClInclude Include="source\h\Sphere.h" />
+    <ClInclude Include="source\h\SphereEffect.h" />
     <ClInclude Include="source\h\stage.h" />
     <ClInclude Include="source\h\straight3d.h" />
     <ClInclude Include="source\h\terrain.h" />
