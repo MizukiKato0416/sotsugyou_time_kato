@@ -175,6 +175,7 @@
     <ClCompile Include="source\cpp\create_bom_manager.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="source\cpp\Effect\billeffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
@@ -210,6 +211,10 @@
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp\effect</Filter>
+=======
+    <ClCompile Include="source\cpp\float_object.cpp">
+      <Filter>cpp</Filter>
+>>>>>>> 0a2c7cc71b9297a1c4b0b3584ab7944c0e283190
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +395,7 @@
     <ClInclude Include="source\h\create_bom_manager.h">
       <Filter>h</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="source\h\billeffect.h">
       <Filter>h\effect</Filter>
     </ClInclude>
@@ -422,6 +428,10 @@
     </ClInclude>
     <ClInclude Include="source\h\plane.h">
       <Filter>h\effect</Filter>
+=======
+    <ClInclude Include="source\h\float_object.h">
+      <Filter>h</Filter>
+>>>>>>> 0a2c7cc71b9297a1c4b0b3584ab7944c0e283190
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

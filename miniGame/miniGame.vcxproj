@@ -176,6 +176,7 @@
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
+    <ClCompile Include="source\cpp\float_object.cpp" />
     <ClCompile Include="source\cpp\font.cpp" />
     <ClCompile Include="source\cpp\gameCamera.cpp" />
     <ClCompile Include="source\cpp\gameScene.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
     <ClInclude Include="source\h\finish_ui.h" />
+    <ClInclude Include="source\h\float_object.h" />
     <ClInclude Include="source\h\font.h" />
     <ClInclude Include="source\h\Fountain.h" />
     <ClInclude Include="source\h\gameCamera.h" />

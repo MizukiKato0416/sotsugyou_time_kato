@@ -21,6 +21,7 @@
 #include "count_down_ui.h"
 #include "finish_ui.h"
 #include "player.h"
+#include "float_object.h"
 
 //エフェクト
 #include "plane.h"
@@ -47,12 +48,13 @@
 
 #define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
+#define GAME_BALLOON_CREATE_DIFFER_WERE_WOLF	 (400.0f)								//風船の生成する嘘つきプレイヤーからの範囲の半径
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
-#define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
+#define GAME_BALLOON_TO_PLAYER_DIFFER			 (150.0f)								//プレイヤーからどれくらい離れた位置に生成するか
 #define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
 
-#define GAME_ITEM_BOX_CREATE_INTERVAL			 (180)									//アイテムボックスの生成間隔
+#define GAME_ITEM_BOX_CREATE_INTERVAL			 (140)									//アイテムボックスの生成間隔
 #define GAME_ITEM_BOX_CREATE_POS_X				 (900.0f)								//アイテムボックスの生成位置X
 #define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
 
@@ -143,6 +145,10 @@ void CGameScene01::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//観客席の風船
+	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_BALLOON_PINK);
 
 	//円柱の壁の生成
 	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
@@ -455,14 +461,29 @@ void CGameScene01::CreateBalloon(void)
 			//かぶらなくなるまで回す
 			while (bLoop)
 			{
-				//遠さをランダムで決める
-				fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
 				//向きをランダムで決める
 				fRot = (rand() % 629 + -314) / 100.0f;
 
+				//原点
+				D3DXVECTOR3 originPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+				//最初だけ人狼モードがオンなら
+				if (nCntBalloon == 0 && GetWereWolfMode())
+				{
+					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER_WERE_WOLF) * 100.0f) / 100.0f;
+					originPos = playerPos[GetWereWolfPlayerIndex() - 1];
+				}
+				else
+				{
+					//遠さをランダムで決める
+					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
+				}
+
+				
+
 				//決めた位置に出す
-				balloonPos.x = sinf(fRot) * fDiffer;
-				balloonPos.z = cosf(fRot) * fDiffer;
+				balloonPos.x = originPos.x + sinf(fRot) * fDiffer;
+				balloonPos.z = originPos.z + cosf(fRot) * fDiffer;
 
 				//クリアした条件の数
 				int nClearCount = 0;
@@ -514,7 +535,28 @@ void CGameScene01::CreateBalloon(void)
 					//クリア数が条件を回した数と一致していたら
 					if (nClearCount == nCntBalloon + CPlayer::GetNum())
 					{
+						//ループ終了
 						bLoop = false;
+
+						//最初だけ人狼モードがオンなら
+						if (nCntBalloon == 0 && GetWereWolfMode())
+						{
+							//今生成しようとしている風船から中央までのベクトルを求める
+							D3DXVECTOR2 baloonOriginDifferVec = D3DXVECTOR2(balloonPos.x - 0.0f, balloonPos.z - 0.0f);
+							//距離ベクトルから距離を算出
+							float fBaloonOriginDiffer = D3DXVec2Length(&baloonOriginDifferVec);
+
+							//ステージからはみ出てたら
+							if (fBaloonOriginDiffer > GAME_BALLOON_CREATE_DIFFER)
+							{
+								//ループさせる
+								bLoop = true;
+							}
+							else
+							{
+								bLoop = false;
+							}
+						}
 					}
 				}
 			}

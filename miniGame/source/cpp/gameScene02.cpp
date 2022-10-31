@@ -18,6 +18,8 @@
 #include "finish_ui.h"
 #include "player.h"
 #include "create_bom_manager.h"
+#include "meshwall.h"
+#include "float_object.h"
 
 //エフェクト
 #include "plane.h"
@@ -31,22 +33,32 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(59)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR						(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
-#define GAME_02_FOG_COLOR_GAMECLEAR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
+#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
+#define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
+#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f))	//バックバッファーの色晴れ
+#define GAME_02_BACK_BUFF_COLOR_CLOUDY			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//バックバッファーの色曇り
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
 
 #define GAME_02_PLAYER_INIT_CREATE_SPACE		(300.0f)							//プレイヤーの初期生成間隔
 #define GAME_02_PLAYER_INIT_CREATE_POS_Z		(-400.0f)							//プレイヤーの初期生成位置Z
 
-#define GAME_02_FINISH_UI_NUM					(5)									//フィニッシュUIの数
+#define GAME_02_FINISH_UI_NUM		(5)			//フィニッシュUIの数
 
-#define GAME_02_NEX_SCENE_COUNT					(180)								//次のシーンまでのカウント
+#define GAME_02_NEX_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
-#define GAME_02_BOM_CREATE_COUNT				(20)								//ボムを生成する間隔
-#define GAME_02_BOM_NUM							(5)									//ボムを生成する個数
+#define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
+#define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
+
+#define GAME_02_CLOUD_NUM					(2)											//雲の数
+#define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1500.0f, -6000.0f))		//雲の位置
+#define GAME_02_CLOUD_SIZE					(12000.0f)									//雲のサイズ
+#define GAME_02_CLOUD_MESH_NUM				(8)											//メッシュを敷き詰める数
+#define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
+#define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
+#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
 
 //=============================================================================
@@ -63,6 +75,8 @@ CGameScene02::CGameScene02()
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
+	m_pCloud.clear();
+	m_weatherState = WEATHER_STATE::CLOUDY;
 }
 
 //=============================================================================
@@ -81,6 +95,7 @@ void CGameScene02::Init(void) {
 	//変数初期化
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
+	m_weatherState = WEATHER_STATE::CLOUDY;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -99,10 +114,10 @@ void CGameScene02::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 1000.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(800.0f, 2000.0f, -800.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
@@ -119,11 +134,35 @@ void CGameScene02::Init(void) {
 	//フォグの初期設定
 	//------------------------------
 	if (pRenderer != nullptr) {
-		pRenderer->SetEffectFogEnable(false);
-		pRenderer->SetEffectFogColor(GAME_02_FOG_COLOR);
-		pRenderer->SetEffectFogRange(800.0f, 4500.0f);
+		pRenderer->SetEffectFogEnable(true);
+
+		//フォグの色
+		D3DXCOLOR fogColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+		//バックバッファーの色
+		D3DXCOLOR backBuffColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+
+		//ランダムで状態を指定
+		m_weatherState = WEATHER_STATE(rand() % (int)WEATHER_STATE::MAX);
+
+		switch (m_weatherState)
+		{
+		case CGameScene02::WEATHER_STATE::CLOUDY:
+			fogColor = GAME_02_FOG_COLOR_CLOUDY;
+			backBuffColor = GAME_02_BACK_BUFF_COLOR_CLOUDY;
+			break;
+		case CGameScene02::WEATHER_STATE::SUNNY:
+			fogColor = GAME_02_FOG_COLOR_SUNNY;
+			backBuffColor = GAME_02_BACK_BUFF_COLOR_SUNNY;
+			break;
+		default:
+			break;
+		}
+
 		//バックバッファをフォグの色に合わせる
-		pRenderer->SetBackBuffColor(GAME_02_FOG_COLOR);
+		pRenderer->SetBackBuffColor(backBuffColor);
+		pRenderer->SetEffectFogColor(fogColor);
+		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
+		
 	}
 
 	//オブジェクトのポーズが無いように設定
@@ -132,13 +171,70 @@ void CGameScene02::Init(void) {
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
+	//門の生成
+	CFloatObject::Create(D3DXVECTOR3(1800.0f, -200.0f, 1900.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.001f, -0.003f, 0.002f), CModel::MODELTYPE::OBJ_BROKEN_GATE);
+
+	//塔の生成
+	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
+
+	//塔の生成
+	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -500.0f, 2500.0f), D3DXVECTOR3(0.1f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0030f, -0.004f, 0.0f), CModel::MODELTYPE::OBJ_CAR);
+
+	//がれきの生成
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.001f, -0.002f, 0.005f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
+
+	CFloatObject::Create(D3DXVECTOR3(-300.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.001f, -0.003f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_03);
+
+	CFloatObject::Create(D3DXVECTOR3(300.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, 0.002f, 0.009f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_04);
+
+	CFloatObject::Create(D3DXVECTOR3(1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0005f, -0.001f, -0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_05);
+
+	CFloatObject::Create(D3DXVECTOR3(1500.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0025f, 0.0f, 0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06);
+
+	//雲の生成
+	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
+	{
+		m_pCloud.push_back(CMeshwall::Create(GAME_02_CLOUD_POS, D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
+			                                 GAME_02_CLOUD_MESH_NUM, GAME_02_CLOUD_MESH_NUM, GAME_02_CLOUD_SIZE, GAME_02_CLOUD_SIZE,
+			                                 CTexture::TEXTURE_TYPE::MESH_CLOUD));
+		//加算合成をする
+		m_pCloud[nCntCloud]->SetAlphaBlend(true);
+		//描画順の設定
+		m_pCloud[nCntCloud]->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+		//ライトをオフにする
+		m_pCloud[nCntCloud]->SetLight(false);
+		//色の設定
+		m_pCloud[nCntCloud]->SetColor(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+	}
+
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
+		D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f, 0.0f);
+
+		if (rot.y > D3DX_PI)
+		{
+			rot.y -= D3DX_PI * 2.0f;
+		}
+		else if (rot.y < -D3DX_PI)
+		{
+			rot.y += D3DX_PI * 2.0f;
+		}
+
 		m_apPlayer[nCntPlayer] = CObjectPlayerAttackCar::Create(D3DXVECTOR3(sinf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f,
 			                                                                0.0f, 
-			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f),
-			                                                    D3DXVECTOR3(0.0f, D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f, 0.0f));
+			                                                                cosf(D3DX_PI / 2.0f * nCntPlayer + D3DX_PI / 4.0f) * 500.0f), rot);
 		//シーンのプレイヤーの設定
 		SetPlayer(m_apPlayer[nCntPlayer]);
 
@@ -163,7 +259,6 @@ void CGameScene02::Init(void) {
 
 	//ゲームシーンの初期化処理
 	CGameScene::Init();
-
 }
 
 //=============================================================================
@@ -229,6 +324,9 @@ void CGameScene02::Update(void) {
 			UpdateGame();
 		}
 	}
+
+	//雲の処理
+	Cloud();
 
 	//ゲームシーンの更新処理
 	CGameScene::Update();
@@ -302,7 +400,6 @@ void CGameScene02::UpdateGame(void) {
 			}
 		}
 	}
-
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -533,5 +630,22 @@ void CGameScene02::HurryUp(void)
 	if (m_pCreateBomManager == nullptr)
 	{
 		m_pCreateBomManager = CCreateBomManager::Create(GAME_02_BOM_CREATE_COUNT, GAME_02_BOM_NUM);
+	}
+}
+
+//=============================================================================
+//雲の処理
+//=============================================================================
+void CGameScene02::Cloud(void)
+{
+	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
+	{
+		if (m_pCloud[nCntCloud] == nullptr)
+		{
+			continue;
+		}
+
+		//テクスチャ座標移動処理
+		m_pCloud[nCntCloud]->SetMoveTex(GAME_02_CLOUD_MOVE_SPEED + GAME_02_CLOUD_MOVE_SPEED_INTERVAL * nCntCloud, 0.0f);
 	}
 }
