@@ -48,7 +48,8 @@
 
 #define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
-#define GAME_BALLOON_CREATE_DIFFER_WERE_WOLF	 (400.0f)								//風船の生成する嘘つきプレイヤーからの範囲の半径
+#define GAME_BALLOON_CREATE_DIFFER_WERE_WOLF_MAX (350.0f)								//風船の生成する嘘つきプレイヤーからの範囲の半径最大値
+#define GAME_BALLOON_CREATE_DIFFER_WERE_WOLF_MIN (300.0f)								//風船の生成する嘘つきプレイヤーからの範囲の半径最小値
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
 #define GAME_BALLOON_TO_PLAYER_DIFFER			 (150.0f)								//プレイヤーからどれくらい離れた位置に生成するか
 #define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
@@ -470,7 +471,8 @@ void CGameScene01::CreateBalloon(void)
 				//最初だけ人狼モードがオンなら
 				if (nCntBalloon == 0 && GetWereWolfMode())
 				{
-					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER_WERE_WOLF) * 100.0f) / 100.0f;
+					fDiffer = (rand() % ((int((GAME_BALLOON_CREATE_DIFFER_WERE_WOLF_MAX - GAME_BALLOON_CREATE_DIFFER_WERE_WOLF_MIN) * 100.0f))) +
+						                 (int(GAME_BALLOON_CREATE_DIFFER_WERE_WOLF_MIN * 100.0f))) / 100.0f;
 					originPos = playerPos[GetWereWolfPlayerIndex() - 1];
 				}
 				else

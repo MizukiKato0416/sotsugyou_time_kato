@@ -26,6 +26,7 @@
 #define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
 #define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
 #define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
+#define BALLOON_SCORE_MAX			(99)		//スコアの最大値
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -268,6 +269,13 @@ bool CBalloon::CollisionPlayer(void)
 			else
 			{
 				pPlayer->GetScoreUi()->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+			}
+
+			//スコアが最大値を超えたら
+			if (pPlayer->GetScoreUi()->GetScore()->GetScore() > BALLOON_SCORE_MAX)
+			{
+				//超えないようにする
+				pPlayer->GetScoreUi()->GetScore()->SetScore(BALLOON_SCORE_MAX);
 			}
 			return true;
 		}
