@@ -83,6 +83,7 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 	m_ParticleLife = nParticleLife;
 	m_nBuckTime = nBuckTime;
 	m_fActive = fActive;
+	m_nDefaultDistanse = Distance;
 
 	m_fRandAngle = CIRCLE;
 	m_fRandAngle2 = CIRCLE;
@@ -95,7 +96,6 @@ HRESULT CRotate3D::Init(D3DXVECTOR3 SetSize,
 		pos.z + m_nDistanse * sinf(m_fRandAngle + m_fAngle) * sinf(m_fRandAngle2 + m_fAngle));;
 
 	m_Oldpos = m_pos;
-
 	m_nDistanse += m_nDefaultDistanse;
 
 	m_posIndividual = pos;
