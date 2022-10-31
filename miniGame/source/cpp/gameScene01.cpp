@@ -48,8 +48,9 @@
 
 #define GAME_BALLOON_CREATE_POS_Y				 (15.0f)								//風船の位置Y
 #define GAME_BALLOON_CREATE_DIFFER				 (600.0f)								//風船の生成する範囲の半径
+#define GAME_BALLOON_CREATE_DIFFER_WERE_WOLF	 (400.0f)								//風船の生成する嘘つきプレイヤーからの範囲の半径
 #define GAME_BALLOON_TO_BALLOON_DIFFER			 (250.0f)								//風船から風船までの距離
-#define GAME_BALLOON_TO_PLAYER_DIFFER			 (180.0f)								//プレイヤーからどれくらい離れた位置に生成するか
+#define GAME_BALLOON_TO_PLAYER_DIFFER			 (150.0f)								//プレイヤーからどれくらい離れた位置に生成するか
 #define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
 
@@ -460,14 +461,29 @@ void CGameScene01::CreateBalloon(void)
 			//かぶらなくなるまで回す
 			while (bLoop)
 			{
-				//遠さをランダムで決める
-				fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
 				//向きをランダムで決める
 				fRot = (rand() % 629 + -314) / 100.0f;
 
+				//原点
+				D3DXVECTOR3 originPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+				//最初だけ人狼モードがオンなら
+				if (nCntBalloon == 0 && GetWereWolfMode())
+				{
+					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER_WERE_WOLF) * 100.0f) / 100.0f;
+					originPos = playerPos[GetWereWolfPlayerIndex() - 1];
+				}
+				else
+				{
+					//遠さをランダムで決める
+					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
+				}
+
+				
+
 				//決めた位置に出す
-				balloonPos.x = sinf(fRot) * fDiffer;
-				balloonPos.z = cosf(fRot) * fDiffer;
+				balloonPos.x = originPos.x + sinf(fRot) * fDiffer;
+				balloonPos.z = originPos.z + cosf(fRot) * fDiffer;
 
 				//クリアした条件の数
 				int nClearCount = 0;
@@ -519,7 +535,28 @@ void CGameScene01::CreateBalloon(void)
 					//クリア数が条件を回した数と一致していたら
 					if (nClearCount == nCntBalloon + CPlayer::GetNum())
 					{
+						//ループ終了
 						bLoop = false;
+
+						//最初だけ人狼モードがオンなら
+						if (nCntBalloon == 0 && GetWereWolfMode())
+						{
+							//今生成しようとしている風船から中央までのベクトルを求める
+							D3DXVECTOR2 baloonOriginDifferVec = D3DXVECTOR2(balloonPos.x - 0.0f, balloonPos.z - 0.0f);
+							//距離ベクトルから距離を算出
+							float fBaloonOriginDiffer = D3DXVec2Length(&baloonOriginDifferVec);
+
+							//ステージからはみ出てたら
+							if (fBaloonOriginDiffer > GAME_BALLOON_CREATE_DIFFER)
+							{
+								//ループさせる
+								bLoop = true;
+							}
+							else
+							{
+								bLoop = false;
+							}
+						}
 					}
 				}
 			}
