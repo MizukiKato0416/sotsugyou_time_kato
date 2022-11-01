@@ -12,5 +12,8 @@ TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect001.jpg				//ÇRÉLÉâÉLÉâ
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Filed_Frost.png				//ÇSÇ‡ÇÌÇ‡ÇÌ
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/GraySmoke.png				//ÇTäDâå
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/spin.png				//ÇUÉXÉsÉì
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/Explosion00.png				//ÇVîöî≠ñå
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/ExprosionRing01.png				//ÇWè’åÇîg
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//ÇXÉeÉXÉg
 
 END_SCRIPT
