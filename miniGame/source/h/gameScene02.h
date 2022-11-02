@@ -48,13 +48,14 @@ private:
 
 	void UpdateGame(void);					//ゲーム中の更新
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
+	void UpdateReady(void);					//準備状態中の更新
 
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
 	void CountDownUi(void);					//カウントダウンUIの処理
 	bool Finish(void);						//フィニッシュするか確認処理
 	void HurryUp(void);						//急げ処理
 	void Cloud(void);						//雲の処理
-	//void CreateItem();						//アイテム生成処理
+	void CreateItem();						//アイテム生成処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ

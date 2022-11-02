@@ -39,6 +39,7 @@ public:
 
 	virtual void UpdateGame(void) = 0;					//ゲーム中の更新
 	virtual void UpdateGameOver(void) = 0;				//ゲームオーバー時の更新
+	virtual void UpdateReady(void) = 0;					//準備状態中の更新
 
 	bool GetGameOver(void) { return m_bGameOver; }		//ゲームオーバー状態のフラグ
 	CTimer* GetTimer(void) { return m_pTimer; }			//タイマーの取得
@@ -62,6 +63,7 @@ protected:
 
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか
+	bool m_bReady;		//準備状態かどうか
 
 	CTimer* m_pTimer;			//ゲームのタイマー
 	CObject2D* m_pTimerFrame;	//タイマーの枠

@@ -20,14 +20,15 @@
 #include "create_bom_manager.h"
 #include "meshwall.h"
 #include "float_object.h"
+#include "player_icon.h"
+#include "ToScreen.h"
+#include "check.h"
+#include "item_shield.h"
+
 
 //エフェクト
 #include "plane.h"
 #include "PresetSetEffect.h"
-
-#include "player_icon.h"
-#include "ToScreen.h"
-#include "check.h"
 
 //=============================================================================
 // マクロ定義
@@ -59,6 +60,10 @@
 #define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
 #define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
 #define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
+
+#define GAME_02_ITEM_SPAWN_COUNT			(60 * 12)						//アイテムの生成間隔
+#define GAME_02_ITEM_SPAWN_DIFFER_MAX		(GAME_02_STAGE_SIZE - 100.0f)	//ステージ中央からどれだけ離れた位置にアイテムを生成するか最大値
+#define GAME_02_ITEM_SPAWN_POS_Y			(1000.0f)						//アイテムの生成位置Y
 
 
 //=============================================================================
@@ -332,6 +337,11 @@ void CGameScene02::Update(void) {
 		if (m_bGameOver) {
 			UpdateGameOver();
 		}
+
+		else if (m_bReady)
+		{
+
+		}
 		//ゲーム中
 		else
 		{
@@ -415,6 +425,9 @@ void CGameScene02::UpdateGame(void) {
 		}
 	}
 
+	//アイテムの生成
+	CreateItem();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
@@ -456,6 +469,12 @@ void CGameScene02::UpdateGameOver(void) {
 	}
 }
 
+//=============================================================================
+//準備状態中の更新
+//=============================================================================
+void UpdateReady(void) {
+
+}
 
 //=============================================================================
 // ゲームオーバー
@@ -661,5 +680,33 @@ void CGameScene02::Cloud(void)
 
 		//テクスチャ座標移動処理
 		m_pCloud[nCntCloud]->SetMoveTex(GAME_02_CLOUD_MOVE_SPEED + GAME_02_CLOUD_MOVE_SPEED_INTERVAL * nCntCloud, 0.0f);
+	}
+}
+
+//=============================================================================
+//アイテム生成処理
+//=============================================================================
+void CGameScene02::CreateItem()
+{
+	m_nItemCounter++;
+
+	if (m_nItemCounter > GAME_02_ITEM_SPAWN_COUNT)
+	{
+		m_nItemCounter = 0;
+
+		//向きをランダムで決める
+		float fRot = (rand() % 629 + -314) / 100.0f;
+		//遠さをランダムで決める
+		float fDiffer = (rand() % (int)(GAME_02_ITEM_SPAWN_DIFFER_MAX) * 100.0f) / 100.0f;
+
+		//出す位置
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, GAME_02_ITEM_SPAWN_POS_Y, 0.0f);
+
+		//決めた位置に出す
+		pos.x = sinf(fRot) * fDiffer;
+		pos.z = cosf(fRot) * fDiffer;
+
+		//アイテムの生成
+		CItemShield::Create(pos);
 	}
 }

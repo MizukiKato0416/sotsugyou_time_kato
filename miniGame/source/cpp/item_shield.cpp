@@ -17,11 +17,10 @@
 // マクロ定義
 //=============================================================================
 #define ITEM_SHIELD_SIZE				(50.0f)		//盾のサイズ半径
-#define ITEM_SHIELD_ROTATE_SPEED		(0.08f)		//盾の回転の速さ
-#define ITEM_SHIELD_GRAVITY				(0.05f)		//盾の重力
+#define ITEM_SHIELD_GRAVITY				(0.12f)		//盾の重力
 #define ITEM_SHIELD_DELETE_COUNT		(360)		//盾の消えるまでの時間
 #define ITEM_SHIELD_COLL_HEIGHT			(30.0f)		//当たり判定をし始める高さ
-#define ITEM_SHIELD_ROTATE_SPEED		(0.01f)		//回転速度
+#define ITEM_SHIELD_ROTATE_SPEED		(0.08f)		//回転速度
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -76,13 +75,13 @@ CItemShield* CItemShield::Create(D3DXVECTOR3 pos) {
 //=============================================================================
 HRESULT CItemShield::Init(void) {
 
-
+	//球体の生成
 	m_pSphereCover = CObjectModel::Create(CModel::MODELTYPE::OBJ_SPHERE_COVER, GetPos() , D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	if (m_pSphereCover) {
 		m_pSphereCover->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
 		CModel* pModel = m_pSphereCover->GetPtrModel();
 		if (pModel) {
-			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 0.0f));
+			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 1.0f));
 			pModel->SetPowerGlow(1.5f);
 		}
 	}

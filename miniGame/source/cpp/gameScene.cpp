@@ -48,6 +48,7 @@ CGameScene::CGameScene()
 {
 	m_pTimer = nullptr;
 	m_bAllCheck = false;
+	m_bReady = false;
 	m_pCheck = nullptr;
 }
 
@@ -65,6 +66,7 @@ CGameScene::~CGameScene()
 void CGameScene::Init(void) {
 	//変数初期化
 	m_bAllCheck = false;
+	m_bReady = true;
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
