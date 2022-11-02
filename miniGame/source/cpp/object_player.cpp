@@ -39,6 +39,7 @@ CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	SetObjType(OBJTYPE_PLAYER);						//オブジェクトタイプの設定
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
 	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
+	m_itemType = CItem::ITEM_TYPE::NONE;
 
 	m_pPlayer = nullptr;
 }

@@ -50,6 +50,14 @@ public:
 	//プレイヤー取得処理
 	CPlayer *GetPlayer(void) { return m_pPlayer; }
 
+	//アイテムタイプ取得処理
+	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
+	//アイテムタイプ設定処理
+	void SetItemType(CItem::ITEM_TYPE itemType) { m_itemType = itemType; }
+
+protected:
+	CItem::ITEM_TYPE m_itemType;	//アイテムの種類
+
 private:
 
 	CPlayer *m_pPlayer;				//プレイヤーのポインタ

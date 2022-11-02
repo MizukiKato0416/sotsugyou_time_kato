@@ -14,6 +14,7 @@
 #include "player.h"
 #include "gameScene02.h"
 
+#include "PresetDelaySet.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -37,12 +38,16 @@
 //--------------------------------
 //バウンド
 //--------------------------------
-#define ATTACK_CAR_NORMAL_MY_BOUND		(1.0f)		//相手に当たったとき自身が跳ね返る量の倍率
-#define ATTACK_CAR_NORMAL_ENEMY_BOUND	(1.5f)		//相手に当たったとき相手が跳ね返る量の倍率
-#define ATTACK_CAR_ATTACK_MY_BOUND		(1.0f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率
-#define ATTACK_CAR_ATTACK_ENEMY_BOUND	(1.5f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率
-#define ATTACK_CAR_BOUND_DEC			(0.9f)		//バウンドの移動量減少量
-#define ATTACK_CAR_BOUND_MIN_SPEED		(2.0f)		//バウンドするのに必要な最小移動量
+#define ATTACK_CAR_NORMAL_MY_BOUND			(1.8f)		//相手に当たったとき自身が跳ね返る量の倍率
+#define ATTACK_CAR_NORMAL_MY_BOUND_WOLF		(0.6f)		//相手に当たったとき自身が跳ね返る量の倍率(人狼)
+#define ATTACK_CAR_NORMAL_ENEMY_BOUND		(3.0f)		//相手に当たったとき相手が跳ね返る量の倍率
+#define ATTACK_CAR_NORMAL_ENEMY_BOUND_WOLF	(1.5f)		//相手に当たったとき相手が跳ね返る量の倍率(人狼)
+#define ATTACK_CAR_ATTACK_MY_BOUND			(1.0f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率
+#define ATTACK_CAR_ATTACK_MY_BOUND_WOLF		(0.5f)		//アタック状態の時に相手に当たったとき自身が跳ね返る量の倍率(人狼)
+#define ATTACK_CAR_ATTACK_ENEMY_BOUND		(1.5f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率
+#define ATTACK_CAR_ATTACK_ENEMY_BOUND_WOLF	(0.7f)		//アタック状態の時に相手に当たったとき相手が跳ね返る量の倍率(人狼)
+#define ATTACK_CAR_BOUND_DEC				(0.9f)		//バウンドの移動量減少量
+#define ATTACK_CAR_BOUND_MIN_SPEED			(2.0f)		//バウンドするのに必要な最小移動量
 
 //--------------------------------
 //その他
@@ -175,7 +180,6 @@ void CObjectPlayerAttackCar::Update(void) {
 
 	//位置情報のポインタの取得
 	D3DXVECTOR3 posObjectPlayer = GetPos();
-
 
 	//----------------------------
 	//カメラの設定
@@ -635,26 +639,77 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			}
 
 			//移動量が少なかったら
-			if (m_fMoveSpeed < ATTACK_CAR_BOUND_MIN_SPEED)
+			if (m_fMoveSpeed < ATTACK_CAR_BOUND_MIN_SPEED && m_fMoveSpeed > -ATTACK_CAR_BOUND_MIN_SPEED)
 			{
 				return;
 			}
 
-
+			//バウンドする量
 			float fBoundPlayer = ATTACK_CAR_NORMAL_MY_BOUND;
 			float fBoundEnemy = ATTACK_CAR_NORMAL_ENEMY_BOUND;
 
+			//アタック状態なら
 			if (m_bAttack)
 			{
 				fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND;
 				fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND;
 			}
 
+
+			////ディフェンスしている状態なら
+			//if (m_bDefence)
+			//{
+			//	fBoundPlayer = ATTACK_CAR_NORMAL_MY_BOUND_WOLF;
+
+			//	//アタック状態なら
+			//	if (m_bAttack)
+			//	{
+			//		fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND_WOLF;
+			//	}
+			//}
+			//else
+			//{
+			//	//アタック状態なら
+			//	if (m_bAttack)
+			//	{
+			//		fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND;
+			//	}
+			//}
+
+			////相手がディフェンスしている状態なら
+			//if (pObjectPlayer->m_bDefence)
+			//{
+			//	fBoundEnemy = ATTACK_CAR_NORMAL_ENEMY_BOUND_WOLF;
+
+			//	//アタック状態なら
+			//	if (m_bAttack)
+			//	{
+			//		fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND_WOLF;
+			//	}
+			//}
+			//else
+			//{
+			//	//アタック状態なら
+			//	if (m_bAttack)
+			//	{
+			//		fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND;
+			//	}
+			//}
+
 			//相手のバウンド移動量取得
 			D3DXVECTOR3 move = pObjectPlayer->GetBoundMove();
+
+			float fMoveSpeed = m_fMoveSpeed;
+			//自分が人狼だったら且つアタック状態なら
+			if (CGameScene::GetWereWolfMode() && CGameScene::GetWereWolfPlayerIndex() == GetPlayer()->GetIndex() && m_bAttack)
+			{
+				//相手を飛ばす量を常に最大にする
+				fMoveSpeed = ATTACK_CAR_ATTACK_MOVE_SPEED /* * 1.1f*/;
+			}
+
 			//跳ね返させる
-			move.x += sinf(fRot) * m_fMoveSpeed * fBoundEnemy;
-			move.z += cosf(fRot) * m_fMoveSpeed * fBoundEnemy;
+			move.x += sinf(fRot) * fMoveSpeed * fBoundEnemy;
+			move.z += cosf(fRot) * fMoveSpeed * fBoundEnemy;
 			//相手のバウンド移動量設定
 			pObjectPlayer->SetBoundMove(move);
 
@@ -678,6 +733,27 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 
 			//当たった状態にする
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
+
+			//衝突エフェクト
+			CPresetDelaySet::Create(1, playerPos);
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			CInput* pInput = nullptr;
+			CInputGamepadX *pPadX = nullptr;
+			if (pManager != nullptr) {
+				//現在の入力デバイスの取得
+				pInput = pManager->GetInputCur();
+				pPadX = dynamic_cast<CInputGamepadX*>(pInput);
+			}
+
+			if (pPadX != nullptr)
+			{
+				//振動させる
+				pPadX->SetVibration(65535, 65535, 15, GetPlayer()->GetIndex() - 1);
+				pPadX->SetVibration(65535, 65535, 15, pObjectPlayer->GetPlayer()->GetIndex() - 1);
+			}
+
 			return;
 		}
 		else

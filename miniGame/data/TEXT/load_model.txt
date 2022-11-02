@@ -17,6 +17,14 @@ data/MODEL/OBJECT/attack_car_stage.x
 data/MODEL/OBJECT/bom.x	
 data/MODEL/OBJECT/broken_tower.x	
 data/MODEL/OBJECT/broken_gate.x	
+data/MODEL/OBJECT/tower_fragment_01.x	
+data/MODEL/OBJECT/tower_fragment_02.x	
+data/MODEL/OBJECT/tower_fragment_03.x	
+data/MODEL/OBJECT/tower_fragment_04.x	
+data/MODEL/OBJECT/tower_fragment_05.x	
+data/MODEL/OBJECT/tower_fragment_06.x	
+data/MODEL/OBJECT/item_shield.x	
+data/MODEL/OBJECT/sphere_cover.x	
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	

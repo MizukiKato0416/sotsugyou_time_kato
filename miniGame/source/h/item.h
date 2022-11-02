@@ -16,7 +16,7 @@
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
-class CObjectPlayerBalloonCar;
+class CObjectPlayer;
 class CObject2D;
 
 //*****************************************************************************
@@ -36,14 +36,13 @@ public:
 	CItem();	//デフォルトコンストラクタ
 	CItem(CModel::MODELTYPE typeModel);		//オーバーロードされたコンストラクタ
 	virtual ~CItem();	//デストラクタ
-	static CItem* Create(D3DXVECTOR3 pos, const CObjectPlayerBalloonCar *pPlayer);	//生成処理
 	virtual HRESULT Init(void);				//初期化処理
 	virtual void Uninit(void);				//終了処理
 	virtual void Update(void);				//更新処理
 	virtual void Draw(void);				//描画処理
 
 	//プレイヤーにヒットしたときの処理
-	virtual void HitPlayer(CObjectPlayerBalloonCar *pPlayer);
+	virtual void HitPlayer(CObjectPlayer *pPlayer);
 
 private:
 	int m_nPlayerIndex;		//このアイテムを持っているプレイヤーのインデックス
@@ -51,7 +50,7 @@ private:
 protected:
 	//第一引数プレイヤーのポインタが帰る
 	bool CollisionPlayer(const float fMySize);	//プレイヤーとの当たり判定
-	CObjectPlayerBalloonCar *m_pPlayer;							//発射したプレイヤーのポインタ
+	CObjectPlayer *m_pPlayer;							//発射したプレイヤーのポインタ
 };
 
 #endif // !_ITEM_H_

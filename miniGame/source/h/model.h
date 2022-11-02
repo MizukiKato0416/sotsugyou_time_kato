@@ -25,16 +25,24 @@ public:
 	//モデルの種類
 	enum class MODELTYPE{
 		//オブジェクト
-		OBJ_CAR = 0,			//車
-		OBJ_STADIUM,			//スタジアム
-		OBJ_BALLOON_PINK,		//風船(ピンク)
-		OBJ_BALLOON_GOLD,		//風船(ゴールド)
-		OBJ_ITEM_BOX,			//アイテムボックス
-		OBJ_BANANA,				//バナナ
-		OBJ_ATTACK_CAR_STAGE,	//衝突ゲーム用ステージ
-		OBJ_BOM,				//爆弾
-		OBJ_BROKEN_TOWER,		//壊れた塔
-		OBJ_BROKEN_GATE,		//壊れた門
+		OBJ_CAR = 0,					//車
+		OBJ_STADIUM,					//スタジアム
+		OBJ_BALLOON_PINK,				//風船(ピンク)
+		OBJ_BALLOON_GOLD,				//風船(ゴールド)
+		OBJ_ITEM_BOX,					//アイテムボックス
+		OBJ_BANANA,						//バナナ
+		OBJ_ATTACK_CAR_STAGE,			//衝突ゲーム用ステージ
+		OBJ_BOM,						//爆弾
+		OBJ_BROKEN_TOWER,				//壊れた塔
+		OBJ_BROKEN_GATE,				//壊れた門
+		OBJ_BROKEN_TOWER_FRAGMENT_01,	//壊れた塔の破片
+		OBJ_BROKEN_TOWER_FRAGMENT_02,	//壊れた塔の破片
+		OBJ_BROKEN_TOWER_FRAGMENT_03,	//壊れた塔の破片
+		OBJ_BROKEN_TOWER_FRAGMENT_04,	//壊れた塔の破片
+		OBJ_BROKEN_TOWER_FRAGMENT_05,	//壊れた塔の破片
+		OBJ_BROKEN_TOWER_FRAGMENT_06,	//壊れた塔の破片
+		OBJ_ITEM_SHIELD,				//アイテム盾
+		OBJ_SPHERE_COVER,				//球のカバー
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 

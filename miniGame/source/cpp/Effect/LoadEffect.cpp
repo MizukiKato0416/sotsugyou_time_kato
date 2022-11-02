@@ -7,6 +7,7 @@
 //***************************************************************************** 
 #include "LoadEffect.h"
 #include "PresetSetEffect.h"
+#include "manager.h"
 
 //=============================================================================
 // 静的
@@ -17,6 +18,8 @@ int CLoadEffect::m_Total2d = 0;
 int CLoadEffect::m_OrderTotal = 0;
 int CLoadEffect::m_FullOrder = 0;
 
+CLoadEffect::CALL_PRESET CLoadEffect::m_CallPreset[MAX_PRESET] = {};
+std::map<std::string, int> CLoadEffect::m_Name;
 
 //=============================================================================
 // コンストラクタ
@@ -65,9 +68,9 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 	D3DCOLORVALUE ChangeColor;
 	int nLife = 0;
 	int Density = 1;
-	int bRandColR = 0;
-	int bRandColG = 0;
-	int bRandColB = 0;
+	int nRandColR = 0;
+	int nRandColG = 0;
+	int nRandColB = 0;
 	int nSynthetic = 0;
 	int nTexture = 0;
 
@@ -112,155 +115,155 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 		{
 			fscanf(pFile, "%s", &aFile[0]); //fscanfを繰り返してファイルを読み取っていく
 
-			if (bEffectState2D == true)
-			{
-				if (strcmp(&aFile[0], "PATTERN") == 0)	//動きのパターン
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nPattern);
-				}
-				if (strcmp(&aFile[0], "ROTATE") == 0)	//回転
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &fRotate);
-				}
-				if (strcmp(&aFile[0], "MOVE") == 0)	//移動量
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f", &move.x, &move.y);
-				}
-				if (strcmp(&aFile[0], "ADDMOVE") == 0)	//動き加算
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f", &Addmove.x, &Addmove.y);
-				}
-				if (strcmp(&aFile[0], "DIFFUSION") == 0)	//拡散率
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &Diffusion);
-				}
-				if (strcmp(&aFile[0], "DESTROYVEC") == 0)	//消えるベクトル
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &Destroyvec);
-				}
-				if (strcmp(&aFile[0], "SIZE") == 0)	//大きさ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &fSize);
-				}
-				if (strcmp(&aFile[0], "ADDSIZE") == 0)	//大きさ加算
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &fAddSize);
-				}
-				if (strcmp(&aFile[0], "COLOR") == 0)	//カラー
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f %f %f", &col.r, &col.g, &col.b, &col.a);
-				}
-				if (strcmp(&aFile[0], "CHANGECOLOR") == 0)	//カラー変動
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f %f %f", &ChangeColor.r, &ChangeColor.g, &ChangeColor.b, &ChangeColor.a);
-				}
-				if (strcmp(&aFile[0], "LIFE") == 0)	//寿命
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nLife);
-				}
-				if (strcmp(&aFile[0], "DENSITY") == 0)	//密度
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &Density);
-				}
-				if (strcmp(&aFile[0], "COLORRANDR") == 0)	//カラーランダム赤
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColR);
-				}
-				if (strcmp(&aFile[0], "COLORRANDG") == 0)	//カラーランダム緑
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColG);
-				}
-				if (strcmp(&aFile[0], "COLORRANDB") == 0)	//カラーランダム青
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColB);
-				}
-				if (strcmp(&aFile[0], "SYNTHETIC") == 0)		//合成
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nSynthetic);
-				}
-				if (strcmp(&aFile[0], "TEXTURE") == 0)		//テクスチャ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nTexture);
-				}
-				if (strcmp(&aFile[0], "DISTANCE") == 0)		//発生距離
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &Distance);
-				}
-				if (strcmp(&aFile[0], "TYPE") == 0)	//タイプ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nType);
-				}
-				if (strcmp(&aFile[0], "HIGTH") == 0)	//高さ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &fHigth);
-				}
-				if (strcmp(&aFile[0], "PARTICLESIZE") == 0)	//最大の大きさ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &ParticleSize);
-				}
-				if (strcmp(&aFile[0], "SECONDCOLOR") == 0)	//２番カラー
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f %f %f", &Secondcol.r, &Secondcol.g, &Secondcol.b, &Secondcol.a);
-				}
-				if (strcmp(&aFile[0], "SECONDADDCOLOR") == 0)	//２番カラー変動
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f %f %f", &SecondChangeColor.r, &SecondChangeColor.g, &SecondChangeColor.b, &SecondChangeColor.a);
-				}
-				if (strcmp(&aFile[0], "TEXMOVE") == 0)	//テクスチャ移動量
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f", &TexMove.x, &TexMove.y);
-				}
-				if (strcmp(&aFile[0], "TEXNUM") == 0)	//テクスチャ移動量
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &TexNum);
-				}
-				if (strcmp(&aFile[0], "TEXSPLIT") == 0)	//テクスチャ移動量
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f %f", &TexSplit.x, &TexSplit.y);
-				}
-				if (strcmp(&aFile[0], "TEXANIMCOUNT") == 0)	//頂点数
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &nAnimCont);
-				}
-				if (strcmp(&aFile[0], "HIGTH") == 0)	//高さ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%f", &fHigth);
-				}
-				if (strcmp(&aFile[0], "ANIMPATTERNTYPE") == 0)	//アニメーションパターンタイプ
-				{
-					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &AnimPatternType);
-				}
+			//if (bEffectState2D == true)
+			//{
+			//	if (strcmp(&aFile[0], "PATTERN") == 0)	//動きのパターン
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nPattern);
+			//	}
+			//	if (strcmp(&aFile[0], "ROTATE") == 0)	//回転
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &fRotate);
+			//	}
+			//	if (strcmp(&aFile[0], "MOVE") == 0)	//移動量
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f", &move.x, &move.y);
+			//	}
+			//	if (strcmp(&aFile[0], "ADDMOVE") == 0)	//動き加算
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f", &Addmove.x, &Addmove.y);
+			//	}
+			//	if (strcmp(&aFile[0], "DIFFUSION") == 0)	//拡散率
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &Diffusion);
+			//	}
+			//	if (strcmp(&aFile[0], "DESTROYVEC") == 0)	//消えるベクトル
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &Destroyvec);
+			//	}
+			//	if (strcmp(&aFile[0], "SIZE") == 0)	//大きさ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &fSize);
+			//	}
+			//	if (strcmp(&aFile[0], "ADDSIZE") == 0)	//大きさ加算
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &fAddSize);
+			//	}
+			//	if (strcmp(&aFile[0], "COLOR") == 0)	//カラー
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f %f %f", &col.r, &col.g, &col.b, &col.a);
+			//	}
+			//	if (strcmp(&aFile[0], "CHANGECOLOR") == 0)	//カラー変動
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f %f %f", &ChangeColor.r, &ChangeColor.g, &ChangeColor.b, &ChangeColor.a);
+			//	}
+			//	if (strcmp(&aFile[0], "LIFE") == 0)	//寿命
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nLife);
+			//	}
+			//	if (strcmp(&aFile[0], "DENSITY") == 0)	//密度
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &Density);
+			//	}
+			//	if (strcmp(&aFile[0], "COLORRANDR") == 0)	//カラーランダム赤
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &bRandColR);
+			//	}
+			//	if (strcmp(&aFile[0], "COLORRANDG") == 0)	//カラーランダム緑
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &bRandColG);
+			//	}
+			//	if (strcmp(&aFile[0], "COLORRANDB") == 0)	//カラーランダム青
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &bRandColB);
+			//	}
+			//	if (strcmp(&aFile[0], "SYNTHETIC") == 0)		//合成
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nSynthetic);
+			//	}
+			//	if (strcmp(&aFile[0], "TEXTURE") == 0)		//テクスチャ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nTexture);
+			//	}
+			//	if (strcmp(&aFile[0], "DISTANCE") == 0)		//発生距離
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &Distance);
+			//	}
+			//	if (strcmp(&aFile[0], "TYPE") == 0)	//タイプ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nType);
+			//	}
+			//	if (strcmp(&aFile[0], "HIGTH") == 0)	//高さ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &fHigth);
+			//	}
+			//	if (strcmp(&aFile[0], "PARTICLESIZE") == 0)	//最大の大きさ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &ParticleSize);
+			//	}
+			//	if (strcmp(&aFile[0], "SECONDCOLOR") == 0)	//２番カラー
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f %f %f", &Secondcol.r, &Secondcol.g, &Secondcol.b, &Secondcol.a);
+			//	}
+			//	if (strcmp(&aFile[0], "SECONDADDCOLOR") == 0)	//２番カラー変動
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f %f %f", &SecondChangeColor.r, &SecondChangeColor.g, &SecondChangeColor.b, &SecondChangeColor.a);
+			//	}
+			//	if (strcmp(&aFile[0], "TEXMOVE") == 0)	//テクスチャ移動量
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f", &TexMove.x, &TexMove.y);
+			//	}
+			//	if (strcmp(&aFile[0], "TEXNUM") == 0)	//テクスチャ移動量
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &TexNum);
+			//	}
+			//	if (strcmp(&aFile[0], "TEXSPLIT") == 0)	//テクスチャ移動量
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f %f", &TexSplit.x, &TexSplit.y);
+			//	}
+			//	if (strcmp(&aFile[0], "TEXANIMCOUNT") == 0)	//頂点数
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &nAnimCont);
+			//	}
+			//	if (strcmp(&aFile[0], "HIGTH") == 0)	//高さ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%f", &fHigth);
+			//	}
+			//	if (strcmp(&aFile[0], "ANIMPATTERNTYPE") == 0)	//アニメーションパターンタイプ
+			//	{
+			//		fscanf(pFile, "%s", &aFile[0]);
+			//		fscanf(pFile, "%d", &AnimPatternType);
+			//	}
 
-			}
+			//}
 
 			if (bEffectState3D == true)
 			{
@@ -393,17 +396,17 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 				if (strcmp(&aFile[0], "COLORRANDR") == 0)	//カラーランダム赤
 				{
 					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColR);
+					fscanf(pFile, "%d", &nRandColR);
 				}
 				if (strcmp(&aFile[0], "COLORRANDG") == 0)	//カラーランダム緑
 				{
 					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColG);
+					fscanf(pFile, "%d", &nRandColG);
 				}
 				if (strcmp(&aFile[0], "COLORRANDB") == 0)	//カラーランダム青
 				{
 					fscanf(pFile, "%s", &aFile[0]);
-					fscanf(pFile, "%d", &bRandColB);
+					fscanf(pFile, "%d", &nRandColB);
 				}
 				if (strcmp(&aFile[0], "SYNTHETIC") == 0)		//合成
 				{
@@ -517,22 +520,25 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 				}
 
 			}
-			//エフェクト情報セット
-			if (strcmp(&aFile[0], "EFFECTSTATE2D") == 0)
-			{
-				bEffectState2D = true;
-			}
-			if (strcmp(&aFile[0], "END_EFFECTSTATE2D") == 0)
-			{
-				bEffectState2D = false;
-				CPresetEffect::SetEffectState2D(nPattern, fRotate, move, Addmove, Diffusion, Destroyvec, fSize, fAddSize, col, ChangeColor, nLife, Density,
-					(bool)bRandColR, (bool)bRandColG, (bool)bRandColB, nSynthetic, nTexture, (float)Distance,
-					TexMove, TexNum, AnimPatternType, TexSplit,
-					nAnimCont, nType, fHigth,ParticleSize, Secondcol, SecondChangeColor);
+			////エフェクト情報セット
+			//if (strcmp(&aFile[0], "EFFECTSTATE2D") == 0)
+			//{
+			//	bEffectState2D = true;
+			//}
+			//if (strcmp(&aFile[0], "END_EFFECTSTATE2D") == 0)
+			//{
+			//	bEffectState2D = false;
+			//	CPresetEffect::SetEffectState2D(nPattern, fRotate, move, Addmove, Diffusion, Destroyvec, fSize, fAddSize, col, ChangeColor, nLife, Density,
+			//		(bool)nRandColR, (bool)nRandColG, (bool)nRandColB, nSynthetic, nTexture, (float)Distance,
+			//		TexMove, TexNum, AnimPatternType, TexSplit,
+			//		nAnimCont, nType, fHigth,ParticleSize, Secondcol, SecondChangeColor);
 
-				m_Total2d++;
+			//	m_Total2d++;
 
-			}
+			//}
+
+			
+
 
 			//3Dエフェクト情報セット
 			if (strcmp(&aFile[0], "EFFECTSTATE3D") == 0)
@@ -541,12 +547,14 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 			}
 			if (strcmp(&aFile[0], "END_EFFECTSTATE3D") == 0)
 			{
+				
+
 				bEffectState3D = false;
 				CPresetEffect::SetEffectState3D(nPattern, fRotate, move3d, Addmove3d, Diffusion, fSize, fAddSize,fSizeY,fAddSizeY, MaxSize, ParticleSize,
 					ParticleAddSize, Active, col, ChangeColor, Secondcol, SecondChangeColor, SecondSynthetic, nLife, Density, TrajectTop, TrajectCur, Move3D, RandMove,
-					(bool)bRandColR, (bool)bRandColG, (bool)bRandColB,
+					(nRandColR == 0) ? false : true, (nRandColG == 0) ? false : true, (nRandColB == 0) ? false : true,
 					nSynthetic, nTexture, Distance, ParticleTime, fActiveAddSize,
-					FieldTime, (bool)FieldCreate, CreatePreset,
+					FieldTime, (FieldCreate == 0) ? false : true, CreatePreset,
 					nSecondTime, nVtx, nType, TexMove, TexNum, nSecondType, TexSplit,
 					nAnimCont, fHigth, AnimPatternType,
 					ControlBezier,Therdcol,
@@ -554,6 +562,71 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 					SecondTex);
 
 				m_Total3d++;
+
+				if (m_Total3d == 12)
+				{
+					int n = 0;
+				}
+
+
+
+
+
+
+				int nPattern = 0;
+				D3DXVECTOR2 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				D3DXVECTOR2 Addmove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				int Diffusion = 1;
+				int Destroyvec = 0;
+				float fSize = 0;
+				float fAddSize = 0;
+				float fSizeY = 0;
+				float fAddSizeY = 0;
+				float fRotate = 0;
+				D3DCOLORVALUE col = {};
+				D3DCOLORVALUE ChangeColor = {};
+				int nLife = 0;
+				int Density = 1;
+				int nRandColR = 0;
+				int nRandColG = 0;
+				int nRandColB = 0;
+				int nSynthetic = 0;
+				int nTexture = 0;
+
+				float move3d = 0.0f;
+				float Addmove3d = 0.0f;
+				float MaxSize = 100.0f;
+				float ParticleSize = 0.0f;
+				float ParticleAddSize = 0.0f;
+				int Active = 0;
+				D3DCOLORVALUE Secondcol = {};
+				D3DCOLORVALUE SecondChangeColor = {};
+				int SecondSynthetic = 0;
+				int TrajectTop = 0;
+				int TrajectCur = 0;
+				D3DXVECTOR3 Move3D = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				int RandMove = 1;
+				int Distance = 1;
+				int ParticleTime = 1;
+				float fActiveAddSize = 0.0f;
+				int FieldTime = 0;
+				int FieldCreate = 0;
+				int CreatePreset = 0;
+				int nSecondTime = 0;
+				int nVtx = 0;
+				int nType = 0;
+				D3DXVECTOR2 TexMove = D3DXVECTOR2(0.0f, 0.0f);
+				D3DXVECTOR2 TexNum = D3DXVECTOR2(1.0f, 1.0f);
+				int nSecondType = 0;
+				D3DXVECTOR2 TexSplit = D3DXVECTOR2(1.0f, 1.0f);
+				int nAnimCont = -1;
+				float fHigth = 30.0f;
+				int AnimPatternType = 0;
+				D3DXVECTOR3 ControlBezier = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				D3DCOLORVALUE Therdcol = {};
+				D3DCOLORVALUE TherdChangeColor = {};
+				int SecondTex = 0;
+
 			}
 
 			//終わり
@@ -563,8 +636,141 @@ void CLoadEffect::EffectStateLoad(const char *aFileName)
 			}
 		}
 	}
+
+
 	fclose(pFile);
 	CPresetEffect::ResetPattern();
+	CLoadEffect::PresetCallLoad(PRESETCALL_TEXT);
+
+}
+
+//=============================================================================
+// プリセット呼び出しテキストの読み込み Author:村元翼
+//=============================================================================
+void CLoadEffect::PresetCallLoad(const char *aFileName)
+{
+	FILE *pFile;
+	char aData[128];
+
+	int nDelay = 0;
+	int nPresetNum = 0;
+	int nType = 0;
+	int nTypeArray = 0;
+	int nArray = 0;
+	char aName[128];
+
+	//NULLチェック
+	for (int i = 0; i < MAX_PRESET; i++)
+	{
+		if (!m_CallPreset[i].m_nDelay.empty())	//ディレイNULLチェック
+		{
+			m_CallPreset[i].m_nDelay.clear();
+			m_CallPreset[i].m_nDelay.shrink_to_fit();
+		}
+		if (!m_CallPreset[i].m_nPresetNum.empty())	//プリセット数NULLチェック
+		{
+			m_CallPreset[i].m_nPresetNum.clear();
+			m_CallPreset[i].m_nPresetNum.shrink_to_fit();
+		}
+		if (!m_CallPreset[i].m_nType.empty())	//呼び出しエフェクトNULLチェック
+		{
+			m_CallPreset[i].m_nType.clear();
+			m_CallPreset[i].m_nType.shrink_to_fit();
+		}
+		if (m_CallPreset[i].m_CallMax != NULL)
+		{
+			m_CallPreset[i].m_CallMax = NULL;
+		}
+	}
+
+	if (pFile = fopen(aFileName, "r"))
+	{
+		while (fgets(aData, 128, pFile))					// 一行ずつ読み込む
+		{
+			fscanf(pFile, "%s", aData);						// 一単語保存
+
+															// パターン生成開始
+			if (strncmp(aData, "PRESETCALL", 11) == 0)
+			{
+				while (fgets(aData, 128, pFile))					// 一行ずつ読み込む
+				{
+					fscanf(pFile, "%s", aData);						// 一単語保存
+
+					if (strncmp(aData, "NAME", 5) == 0)
+					{
+						fscanf(pFile, "%*s%s", aName);			// 
+						m_Name[aName] = nArray;					// 名前と番号を結びつける
+					}
+
+					if (strncmp(aData, "CALLSET", 8) == 0)
+					{
+						while (fgets(aData, 128, pFile))					// 一行ずつ読み込む
+						{
+							fscanf(pFile, "%s", aData);						// 一単語保存
+
+																			// 呼び出してから何フレーム後に生成するか
+							if (strncmp(aData, "DELEY", 6) == 0)
+							{
+								fscanf(pFile, "%*s%d", &nDelay);
+								m_CallPreset[nArray].m_nDelay.emplace_back(nDelay);
+							}
+
+							// いくつエフェクトを呼び出すか
+							if (strncmp(aData, "PRESETNUM", 6) == 0)
+							{
+								fscanf(pFile, "%*s%d", &nPresetNum);
+								m_CallPreset[nArray].m_nPresetNum.emplace_back(nPresetNum);
+							}
+
+							// エフェクトのタイプ
+							if (strncmp(aData, "TYPE", 4) == 0)
+							{
+								fscanf(pFile, "%*s");
+
+								// 空のデータを追加する
+								m_CallPreset[nArray].m_nType.emplace_back();
+
+								// 呼び出す数だけループする
+								for (int nCnt = 0; nCnt < nPresetNum; nCnt++)
+								{
+									fscanf(pFile, "%d", &nType);
+									m_CallPreset[nArray].m_nType[nTypeArray].emplace_back(nType);
+								}
+							}
+
+							if (strncmp(aData, "END_CALLSET", 12) == 0)
+							{
+								nTypeArray++;
+								m_CallPreset[nArray].m_CallMax++;	// 呼び出し最大数カウント
+								break;
+							}
+						}
+					}
+
+					if (strncmp(aData, "END_PRESETCALL", 8) == 0)
+					{
+						nArray++;		// 配列を進める
+						nTypeArray = 0;	// エフェクトタイプの配列を初期化
+						break;
+					}
+				}
+			}
+
+			// 読み込み終了
+			if (strncmp(aData, "END_SCRIPT", 11) == 0)
+			{
+				break;
+			}
+		}
+	}
+
+	else
+	{
+		printf("読み込めませんでした。");
+	}
+
+	// ファイルを閉じる
+	fclose(pFile);
 }
 
 //=============================================================================
