@@ -149,7 +149,7 @@ void CObject3D::Draw(void) {
 	pRenderer->SetEffectMaterialSpecular(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 	pRenderer->SetEffectMaterialPower(2.0f);
 	//輪郭の発光色の設定
-	pRenderer->SetEffectColorGlow(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	pRenderer->SetEffectGlow(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), 0.0f);
 
 	//パスの開始
 	pRenderer->BeginPassEffect(dwPassFlag);

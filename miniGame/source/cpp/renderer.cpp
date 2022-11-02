@@ -536,8 +536,10 @@ void CRenderer::SetEffectMaterialPower(float matPower) {
 }
 
 //シェーダの輪郭の発光色を設定
-void CRenderer::SetEffectColorGlow(D3DXCOLOR colGlow) {
-	if (m_pEffect != nullptr) m_pEffect->SetVector("g_colGlow", &D3DXVECTOR4(colGlow.r, colGlow.g, colGlow.b, colGlow.a));
+void CRenderer::SetEffectGlow(D3DXCOLOR colGlow, float fPower) {
+	if (m_pEffect == nullptr) return;
+	m_pEffect->SetVector("g_colGlow", &D3DXVECTOR4(colGlow.r, colGlow.g, colGlow.b, colGlow.a));
+	m_pEffect->SetFloat("g_powGlow", fPower);
 }
 
 
