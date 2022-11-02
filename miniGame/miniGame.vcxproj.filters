@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="source\cpp\balloon.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\billboard.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\billeffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\camera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\check_icon.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\count_down_ui.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\effect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\fade.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\finish_ui.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\font.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Fountain.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameCamera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gauge.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gauge2D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gauge3D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\input.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\item.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\item_banana.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\itemBox.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\main.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\manager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\meshcylinder.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\meshwall.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\model.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object2D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object3D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\objectList.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\objectModel.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\objectModelUI.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\objectMotion.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\pauseMenu.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\plane.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\player_icon.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\renderer.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Rotate3d.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\scene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\score.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\selectMenu.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\selectMenu2D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\selectMenu3D.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\sound.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\stage.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\straight3d.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\terrain.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\texture.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\timer.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\titleCamera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\titleScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\wallCylinder.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\score_ui.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\ToScreen.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\resultScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\player.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player_balloon_car.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\check.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene01.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\gameScene02.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\object_player_attack_car.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\bom.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\create_bom_manager.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\float_object.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\h\balloon.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\billboard.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\billeffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\camera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\check_icon.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\count_down_ui.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\effect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\fade.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\FieldEffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finish_ui.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\font.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Fountain.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameCamera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gauge.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gauge2D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gauge3D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\input.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\item.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\item_banana.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\itemBox.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\LoadEffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\main.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\manager.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\meshcylinder.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\meshwall.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\model.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object2D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object3D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\objectList.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\objectModel.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\objectModelUI.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\objectMotion.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\pauseMenu.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\plane.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\player_icon.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetSetEffect.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\renderer.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Rotate3d.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\scene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\scene3d.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\score.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\selectMenu.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\selectMenu2D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\selectMenu3D.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\sound.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\stage.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\straight3d.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\terrain.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\texture.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\timer.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\titleCamera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\titleScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\ToScreen.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\wallCylinder.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\score_ui.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="resultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\player.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_balloon_car.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\check.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene01.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\gameScene02.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\object_player_attack_car.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\bom.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\create_bom_manager.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\float_object.h">
+      <Filter>h</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="cpp">
+      <UniqueIdentifier>{adf2bb87-94b3-4512-a76c-8574ba0bd041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="h">
+      <UniqueIdentifier>{20d9c940-83d3-4133-bdf4-c44f8448c5a1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
