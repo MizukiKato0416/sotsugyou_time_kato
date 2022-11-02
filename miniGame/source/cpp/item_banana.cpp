@@ -8,8 +8,10 @@
 #include "manager.h"
 #include "sound.h"
 #include "object_player_balloon_car.h"
+#include "player.h"
 #include "wallCylinder.h"
 #include "object2D.h"
+#include "input.h"
 //エフェクト
 #include "PresetSetEffect.h"
 
@@ -164,6 +166,22 @@ void CItemBanana::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
 	{
 		//プレイヤーの状態をスピン状態にする
 		pPlayer->SetState(CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN);
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		CInput* pInput = nullptr;
+		CInputGamepadX *pPadX = nullptr;
+		if (pManager != nullptr) {
+			//現在の入力デバイスの取得
+			pInput = pManager->GetInputCur();
+			pPadX = dynamic_cast<CInputGamepadX*>(pInput);
+		}
+
+		if (pPadX != nullptr)
+		{
+			//振動させる
+			pPadX->SetVibration(65535, 65535, 40, pPlayer->GetPlayer()->GetIndex() - 1);
+		}
 
 		//ーーーーーーーーーーーーーーーーーーー
 		//スピン(バナナヒット)

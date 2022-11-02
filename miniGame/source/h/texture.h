@@ -110,6 +110,7 @@ public:
 		MESH_STAGE_02_WALL_03,		//ステージの壁3
 		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
 		MESH_TOWER_PILLAR,			//タワーの柱
+		MESH_ITEM_SHIELD,			//アイテム盾
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

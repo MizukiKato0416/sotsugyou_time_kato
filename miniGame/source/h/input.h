@@ -47,6 +47,7 @@ public:
 		REVERSE,		//バック
 		USE_ITEM,		//アイテムの使用
 		CAR_ATTACK,		//アタック
+		CAR_DEFENSE,	//チート用ディフェンス
 		//チェック
 		CHECK_X,		//Xボタン
 		CHECK_B,		//Bボタン

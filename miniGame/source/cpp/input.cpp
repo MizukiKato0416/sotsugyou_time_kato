@@ -666,6 +666,13 @@ bool CInputGamepadX::GetPress(CODE code, int nIdx) {
 		}
 		break;
 
+		//ディフェンス
+	case CODE::CAR_DEFENSE:
+		if (GetButtonPress(XINPUT_GAMEPAD_L, nIdx)) {
+			return true;
+		}
+		break;
+
 	}
 	return false;
 }
@@ -787,7 +794,7 @@ bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 void CInputGamepadX::SetVibration(int nLeftValue, int nRightValue, int nCntVibration, int nIdx) {
 	m_aVibrationState[nIdx].wLeftMotorSpeed = nLeftValue; // use any value between 0-65535 here
 	m_aVibrationState[nIdx].wRightMotorSpeed = nRightValue; // use any value between 0-65535 here
-	XInputSetState(0, &m_aVibrationState[nIdx]);
+	XInputSetState(nIdx, &m_aVibrationState[nIdx]);
 	m_aCntVibration[nIdx] = nCntVibration;
 	m_abVibration[nIdx] = true;
 }

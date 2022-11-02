@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// ボム処理 [bom.cpp]
+// ボム処理 [bomb.cpp]
 // Author : 加藤瑞葵
 //
 //=============================================================================
@@ -19,9 +19,9 @@
 // マクロ定義
 //=============================================================================
 #define BOM_PLAYER_COLL_SIZE	(30.0f)		//プレイヤーの当たり判定の大きさ半径
-#define BOM_SIZE				(80.0f)		//ボムのサイズ半径
+#define BOM_SIZE				(280.0f)	//ボムのサイズ半径
 #define BOM_GRAVITY				(0.1f)		//ボムの重力
-#define BOM_COLL_POS_Y			(20.0f)		//当たり判定をし始める高さ
+#define BOM_COLL_POS_Y			(10.0f)		//当たり判定をし始める高さ
 #define BOM_COLL_PLAYER_BOUND	(150.0f)	//プレイヤーを飛ばす量
 
 //=============================================================================
@@ -78,6 +78,14 @@ HRESULT CBom::Init(void) {
 
 	//変数初期化
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	CModel *pModel = GetPtrModel();
+	if (pModel != nullptr)
+	{
+			//指定したマテリアルの色を設定
+		pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 0);
+		pModel->SetMaterialPower(18.0f, 0);
+	}
 
 	CObjectModel::Init();
 	return S_OK;
@@ -136,7 +144,6 @@ void CBom::Update(void) {
 	{
 		//爆発音再生
 		ExplosionSound();
-
 
 		//消す
 		Uninit();

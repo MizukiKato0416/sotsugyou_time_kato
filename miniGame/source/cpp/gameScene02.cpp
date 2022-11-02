@@ -32,7 +32,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define GAME_02_TIME							(20)								//ゲームの時間
+#define GAME_02_TIME							(60)								//ゲームの時間
 #define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
 #define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
@@ -49,8 +49,8 @@
 
 #define GAME_02_NEX_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
-#define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
-#define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
+#define GAME_02_BOM_CREATE_COUNT	(30)		//ボムを生成する間隔
+#define GAME_02_BOM_NUM				(1)			//ボムを生成する個数
 
 #define GAME_02_CLOUD_NUM					(2)											//雲の数
 #define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1500.0f, -6000.0f))		//雲の位置
@@ -179,14 +179,15 @@ void CGameScene02::Init(void) {
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
 
-	//塔の生成
+	//車の生成
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -500.0f, 2500.0f), D3DXVECTOR3(0.1f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0030f, -0.004f, 0.0f), CModel::MODELTYPE::OBJ_CAR);
 
-	//がれきの生成
-	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+	CFloatObject::Create(D3DXVECTOR3(1300.0f, -800.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.001f, -0.001f, 0.0014f), CModel::MODELTYPE::OBJ_CAR);
 
+	//がれきの生成
+	//奥のがれき
 	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.001f, -0.002f, 0.005f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
 
@@ -201,6 +202,27 @@ void CGameScene02::Init(void) {
 
 	CFloatObject::Create(D3DXVECTOR3(1500.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0025f, 0.0f, 0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06);
+
+	//手前のがれき
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+
+	CFloatObject::Create(D3DXVECTOR3(1000.0f, -800.0f, -300.0f), D3DXVECTOR3(1.0f, -0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0001f, 0.0008f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06); 
+
+	CFloatObject::Create(D3DXVECTOR3(1200.0f, -500.0f, 0.0f), D3DXVECTOR3(-1.0f, 0.0f, 1.2f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0008f, 0.0008f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_03);
+
+	CFloatObject::Create(D3DXVECTOR3(-1400.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 0.3f, -1.2f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0016f, -0.0005f, -0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_05);
+
+	CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.005f, 0.0f), CModel::MODELTYPE::OBJ_ITEM_SHIELD);
+
+	CObjectModel *ObjModel = CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                                          D3DXVECTOR3(0.0f, 0.0f, 0.0f), CModel::MODELTYPE::OBJ_SPHERE_COVER);
+	ObjModel->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+	ObjModel->GetPtrModel()->SetColorGlow(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)

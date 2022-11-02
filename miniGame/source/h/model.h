@@ -41,6 +41,8 @@ public:
 		OBJ_BROKEN_TOWER_FRAGMENT_04,	//壊れた塔の破片
 		OBJ_BROKEN_TOWER_FRAGMENT_05,	//壊れた塔の破片
 		OBJ_BROKEN_TOWER_FRAGMENT_06,	//壊れた塔の破片
+		OBJ_ITEM_SHIELD,				//アイテム盾
+		OBJ_SPHERE_COVER,				//球のカバー
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 

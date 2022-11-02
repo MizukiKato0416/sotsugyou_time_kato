@@ -170,7 +170,7 @@ VS_OUTPUT RenderSceneVSLight(
 	Out.Specular = saturate(dot(nor, vecHarf));
 
 	//輪郭を光らせる
-	if(g_colGlow.w) Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
+	if(g_colGlow.w) Out.Diffuse += (pow(1.0 - saturate(dot(vecView, nor)), 1) + 0.1) * (g_colGlow - Out.Diffuse);
 
 	//テクスチャ座標
 	Out.TexUV = vTexUV;

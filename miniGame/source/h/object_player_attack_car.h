@@ -61,10 +61,10 @@ private:
 	D3DXVECTOR3 m_destRot;			//目標の角度
 	D3DXVECTOR3 m_move;				//移動量
 	D3DXVECTOR3 m_boundMove;		//バウンド移動量
-
 	float m_fMoveSpeed;				//移動する速さ
-	bool m_bAttack;					//アタックしているかどうか
-	bool m_bCollOld[MAX_OBJECT_PLAYER_NUM];				//前のフレーム当たったかどうか
+
+	bool m_bAttack;									//アタックしているかどうか
+	bool m_bCollOld[MAX_OBJECT_PLAYER_NUM];			//前のフレーム当たったかどうか
 };
 
 #endif // !_OBJECT_PLAYER_ATTACK_CAR_H_

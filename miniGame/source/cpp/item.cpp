@@ -45,25 +45,6 @@ CItem::~CItem()
 }
 
 //=============================================================================
-// 生成処理
-//=============================================================================
-CItem* CItem::Create(D3DXVECTOR3 pos, const CObjectPlayerBalloonCar *pPlayer) {
-	
-	//デフォルトのモデルを設定
-	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_ITEM_BOX;
-
-	CItem* pItem;
-	pItem = new CItem(typeModel);
-	if (pItem == nullptr) return nullptr;
-
-	pItem->SetPos(pos);
-	
-	pItem->Init();
-
-	return pItem;
-}
-
-//=============================================================================
 // 初期化処理
 //=============================================================================
 HRESULT CItem::Init(void) {
@@ -101,7 +82,7 @@ void CItem::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItem::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
+void CItem::HitPlayer(CObjectPlayer * pPlayer)
 {
 }
 
@@ -117,7 +98,7 @@ bool CItem::CollisionPlayer(const float fMySize)
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
 
 		//プレイヤーにキャスト
-		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
+		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
 
 		//オブジェクトタイプの確認
 		bool bMatchType = false;
