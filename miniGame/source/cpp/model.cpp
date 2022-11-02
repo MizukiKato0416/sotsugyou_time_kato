@@ -488,6 +488,12 @@ void CModel::SetModelType(MODELTYPE type) {
 		m_modelType = (MODELTYPE)0;
 	}
 
+	//マテリアルをデフォルトに設定
+	for (int nIdxMat = 0; nIdxMat < MAX_MATERIAL; nIdxMat++)
+	{
+		m_aMat[nIdxMat] = m_aMatDefault[(int)m_modelType][nIdxMat];
+	}
+
 	//輪郭がある場合
 	if (m_pCloneMesh != nullptr) {
 		//複製メッシュの破棄

@@ -6,6 +6,7 @@
 //=============================================================================
 #include "scene.h"
 #include "titleScene.h"
+#include "selectGameScene.h"
 #include "gameScene.h"
 #include "gameScene01.h"
 #include "gameScene02.h"
@@ -74,6 +75,10 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 	{
 	case CScene::SCENE_TYPE::TITLE:
 		pScene = new CTitleScene;
+		break;
+
+	case CScene::SCENE_TYPE::SELECT_GAME:
+		pScene = new CSelectGameScene;
 		break;
 
 	case CScene::SCENE_TYPE::GAME_01:

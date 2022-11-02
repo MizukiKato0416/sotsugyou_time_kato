@@ -139,9 +139,6 @@
     <ClCompile Include="source\cpp\scene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\score.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -212,6 +209,12 @@
       <Filter>cpp\effect</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\plane.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\selectGameScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -354,9 +357,6 @@
     <ClInclude Include="source\h\scene.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\scene3d.h">
-      <Filter>h</Filter>
-    </ClInclude>
     <ClInclude Include="source\h\score.h">
       <Filter>h</Filter>
     </ClInclude>
@@ -427,6 +427,12 @@
       <Filter>h\effect</Filter>
     </ClInclude>
     <ClInclude Include="source\h\Fountain.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\selectGameScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\scene3d.h">
       <Filter>h\effect</Filter>
     </ClInclude>
   </ItemGroup>

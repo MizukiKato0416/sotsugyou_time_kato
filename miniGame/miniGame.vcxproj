@@ -212,6 +212,7 @@
     <ClCompile Include="source\cpp\scene.cpp" />
     <ClCompile Include="source\cpp\score.cpp" />
     <ClCompile Include="source\cpp\score_ui.cpp" />
+    <ClCompile Include="source\cpp\selectGameScene.cpp" />
     <ClCompile Include="source\cpp\selectMenu.cpp" />
     <ClCompile Include="source\cpp\selectMenu2D.cpp" />
     <ClCompile Include="source\cpp\selectMenu3D.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="source\h\scene3d.h" />
     <ClInclude Include="source\h\score.h" />
     <ClInclude Include="source\h\score_ui.h" />
+    <ClInclude Include="source\h\selectGameScene.h" />
     <ClInclude Include="source\h\selectMenu.h" />
     <ClInclude Include="source\h\selectMenu2D.h" />
     <ClInclude Include="source\h\selectMenu3D.h" />

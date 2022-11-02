@@ -21,8 +21,6 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define FOG_COLOR (D3DXCOLOR(0.9f, 0.5f, 0.0f, 1.0f))	//フォグの色
-#define TEXT_FILE_NAME_APPLETYPE "data/TEXT/save_appletype.txt"
 #define ESC_POS (D3DXVECTOR3(120.0f, 40.0f, 0.0f))
 #define ESC_WIDTH (200.0f)
 #define ESC_HEIGHT (40.0f)
@@ -223,7 +221,7 @@ void CTitleScene::Update(void) {
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;	
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::GAME_02, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
 		}
 		else
 		{
