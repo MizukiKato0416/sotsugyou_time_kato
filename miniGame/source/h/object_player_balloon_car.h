@@ -80,7 +80,6 @@ private:
 	void ItemUi(void);								//アイテムUi処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
-	D3DXVECTOR3 m_destRot;	//目標の角度
 	D3DXVECTOR3 m_move;		//移動量
 
 	float m_fMoveSpeed;				//移動する速さ

@@ -75,7 +75,6 @@ CObjectPlayerBalloonCar::CObjectPlayerBalloonCar()
 	SetDrawPriority(DRAW_PRIORITY::CHARA);			//•`‰æ‡‚ÌÝ’è
 
 	m_lastPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_destRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	m_fMoveSpeed = 0.0f;
@@ -122,7 +121,6 @@ HRESULT CObjectPlayerBalloonCar::Init(void) {
 
 	//ƒvƒŒƒCƒ„[‚Ì‰ŠúÝ’è
 	CObjectModel::SetRot(D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
-	m_destRot.y =  D3DX_PI;	//‰œŒü‚«
 	m_fMoveSpeed = 0.0f;
 	m_fBoundMoveSpeed = 0.0f;
 	m_state = OBJECT_PLAYER_BALLOON_CAR_STATE::NORMAL;
@@ -396,81 +394,91 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 	bInputMove = bRotateUp || bRotateDown || bRotateLeft || bRotateRight;	//‚Ç‚ê‚©‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éê‡
 	//ˆÚ“®ƒL[‰Ÿ‰º’†
 	if (bInputMove) {
+		float destRotY;	//–Ú•WŠp“x
+
 		//ƒL[‚ð‰Ÿ‚µ‚Ä‚¢‚½•ûŒü‚ð–Ú•W‚ÌŠp“x‚É‚·‚é
 		//ã
 		if (bRotateUp) {
 			if (bRotateRight) {
-				m_destRot.y = D3DX_PI * -0.75f + fRotCameraY;
+				destRotY = D3DX_PI * -0.75f + fRotCameraY;
 			}
 			else if (bRotateLeft) {
-				m_destRot.y = D3DX_PI * 0.75f + fRotCameraY;
+				destRotY = D3DX_PI * 0.75f + fRotCameraY;
 			}
 			else {
-				m_destRot.y = D3DX_PI + fRotCameraY;
+				destRotY = D3DX_PI + fRotCameraY;
 			}
 		}
 		//‰º
 		else if (bRotateDown) {
 			if (bRotateRight) {
-				m_destRot.y = D3DX_PI * -0.25f + fRotCameraY;
+				destRotY = D3DX_PI * -0.25f + fRotCameraY;
 			}
 			else if (bRotateLeft) {
-				m_destRot.y = D3DX_PI * 0.25f + fRotCameraY;
+				destRotY = D3DX_PI * 0.25f + fRotCameraY;
 			}
 			else {
-				m_destRot.y = 0.0f + fRotCameraY;
+				destRotY = 0.0f + fRotCameraY;
 			}
 		}
 		//¶‰E
 		else {
 			if (bRotateRight) {
-				m_destRot.y = D3DX_PI * -0.5f + fRotCameraY;
+				destRotY = D3DX_PI * -0.5f + fRotCameraY;
 			}
 			else if (bRotateLeft) {
-				m_destRot.y = D3DX_PI * 0.5f + fRotCameraY;
+				destRotY = D3DX_PI * 0.5f + fRotCameraY;
 			}
 		}
 
 		//ƒpƒC’´‰ßŽž
-		if (m_destRot.y > D3DX_PI) {
-			m_destRot.y = -D3DX_PI * 2 + m_destRot.y;
+		if (destRotY > D3DX_PI) {
+			destRotY += -D3DX_PI * 2;
 		}
-		else if (m_destRot.y < -D3DX_PI) {
-			m_destRot.y = D3DX_PI * 2 + m_destRot.y;
+		else if (destRotY < -D3DX_PI) {
+			destRotY += D3DX_PI * 2;
+		}
+
+		//ŒãiŽž‚Í‹tŒü‚«
+		if (m_fMoveSpeed < 0.0f) {
+			destRotY += D3DX_PI;
+			if (destRotY > D3DX_PI) {
+				destRotY += -D3DX_PI * 2;
+			}
 		}
 
 		D3DXVECTOR3 rotObjectPlayer = CObjectModel::GetRot();//Šp“x‚ÌŽæ“¾
 		float fdeltaRot;	//Šp“x‚Ì·•ª
 		//Œ»Ý‚ÌŠp“x‚Æ–Ú•W‚ÌŠp“x‚Ì·•ª‚ÌŒvŽZ
-		if (m_destRot.y >= 0.0f) {
+		if (destRotY >= 0.0f) {
 			if (rotObjectPlayer.y >= 0.0f) {
-				fdeltaRot = m_destRot.y - rotObjectPlayer.y;
+				fdeltaRot = destRotY - rotObjectPlayer.y;
 			}
 			else if (rotObjectPlayer.y < 0.0f) {
-				if (m_destRot.y - rotObjectPlayer.y >= D3DX_PI) {
-					fdeltaRot = -D3DX_PI - rotObjectPlayer.y - D3DX_PI + m_destRot.y;
+				if (destRotY - rotObjectPlayer.y >= D3DX_PI) {
+					fdeltaRot = -D3DX_PI - rotObjectPlayer.y - D3DX_PI + destRotY;
 				}
-				else if (m_destRot.y - rotObjectPlayer.y < D3DX_PI) {
-					fdeltaRot = m_destRot.y - rotObjectPlayer.y;
+				else if (destRotY - rotObjectPlayer.y < D3DX_PI) {
+					fdeltaRot = destRotY - rotObjectPlayer.y;
 				}
 			}
 		}
-		else if (m_destRot.y < 0.0f) {
+		else if (destRotY < 0.0f) {
 			if (rotObjectPlayer.y >= 0.0f) {
-				if (rotObjectPlayer.y - m_destRot.y >= D3DX_PI) {
-					fdeltaRot = D3DX_PI - rotObjectPlayer.y + D3DX_PI + m_destRot.y;
+				if (rotObjectPlayer.y - destRotY >= D3DX_PI) {
+					fdeltaRot = D3DX_PI - rotObjectPlayer.y + D3DX_PI + destRotY;
 				}
-				else if (rotObjectPlayer.y - m_destRot.y < D3DX_PI) {
-					fdeltaRot = m_destRot.y - rotObjectPlayer.y;
+				else if (rotObjectPlayer.y - destRotY < D3DX_PI) {
+					fdeltaRot = destRotY - rotObjectPlayer.y;
 				}
 			}
 			else if (rotObjectPlayer.y < 0.0f) {
-				fdeltaRot = m_destRot.y - rotObjectPlayer.y;
+				fdeltaRot = destRotY - rotObjectPlayer.y;
 			}
 		}
 
 		//‰ñ“]‚Ì”½‰f
-		rotObjectPlayer.y += fdeltaRot * ROTATE_SPEED * (m_fMoveSpeed / 8.0f);
+		rotObjectPlayer.y += fdeltaRot * ROTATE_SPEED * (fabsf(m_fMoveSpeed) / 8.0f);
 
 		//ƒpƒC’´‰ßŽž
 		if (rotObjectPlayer.y > D3DX_PI) {

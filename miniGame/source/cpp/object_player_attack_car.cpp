@@ -370,7 +370,8 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 	bInputMove = bRotateUp || bRotateDown || bRotateLeft || bRotateRight;	//どれかが押されている場合
 	//移動キー押下中
 	if (bInputMove) {
-		float destRotY;
+		float destRotY;	//目標角度
+
 		//キーを押していた方向を目標の角度にする
 		//上
 		if (bRotateUp) {
