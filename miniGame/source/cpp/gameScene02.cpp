@@ -219,10 +219,16 @@ void CGameScene02::Init(void) {
 	CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.005f, 0.0f), CModel::MODELTYPE::OBJ_ITEM_SHIELD);
 
-	CObjectModel *ObjModel = CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	CObjectModel *pObjModel = CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                                          D3DXVECTOR3(0.0f, 0.0f, 0.0f), CModel::MODELTYPE::OBJ_SPHERE_COVER);
-	ObjModel->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
-	ObjModel->GetPtrModel()->SetColorGlow(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	if (pObjModel) {
+		pObjModel->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+		CModel* pModel = pObjModel->GetPtrModel();
+		if (pModel) {
+			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 0.0f));
+			pModel->SetPowerGlow(1.5f);
+		}
+	}
 
 	//â_ÇÃê∂ê¨
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)

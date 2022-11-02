@@ -75,7 +75,7 @@ public:
 	void SetEffectMaterialSpecular(D3DXCOLOR matSpecular);	//シェーダのマテリアルのスペキュラー色を設定
 	void SetEffectMaterialPower(float matPower);			//シェーダのマテリアルの反射の強さを設定
 
-	void SetEffectColorGlow(D3DXCOLOR colGlow);			//シェーダの輪郭の発光色を設定
+	void SetEffectGlow(D3DXCOLOR colGlow, float fPower);			//シェーダの輪郭の発光色を設定
 
 private:
 	void CreateVtxDecl2D(void);		//2Dポリゴンの頂点定義を生成

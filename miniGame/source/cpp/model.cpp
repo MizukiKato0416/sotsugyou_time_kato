@@ -37,6 +37,7 @@ CModel::CModel()
 	memset(&m_aMat, 0, sizeof(m_aMat));
 	memset(&m_aChangeDiffuse, 0, sizeof(m_aChangeDiffuse));
 	m_colGlow = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_powGlow = 2.0f;
 
 	m_bOutline = false;
 	m_colOutline = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -372,7 +373,7 @@ void CModel::Draw(void) {
 			pRenderer->SetEffectMaterialSpecular(m_aMat[nCntMat].MatD3D.Specular);
 			pRenderer->SetEffectMaterialPower(m_aMat[nCntMat].MatD3D.Power);
 			//輪郭の発光色の設定
-			pRenderer->SetEffectColorGlow(m_colGlow);
+			pRenderer->SetEffectGlow(m_colGlow, m_powGlow);
 
 			DWORD dwPassFlag = PASS_3D | PASS_LIGHT;
 			//テクスチャがある場合フラグを追加
@@ -604,6 +605,13 @@ void CModel::StartChangeMaterialDiffuse(int nIdxMat, D3DXCOLOR colDest, int nTim
 //=============================================================================
 void CModel::SetColorGlow(D3DXCOLOR col) {
 	m_colGlow = col;
+}
+
+//=============================================================================
+// 輪郭の強度の設定
+//=============================================================================
+void CModel::SetPowerGlow(float fPower) {
+	m_powGlow = fPower;
 }
 
 //=============================================================================

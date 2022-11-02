@@ -98,6 +98,7 @@ public:
 	void SetMaterialPower(float fPower, int nIdx);		//マテリアルの反射の質感の設定
 	void StartChangeMaterialDiffuse(int nIdxMat, D3DXCOLOR colDest, int nTimeFin);	//マテリアルの色の変更の開始
 	void SetColorGlow(D3DXCOLOR col);	//輪郭の発光色の設定
+	void SetPowerGlow(float fPower);	//輪郭の強度の設定
 
 	void CreateCloneMesh(void);		//複製メッシュの生成
 	void ExpansionCloneMesh(void);	//複製メッシュを膨張させる
@@ -120,7 +121,9 @@ private:
 	int m_nIdxParent;		//親のインデックス
 	D3DXMATERIAL m_aMat[MAX_MATERIAL];	//モデルのマテリアル
 	ChangeDiffuse m_aChangeDiffuse[MAX_MATERIAL];	//モデルのマテリアルの色を変更する構造体の配列
+
 	D3DXCOLOR m_colGlow;	//輪郭の発光色の色
+	D3DXCOLOR m_powGlow;	//輪郭の強度
 
 	bool m_bOutline;			//輪郭があるかどうか
 	D3DXCOLOR m_colOutline;	//輪郭の色
