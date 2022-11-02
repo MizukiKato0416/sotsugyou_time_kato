@@ -34,6 +34,7 @@ CItemShield::CItemShield()
 {
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
+	m_pSphereCover = nullptr;
 }
 
 //=============================================================================
@@ -41,7 +42,9 @@ CItemShield::CItemShield()
 //=============================================================================
 CItemShield::CItemShield(CModel::MODELTYPE typeModel) : CItem(typeModel)
 {
-	
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_nCounter = 0;
+	m_pSphereCover = nullptr;
 }
 
 //=============================================================================
@@ -73,6 +76,18 @@ CItemShield* CItemShield::Create(D3DXVECTOR3 pos) {
 //=============================================================================
 HRESULT CItemShield::Init(void) {
 
+
+	m_pSphereCover = CObjectModel::Create(CModel::MODELTYPE::OBJ_SPHERE_COVER, GetPos() , D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	if (m_pSphereCover) {
+		m_pSphereCover->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+		CModel* pModel = m_pSphereCover->GetPtrModel();
+		if (pModel) {
+			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 0.0f));
+			pModel->SetPowerGlow(1.5f);
+		}
+	}
+
+
 	//変数初期化
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
@@ -86,6 +101,13 @@ HRESULT CItemShield::Init(void) {
 // 終了処理
 //=============================================================================
 void CItemShield::Uninit(void) {
+
+	//消す
+	if (m_pSphereCover != nullptr)
+	{
+		m_pSphereCover->Uninit();
+		m_pSphereCover = nullptr;
+	}
 
 	CItem::Uninit();
 }
@@ -143,10 +165,8 @@ void CItemShield::Move(void) {
 
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();
-
 	//重力加算
 	m_move.y -= ITEM_SHIELD_GRAVITY;
-
 	//位置加算
 	pos += m_move;
 
@@ -159,6 +179,13 @@ void CItemShield::Move(void) {
 
 	//位置設定
 	SetPos(pos);
+
+	//球体が生成されていたら
+	if (m_pSphereCover != nullptr)
+	{
+		//位置をアイテムに合わせる
+		m_pSphereCover->SetPos(pos);
+	}
 }
 
 //=============================================================================

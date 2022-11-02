@@ -44,6 +44,7 @@ private:
 	D3DXVECTOR3 m_move;		//移動量
 	int m_nCounter;			//カウンター
 
+	CObjectModel *m_pSphereCover;		//球体
 };
 
 #endif // !_ITEM_SHIELD_H_
