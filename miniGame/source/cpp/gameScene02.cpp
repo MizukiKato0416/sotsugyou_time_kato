@@ -216,20 +216,6 @@ void CGameScene02::Init(void) {
 	CFloatObject::Create(D3DXVECTOR3(-1400.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 0.3f, -1.2f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0016f, -0.0005f, -0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_05);
 
-	CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.0f, 0.005f, 0.0f), CModel::MODELTYPE::OBJ_ITEM_SHIELD);
-
-	CObjectModel *pObjModel = CFloatObject::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                                          D3DXVECTOR3(0.0f, 0.0f, 0.0f), CModel::MODELTYPE::OBJ_SPHERE_COVER);
-	if (pObjModel) {
-		pObjModel->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
-		CModel* pModel = pObjModel->GetPtrModel();
-		if (pModel) {
-			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 0.0f));
-			pModel->SetPowerGlow(1.5f);
-		}
-	}
-
 	//â_ÇÃê∂ê¨
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
 	{

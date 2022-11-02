@@ -54,6 +54,7 @@ private:
 	bool Finish(void);						//フィニッシュするか確認処理
 	void HurryUp(void);						//急げ処理
 	void Cloud(void);						//雲の処理
+	//void CreateItem();						//アイテム生成処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
@@ -61,6 +62,7 @@ private:
 	std::vector<CMeshwall*> m_pCloud;									//雲のポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
+	int m_nItemCounter;						//アイテムの生成カウンター
 	bool m_bHurryUp;						//急ぐかどうか
 	WEATHER_STATE m_weatherState;			//天候の状態
 };

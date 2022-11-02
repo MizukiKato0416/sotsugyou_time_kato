@@ -429,12 +429,6 @@
     <ClInclude Include="source\h\Fountain.h">
       <Filter>h\effect</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\selectGameScene.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\scene3d.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cpp">

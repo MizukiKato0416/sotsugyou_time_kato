@@ -189,6 +189,7 @@
     <ClCompile Include="source\cpp\item.cpp" />
     <ClCompile Include="source\cpp\itemBox.cpp" />
     <ClCompile Include="source\cpp\item_banana.cpp" />
+    <ClCompile Include="source\cpp\item_shield.cpp" />
     <ClCompile Include="source\cpp\main.cpp" />
     <ClCompile Include="source\cpp\manager.cpp" />
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="source\h\item.h" />
     <ClInclude Include="source\h\itemBox.h" />
     <ClInclude Include="source\h\item_banana.h" />
+    <ClInclude Include="source\h\item_shield.h" />
     <ClInclude Include="source\h\LoadEffect.h" />
     <ClInclude Include="source\h\main.h" />
     <ClInclude Include="source\h\manager.h" />

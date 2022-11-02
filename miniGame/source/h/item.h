@@ -30,7 +30,10 @@ public:
 	{
 		NONE = 0,
 		BANANA,
-		MAX
+		BALLOON_GAME_MAX,
+
+		SHIELD = 0,
+		ATTACK_GAME_MAX
 	};
 
 	CItem();	//デフォルトコンストラクタ
@@ -48,9 +51,8 @@ private:
 	int m_nPlayerIndex;		//このアイテムを持っているプレイヤーのインデックス
 
 protected:
-	//第一引数プレイヤーのポインタが帰る
-	bool CollisionPlayer(const float fMySize);	//プレイヤーとの当たり判定
-	CObjectPlayer *m_pPlayer;							//発射したプレイヤーのポインタ
+	bool CollisionPlayer(const float fMySize, const float fHeight);	//プレイヤーとの当たり判定
+	CObjectPlayer *m_pPlayer;					                    //発射したプレイヤーのポインタ
 };
 
 #endif // !_ITEM_H_
