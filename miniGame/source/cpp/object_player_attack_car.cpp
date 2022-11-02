@@ -409,10 +409,10 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 
 		//パイ超過時
 		if (m_destRot.y > D3DX_PI) {
-			m_destRot.y = -D3DX_PI * 2 + m_destRot.y;
+			m_destRot.y += -D3DX_PI * 2;
 		}
 		else if (m_destRot.y < -D3DX_PI) {
-			m_destRot.y = D3DX_PI * 2 + m_destRot.y;
+			m_destRot.y += D3DX_PI * 2;
 		}
 
 		D3DXVECTOR3 rotObjectPlayer = CObjectModel::GetRot();//角度の取得
@@ -450,10 +450,10 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 
 		//パイ超過時
 		if (rotObjectPlayer.y > D3DX_PI) {
-			rotObjectPlayer.y = -D3DX_PI;
+			rotObjectPlayer.y -= D3DX_PI * 2;
 		}
 		else if (rotObjectPlayer.y < -D3DX_PI) {
-			rotObjectPlayer.y = D3DX_PI;
+			rotObjectPlayer.y += D3DX_PI * 2;
 		}
 
 		//角度の設定

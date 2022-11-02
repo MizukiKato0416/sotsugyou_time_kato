@@ -63,10 +63,10 @@ protected:
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか
 
-	CTimer* m_pTimer;													//ゲームのタイマー
-	CObject2D* m_pTimerFrame;											//タイマーの枠
-	CPauseMenu* m_pMenuPause;											//ポーズメニュー
-	CCheck *m_pCheck;													//チェッククラスのポインタ
+	CTimer* m_pTimer;			//ゲームのタイマー
+	CObject2D* m_pTimerFrame;	//タイマーの枠
+	CPauseMenu* m_pMenuPause;	//ポーズメニュー
+	CCheck *m_pCheck;			//チェッククラスのポインタ
 };
 
 #endif // !_GAME_SCENE_H_

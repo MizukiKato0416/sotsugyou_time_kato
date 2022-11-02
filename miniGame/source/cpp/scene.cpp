@@ -20,6 +20,7 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
+CScene::SCENE_TYPE CScene::m_typeScene = CScene::SCENE_TYPE::TITLE;
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -71,6 +72,8 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 	}
 
 	//新しいシーンの生成
+	m_typeScene = typeScene;
+
 	switch (typeScene)
 	{
 	case CScene::SCENE_TYPE::TITLE:
