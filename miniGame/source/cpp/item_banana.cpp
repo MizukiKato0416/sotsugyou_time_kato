@@ -21,6 +21,7 @@
 #define ITEM_BANANA_SIZE				(50.0f)		//バナナのサイズ半径
 #define ITEM_BANANA_ROTATE_SPEED		(0.08f)		//バナナの回転の速さ
 #define ITEM_BANANA_MOVE_SPEED			(25.0f)		//バナナの移動の速さ
+#define ITEM_BANANA_COLL_HEIGHT			(1000.0f)	//バナナの当たり判定をし始める高さ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -131,7 +132,7 @@ void CItemBanana::Update(void) {
 	SetPos(pos);
 
 	//プレイヤーとの当たり判定
-	if (CollisionPlayer(ITEM_BANANA_SIZE))
+	if (CollisionPlayer(ITEM_BANANA_SIZE, ITEM_BANANA_COLL_HEIGHT))
 	{
 		//マネージャーの取得
 		CManager* pManager = CManager::GetManager();
@@ -159,13 +160,20 @@ void CItemBanana::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItemBanana::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
+void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
 {
+	CObjectPlayerBalloonCar *pBalloonCar = dynamic_cast<CObjectPlayerBalloonCar*>(pPlayer);
+
+	if (pBalloonCar == nullptr)
+	{
+		return;
+	}
+
 	//プレイヤーが通常状態だったら
-	if (pPlayer->GetState() == CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::NORMAL)
+	if (pBalloonCar->GetState() == CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::NORMAL)
 	{
 		//プレイヤーの状態をスピン状態にする
-		pPlayer->SetState(CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN);
+		pBalloonCar->SetState(CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN);
 
 		//マネージャーの取得
 		CManager* pManager = CManager::GetManager();
@@ -180,12 +188,12 @@ void CItemBanana::HitPlayer(CObjectPlayerBalloonCar * pPlayer)
 		if (pPadX != nullptr)
 		{
 			//振動させる
-			pPadX->SetVibration(65535, 65535, 40, pPlayer->GetPlayer()->GetIndex() - 1);
+			pPadX->SetVibration(65535, 65535, 40, pBalloonCar->GetPlayer()->GetIndex() - 1);
 		}
 
 		//ーーーーーーーーーーーーーーーーーーー
 		//スピン(バナナヒット)
-		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pPlayer->GetPos().x, pPlayer->GetPos().y + 1, pPlayer->GetPos().z), {}, {});		//回るやつ
+		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pBalloonCar->GetPos().x, pBalloonCar->GetPos().y + 1, pBalloonCar->GetPos().z), {}, {});		//回るやつ
 		//ーーーーーーーーーーーーーーーーーーー
 	}
 }

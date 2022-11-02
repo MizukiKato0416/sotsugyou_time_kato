@@ -53,6 +53,7 @@
 //その他
 //--------------------------------
 #define ATTACK_CAR_GRAVITY				(0.5f)		//重力
+#define ATTACK_CAR_DEFENCE_COUNT		(300)		//ディフェンス状態の時間
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -71,6 +72,9 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 	m_fMoveSpeed = 0.0f;
 	m_bAttack = false;
 	memset(m_bCollOld, false, sizeof(m_bCollOld[MAX_OBJECT_PLAYER_NUM]));
+
+	m_nDefenceCounter = 0;
+	m_bDefence = false;
 }
 
 //=============================================================================
@@ -111,7 +115,8 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 	m_boundMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bAttack = false;
 	memset(m_bCollOld, FALSE, sizeof(m_bCollOld[MAX_OBJECT_PLAYER_NUM]));
-
+	m_nDefenceCounter = 0;
+	m_bDefence = false;
 	return S_OK;
 }
 
@@ -210,6 +215,9 @@ void CObjectPlayerAttackCar::Update(void) {
 	posObjectPlayer += m_move + m_boundMove;
 	//位置設定
 	SetPos(posObjectPlayer);
+
+	//ディフェンス状態処理
+	Defence();
 
 	//----------------------------
 	//当たり判定
@@ -522,6 +530,29 @@ void CObjectPlayerAttackCar::Attack(void)
 }
 
 //=============================================================================
+//アタック処理
+//=============================================================================
+void CObjectPlayerAttackCar::Defence(void)
+{
+	//ディフェンス状態でないとき
+	if (!m_bDefence)
+	{
+		return;
+	}
+
+	m_nDefenceCounter++;
+
+	//一定時間たったら
+	if (m_nDefenceCounter > ATTACK_CAR_DEFENCE_COUNT)
+	{
+		//ディフェンス状態をやめる
+		m_nDefenceCounter = 0;
+		m_bDefence = false;
+	}
+
+}
+
+//=============================================================================
 //重力処理
 //=============================================================================
 void CObjectPlayerAttackCar::Gravity(void)
@@ -656,45 +687,45 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			}
 
 
-			////ディフェンスしている状態なら
-			//if (m_bDefence)
-			//{
-			//	fBoundPlayer = ATTACK_CAR_NORMAL_MY_BOUND_WOLF;
+			//ディフェンスしている状態なら
+			if (m_bDefence)
+			{
+				fBoundPlayer = ATTACK_CAR_NORMAL_MY_BOUND_WOLF;
 
-			//	//アタック状態なら
-			//	if (m_bAttack)
-			//	{
-			//		fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND_WOLF;
-			//	}
-			//}
-			//else
-			//{
-			//	//アタック状態なら
-			//	if (m_bAttack)
-			//	{
-			//		fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND;
-			//	}
-			//}
+				//アタック状態なら
+				if (m_bAttack)
+				{
+					fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND_WOLF;
+				}
+			}
+			else
+			{
+				//アタック状態なら
+				if (m_bAttack)
+				{
+					fBoundPlayer = ATTACK_CAR_ATTACK_MY_BOUND;
+				}
+			}
 
-			////相手がディフェンスしている状態なら
-			//if (pObjectPlayer->m_bDefence)
-			//{
-			//	fBoundEnemy = ATTACK_CAR_NORMAL_ENEMY_BOUND_WOLF;
+			//相手がディフェンスしている状態なら
+			if (pObjectPlayer->m_bDefence)
+			{
+				fBoundEnemy = ATTACK_CAR_NORMAL_ENEMY_BOUND_WOLF;
 
-			//	//アタック状態なら
-			//	if (m_bAttack)
-			//	{
-			//		fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND_WOLF;
-			//	}
-			//}
-			//else
-			//{
-			//	//アタック状態なら
-			//	if (m_bAttack)
-			//	{
-			//		fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND;
-			//	}
-			//}
+				//アタック状態なら
+				if (m_bAttack)
+				{
+					fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND_WOLF;
+				}
+			}
+			else
+			{
+				//アタック状態なら
+				if (m_bAttack)
+				{
+					fBoundEnemy = ATTACK_CAR_ATTACK_ENEMY_BOUND;
+				}
+			}
 
 			//相手のバウンド移動量取得
 			D3DXVECTOR3 move = pObjectPlayer->GetBoundMove();

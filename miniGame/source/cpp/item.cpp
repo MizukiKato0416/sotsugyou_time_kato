@@ -89,10 +89,15 @@ void CItem::HitPlayer(CObjectPlayer * pPlayer)
 //=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CItem::CollisionPlayer(const float fMySize)
+bool CItem::CollisionPlayer(const float fMySize, const float fHeight)
 {
+	//当たり判定を始める高さにまで到達していなかったら
+	if (GetPos().y > fHeight)
+	{
+		return false;
+	}
+
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
-	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
 
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得

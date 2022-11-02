@@ -47,12 +47,23 @@ public:
 	//バウンド移動量設定処理
 	void SetBoundMove(const D3DXVECTOR3 boundMove) { m_boundMove = boundMove; }
 
+	//ディフェンス状態取得処理
+	bool GetDefence() { return m_bDefence; }
+	//ディフェンス状態設定処理
+	void SetDefence(const bool bDefence) { m_bDefence = bDefence; }
+
+	//ディフェンスカウンター取得処理
+	int GetDefenceCounter() { return m_nDefenceCounter; }
+	//ディフェンスカウンター設定処理
+	void SetDefenceCounter(const int nDefenceCounter) { m_nDefenceCounter = nDefenceCounter; }
+
 private:
 
 	void Move(CInput* pInput, float fRotCameraY);	//移動
 	void DecMove(void);								//移動量の減少
 	void DecBoundMove(void);						//バウンド移動量の減少
 	void Attack(void);								//アタック処理
+	void Defence(void);								//ディフェンス処理
 	void Gravity(void);								//重力処理
 	void Collision(D3DXVECTOR3& pos);				//当たり判定
 	void CollisionObjectPlayer(void);				//プレイヤーとの当たり判定
@@ -62,9 +73,11 @@ private:
 	D3DXVECTOR3 m_move;				//移動量
 	D3DXVECTOR3 m_boundMove;		//バウンド移動量
 	float m_fMoveSpeed;				//移動する速さ
+	int m_nDefenceCounter;			//ディフェンス状態をカウントする用
 
 	bool m_bAttack;									//アタックしているかどうか
 	bool m_bCollOld[MAX_OBJECT_PLAYER_NUM];			//前のフレーム当たったかどうか
+	bool m_bDefence;								//ディフェンス状態かどうか
 };
 
 #endif // !_OBJECT_PLAYER_ATTACK_CAR_H_

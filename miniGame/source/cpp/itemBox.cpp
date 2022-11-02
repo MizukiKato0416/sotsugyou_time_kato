@@ -192,7 +192,7 @@ bool CItemBox::CollisionPlayer(void)
 			if (pPlayer->GetItemType() == CItem::ITEM_TYPE::NONE)
 			{
 				//アイテムの中からランダムで取得させる
-				int nRandItem = rand() % (int(CItem::ITEM_TYPE::MAX) - 1) + 1;
+				int nRandItem = rand() % (int(CItem::ITEM_TYPE::BALLOON_GAME_MAX) - 1) + 1;
 
 				//アイテムを取得させる
 				pPlayer->SetItemType((CItem::ITEM_TYPE)nRandItem);

@@ -214,6 +214,9 @@
     <ClCompile Include="source\cpp\Effect\plane.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\item_shield.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -428,6 +431,9 @@
     </ClInclude>
     <ClInclude Include="source\h\Fountain.h">
       <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\item_shield.h">
+      <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
