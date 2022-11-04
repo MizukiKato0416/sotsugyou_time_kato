@@ -407,8 +407,8 @@ EFFECTSTATE3D
 	ADDSIZE = 0.0					//大きさ変動
 	SIZEY = 20.0						//Y大きさ
 	ADDSIZEY = 0.0					//Y大きさ変動
-	DENSITY = 15						//密度
-	MOVE3D = 13.00 24.00 -1.39						//移動関係(移動速度、上昇、重力)
+	DENSITY = 30						//密度
+	MOVE3D = 20.00 24.00 -1.0						//移動関係(移動速度、上昇、重力)
 	DIFFUSION = 421					//拡散率
 	TYPE = 1					//上昇量ランダム
 	COLOR = 1000 400 0 900			//カラー
@@ -455,10 +455,10 @@ END_EFFECTSTATE3D
 #========================================================================
 EFFECTSTATE3D
 	PATTERN = 1				//動きのパターン
-	SIZE = 102.0						//大きさ
+	SIZE = 132.0						//大きさ
 	ADDSIZE = 22.2					//大きさ変動
-	SIZEY = 24.0						//Y大きさ
-	ADDSIZEY = -3.0					//Y大きさ変動
+	SIZEY = 54.0						//Y大きさ
+	ADDSIZEY = -8.0					//Y大きさ変動
 	DENSITY = 1						//密度
 	MOVE3D = 0.0 0.0 0.0					//移動
 	DISTANCE = 1.0						//発生距離
@@ -483,9 +483,9 @@ END_EFFECTSTATE3D
 #========================================================================
 EFFECTSTATE3D
 	PATTERN = 1				//動きのパターン
-	SIZE = 40.0						//大きさ
+	SIZE = 160.0						//大きさ
 	ADDSIZE = 4.0					//大きさ変動
-	SIZEY = 40.0						//Y大きさ
+	SIZEY = 160.0						//Y大きさ
 	ADDSIZEY = 4.0					//Y大きさ変動
 	DENSITY = 1						//密度
 	MOVE3D = 0.0 0.0 0.0					//移動
@@ -494,8 +494,8 @@ EFFECTSTATE3D
 	SECONDTYPE = 0					//ランダム移動のパターン
 	PARTICLETIME = 1						//粒発生間隔
 	COLOR = 1000 1000 1000 1000			//カラー
-	CHANGECOLOR = 0 0 0 -30			//カラー変動値
-	LIFE = 10						//ライフ
+	CHANGECOLOR = 0 0 0 0			//カラー変動値
+	LIFE = 8						//ライフ
 	TEXTURE = 0						//テクスチャ  (Effect000.jpg) 球は＋１の番号
 	SYNTHETIC = 0						//合成
 	TEXMOVE = 0.000 0.000					//テクスチャ移動
