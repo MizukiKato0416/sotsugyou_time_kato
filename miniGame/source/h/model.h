@@ -97,8 +97,8 @@ public:
 	void SetMaterialEmissive(D3DXCOLOR col, int nIdx);	//マテリアルの発光色の設定
 	void SetMaterialPower(float fPower, int nIdx);		//マテリアルの反射の質感の設定
 	void StartChangeMaterialDiffuse(int nIdxMat, D3DXCOLOR colDest, int nTimeFin);	//マテリアルの色の変更の開始
-	void SetColorGlow(D3DXCOLOR col);	//輪郭の発光色の設定
-	void SetPowerGlow(float fPower);	//輪郭の強度の設定
+	void SetColorGlow(D3DXCOLOR col) { m_colGlow = col; }	//輪郭の発光色の設定
+	void SetPowerGlow(float fPower) { m_powGlow = fPower; }	//輪郭の強度の設定
 
 	void CreateCloneMesh(void);		//複製メッシュの生成
 	void ExpansionCloneMesh(void);	//複製メッシュを膨張させる

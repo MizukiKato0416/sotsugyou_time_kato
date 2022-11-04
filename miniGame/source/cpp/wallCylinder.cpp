@@ -278,7 +278,7 @@ void CWallCylinder::ChangeColorAlpha(void) {
 	float fRadiusWall = GetRadius();
 	D3DXVECTOR3 posPlayer = pPlayer->GetPos();	//プレイヤーの位置の取得
 	float fDistance = sqrtf(powf(posPlayer.x - GetPos().x, 2.0f) + powf(posPlayer.z - GetPos().z, 2.0f));	//プレイヤーの位置と円柱の中心との距離
-	D3DXCOLOR col = GetColor();	//色の取得
+	D3DXCOLOR col = GetMaterialDiffuse();	//色の取得
 
 	if (fDistance > fRadiusWall - DISTANCE_COLOR_CHANGE) {
 		col.a = (fDistance - (fRadiusWall - DISTANCE_COLOR_CHANGE)) / (fRadiusWall - DISTANCE_COLOR_MAX - (fRadiusWall - DISTANCE_COLOR_CHANGE));
