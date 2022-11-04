@@ -121,7 +121,7 @@ void CItemShield::Update(void) {
 	{
 		m_nCounter = 0;
 		//è¡Ç∑
-		Uninit();
+		//Uninit();
 		return;
 	}
 

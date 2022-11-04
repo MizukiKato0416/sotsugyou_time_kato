@@ -241,5 +241,7 @@ void CCheck::CountDown()
 		//カウントダウンUIを消す
 		m_pCountDownUi->Uninit();
 		m_pCountDownUi = nullptr;
+
+		m_state = STATE::NONE;
 	}
 }

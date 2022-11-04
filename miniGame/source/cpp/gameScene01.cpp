@@ -76,6 +76,7 @@ CGameScene01::CGameScene01()
 	m_nCreateItemBoxCounter = 0;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
+	m_bReady = false;
 }
 
 //=============================================================================
@@ -93,6 +94,7 @@ void CGameScene01::Init(void) {
 
 	//変数初期化
 	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
+	m_bReady = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -228,36 +230,18 @@ void CGameScene01::Update(void) {
 
 #endif
 
-	//チェック出来ていなかったら
-	if (!m_bAllCheck)
-	{
-		if (m_pCheck != nullptr)
-		{
-			//全員がチェック出来たら
-			if (m_pCheck->GetUninitAll())
-			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-				{
-					//プレイヤーアイコンの生成処理
-					CreatePlayerIcon(nCntPlayer);
-				}
-				//全員がチェック出来た状態にする
-				m_bAllCheck = true;
-			}
-		}
-		
+	//ゲームオーバー時
+	if (m_bGameOver) {
+		UpdateGameOver();
 	}
+	//準備状態時
+	else if (m_bReady) {
+		UpdateReady();
+	}
+	//ゲーム中
 	else
 	{
-		//ゲームオーバー時
-		if (m_bGameOver) {
-			UpdateGameOver();
-		}
-		//ゲーム中
-		else
-		{
-			UpdateGame();
-		}
+		UpdateGame();
 	}
 
 	//ゲームシーンの更新処理
@@ -286,12 +270,7 @@ void CGameScene01::UpdateGame(void) {
 	if (m_pCheck != nullptr)
 	{
 		//カウントダウンUIが生成されていたら
-		if (m_pCheck->GetCountDownUi() != nullptr)
-		{
-			//カウントダウンUIの処理
-			CountDownUi();
-		}
-		else
+		if (m_pCheck->GetCountDownUi() == nullptr)
 		{
 			//チェックアイコンを消す
 			m_pCheck->Uninit();
@@ -366,6 +345,41 @@ void CGameScene01::UpdateGameOver(void) {
 	}
 }
 
+//=============================================================================
+//準備状態中の更新
+//=============================================================================
+void CGameScene01::UpdateReady(void){
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck != nullptr)
+		{
+			//全員がチェック出来たら
+			if (m_pCheck->GetUninitAll())
+			{
+				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+				{
+					//プレイヤーアイコンの生成処理
+					CreatePlayerIcon(nCntPlayer);
+				}
+				//全員がチェック出来た状態にする
+				m_bAllCheck = true;
+			}
+		}
+	}
+	else
+	{
+		if (m_pCheck != nullptr)
+		{
+			//カウントダウンUIが生成されていたら
+			if (m_pCheck->GetCountDownUi() != nullptr)
+			{
+				//カウントダウンUIの処理
+				CountDownUi();
+			}
+		}
+	}
+}
 
 //=============================================================================
 // ゲームオーバー
@@ -480,8 +494,6 @@ void CGameScene01::CreateBalloon(void)
 					//遠さをランダムで決める
 					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
 				}
-
-				
 
 				//決めた位置に出す
 				balloonPos.x = originPos.x + sinf(fRot) * fDiffer;
@@ -660,6 +672,13 @@ void CGameScene01::CountDownUi(void)
 	//スタート状態なら
 	if (m_pCheck->GetCountDownUi()->GetStart())
 	{
+		//準備状態なら
+		if (m_bReady)
+		{
+			//準備状態を終了する
+			m_bReady = false;
+		}
+
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//生成されていたら

@@ -79,6 +79,7 @@ CGameScene02::CGameScene02()
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bHurryUp = false;
+	m_bReady = false;
 	m_pCreateBomManager = nullptr;
 	m_pCloud.clear();
 	m_weatherState = WEATHER_STATE::CLOUDY;
@@ -101,6 +102,7 @@ void CGameScene02::Init(void) {
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
 	m_weatherState = WEATHER_STATE::CLOUDY;
+	m_bReady = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -312,41 +314,19 @@ void CGameScene02::Update(void) {
 
 #endif
 
-	//チェック出来ていなかったら
-	if (!m_bAllCheck)
-	{
-		if (m_pCheck != nullptr)
-		{
-			//全員がチェック出来たら
-			if (m_pCheck->GetUninitAll())
-			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-				{
-					//プレイヤーアイコンの生成処理
-					CreatePlayerIcon(nCntPlayer);
-				}
-				//全員がチェック出来た状態にする
-				m_bAllCheck = true;
-			}
-		}
-		
+	
+	//ゲームオーバー時
+	if (m_bGameOver) {
+		UpdateGameOver();
 	}
+	//準備状態時
+	else if (m_bReady) {
+		UpdateReady();
+	}
+	//ゲーム中
 	else
 	{
-		//ゲームオーバー時
-		if (m_bGameOver) {
-			UpdateGameOver();
-		}
-
-		else if (m_bReady)
-		{
-
-		}
-		//ゲーム中
-		else
-		{
-			UpdateGame();
-		}
+		UpdateGame();
 	}
 
 	//雲の処理
@@ -381,12 +361,7 @@ void CGameScene02::UpdateGame(void) {
 	if (m_pCheck != nullptr)
 	{
 		//カウントダウンUIが生成されていたら
-		if (m_pCheck->GetCountDownUi() != nullptr)
-		{
-			//カウントダウンUIの処理
-			CountDownUi();
-		}
-		else
+		if (m_pCheck->GetCountDownUi() == nullptr)
 		{
 			//チェックアイコンを消す
 			m_pCheck->Uninit();
@@ -472,8 +447,37 @@ void CGameScene02::UpdateGameOver(void) {
 //=============================================================================
 //準備状態中の更新
 //=============================================================================
-void UpdateReady(void) {
-
+void CGameScene02::UpdateReady(void) {
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck != nullptr)
+		{
+			//全員がチェック出来たら
+			if (m_pCheck->GetUninitAll())
+			{
+				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+				{
+					//プレイヤーアイコンの生成処理
+					CreatePlayerIcon(nCntPlayer);
+				}
+				//全員がチェック出来た状態にする
+				m_bAllCheck = true;
+			}
+		}
+	}
+	else
+	{
+		if (m_pCheck != nullptr)
+		{
+			//カウントダウンUIが生成されていたら
+			if (m_pCheck->GetCountDownUi() != nullptr)
+			{
+				//カウントダウンUIの処理
+				CountDownUi();
+			}
+		}
+	}
 }
 
 //=============================================================================
@@ -581,6 +585,13 @@ void CGameScene02::CountDownUi(void)
 	//スタート状態なら
 	if (m_pCheck->GetCountDownUi()->GetStart())
 	{
+		//準備状態なら
+		if (m_bReady)
+		{
+			//準備状態を終了する
+			m_bReady = false;
+		}
+
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//生成されていたら
