@@ -49,8 +49,11 @@ CItem::~CItem()
 //=============================================================================
 HRESULT CItem::Init(void) {
 
-	//何もアイテムを持っていない状態にする
-	m_pPlayer->SetItemType(ITEM_TYPE::NONE);
+	if (m_pPlayer != nullptr)
+	{
+		//何もアイテムを持っていない状態にする
+		m_pPlayer->SetItemType(ITEM_TYPE::NONE);
+	}
 
 	CObjectModel::Init();
 	return S_OK;
