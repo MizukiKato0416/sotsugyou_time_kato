@@ -22,7 +22,7 @@
 #define BOM_SIZE				(280.0f)	//ボムのサイズ半径
 #define BOM_GRAVITY				(0.1f)		//ボムの重力
 #define BOM_COLL_POS_Y			(10.0f)		//当たり判定をし始める高さ
-#define BOM_COLL_PLAYER_BOUND	(150.0f)	//プレイヤーを飛ばす量
+#define BOM_COLL_PLAYER_BOUND	(15.0f - 14.0f)	//プレイヤーを飛ばす量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -129,7 +129,7 @@ void CBom::Update(void) {
 		ExplosionSound();
 
 		//爆発エフェクト
-		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, 3.0f, pos.z));
+		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, pos.y + 3.0f, pos.z));
 
 		//消す
 		Uninit();
@@ -144,6 +144,9 @@ void CBom::Update(void) {
 	{
 		//爆発音再生
 		ExplosionSound();
+
+		//爆発エフェクト
+		CPresetDelaySet::Create(2, D3DXVECTOR3(pos.x, pos.y, pos.z));
 
 		//消す
 		Uninit();

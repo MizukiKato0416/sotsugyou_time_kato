@@ -34,7 +34,7 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(60)								//ハリーアップの時間
 
 #define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
 #define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り

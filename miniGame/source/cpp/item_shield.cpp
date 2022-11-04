@@ -81,7 +81,7 @@ HRESULT CItemShield::Init(void) {
 		m_pSphereCover->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
 		CModel* pModel = m_pSphereCover->GetPtrModel();
 		if (pModel != nullptr) {
-			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 0.0f));
+			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 1.0f));
 			pModel->SetPowerGlow(1.5f);
 		}
 	}
