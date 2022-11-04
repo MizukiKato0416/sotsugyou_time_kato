@@ -205,6 +205,10 @@ bool CBom::CollisionPlayer(void)
 			//跳ね返させる
 			move.x += sinf(fRot) * BOM_COLL_PLAYER_BOUND;
 			move.z += cosf(fRot) * BOM_COLL_PLAYER_BOUND;
+
+			//直撃エフェクト
+			CPresetDelaySet::Create(1, D3DXVECTOR3(playerPos.x, 3.0f, playerPos.z));
+
 			//相手のバウンド移動量設定
 			pPlayer->SetBoundMove(move);
 			return true;
