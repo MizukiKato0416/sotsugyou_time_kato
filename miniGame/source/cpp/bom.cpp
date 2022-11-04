@@ -129,7 +129,7 @@ void CBom::Update(void) {
 		ExplosionSound();
 
 		//爆発エフェクト
-		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, pos.y + 3.0f, pos.z));
+		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, pos.y + 6.0f, pos.z));
 
 		//消す
 		Uninit();

@@ -408,7 +408,7 @@ EFFECTSTATE3D
 	SIZEY = 20.0						//Y大きさ
 	ADDSIZEY = 0.0					//Y大きさ変動
 	DENSITY = 30						//密度
-	MOVE3D = 20.00 24.00 -1.0						//移動関係(移動速度、上昇、重力)
+	MOVE3D = 25.00 24.00 -1.0						//移動関係(移動速度、上昇、重力)
 	DIFFUSION = 421					//拡散率
 	TYPE = 1					//上昇量ランダム
 	COLOR = 1000 400 0 900			//カラー
@@ -433,13 +433,13 @@ EFFECTSTATE3D
 	ADDSIZE = 1.0					//大きさ変動
 	SIZEY = 30.0						//Y大きさ
 	ADDSIZEY = 1.0					//Y大きさ変動
-	DENSITY = 5						//密度
+	DENSITY = 6						//密度
 	MOVE3D = 3.00 4.00 0.37						//移動関係(移動速度、上昇、重力)
 	DIFFUSION = 421					//拡散率
 	TYPE = 0					//上昇量ランダム
 	COLOR = 1000 1000 1000 800			//カラー
-	CHANGECOLOR = 0 0 0 -50			//カラー変動値
-	LIFE = 25						//ライフ
+	CHANGECOLOR = 0 0 0 -25			//カラー変動値
+	LIFE = 40						//ライフ
 	TEXTURE = 4						//テクスチャ  (Filed_Frost.png) 球は＋１の番号
 	SYNTHETIC = 1						//合成
 	TEXMOVE = 0.000 0.000					//テクスチャ移動
@@ -484,9 +484,9 @@ END_EFFECTSTATE3D
 EFFECTSTATE3D
 	PATTERN = 1				//動きのパターン
 	SIZE = 160.0						//大きさ
-	ADDSIZE = 4.0					//大きさ変動
+	ADDSIZE = 8.0					//大きさ変動
 	SIZEY = 160.0						//Y大きさ
-	ADDSIZEY = 4.0					//Y大きさ変動
+	ADDSIZEY = 8.0					//Y大きさ変動
 	DENSITY = 1						//密度
 	MOVE3D = 0.0 0.0 0.0					//移動
 	DISTANCE = 1.0						//発生距離
@@ -494,7 +494,7 @@ EFFECTSTATE3D
 	SECONDTYPE = 0					//ランダム移動のパターン
 	PARTICLETIME = 1						//粒発生間隔
 	COLOR = 1000 1000 1000 1000			//カラー
-	CHANGECOLOR = 0 0 0 0			//カラー変動値
+	CHANGECOLOR = 0 0 0 -20			//カラー変動値
 	LIFE = 8						//ライフ
 	TEXTURE = 0						//テクスチャ  (Effect000.jpg) 球は＋１の番号
 	SYNTHETIC = 0						//合成
