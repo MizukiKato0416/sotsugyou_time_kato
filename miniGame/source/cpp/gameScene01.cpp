@@ -154,8 +154,18 @@ void CGameScene01::Init(void) {
 		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_BALLOON_PINK);
 
 	//‰~’Œ‚Ì•Ç‚Ì¶¬
-	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
-	CMeshcylinder::Create(D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE, GAME_STAGE_SIZE + 50.0f, 1, 0.0f, true, CTexture::TEXTURE_TYPE::NONE);
+	CMeshcylinder* pWall = CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL, false);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	pWall = CMeshcylinder::Create(D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE, GAME_STAGE_SIZE + 50.0f, 1, 0.0f, true, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	pWall = CMeshcylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE + 50.0f, GAME_STAGE_SIZE + 50.0f, 1, 40.0f, true, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 
 	//•—‘D‚ğ¶¬‚·‚é
 	for (int nCntBalloon = 0; nCntBalloon < BALLOON_MAX_NUM; nCntBalloon++)

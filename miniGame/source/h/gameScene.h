@@ -37,10 +37,6 @@ public:
 	void DeletePauseMenu(void);	//ポーズメニューの破棄
 	virtual void GameOver(void);	//ゲームオーバー
 
-	virtual void UpdateGame(void) = 0;					//ゲーム中の更新
-	virtual void UpdateGameOver(void) = 0;				//ゲームオーバー時の更新
-	virtual void UpdateReady(void) = 0;					//準備状態中の更新
-
 	bool GetGameOver(void) { return m_bGameOver; }		//ゲームオーバー状態のフラグ
 	CTimer* GetTimer(void) { return m_pTimer; }			//タイマーの取得
 
@@ -55,7 +51,10 @@ public:
 	static int GetWereWolfPlayerIndex(void) { return m_nWereWolfPlayerIndex; }
 
 private:
-	
+	virtual void UpdateGame(void) = 0;		//ゲーム中の更新
+	virtual void UpdateGameOver(void) = 0;	//ゲームオーバー時の更新
+	virtual void UpdateReady(void) = 0;		//準備状態中の更新
+
 	static bool m_bWereWolfMode;			//人狼モードにするかどうか
 	static int m_nWereWolfPlayerIndex;		//人狼になったプレイヤーのインデックス
 
