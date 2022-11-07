@@ -17,6 +17,7 @@
 #include "ToScreen.h"
 
 #include "gameCamera.h"
+#include "gameScene.h"
 
 //=============================================================================
 // マクロ定義
@@ -92,10 +93,27 @@ void CResultScene::Init(void) {
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
-	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	//------------------------------
+	//ランキング表示
+	//------------------------------
+	int aPlayerRank[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランクの配列 インデックスはプレイヤーのインデックスと対応
+	std::vector<int> vPlayerRankSort(MAX_OBJECT_PLAYER_NUM);	//プレイヤーのランクの配列をソートしたもの
+
+	//プレイヤーランクの取得
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
-		const float fDist = 180.0f;
-		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + nCnt * fDist, 0.0f, 0.0f);
+		vPlayerRankSort[nIdxPlayer] = aPlayerRank[nIdxPlayer] = CGameScene::GetRanking(nIdxPlayer);
+	}
+
+	//ランクのソート
+	std::sort(vPlayerRankSort.begin, vPlayerRankSort.end);
+
+
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		const float fDist = 180.0f;	//プレイヤー同士の距離
+		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (nIdxPlayer -1) * fDist, 0.0f, 0.0f);	//左端から1位を並べる
 		CObjectModelUI* pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (pPlayerModel == nullptr) continue;
@@ -107,7 +125,7 @@ void CResultScene::Init(void) {
 
 		if (pModel == nullptr) continue;
 		D3DXCOLOR colModel;
-		switch (nCnt)
+		switch (nIdxPlayer)
 		{
 		case 0:
 			colModel = OBJECT_PLAYER_COLOR_1P;
@@ -128,7 +146,9 @@ void CResultScene::Init(void) {
 		pModel->SetMaterialDiffuse(colModel, 0);
 	}
 
+	//------------------------------
 	//BGMの再生
+	//------------------------------
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
