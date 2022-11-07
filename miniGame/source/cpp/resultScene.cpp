@@ -141,10 +141,10 @@ void CResultScene::Init(void) {
 		CModel* pModel = pPlayerModel->GetPtrModel();
 
 		D3DXVECTOR3 posRankUI = WorldToScreen(posModel, pPlayerModel->GetViewMatrix());
-		CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 100.0f, 50.0f);
+		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 100.0f, 50.0f);
 
 		if (pModel == nullptr) continue;
-		D3DXCOLOR colModel;
+		D3DXCOLOR colModel;	//モデルのマテリアル色
 		switch (nIdxPlayer)
 		{
 		case 0:
@@ -163,7 +163,30 @@ void CResultScene::Init(void) {
 			colModel = OBJECT_PLAYER_COLOR_1P;
 			break;
 		}
-		pModel->SetMaterialDiffuse(colModel, 0);
+		pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
+
+
+		//順位UIのテクスチャ設定
+		if (pRankUI == nullptr) continue;
+
+		switch (aPlayerRank[nIdxPlayer])
+		{
+		case 0:
+			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_1);
+			break;
+		case 1:
+			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_2);
+			break;
+		case 2:
+			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_3);
+			break;
+		case 3:
+			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_4);
+			break;
+		default:
+			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_1);
+			break;
+		}		
 	}
 
 	//------------------------------
