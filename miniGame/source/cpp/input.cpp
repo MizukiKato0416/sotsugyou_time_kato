@@ -685,7 +685,7 @@ bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 	{
 		//‘I‘ð
 	case CODE::SELECT:
-		if (GetButtonTrigger(XINPUT_GAMEPAD_A, nIdx) || GetButtonTrigger(XINPUT_GAMEPAD_START, nIdx)) {
+		if (GetButtonTrigger(XINPUT_GAMEPAD_A, nIdx)) {
 			return true;
 		}
 		break;
