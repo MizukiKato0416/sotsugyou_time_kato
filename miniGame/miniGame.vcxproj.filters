@@ -31,9 +31,6 @@
     <ClCompile Include="source\cpp\fade.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\finish_ui.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -220,6 +217,9 @@
     <ClCompile Include="source\cpp\item_shield.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -250,9 +250,6 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\fade.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\FieldEffect.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\finish_ui.h">
@@ -440,6 +437,9 @@
     </ClInclude>
     <ClInclude Include="source\h\resultScene.h">
       <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\FieldEffect.h">
+      <Filter>h\effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
