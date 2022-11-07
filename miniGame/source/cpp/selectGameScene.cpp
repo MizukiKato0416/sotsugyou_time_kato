@@ -176,7 +176,7 @@ void CSelectGameScene::Update(void) {
 		pSound = pManager->GetSound();
 	}
 
-	if (pInput == nullptr || pFade == nullptr) return;
+	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
 
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey)
@@ -187,11 +187,13 @@ void CSelectGameScene::Update(void) {
 			//フェードをスキップ
 			pFade->SkipFade();
 		}
-		else
+		//選択ロック中ではないとき
+		else if(!m_pMenuGame->GetLockChangeSelect())
 		{
 			// 押されたとき
 			m_bPushKey = true;
-
+			//選択のロック
+			m_pMenuGame->SetLockChangeSelect(true);
 			//決定音の再生
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 		}
@@ -204,11 +206,10 @@ void CSelectGameScene::Update(void) {
 		if (m_nFadeTime < 0)
 		{
 			CScene::SCENE_TYPE nextScene = CScene::SCENE_TYPE::TITLE;	//次のシーン
-			if (m_pMenuGame != nullptr) {
-				int nSelectCur = m_pMenuGame->GetIdxCurSelect();
-				if (nSelectCur == MAX_GAME_NUM) nSelectCur = rand() % MAX_GAME_NUM;
-				nextScene = (CScene::SCENE_TYPE)(nSelectCur + (int)CScene::SCENE_TYPE::GAME_01);
-			}
+			int nSelectCur = m_pMenuGame->GetIdxCurSelect();
+			if (nSelectCur == MAX_GAME_NUM) nSelectCur = rand() % MAX_GAME_NUM;
+			nextScene = (CScene::SCENE_TYPE)(nSelectCur + (int)CScene::SCENE_TYPE::GAME_01);
+
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;
 			//シーン遷移開始			
