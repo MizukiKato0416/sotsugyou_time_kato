@@ -22,6 +22,8 @@
 #include "finish_ui.h"
 #include "player.h"
 #include "float_object.h"
+#include "score.h"
+#include "score_ui.h"
 
 //エフェクト
 #include "plane.h"
@@ -148,10 +150,6 @@ void CGameScene01::Init(void) {
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-
-	//観客席の風船
-	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_BALLOON_PINK);
 
 	//円柱の壁の生成
 	CMeshcylinder* pWall = CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL, false);
@@ -428,6 +426,16 @@ void CGameScene01::GameOver(void) {
 
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
+
+	/*std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
+
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking();
+	}
+*/
+	//nSocre.
 }
 
 //=============================================================================
@@ -608,6 +616,14 @@ void CGameScene01::CreateBalloon(void)
 			//ーーーーーーーーーーーーーーーーーーー
 
 		}
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BALLOON_SPAWN);
 	}
 }
 

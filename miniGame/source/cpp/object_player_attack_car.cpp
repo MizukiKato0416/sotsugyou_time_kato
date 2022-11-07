@@ -13,6 +13,7 @@
 #include "PresetSetEffect.h"
 #include "player.h"
 #include "gameScene02.h"
+#include "gameScene.h"
 
 #include "PresetDelaySet.h"
 //=============================================================================
@@ -141,7 +142,7 @@ void CObjectPlayerAttackCar::Update(void) {
 		DecBoundMove();
 
 		//減速
-		DecMove();
+		//DecMove();
 
 		//移動量設定
 		m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
@@ -583,20 +584,8 @@ void CObjectPlayerAttackCar::Gravity(void)
 		//減速
 		DecMove();
 
-		//ランキングが設定されていなかったら
-		if (GetPlayer()->GetRanking() == 0)
-		{
-			//ランキング設定
-			GetPlayer()->SetRanking();
-
-			//マネージャーの取得
-			CManager* pManager = CManager::GetManager();
-			//サウンドの取得
-			CSound* pSound = nullptr;
-			if (pManager != nullptr) pSound = pManager->GetSound();
-			//サウンドを再生
-			pSound->PlaySound(CSound::SOUND_LABEL::SE_FALL);
-		}
+		//ランキング設定処理
+		SetRanking();
 
 		return;
 	}
@@ -803,4 +792,45 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
+}
+
+//=============================================================================
+//ランキング設定処理
+//=============================================================================
+void CObjectPlayerAttackCar::SetRanking()
+{
+	//ランキングが設定されていたら
+	if (CGameScene::GetRanking(GetPlayer()->GetIndex() - 1) != 0)
+	{
+		return;
+	}
+
+	//マネージャーの取得
+	CManager *pManager = CManager::GetManager();
+	if (pManager == nullptr) {
+		return;
+	}
+
+	//ゲームシーンの取得
+	CGameScene *pGameScene = pManager->GetGameScene();
+	if (pGameScene == nullptr) {
+		return;
+	}
+
+	//キャスト
+	CGameScene02 *pGameScene02 = dynamic_cast<CGameScene02*>(pGameScene);
+	if (pGameScene02 == nullptr) {
+		return;
+	}
+
+	//ランキング設定
+	CGameScene::SetRanking(pGameScene02->GetSavePlayerNum(), GetPlayer()->GetIndex() - 1);
+	//生き残った人数を減らす
+	pGameScene02->AddSavePlayerNum(-1);
+
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//サウンドを再生
+	pSound->PlaySound(CSound::SOUND_LABEL::SE_FALL);
 }

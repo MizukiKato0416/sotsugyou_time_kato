@@ -38,8 +38,9 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-bool CGameScene::m_bWereWolfMode = true;
-int CGameScene::m_nWereWolfPlayerIndex = 1;
+bool CGameScene::m_bWereWolfMode = false;
+int CGameScene::m_nWereWolfPlayerIndex = 0;
+int CGameScene::m_aRanking[MAX_OBJECT_PLAYER_NUM] = { 0, 0, 0, 0 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -50,6 +51,11 @@ CGameScene::CGameScene()
 	m_bAllCheck = false;
 	m_bReady = false;
 	m_pCheck = nullptr;
+
+	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
+	{
+		m_aRanking[nCntSavePlayer] = 0;
+	}
 }
 
 //=============================================================================
@@ -88,6 +94,10 @@ void CGameScene::Init(void) {
 // ゲームシーンの終了処理
 //=============================================================================
 void CGameScene::Uninit(void) {
+
+
+
+
 
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);

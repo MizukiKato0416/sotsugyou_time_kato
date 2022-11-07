@@ -36,13 +36,6 @@ public:
 	//プレイヤー番号取得処理
 	int GetIndex(void) { return m_nIndex; }
 
-	//ランキング取得処理
-	int GetRanking(void) { return m_nRanking; }
-
-	//ランキング設定処理
-	void SetRanking();
-	void SetRanking(const int nRank) { m_nRanking = nRank; }
-
 	//プレイヤーの総数取得処理
 	static int GetNum(void) { return m_nObjectPlayerNum; }
 
@@ -54,9 +47,7 @@ public:
 
 private:
 	static int m_nObjectPlayerNum;	//プレイヤーの数
-	static int m_nRank;				//現在決まっているランキング
 	int m_nIndex;					//プレイヤー番号
-	int m_nRanking;					//自分のランキング
 	bool m_bUpdate;					//更新処理をするかどうか
 };
 

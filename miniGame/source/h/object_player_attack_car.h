@@ -56,6 +56,8 @@ public:
 	int GetDefenceCounter() { return m_nDefenceCounter; }
 	//ディフェンスカウンター設定処理
 	void SetDefenceCounter(const int nDefenceCounter) { m_nDefenceCounter = nDefenceCounter; }
+	//ランキング設定処理
+	void SetRanking();								
 
 private:
 

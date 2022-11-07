@@ -145,9 +145,6 @@ void CBom::Update(void) {
 		//爆発音再生
 		ExplosionSound();
 
-		//爆発エフェクト
-		CPresetDelaySet::Create(2, D3DXVECTOR3(pos.x, pos.y + 5.0f, pos.z));
-
 		//消す
 		Uninit();
 		return;
@@ -211,6 +208,9 @@ bool CBom::CollisionPlayer(void)
 
 			//相手のバウンド移動量設定
 			pPlayer->SetBoundMove(move);
+
+			//爆発エフェクト
+			CPresetDelaySet::Create(2, D3DXVECTOR3(playerPos.x, playerPos.y + 5.0f, playerPos.z));
 			return true;
 		}
 

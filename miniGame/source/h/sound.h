@@ -38,6 +38,8 @@ public:
 		SE_CRASH,				//衝突SE
 		SE_FALL,				//落下SE
 		SE_EXPLOSION,			//爆発SE
+		SE_ITEM_SHIELD_GET,		//盾アイテム獲得SE
+		SE_BALLOON_SPAWN,		//風船スポーンSE
 
 		ENUM_MAX
 	};

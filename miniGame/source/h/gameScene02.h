@@ -37,6 +37,13 @@ public:
 	void Update(void);	//更新処理
 	void GameOver(void);	//ゲームオーバー
 
+	//生きているプレイヤーの数設定処理
+	void SetSavePlayerNum(const int nSavePlayerNum) { m_nSavePlayerNum = nSavePlayerNum; }
+	//生きているプレイヤーの数加算処理
+	void AddSavePlayerNum(const int nAddNum) { m_nSavePlayerNum += nAddNum; }
+	//生きているプレイヤーの数設取得処理
+	int GetSavePlayerNum() { return m_nSavePlayerNum; }
+
 private:
 	//天候の状態
 	enum class WEATHER_STATE
@@ -64,6 +71,7 @@ private:
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント
 	int m_nItemCounter;						//アイテムの生成カウンター
+	int m_nSavePlayerNum;					//生きているプレイヤーの数
 	bool m_bHurryUp;						//急ぐかどうか
 	WEATHER_STATE m_weatherState;			//天候の状態
 };

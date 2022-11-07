@@ -14,7 +14,8 @@ data/TEXTURE/UI/press_start.png
 data/TEXTURE/UI/text_tutorial.png
 data/TEXTURE/UI/text_credit.png
 data/TEXTURE/UI/quit_game.png
-data/TEXTURE/UI/tutorial.jpg
+data/TEXTURE/UI/tutorial_balloon.png
+data/TEXTURE/UI/tutorial_attack.png
 data/TEXTURE/UI/credit.jpg
 data/TEXTURE/UI/select_icon.png
 data/TEXTURE/UI/count_down_ui_3.png

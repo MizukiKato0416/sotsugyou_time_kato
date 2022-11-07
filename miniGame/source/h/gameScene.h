@@ -50,13 +50,19 @@ public:
 	//人狼になったプレイヤーのインデックス取得処理
 	static int GetWereWolfPlayerIndex(void) { return m_nWereWolfPlayerIndex; }
 
+	//ランキング設定処理(0は1P1は2P)
+	static void SetRanking(const int nRanking, const int nIndex) { m_aRanking[nIndex] = nRanking; }
+	//ランキング取得処理(0は1P1は2P)
+	static int GetRanking(const int nIndex) { return m_aRanking[nIndex]; }
+
 private:
 	virtual void UpdateGame(void) = 0;		//ゲーム中の更新
 	virtual void UpdateGameOver(void) = 0;	//ゲームオーバー時の更新
 	virtual void UpdateReady(void) = 0;		//準備状態中の更新
 
-	static bool m_bWereWolfMode;			//人狼モードにするかどうか
-	static int m_nWereWolfPlayerIndex;		//人狼になったプレイヤーのインデックス
+	static bool m_bWereWolfMode;					//人狼モードにするかどうか
+	static int m_nWereWolfPlayerIndex;				//人狼になったプレイヤーのインデックス
+	static int m_aRanking[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランキング
 
 protected:
 

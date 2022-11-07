@@ -140,7 +140,7 @@ void CItemShield::Update(void) {
 		CSound *pSound = nullptr;
 		if (pManager != nullptr) pSound = pManager->GetSound();
 		//‰¹Ä¶
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_3);
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
 
 		//“–‚½‚Á‚Ä‚¢‚½‚çÁ‚·
 		Uninit();

@@ -34,7 +34,7 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(60)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
 #define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
 #define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
@@ -83,6 +83,7 @@ CGameScene02::CGameScene02()
 	m_pCreateBomManager = nullptr;
 	m_pCloud.clear();
 	m_weatherState = WEATHER_STATE::CLOUDY;
+	m_nSavePlayerNum = 0;
 }
 
 //=============================================================================
@@ -103,6 +104,7 @@ void CGameScene02::Init(void) {
 	m_pCreateBomManager = nullptr;
 	m_weatherState = WEATHER_STATE::CLOUDY;
 	m_bReady = true;
+	m_nSavePlayerNum = MAX_OBJECT_PLAYER_NUM;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -499,13 +501,6 @@ void CGameScene02::GameOver(void) {
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		//ランキングが設定されていないなら
-		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() == 0)
-		{
-			//一位に設定
-			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking(1);
-		}
-
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
@@ -642,21 +637,21 @@ bool CGameScene02::Finish(void)
 			continue;
 		}
 
-		//二位が決まっていなかったら
-		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 2)
+		//生き残っている人が2人以上いたら
+		if (GetSavePlayerNum() > 1)
 		{
 			continue;
 		}
 
-		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
 		{
-			//ランキングが決まっていない人を1位にする
-			if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 0)
+			//ランキング最後の1人を1位にする
+			if (GetRanking(nCntSavePlayer) != 0)
 			{
 				continue;
 			}
 
-			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking();
+			SetRanking(GetSavePlayerNum(), nCntSavePlayer);
 			//ゲーム終了
 			GameOver();
 			return true;
