@@ -97,23 +97,43 @@ void CResultScene::Init(void) {
 	//ランキング表示
 	//------------------------------
 	int aPlayerRank[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランクの配列 インデックスはプレイヤーのインデックスと対応
-	std::vector<int> vPlayerRankSort(MAX_OBJECT_PLAYER_NUM);	//プレイヤーのランクの配列をソートしたもの
 
 	//プレイヤーランクの取得
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
-		vPlayerRankSort[nIdxPlayer] = aPlayerRank[nIdxPlayer] = CGameScene::GetRanking(nIdxPlayer);
+		aPlayerRank[nIdxPlayer] = CGameScene::GetRanking(nIdxPlayer);
 	}
 
-	//ランクのソート
-	std::sort(vPlayerRankSort.begin(), vPlayerRankSort.end());
+	//プレイヤーの表示順の設定
+	int aOrderPlayer[MAX_OBJECT_PLAYER_NUM];
+	memset(aOrderPlayer, 0, sizeof(aOrderPlayer));
+	int nCurRank = 1;	//現在のランク
+	int nIdxOrder = 0;	//順番のインデックス
 
+	while (nCurRank > MAX_OBJECT_PLAYER_NUM)
+	{
+		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+		{
+			if (aOrderPlayer[nIdxOrder]);	//順番が決定されていた場合除外
 
+			//ランクが一致していた場合
+			if (aPlayerRank[nIdxPlayer] == nCurRank) {
+				aOrderPlayer[nIdxPlayer] = nIdxOrder;	//順番の設定
+				nIdxOrder++;
+				break;
+			}
+
+			//ランクが一致しなかった場合
+			if (nIdxPlayer == MAX_OBJECT_PLAYER_NUM - 1) {
+				nCurRank++;
+			}
+		}
+	}
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
 		const float fDist = 180.0f;	//プレイヤー同士の距離
-		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (nIdxPlayer -1) * fDist, 0.0f, 0.0f);	//左端から1位を並べる
+		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (aOrderPlayer[nIdxPlayer]) * fDist, 0.0f, 0.0f);	//左端から1位を並べる
 		CObjectModelUI* pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (pPlayerModel == nullptr) continue;
