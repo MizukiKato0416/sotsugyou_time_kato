@@ -63,6 +63,7 @@ private:
 	void HurryUp(void);						//急げ処理
 	void Cloud(void);						//雲の処理
 	void CreateItem();						//アイテム生成処理
+	void SetRanking();						//ランキング設定処理
 
 	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ

@@ -427,15 +427,12 @@ void CGameScene01::GameOver(void) {
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
 
-	/*std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
+	std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
-
-		m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking();
 	}
-*/
-	//nSocre.
+	
 }
 
 //=============================================================================
