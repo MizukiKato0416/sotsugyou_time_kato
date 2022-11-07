@@ -228,7 +228,6 @@
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resultScene.h" />
     <ClInclude Include="source\h\balloon.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
@@ -280,6 +279,7 @@
     <ClInclude Include="source\h\PresetDelaySet.h" />
     <ClInclude Include="source\h\PresetSetEffect.h" />
     <ClInclude Include="source\h\renderer.h" />
+    <ClInclude Include="source\h\resultScene.h" />
     <ClInclude Include="source\h\Rotate3d.h" />
     <ClInclude Include="source\h\scene.h" />
     <ClInclude Include="source\h\scene3d.h" />

@@ -354,9 +354,6 @@
     <ClInclude Include="source\h\renderer.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="resultScene.h">
-      <Filter>h</Filter>
-    </ClInclude>
     <ClInclude Include="source\h\scene.h">
       <Filter>h</Filter>
     </ClInclude>
@@ -439,6 +436,9 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\selectGameScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\resultScene.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

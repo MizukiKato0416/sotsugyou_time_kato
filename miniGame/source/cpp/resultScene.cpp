@@ -121,14 +121,14 @@ void CResultScene::Init(void) {
 			//ƒ‰ƒ“ƒN‚ªˆê’v‚µ‚Ä‚¢‚½ê‡
 			if (aPlayerRank[nIdxPlayer] == nCurRank) {
 				aOrderPlayer[nIdxPlayer] = nIdxOrder;	//‡”Ô‚Ìİ’è
-				nIdxOrder++;
-				bDecision = true;
+				nIdxOrder++;	//‡”Ô‚Ì‰ÁZ
+				bDecision = true;	//‡”Ô‚ÌŒˆ’è
 				break;
 			}
 		}
 		//ƒ‰ƒ“ƒN‚ªˆê’v‚µ‚È‚©‚Á‚½ê‡
 		if (!bDecision) {
-			nCurRank++;
+			nCurRank++;	//ƒ‰ƒ“ƒN‚Ì‰ÁZ
 		}
 	}
 

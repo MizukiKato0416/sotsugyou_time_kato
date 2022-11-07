@@ -50,6 +50,7 @@ CGameScene::CGameScene()
 	m_pTimer = nullptr;
 	m_bAllCheck = false;
 	m_bReady = false;
+	m_bLockPauseMenu = false;
 	m_pCheck = nullptr;
 
 	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
@@ -73,6 +74,7 @@ void CGameScene::Init(void) {
 	//変数初期化
 	m_bAllCheck = false;
 	m_bReady = true;
+	m_bLockPauseMenu = false;
 	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
 	{
 		m_aRanking[nCntSavePlayer] = 0;
@@ -120,8 +122,18 @@ void CGameScene::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene::Update(void) {
+	//毎フレーム終了時にロック解除
+	m_bLockPauseMenu = false;
+}
 
+//=============================================================================
+// ポーズメニューの生成
+//=============================================================================
+void CGameScene::CreatePauseMenu(void) {
+	if (m_pMenuPause != nullptr) DeletePauseMenu();
 
+	//ポーズメニュークラスを生成
+	m_pMenuPause = CPauseMenu::Create();
 }
 
 //=============================================================================
@@ -133,6 +145,9 @@ void CGameScene::DeletePauseMenu(void) {
 		m_pMenuPause->Uninit();
 		m_pMenuPause = nullptr;
 	}
+
+	//破棄してすぐは生成できないように
+	m_bLockPauseMenu = true;
 }
 
 //=============================================================================
