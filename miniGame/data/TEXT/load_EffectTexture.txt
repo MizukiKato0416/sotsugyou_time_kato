@@ -15,5 +15,6 @@ TEXTURE_FILENAME = data/TEXTURE/EFFECT/spin.png				//ÇUÉXÉsÉì
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Explosion00.png				//ÇVîöî≠ñå
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/ExprosionRing01.png				//ÇWè’åÇîg
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//ÇXÉeÉXÉg
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/ster.png				//ÇPÇOêØ
 
 END_SCRIPT

@@ -53,4 +53,46 @@ PRESETCALL
 	END_CALLSET
 END_PRESETCALL
 
+#========================================================================
+# 3落下
+#========================================================================
+PRESETCALL
+	NAME = FALL	// プリセットの名前
+
+	CALLSET
+		DELEY = 0 			//何フレーム後に呼び出すか(親)
+		PRESETNUM = 3		//呼び出すエフェクト総数
+		TYPE = 17 18 19		//エフェクトパターン
+	END_CALLSET
+	
+	CALLSET
+		DELEY = 4 
+		PRESETNUM = 1
+		TYPE = 17 	
+	END_CALLSET
+	
+	CALLSET
+		DELEY = 8 
+		PRESETNUM = 2
+		TYPE = 17 19	
+	END_CALLSET
+	
+	CALLSET
+		DELEY = 12 
+		PRESETNUM = 1
+		TYPE = 17 	
+	END_CALLSET
+	
+	CALLSET
+		DELEY = 16 
+		PRESETNUM = 2
+		TYPE = 17 19	
+	END_CALLSET
+	
+	CALLSET
+		DELEY = 20 
+		PRESETNUM = 1
+		TYPE = 17	
+	END_CALLSET
+END_PRESETCALL
 END_SCRIPT	#ここ消すと無限ループする
