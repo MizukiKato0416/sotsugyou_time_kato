@@ -34,7 +34,7 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(60)								//ハリーアップの時間
 
 #define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
 #define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
@@ -524,6 +524,9 @@ void CGameScene02::GameOver(void) {
 		m_pCreateBomManager = nullptr;
 	}
 
+	//ランキング設定処理
+	SetRanking();
+
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
 }
@@ -627,7 +630,11 @@ void CGameScene02::CountDownUi(void)
 //=============================================================================
 bool CGameScene02::Finish(void)
 {
-	int nCntGameOver = 0;
+	//ゲームオーバー状態なら
+	if (m_bGameOver)
+	{
+		return false;
+	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
@@ -643,19 +650,11 @@ bool CGameScene02::Finish(void)
 			continue;
 		}
 
-		for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
-		{
-			//ランキング最後の1人を1位にする
-			if (GetRanking(nCntSavePlayer) != 0)
-			{
-				continue;
-			}
+		//ランキング設定処理
+		SetRanking();
 
-			SetRanking(GetSavePlayerNum(), nCntSavePlayer);
-			//ゲーム終了
-			GameOver();
-			return true;
-		}
+		//ゲーム終了
+		GameOver();
 	}
 	return false;
 }
@@ -714,5 +713,23 @@ void CGameScene02::CreateItem()
 
 		//アイテムの生成
 		CItemShield::Create(pos);
+	}
+}
+
+//=============================================================================
+//ランキング設定処理
+//=============================================================================
+void CGameScene02::SetRanking()
+{
+	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
+	{
+		//残った人をランキング1位にする
+		if (GetRanking(nCntSavePlayer) != 0)
+		{
+			continue;
+		}
+
+		//ランキング設定処理
+		CGameScene::SetRanking(1, nCntSavePlayer);
 	}
 }
