@@ -4,6 +4,7 @@
 // Author : 鶴間俊樹
 //
 //=============================================================================
+#include <functional>		//比較用
 #include "gameScene01.h"
 #include "manager.h"
 #include "input.h"
@@ -427,12 +428,8 @@ void CGameScene01::GameOver(void) {
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
 
-	std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
-	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-	{
-		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
-	}
-	
+	//ランキング設定処理
+	SetRanking();
 }
 
 //=============================================================================
@@ -743,6 +740,58 @@ void CGameScene01::CountDownUi(void)
 			//タイマーの生成
 			m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
 			m_pTimer = CTimer::Create(GAME_TIME, 2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
+		}
+	}
+}
+
+//=============================================================================
+//ランキング設定処理
+//=============================================================================
+void CGameScene01::SetRanking()
+{
+	std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
+	}
+	//降順でソート
+	std::sort(nSocre.begin(), nSocre.end(), std::greater<int>());
+
+	//直前で順位を決定したプレイヤー
+	int nLastRank = 0;
+
+	for (int nCntScore = 0; nCntScore < MAX_OBJECT_PLAYER_NUM; nCntScore++)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//取得したプレイヤーのスコアと一致していなかったら
+			if (nSocre[nCntScore] != m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore())
+			{
+				continue;
+			}
+
+			
+
+			//一番最初なら
+			if (nCntScore == 0)
+			{
+				//ランキング設定処理
+				CGameScene::SetRanking(nCntScore + 1, nCntPlayer);
+				nLastRank = nCntScore + 1;
+			}
+
+			//前のスコアと一致していたら
+			else if (nSocre[nCntScore] == nSocre[nCntScore - 1])
+			{
+				//前の順位と同じにする
+				CGameScene::SetRanking(nLastRank, nCntPlayer);
+			}
+			else
+			{
+				//ランキング設定処理
+				CGameScene::SetRanking(nCntScore + 1, nCntPlayer);
+				nLastRank = nCntScore + 1;
+			}
 		}
 	}
 }

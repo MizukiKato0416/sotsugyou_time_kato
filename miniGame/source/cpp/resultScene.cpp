@@ -106,7 +106,7 @@ void CResultScene::Init(void) {
 	}
 
 	//ランクのソート
-	std::sort(vPlayerRankSort.begin, vPlayerRankSort.end);
+	std::sort(vPlayerRankSort.begin(), vPlayerRankSort.end());
 
 
 
