@@ -8,6 +8,7 @@
 // enum‚Æ“¯‚¶‡‚É
 
 data/TEXTURE/BG/bg_title.jpg
+data/TEXTURE/BG/bg_result.jpg
 
 data/TEXTURE/UI/text_titlename.png
 data/TEXTURE/UI/press_start.png

@@ -408,10 +408,10 @@ void CFieldEffect::Update()
 
 	//SetPosField(m_pos, D3DXVECTOR3(m_size, SizeY, {}), fRotate, -fRotate);
 	SetPosBill(
-		D3DXVECTOR3(m_pos.x - m_pos.x + (cosf(-fRotate)) * m_size, SizeY, m_pos.z - m_pos.z + (sinf(fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x - m_pos.x + (sinf(fRotate))  * m_size, SizeY, m_pos.z - m_pos.z - (cosf(-fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x - m_pos.x - (sinf(fRotate))  * m_size, SizeY, m_pos.z - m_pos.z + (cosf(-fRotate))* m_size),
-		D3DXVECTOR3(m_pos.x - m_pos.x - (cosf(-fRotate)) * m_size, SizeY, m_pos.z - m_pos.z - (sinf(fRotate))* m_size));
+		D3DXVECTOR3(m_pos.x - m_pos.x + (cosf(-fRotate)) * m_size, SizeY - SizeY, m_pos.z - m_pos.z + (sinf(fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x + (sinf(fRotate))  * m_size, SizeY - SizeY, m_pos.z - m_pos.z - (cosf(-fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x - (sinf(fRotate))  * m_size, SizeY - SizeY, m_pos.z - m_pos.z + (cosf(-fRotate))* m_size),
+		D3DXVECTOR3(m_pos.x - m_pos.x - (cosf(-fRotate)) * m_size, SizeY - SizeY, m_pos.z - m_pos.z - (sinf(fRotate))* m_size));
 
 	if (bUninit == true)
 	{

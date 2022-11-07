@@ -75,6 +75,7 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 
 	m_nDefenceCounter = 0;
 	m_bDefence = false;
+	m_nFallEffectCounter = 0;
 }
 
 //=============================================================================
@@ -116,6 +117,8 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 	memset(m_bCollOld, FALSE, sizeof(m_bCollOld[MAX_OBJECT_PLAYER_NUM]));
 	m_nDefenceCounter = 0;
 	m_bDefence = false;
+	m_nFallEffectCounter = 0;
+
 	return S_OK;
 }
 
@@ -135,18 +138,18 @@ void CObjectPlayerAttackCar::Update(void) {
 	//更新しない設定なら
 	if (!GetPlayer()->GetUpdate())
 	{
-		//重力処理
-		Gravity();
-
 		//減速
 		DecBoundMove();
 
 		//減速
-		//DecMove();
+		DecMove();
 
 		//移動量設定
 		m_move.x = sinf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
 		m_move.z = cosf(GetRot().y + D3DX_PI) * m_fMoveSpeed;
+
+		//重力処理
+		Gravity();
 
 		//----------------------------
 		//移動の反映
@@ -159,6 +162,18 @@ void CObjectPlayerAttackCar::Update(void) {
 		posObjectPlayer += m_move + m_boundMove;
 		//位置設定
 		SetPos(posObjectPlayer);
+
+		if (GetPos().y > -1000.0f && GetPos().y < -200.0f)
+		{
+			m_nFallEffectCounter++;
+
+			if (m_nFallEffectCounter == 5)
+			{
+				//m_nFallEffectCounter = 0;
+				//落下エフェクト
+				CPresetDelaySet::Create(3, GetPos());
+			}
+		}
 
 		CObjectPlayer::Update();
 
@@ -223,6 +238,18 @@ void CObjectPlayerAttackCar::Update(void) {
 	//----------------------------
 	Collision(posObjectPlayer);
 
+	if (GetPos().y > -1000.0f && GetPos().y < -200.0f)
+	{
+		m_nFallEffectCounter++;
+
+		if (m_nFallEffectCounter == 5)
+		{
+			//m_nFallEffectCounter = 0;
+			//落下エフェクト
+			CPresetDelaySet::Create(3, GetPos());
+		}
+	}
+
 	CObjectPlayer::Update();
 }
 
@@ -284,7 +311,6 @@ void CObjectPlayerAttackCar::Move(CInput* pInput, float fRotCameraY) {
 
 	D3DXVECTOR3 moveAddSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//追加する移動量
 	D3DXVECTOR3 moveMaxSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//移動量の最大
-
 	
 	//------------------------
 	//移動量の決定
@@ -581,9 +607,6 @@ void CObjectPlayerAttackCar::Gravity(void)
 	//ステージ外に出たら
 	if (fDiffer - GetRadius() > GAME_02_STAGE_SIZE)
 	{
-		//減速
-		DecMove();
-
 		//ランキング設定処理
 		SetRanking();
 

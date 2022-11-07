@@ -25,6 +25,8 @@ public:
 
 		//UIのテクスチャ
 		BG_TITLE,
+		BG_RESULT,
+
 		TEXT_TITLENAME,
 		TEXT_GAMESTART,
 		TEXT_TUTORIAL,

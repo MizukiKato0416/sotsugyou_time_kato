@@ -34,11 +34,11 @@
 // マクロ定義
 //=============================================================================
 #define GAME_02_TIME							(60)								//ゲームの時間
-#define GAME_02_HURRY_UP_TIME					(60)								//ハリーアップの時間
+#define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
+#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色晴れ
 #define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
-#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f))	//バックバッファーの色晴れ
+#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.1f, 0.3f, 0.5f, 1.0f))	//バックバッファーの色晴れ
 #define GAME_02_BACK_BUFF_COLOR_CLOUDY			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//バックバッファーの色曇り
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
@@ -53,13 +53,13 @@
 #define GAME_02_BOM_CREATE_COUNT	(30)		//ボムを生成する間隔
 #define GAME_02_BOM_NUM				(1)			//ボムを生成する個数
 
-#define GAME_02_CLOUD_NUM					(2)											//雲の数
+#define GAME_02_CLOUD_NUM					(1)											//雲の数
 #define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1500.0f, -6000.0f))		//雲の位置
 #define GAME_02_CLOUD_SIZE					(12000.0f)									//雲のサイズ
 #define GAME_02_CLOUD_MESH_NUM				(8)											//メッシュを敷き詰める数
 #define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
 #define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
-#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
+#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))			//雲の色
 
 #define GAME_02_ITEM_SPAWN_COUNT			(60 * 12)						//アイテムの生成間隔
 #define GAME_02_ITEM_SPAWN_DIFFER_MAX		(GAME_02_STAGE_SIZE - 100.0f)	//ステージ中央からどれだけ離れた位置にアイテムを生成するか最大値
@@ -170,7 +170,7 @@ void CGameScene02::Init(void) {
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(backBuffColor);
 		pRenderer->SetEffectFogColor(fogColor);
-		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
+		pRenderer->SetEffectFogRange(20.0f, 10000.0f);
 		
 	}
 

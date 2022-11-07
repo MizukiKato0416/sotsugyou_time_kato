@@ -75,6 +75,7 @@ private:
 	D3DXVECTOR3 m_boundMove;		//バウンド移動量
 	float m_fMoveSpeed;				//移動する速さ
 	int m_nDefenceCounter;			//ディフェンス状態をカウントする用
+	int m_nFallEffectCounter;		//落ちるエフェクトの生成カウンター
 
 	bool m_bAttack;									//アタックしているかどうか
 	bool m_bCollOld[MAX_OBJECT_PLAYER_NUM];			//前のフレーム当たったかどうか
