@@ -418,9 +418,9 @@ void CGameScene02::UpdateGame(void) {
 	if (pFade == nullptr) return;
 
 	//ポーズ
-	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
-		//ポーズメニュークラスを生成
-		m_pMenuPause = CPauseMenu::Create();
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade() && !m_bLockPauseMenu) {
+		//ポーズメニューを生成
+		CreatePauseMenu();
 		//サウンドを再生
 		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}

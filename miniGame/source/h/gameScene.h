@@ -34,6 +34,7 @@ public:
 	virtual void Init(void);	//初期化処理
 	virtual void Uninit(void);	//終了処理
 	virtual void Update(void);	//更新処理
+	void CreatePauseMenu(void);	//ポーズメニューの生成
 	void DeletePauseMenu(void);	//ポーズメニューの破棄
 	virtual void GameOver(void);	//ゲームオーバー
 
@@ -69,6 +70,7 @@ protected:
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか
 	bool m_bReady;		//準備状態かどうか
+	bool m_bLockPauseMenu;	//ポーズメニュー生成のロック
 
 	CTimer* m_pTimer;			//ゲームのタイマー
 	CObject2D* m_pTimerFrame;	//タイマーの枠
