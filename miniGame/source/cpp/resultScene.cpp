@@ -106,27 +106,29 @@ void CResultScene::Init(void) {
 
 	//プレイヤーの表示順の設定
 	int aOrderPlayer[MAX_OBJECT_PLAYER_NUM];
-	memset(aOrderPlayer, 0, sizeof(aOrderPlayer));
+	memset(aOrderPlayer, -1, sizeof(aOrderPlayer));
 	int nCurRank = 1;	//現在のランク
 	int nIdxOrder = 0;	//順番のインデックス
 
-	while (nCurRank > MAX_OBJECT_PLAYER_NUM)
+	while (nCurRank <= MAX_OBJECT_PLAYER_NUM)
 	{
+		bool bDecision = false;	//順番の決定
+
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
-			if (aOrderPlayer[nIdxOrder]);	//順番が決定されていた場合除外
+			if (aOrderPlayer[nIdxPlayer] != -1) continue;	//順番が決定されていた場合除外
 
 			//ランクが一致していた場合
 			if (aPlayerRank[nIdxPlayer] == nCurRank) {
 				aOrderPlayer[nIdxPlayer] = nIdxOrder;	//順番の設定
 				nIdxOrder++;
+				bDecision = true;
 				break;
 			}
-
-			//ランクが一致しなかった場合
-			if (nIdxPlayer == MAX_OBJECT_PLAYER_NUM - 1) {
-				nCurRank++;
-			}
+		}
+		//ランクが一致しなかった場合
+		if (!bDecision) {
+			nCurRank++;
 		}
 	}
 
@@ -171,16 +173,16 @@ void CResultScene::Init(void) {
 
 		switch (aPlayerRank[nIdxPlayer])
 		{
-		case 0:
+		case 1:
 			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_1);
 			break;
-		case 1:
+		case 2:
 			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_2);
 			break;
-		case 2:
+		case 3:
 			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_3);
 			break;
-		case 3:
+		case 4:
 			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::PLAYER_NUM_4);
 			break;
 		default:
