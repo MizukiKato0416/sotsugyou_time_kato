@@ -73,6 +73,10 @@ void CGameScene::Init(void) {
 	//変数初期化
 	m_bAllCheck = false;
 	m_bReady = true;
+	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
+	{
+		m_aRanking[nCntSavePlayer] = 0;
+	}
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
@@ -94,11 +98,6 @@ void CGameScene::Init(void) {
 // ゲームシーンの終了処理
 //=============================================================================
 void CGameScene::Uninit(void) {
-
-
-
-
-
 	//シーンのプレイヤーの設定
 	SetPlayer(nullptr);
 

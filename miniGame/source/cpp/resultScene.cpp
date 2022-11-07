@@ -231,7 +231,7 @@ void CResultScene::Update(void) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 		if (pFade == nullptr) return;
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
+		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
 	}
 
 }

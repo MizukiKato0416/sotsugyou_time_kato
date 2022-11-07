@@ -650,9 +650,6 @@ bool CGameScene02::Finish(void)
 			continue;
 		}
 
-		//ランキング設定処理
-		SetRanking();
-
 		//ゲーム終了
 		GameOver();
 	}
