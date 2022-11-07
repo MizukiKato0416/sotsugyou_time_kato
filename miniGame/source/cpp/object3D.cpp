@@ -28,9 +28,9 @@ CObject3D::CObject3D()
 	m_mat.MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_mat.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	m_mat.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	m_mat.MatD3D.Power = 1.0f;
+	m_mat.MatD3D.Power = 0.0f;
 	m_colGlow = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	m_powGlow = 3.0f;
+	m_powGlow = 2.0f;
 
 	m_bAlphaBlend = false;
 	m_bEnableLight = true;
