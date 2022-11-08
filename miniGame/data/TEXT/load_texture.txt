@@ -65,6 +65,11 @@ data/TEXTURE/UI/wolf_select_2.png
 data/TEXTURE/UI/wolf_select_3.png
 data/TEXTURE/UI/wolf_select_4.png
 
+data/TEXTURE/UI/40point.png
+data/TEXTURE/UI/30point.png
+data/TEXTURE/UI/20point.png
+data/TEXTURE/UI/10point.png
+
 data/TEXTURE/UI/1P_frame_score.png
 data/TEXTURE/UI/2P_frame_score.png
 data/TEXTURE/UI/3P_frame_score.png
