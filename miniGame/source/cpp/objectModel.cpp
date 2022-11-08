@@ -31,6 +31,7 @@ CObjectModel::CObjectModel(CModel::MODELTYPE typeModel, bool bOutLine)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rotSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bDrawZTex = true;
 }
 
 //=============================================================================
@@ -105,6 +106,9 @@ void CObjectModel::Draw(void) {
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 	if (pDevice == nullptr) return;
+
+	//深度値描画しない場合終了
+	if (pRenderer->GetDrawZTex() && !m_bDrawZTex) return;
 
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 	//ワールドマトリックスの初期化

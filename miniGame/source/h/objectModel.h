@@ -44,6 +44,8 @@ public:
 	void SetModelColor(D3DXCOLOR col, int nIdx);		//モデルの色の設定
 	void SetModelGlowColor(D3DXCOLOR col);	//モデルの発光色の設定
 
+	void SetDrawZTex(bool bDraw) { m_bDrawZTex = bDraw; }
+
 private:
 	void Move(void);	//移動
 	void Rotate(void);	//回転
@@ -54,6 +56,8 @@ private:
 	D3DXVECTOR3 m_rot;	//角度
 	D3DXVECTOR3 m_rotSpeed;	//回転速度
 	D3DXMATRIX m_mtxWorld;//ワールドマトリックス
+
+	bool m_bDrawZTex;	//深度値描画
 };
 
 #endif // !_OBJECT_MODEL_H_

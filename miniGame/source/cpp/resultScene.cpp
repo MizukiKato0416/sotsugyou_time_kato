@@ -32,7 +32,7 @@
 //=============================================================================
 CResultScene::CResultScene()
 {
-
+	m_pBg = nullptr;
 }
 
 //=============================================================================
@@ -90,8 +90,7 @@ void CResultScene::Init(void) {
 	//------------------------------
 	//オブジェクトの初期設定
 	//------------------------------
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
-
+	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_RESULT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//------------------------------
 	//ランキング表示
@@ -236,4 +235,10 @@ void CResultScene::Update(void) {
 		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
 	}
 
+
+	if (m_pBg != nullptr)
+	{
+		//背景を動かす
+		m_pBg->SetMoveTex(0.001f, 0.001f);
+	}
 }

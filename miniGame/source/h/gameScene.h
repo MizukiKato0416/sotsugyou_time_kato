@@ -22,6 +22,7 @@ class CTimer;
 class CObject2D;
 class CPauseMenu;
 class CCheck;
+class CWolfDecide;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -76,6 +77,7 @@ protected:
 	CObject2D* m_pTimerFrame;	//タイマーの枠
 	CPauseMenu* m_pMenuPause;	//ポーズメニュー
 	CCheck *m_pCheck;			//チェッククラスのポインタ
+	CWolfDecide *m_pWolfDecide;	//人狼決定クラスのポインタ
 };
 
 #endif // !_GAME_SCENE_H_

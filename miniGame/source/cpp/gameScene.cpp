@@ -21,6 +21,7 @@
 #include "count_down_ui.h"
 #include "finish_ui.h"
 #include "player.h"
+#include "wolf_decide.h"
 
 //エフェクト
 #include "plane.h"
@@ -52,6 +53,8 @@ CGameScene::CGameScene()
 	m_bReady = false;
 	m_bLockPauseMenu = false;
 	m_pCheck = nullptr;
+	m_pWolfDecide = nullptr;
+	m_nWereWolfPlayerIndex = 0;
 
 	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
 	{
@@ -75,6 +78,7 @@ void CGameScene::Init(void) {
 	m_bAllCheck = false;
 	m_bReady = true;
 	m_bLockPauseMenu = false;
+	m_nWereWolfPlayerIndex = 0;
 	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
 	{
 		m_aRanking[nCntSavePlayer] = 0;
@@ -83,8 +87,16 @@ void CGameScene::Init(void) {
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 	
-	//チェックアイコンの生成
-	m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
+	if (m_bWereWolfMode)
+	{
+		//人狼決定
+		m_pWolfDecide = CWolfDecide::Create();
+	}
+	else
+	{
+		//チェックアイコンの生成
+		m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
+	}
 
 #ifdef _DEBUG
 	//Zバッファテクスチャの表示
@@ -122,6 +134,21 @@ void CGameScene::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene::Update(void) {
+
+	if (m_pWolfDecide != nullptr)
+	{
+		//フェーズが終了になったら
+		if (m_pWolfDecide->GetPhase() == CWolfDecide::PHASE::UNINIT)
+		{
+			//消す
+			m_pWolfDecide->Uninit();
+			m_pWolfDecide = nullptr;
+
+			//チェックアイコンの生成
+			m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
+		}
+	}
+
 	//毎フレーム終了時にロック解除
 	m_bLockPauseMenu = false;
 }
