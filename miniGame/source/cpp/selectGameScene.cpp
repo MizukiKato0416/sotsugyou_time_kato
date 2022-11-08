@@ -19,6 +19,7 @@
 // マクロ定義
 //=============================================================================
 #define MAX_GAME_NUM ((int)CScene::SCENE_TYPE::GAME_MAX - (int)CScene::SCENE_TYPE::GAME_01)	//ゲームの最大数
+#define MENU_SELECT_NUM (MAX_GAME_NUM + 1)	//ランダム分追加
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -29,7 +30,7 @@
 //=============================================================================
 CSelectGameScene::CSelectGameScene()
 {
-	
+	m_nFadeTime = FPS;
 }
 
 //=============================================================================
@@ -97,11 +98,11 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MAX_GAME_NUM + 1, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
-		const CModel::MODELTYPE typeModelGame[MAX_GAME_NUM + 1] =
+		const CModel::MODELTYPE typeModelGame[MENU_SELECT_NUM] =
 		{	
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
@@ -109,7 +110,7 @@ void CSelectGameScene::Init(void) {
 		};
 
 		//全モデルの設定
-		for (int nIdxModel = 0; nIdxModel < MAX_GAME_NUM + 1; nIdxModel++)
+		for (int nIdxModel = 0; nIdxModel < MENU_SELECT_NUM; nIdxModel++)
 		{
 			//メニューのUIオブジェクトの取得
 			CObjectModelUI* pObjModelUI = m_pMenuGame->GetModelUI(nIdxModel);
@@ -178,6 +179,9 @@ void CSelectGameScene::Update(void) {
 
 	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
 
+	//現在の選択肢の番号
+	int nSelectCur = m_pMenuGame->GetIdxCurSelect();
+
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey)
 	{
@@ -190,30 +194,55 @@ void CSelectGameScene::Update(void) {
 		//選択ロック中ではないとき
 		else if(!m_pMenuGame->GetLockChangeSelect())
 		{
-			// 押されたとき
+			// 押されたフラグ
 			m_bPushKey = true;
 			//選択のロック
 			m_pMenuGame->SetLockChangeSelect(true);
 			//決定音の再生
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+			//ランダム選択時
+			if (nSelectCur == MAX_GAME_NUM) {
+				nSelectCur = rand() % MAX_GAME_NUM;	//ランダムな選択
+				//メニューの設定
+				m_pMenuGame->SetCountRotate(FPS * 3);	//回転時間の設定
+				m_pMenuGame->SetSpeedRotModel(0.2f * D3DX_PI);	//回転速度の設定
+			}
+
+			m_nextScene = (CScene::SCENE_TYPE)(nSelectCur + (int)CScene::SCENE_TYPE::GAME_01);	//次のシーンの決定
 		}
 	}
 
 	//決定キーが押されたとき
 	if (m_bPushKey)
 	{
-		// 遷移する時間が0より小さくなっていたら
-		if (m_nFadeTime < 0)
-		{
-			CScene::SCENE_TYPE nextScene = CScene::SCENE_TYPE::TITLE;	//次のシーン
-			int nSelectCur = m_pMenuGame->GetIdxCurSelect();
-			if (nSelectCur == MAX_GAME_NUM) nSelectCur = rand() % MAX_GAME_NUM;
-			nextScene = (CScene::SCENE_TYPE)(nSelectCur + (int)CScene::SCENE_TYPE::GAME_01);
+		//ランダム選択中の処理
+		if (nSelectCur == MAX_GAME_NUM) {
+			if (m_pMenuGame->GetCountRotate() >= 0) {
+				//回転量の減算
+				m_pMenuGame->SetSpeedRotModel(m_pMenuGame->GetSpeedRotModel() * 0.99f);
+			}
 
+			//終了時
+			if (m_pMenuGame->GetCountRotate() == 0) {
+				//選択を決定　これによりこのif文が通らなくなる
+				int nIdxCurSelect = (int)m_nextScene - (int)CScene::SCENE_TYPE::GAME_01;	//メニューの選択番号
+				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
+				m_pMenuGame->SetCountRotate(60);				//回転時間の設定
+				m_pMenuGame->BeginChangeSelect(true);			//次のシーンのアイコンに変更
+				//選択のロック
+				m_pMenuGame->SetLockChangeSelect(true);
+			}
+		}
+		// 遷移する時間が0より小さくなっていたら
+		else if (m_nFadeTime < 0)
+		{
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(nextScene, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(m_nextScene, 0.02f, 60);
+			//選択のロック
+			m_pMenuGame->SetLockChangeSelect(true);
 		}
 		else
 		{

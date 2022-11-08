@@ -36,6 +36,7 @@ private:
 	bool m_bPushKey;	//選択キー押下時
 
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
+	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };
 
 #endif // !_SELECT_GAME_SCENE_H_

@@ -137,7 +137,7 @@ void CSelectMenu2D::CreateSelectUI(void) {
 //=============================================================================
 // 選択の変更が開始されたときの処理
 //=============================================================================
-void CSelectMenu2D::BeginChangeSelect(void) {
+void CSelectMenu2D::BeginChangeSelect(bool bChangePlus) {
 	if (m_ppSelectUIArray == nullptr) return;
 
 	//選択中のアイコンがある場合

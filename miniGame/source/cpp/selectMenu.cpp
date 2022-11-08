@@ -94,6 +94,7 @@ void CSelectMenu::ChangeSelect(void) {
 	if (pInput == nullptr) return;
 
 	bool bChangeSelect = false;	//変更があったかどうか
+	bool bChangePlus = true;	//選択の変更がプラスかどうか
 
 	switch (m_typeSelect)
 	{
@@ -104,6 +105,8 @@ void CSelectMenu::ChangeSelect(void) {
 			m_nIdxCurSelect--;	//選択を１つ前に
 			if (m_nIdxCurSelect < 0) m_nIdxCurSelect = m_nNumSelect - 1;	//０を下回った場合最大の番号
 			bChangeSelect = true;
+			//選択がマイナス
+			bChangePlus = false;
 		}
 		if (pInput->GetTrigger(CInput::CODE::SELECT_DOWN, 0)) {
 			m_nIdxCurSelect++;	//選択を１つ後に
@@ -118,6 +121,8 @@ void CSelectMenu::ChangeSelect(void) {
 			m_nIdxCurSelect--;	//選択を１つ前に
 			if (m_nIdxCurSelect < 0) m_nIdxCurSelect = m_nNumSelect - 1;	//０を下回った場合最大の番号
 			bChangeSelect = true;
+			//選択がマイナス
+			bChangePlus = false;
 		}
 		if (pInput->GetTrigger(CInput::CODE::SELECT_RIGHT, 0)) {
 			m_nIdxCurSelect++;	//選択を１つ後に
@@ -129,7 +134,7 @@ void CSelectMenu::ChangeSelect(void) {
 
 	//変更があったときの処理
 	if (bChangeSelect) {
-		BeginChangeSelect();	//変更開始時の処理を派生クラスで行う
+		BeginChangeSelect(bChangePlus);	//変更開始時の処理を派生クラスで行う
 
 		//マネージャーの取得
 		CManager* pManager = CManager::GetManager();

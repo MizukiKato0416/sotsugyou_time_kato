@@ -34,11 +34,17 @@ public:
 	virtual void Update(void);	//更新処理
 	virtual void Draw(void) {}	//描画処理
 
-	virtual void BeginChangeSelect(void);	//選択の変更が開始されたときの処理
+	virtual void BeginChangeSelect(bool bChangePlus);	//選択の変更が開始されたときの処理
 	virtual void EndChangeSelect(void) {}	//選択の変更が終了したときの処理
 
 	CObjectModelUI* GetModelUI(int nIdx);	//UIモデルオブジェクトのポインタを取得
 	void SetSpeedRotModel(float fSpeed) { m_fSpeedRotModel = fSpeed; }	//モデル移動時の回転速度の設定
+	float GetSpeedRotModel(void) { return m_fSpeedRotModel; }			//モデル移動時の回転速度の取得
+	void SetCountRotate(int nCnt) { m_nCntRotate = nCnt; }		//回転するカウントの設定
+	int GetCountRotate(void) { return m_nCntRotate; }			//回転するカウントの設定
+	void SetSpanRotate(int nSpan) { m_nSpanRotate = nSpan; }	//回転スパンの設定
+
+	void SetRotDest(int nIdxCurSelect) { m_fRotModelDest = D3DX_PI * 2 * ((float)nIdxCurSelect / GetNumSelect()); }	//目標の角度を選択のインデックスから設定
 
 private:
 	void CreateModelUI(void);	//モデルの生成
@@ -49,11 +55,15 @@ private:
 
 	CObjectModelUI** m_ppObjModelUIArray;	//UIモデルオブジェクトの配列のダブルポインタ
 	CModel::MODELTYPE m_typeModel;	//生成するモデルの種類
-	bool m_bMoveModel;		//モデル移動中かどうか
-	float m_fRotModelY;		//モデルの配置位置を決める角度
+
+	int m_nSpanRotate;		//回転のスパン
+	int m_nCntRotate;		//回転するカウント
+	float m_fRotModel;		//モデルの配置位置を決める角度
+	float m_fRotModelDest;	//モデルの目標角度
 	float m_fSpeedRotModel;	//モデル移動時の回転速度
+
 	float m_fDistCamera;	//メニュー用のカメラの距離
-	float m_fRotCameraY;	//メニュー用のカメラのY角度
+	float m_fRotCamera;	//メニュー用のカメラのY角度
 	float m_fHeightCamera;	//メニュー用のカメラの位置の高さ
 };
 
