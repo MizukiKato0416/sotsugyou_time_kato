@@ -297,6 +297,10 @@ void CGameScene02::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene02::Update(void) {
+
+
+
+
 #ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
@@ -453,32 +457,40 @@ void CGameScene02::UpdateReady(void) {
 	//チェック出来ていなかったら
 	if (!m_bAllCheck)
 	{
-		if (m_pCheck != nullptr)
+		if (m_pCheck == nullptr)
 		{
-			//全員がチェック出来たら
-			if (m_pCheck->GetUninitAll())
-			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-				{
-					//プレイヤーアイコンの生成処理
-					CreatePlayerIcon(nCntPlayer);
-				}
-				//全員がチェック出来た状態にする
-				m_bAllCheck = true;
-			}
+			return;
 		}
+		
+		if (!m_pCheck->GetUninitAll())
+		{
+			return;
+		}
+
+		//全員がチェック出来たら
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//プレイヤーアイコンの生成処理
+			CreatePlayerIcon(nCntPlayer);
+		}
+		//全員がチェック出来た状態にする
+		m_bAllCheck = true;
 	}
 	else
 	{
-		if (m_pCheck != nullptr)
+		if (m_pCheck == nullptr)
 		{
-			//カウントダウンUIが生成されていたら
-			if (m_pCheck->GetCountDownUi() != nullptr)
-			{
-				//カウントダウンUIの処理
-				CountDownUi();
-			}
+			return;
 		}
+		
+		if (m_pCheck->GetCountDownUi() == nullptr)
+		{
+			return;
+		}
+
+		//カウントダウンUIが生成されていたら
+		//カウントダウンUIの処理
+		CountDownUi();
 	}
 }
 

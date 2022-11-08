@@ -226,6 +226,7 @@
     <ClCompile Include="source\cpp\titleScene.cpp" />
     <ClCompile Include="source\cpp\ToScreen.cpp" />
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
+    <ClCompile Include="source\cpp\wolf_decide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h" />
@@ -301,6 +302,7 @@
     <ClInclude Include="source\h\titleScene.h" />
     <ClInclude Include="source\h\ToScreen.h" />
     <ClInclude Include="source\h\wallCylinder.h" />
+    <ClInclude Include="source\h\wolf_decide.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
