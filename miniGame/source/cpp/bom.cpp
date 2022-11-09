@@ -129,7 +129,7 @@ void CBom::Update(void) {
 		ExplosionSound();
 
 		//爆発エフェクト
-		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, pos.y + 6.0f, pos.z));
+		CPresetDelaySet::Create(0, D3DXVECTOR3(pos.x, pos.y + 6.0f, pos.z), {}, {});
 
 		//消す
 		Uninit();
@@ -210,7 +210,7 @@ bool CBom::CollisionPlayer(void)
 			pPlayer->SetBoundMove(move);
 
 			//爆発エフェクト
-			CPresetDelaySet::Create(2, D3DXVECTOR3(playerPos.x, playerPos.y + 5.0f, playerPos.z));
+			CPresetDelaySet::Create(2, D3DXVECTOR3(playerPos.x, playerPos.y + 5.0f, playerPos.z), {}, {});
 			return true;
 		}
 

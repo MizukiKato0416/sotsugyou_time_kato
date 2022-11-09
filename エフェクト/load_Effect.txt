@@ -642,11 +642,11 @@ EFFECTSTATE3D
 	ADDSIZEY = 80.6					//Y大きさ変動
 	DENSITY = 1						//密度
 	DISTANCE = 1.0						//発生距離
-	COLOR = 1000 1000 130 1000			//カラー
-	CHANGECOLOR = 0 0 0 -40			//カラー変動値
+	COLOR = 1000 1000 530 1000			//カラー
+	CHANGECOLOR = 0 0 0 -20			//カラー変動値
 	LIFE = 100						//ライフ
 	TEXTURE = 3						//テクスチャ  (Line00.png) 球は＋１の番号
-	SYNTHETIC = 0						//合成
+	SYNTHETIC = 1						//合成
 	TEXMOVE = 0.000 0.000					//テクスチャ移動
 	TEXNUM = 1.0 1.0					//テクスチャ枚数
 	TEXANIMCOUNT = -1					//テクスチャアニメーションカウント

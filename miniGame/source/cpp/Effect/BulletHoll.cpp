@@ -6,6 +6,10 @@
 #include "renderer.h"
 #include "manager.h"
 
+//=============================================================================
+// マクロ
+//=============================================================================
+#define MAX_COLOR_BH (1.0f)
 
 //=============================================================================
 // コンストラクタ
@@ -134,6 +138,35 @@ HRESULT CBulletHoll::Init(D3DXVECTOR3 size,
 			m_pos.z + (sinf(-m_Rot.y)) * m_Size.x / 2);
 	}
 
+	if (m_bConversion == false)
+	{
+		//カラー値の255→1.0表記への変換
+		if (m_Color.r > MAX_COLOR_BH)
+		{
+			m_Color.r = m_Color.r / 1000;
+		}
+		if (m_Color.g > MAX_COLOR_BH)
+		{
+			m_Color.g = m_Color.g / 1000;
+		}
+		if (m_Color.b > MAX_COLOR_BH)
+		{
+			m_Color.b = m_Color.b / 1000;
+		}
+		if (m_Color.a > MAX_COLOR_BH)
+		{
+			m_Color.a = m_Color.a / 1000;
+		}
+		m_bConversion = true;
+	}
+
+	//255→1.0表記への変換に使う
+	bool ColorBoolR = false;
+	bool ColorBoolG = false;
+	bool ColorBoolB = false;
+	bool ColorBoolA = false;
+
+
 	//？？？
 	//m_pos1 = D3DXVECTOR3(
 	//	pos.x + size.x,
@@ -154,8 +187,7 @@ HRESULT CBulletHoll::Init(D3DXVECTOR3 size,
 	//CScene3d::SetRot(m_Rot);
 
 
-	CPlane::SetPosBill(m_pos1, m_pos2, m_pos3, m_pos4);
-	m_nSynthenic = Synthetic;
+	CPlane::SetPosBill(m_pos1 - m_pos, m_pos2 - m_pos, m_pos3 - m_pos, m_pos4 - m_pos);
 	return S_OK;
 
 }
@@ -235,7 +267,7 @@ void CBulletHoll::Update()
 			m_pos.z + (sinf(-m_Rot.y)) * m_Size.x / 2);
 	}
 
-	CPlane::SetPosBill(m_pos1, m_pos2, m_pos3, m_pos4);
+	CPlane::SetPosBill(m_pos1 - m_pos, m_pos2 - m_pos, m_pos3 - m_pos, m_pos4 - m_pos);
 	CBillEffect::Update();
 }
 

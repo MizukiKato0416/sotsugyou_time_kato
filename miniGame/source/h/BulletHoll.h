@@ -73,6 +73,8 @@ private:
 	D3DXVECTOR3 m_pos4;	//oŒ»ˆÊ’u
 
 	D3DXVECTOR3 m_Rot;	//‰ñ“]
+
+	bool m_bConversion;	//•ÏŠ·‚ÌI—¹
 };
 
 #endif

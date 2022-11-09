@@ -58,7 +58,7 @@ private:
 	int m_nLife;	//õ–½
 	int m_nSynsetic;	//‡¬
 
-	bool bUninit;	//íœ
+	bool m_bUninit;	//íœ
 	bool m_bConversion;	//•ÏŠ·‚ÌI—¹
 
 };
