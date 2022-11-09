@@ -11,7 +11,7 @@
 class CBezierBill : public CBillEffect
 {
 public:
-	CBezierBill(int nPriority);	//コンストラクタ
+	CBezierBill();	//コンストラクタ
 	~CBezierBill();	//デストラクタ
 
 	typedef struct
@@ -107,7 +107,6 @@ private:
 	int m_TjajectTex;
 	int m_TrajectLife;
 
-	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_Size;
 	D3DXVECTOR3 m_Oldpos;
 
