@@ -18,8 +18,8 @@
 #include "Rotate3d.h"
 #include "sphereEffect.h"
 //#include "ThunderBill.h"
-//#include "BezierBillh.h"
-//#include "BulletHoll.h"
+#include "BezierBillh.h"
+#include "BulletHoll.h"
 #include "Fountain.h"
 
 #include "LoadEffect.h"
@@ -40,18 +40,12 @@ int CPresetEffect::m_nEffectPattern3d = 0;
 
 int CPresetEffect::m_nMaxOrderCount = 0;	//呼び出す最大数カウント
 
-//CPresetEffect::EFFECT_STATE2D CPresetEffect::m_EffectState2D[MAX_EFFECTPATTERN_2D] = {};
 CPresetEffect::EFFECT_STATE3D CPresetEffect::m_EffectState3D[MAX_EFFECTPATTERN_3D] = {};
-
-//CPresetEffect::ORDER_PRESET CPresetEffect::m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
-
 //=============================================================================
 // コンストラクタ
 //=============================================================================
 CPresetEffect::CPresetEffect()
 {
-	//m_EffectState2D[MAX_EFFECTPATTERN_2D] = {};
-	//m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D] = {};
 }
 
 //=============================================================================
@@ -61,7 +55,8 @@ CPresetEffect::~CPresetEffect()
 {
 
 }
-
+//折り畳み用
+#if 0
 //=============================================================================
 // 変数にぶち込む関数 2D用
 //=============================================================================
@@ -125,6 +120,7 @@ CPresetEffect::~CPresetEffect()
 //
 //	m_nEffectPattern2d++;
 //}
+#endif
 
 //=============================================================================
 // 変数にぶち込む関数 3D用
@@ -235,8 +231,8 @@ void CPresetEffect::SetEffectState3D(
 	m_nEffectPattern3d++;
 }
 //=============================================================================
-// 呼ばれた物を呼び出すやつ2D
-//長いので折り畳み
+// 呼ばれた物を呼び出すやつ2D(使わん)
+// 長いので折り畳み
 //=============================================================================
 #if 0
 //void CPresetEffect::SetEffect2D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 PlayerPos, D3DXVECTOR3 rot)
@@ -637,58 +633,58 @@ void CPresetEffect::SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpo
 		//}
 		break;
 	case(8):
-		//for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
-		//{
-		//	CBezierBill::Create(
-		//		D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
-		//		D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
-		//		m_EffectState3D[nPattern].m_Col,
-		//		m_EffectState3D[nPattern].m_Changecolor,
-		//		m_EffectState3D[nPattern].nTexture,
-		//		m_EffectState3D[nPattern].m_nLife,
-		//		m_EffectState3D[nPattern].m_TexNum,
-		//		m_EffectState3D[nPattern].m_TexMove,
-		//		m_EffectState3D[nPattern].AnimCnt,
-		//		m_EffectState3D[nPattern].m_TexSplit,
-		//		pos,
-		//		Endpos,
-		//		m_EffectState3D[nPattern].m_move,
-		//		m_EffectState3D[nPattern].m_ControlBezier,
-		//		{},
-		//		m_EffectState3D[nPattern].m_MaxSize,
-		//		m_EffectState3D[nPattern].m_SecondCol,
-		//		m_EffectState3D[nPattern].m_SecondChangecolor,
-		//		m_EffectState3D[nPattern].m_TherdCol,
-		//		m_EffectState3D[nPattern].m_TherdChangecolor,
-		//		0.0f,
-		//		m_EffectState3D[nPattern].m_SecondTex,
-		//		m_EffectState3D[nPattern].ParticleTime,
-		//		m_EffectState3D[nPattern].m_nDistance,
-		//		m_EffectState3D[nPattern].Synthetic,
-		//		m_EffectState3D[nPattern].m_ParticleSynthetic,
-		//		(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType);
-		//}
+		for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
+		{
+			CBezierBill::Create(
+				D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
+				D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
+				m_EffectState3D[nPattern].m_Col,
+				m_EffectState3D[nPattern].m_Changecolor,
+				m_EffectState3D[nPattern].nTexture,
+				m_EffectState3D[nPattern].m_nLife,
+				m_EffectState3D[nPattern].m_TexNum,
+				m_EffectState3D[nPattern].m_TexMove,
+				m_EffectState3D[nPattern].AnimCnt,
+				m_EffectState3D[nPattern].m_TexSplit,
+				pos,
+				Endpos,
+				m_EffectState3D[nPattern].m_move,
+				m_EffectState3D[nPattern].m_ControlBezier,
+				m_EffectState3D[nPattern].m_MaxSize,
+				m_EffectState3D[nPattern].m_SecondCol,
+				m_EffectState3D[nPattern].m_SecondChangecolor,
+				m_EffectState3D[nPattern].m_TherdCol,
+				m_EffectState3D[nPattern].m_TherdChangecolor,
+				0.0f,
+				m_EffectState3D[nPattern].m_SecondTex,
+				m_EffectState3D[nPattern].ParticleTime,
+				m_EffectState3D[nPattern].m_nDistance,
+				m_EffectState3D[nPattern].Synthetic,
+				m_EffectState3D[nPattern].m_ParticleSynthetic,
+				(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
+				false);
+		}
 		break;
 	case(9):
-		//for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
-		//{
-
-		//	CBulletHoll::Create(D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
-		//		D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
-		//		pos,
-		//		m_EffectState3D[nPattern].m_Col,
-		//		m_EffectState3D[nPattern].m_Changecolor,
-		//		m_EffectState3D[nPattern].m_nLife,
-		//		m_EffectState3D[nPattern].nTexture,
-		//		m_EffectState3D[nPattern].m_TexMove,
-		//		m_EffectState3D[nPattern].m_TexNum,
-		//		m_EffectState3D[nPattern].AnimCnt,
-		//		m_EffectState3D[nPattern].m_TexSplit,
-		//		rot,
-		//		m_EffectState3D[nPattern].Synthetic,
-		//		(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
-		//		m_EffectState3D[nPattern].m_nDistance);
-		//}
+		for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
+		{
+			CBulletHoll::Create(D3DXVECTOR3(m_EffectState3D[nPattern].m_fSize, m_EffectState3D[nPattern].m_fSizeY, 0.0f),
+				D3DXVECTOR3(m_EffectState3D[nPattern].m_fAddSize, m_EffectState3D[nPattern].m_fAddSizeY, 0.0f),
+				pos,
+				m_EffectState3D[nPattern].m_Col,
+				m_EffectState3D[nPattern].m_Changecolor,
+				m_EffectState3D[nPattern].m_nLife,
+				m_EffectState3D[nPattern].nTexture,
+				m_EffectState3D[nPattern].m_TexMove,
+				m_EffectState3D[nPattern].m_TexNum,
+				m_EffectState3D[nPattern].AnimCnt,
+				m_EffectState3D[nPattern].m_TexSplit,
+				rot,
+				m_EffectState3D[nPattern].Synthetic,
+				(CBillEffect::ANIMPATTERN)m_EffectState3D[nPattern].m_AnimPatternType,
+				m_EffectState3D[nPattern].m_nDistance,
+				(CBulletHoll::HEIGHT_TYPE)0);
+		}
 		break;
 	case(10):
 		for (int nCnt = 0; nCnt < m_EffectState3D[nPattern].m_nDensity; nCnt++)
@@ -715,132 +711,3 @@ void CPresetEffect::SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpo
 		break;
 	}
 }
-
-//よくわからないえらーだからけす
-#if 0
-////=============================================================================
-//// オーダーセット(3D)
-////=============================================================================
-//void CPresetEffect::SetOrderPreset(int nDeley, int nPresetNum)
-//{
-//	m_Order3D[CLoadEffect::GetFullOrder()][CLoadEffect::GetOrderTotal()].nDeley = nDeley;
-//	m_Order3D[CLoadEffect::GetFullOrder()][CLoadEffect::GetOrderTotal()].nPresetNum = nPresetNum;
-//
-//	m_nMaxOrderCount++;
-//
-//}
-//
-//
-////=============================================================================
-//// オーダー呼び出し(3D)
-////=============================================================================
-//void CPresetEffect::CallOrder3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos)
-//{
-//	for (int i = 0; i < MAX_ORDER_3D; i++)
-//	{
-//		for (int i2 = 0; i2 < m_Order3D[nPattern][i].nPresetNum; i2++)
-//		{
-//			m_Order3D[nPattern][i].pos[i2] = pos;
-//			m_Order3D[nPattern][i].Endpos[i2] = Endpos;
-//			m_Order3D[nPattern][i].bOne[i2] = false;
-//
-//		}
-//	}
-//
-//}
-//
-////=============================================================================
-//// 初期化
-////=============================================================================
-//HRESULT CPresetEffect::Init()
-//{
-//	for (int i3 = 0; i3 < MAX_ORDER_3D; i3++)
-//	{
-//		for (int i = 0; i < MAX_ORDER_3D; i++)
-//		{
-//			nCntDeley[i] = 0;
-//			for (int i2 = 0; i2 < m_Order3D[i3][i].nPresetNum; i2++)
-//			{
-//				m_Order3D[i3][i].bOne[i2] = true;
-//			}
-//		}
-//	}
-//
-//
-//	return S_OK;
-//}
-//
-////=============================================================================
-//// 終了
-////=============================================================================
-//void CPresetEffect::Uninit()
-//{
-//	Uninit();
-//}
-//
-////=============================================================================
-//// 更新
-////=============================================================================
-//void CPresetEffect::Update()
-//{
-//	for (int i3 = 0; i3 < MAX_ORDER_3D; i3++)
-//	{
-//		for (int i = 0; i < MAX_ORDER_3D; i++)
-//		{
-//			for (int i2 = 0; i2 < m_Order3D[i3][i].nPresetNum; i2++)
-//			{
-//
-//				nCntDeley[i]++;
-//				if (m_Order3D[i3][i].bOne[i2] == false)
-//				{
-//					if (m_Order3D[i3][i].nDeley < nCntDeley[i])
-//					{
-//						SetEffect3D(m_Order3D[i3][i].m_nOrder[i2], m_Order3D[i3][i].pos[i2], m_Order3D[i3][i].Endpos[i2], {});
-//						m_Order3D[i3][i].bOne[i2] = true;
-//					}
-//				}
-//				else if (m_Order3D[i3][i].bOne[i2] == true)
-//				{
-//					ResetDeley(i);
-//				}
-//			}
-//		}
-//	}
-//}
-//
-////=============================================================================
-//// 描画
-////=============================================================================
-//void CPresetEffect::Draw()
-//{
-//
-//}
-//
-////=============================================================================
-//// オーダーメニューの作成
-////=============================================================================
-//CPresetEffect *CPresetEffect::CreateOrderMenu(int nDeley, int nPresetNum, int nOrder[MAX_ORDER_3D])
-//{
-//	CPresetEffect *pPresetEffect = new CPresetEffect();
-//
-//	if (pPresetEffect != NULL)
-//	{
-//		for (int nCnt = {}; nCnt < MAX_ORDER_3D; nCnt++)
-//		{
-//			pPresetEffect->Init();
-//			pPresetEffect->SetOrder(nOrder[nCnt], nCnt);
-//		}
-//		pPresetEffect->SetOrderPreset(nDeley, nPresetNum);
-// 	}
-//
-//	return pPresetEffect;
-//}
-//
-////=============================================================================
-//// オーダーの作成
-////=============================================================================
-//void CPresetEffect::SetOrder(int nOrder, int nPattern)
-//{
-//	m_Order3D[CLoadEffect::GetFullOrder()][CLoadEffect::GetOrderTotal()].m_nOrder[nPattern] = nOrder;
-//}
-#endif

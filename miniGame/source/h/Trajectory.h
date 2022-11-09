@@ -2,13 +2,17 @@
 // 軌跡処理 [Trajectory.h]
 // Author : 佐藤秀亮
 //=============================================================================
+#ifndef _TRAJECTORY_H_
+#define _TRAJECTORY_H_
 
-#include "SetMesh.h"
 
-class CTrajectory : public CSetMesh
+#include "main.h"
+#include "plane.h"
+
+class CTrajectory : public CPlane
 {
 public:
-	CTrajectory(int nPriority);
+	CTrajectory();
 	~CTrajectory();
 
 	HRESULT Init(D3DXVECTOR3 Vtxpos1,
@@ -43,5 +47,20 @@ public:
 		int nLife,
 		int Synthetic);
 private:
+	//頂点の座標
+	D3DXVECTOR3 m_pos1;
+	D3DXVECTOR3 m_pos2;
+	D3DXVECTOR3 m_pos3;
+	D3DXVECTOR3 m_pos4;
+
+	D3DCOLORVALUE m_TrajectAddColor;	//軌跡カラー増減
+
+	int m_nLife;	//寿命
+	int m_nSynsetic;	//合成
+
+	bool bUninit;	//削除
+	bool m_bConversion;	//変換の終了
 
 };
+
+#endif

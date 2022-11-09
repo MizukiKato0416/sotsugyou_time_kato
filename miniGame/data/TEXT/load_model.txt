@@ -25,6 +25,7 @@ data/MODEL/OBJECT/tower_fragment_05.x
 data/MODEL/OBJECT/tower_fragment_06.x	
 data/MODEL/OBJECT/item_shield.x	
 data/MODEL/OBJECT/sphere_cover.x	
+data/MODEL/OBJECT/hatena.x	
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	

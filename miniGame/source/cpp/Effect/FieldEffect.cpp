@@ -126,7 +126,6 @@ HRESULT CFieldEffect::Init(D3DXVECTOR3 size,
 	//カラー変動
 	m_FieldAddColor = FieldAddColor;
 
-
 	//カラー減算値の255→1.0表記への変換
 	if (m_FieldAddColor.r >= MAX_COLOR_FI || m_FieldAddColor.r <= -MAX_COLOR_FI)	//赤
 	{

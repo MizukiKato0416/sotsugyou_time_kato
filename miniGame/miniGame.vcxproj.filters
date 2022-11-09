@@ -229,6 +229,15 @@
     <ClCompile Include="source\cpp\find_wolf_camera.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\Effect\BezierBill.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Trajectory.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\BulletHoll.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -458,6 +467,15 @@
     </ClInclude>
     <ClInclude Include="source\h\find_wolf_camera.h">
       <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\BezierBillh.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Trajectory.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\BulletHoll.h">
+      <Filter>h\effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
