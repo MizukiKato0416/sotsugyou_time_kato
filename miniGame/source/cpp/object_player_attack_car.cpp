@@ -247,6 +247,7 @@ void CObjectPlayerAttackCar::Update(void) {
 			//m_nFallEffectCounter = 0;
 			//落下エフェクト
 			CPresetDelaySet::Create(3, GetPos());
+
 		}
 	}
 
