@@ -33,7 +33,32 @@ public:
 	void Update(void);	    //更新処理
 
 private:
+	//フェーズ
+	enum class PHASE
+	{
+		NONE = 0,
+		TUTORIAL_1,		//説明1
+		TUTORIAL_2,		//説明2
+		WOLF_DECIDE,	//人狼決定
+		TUTORIAL_3,		//説明3
+		WAIT,			//待ち時間
+		ANSWER,			//答え
+		TUTORIAL_4,		//説明4
+		MAX
+	};
+
+	void Tutorial1();	//説明1処理
+	void Tutorial2();	//説明2処理
+	void WolfDecide();	//人狼決定処理
+	void Tutorial3();	//説明3処理
+	void Wait();		//待つ処理
+	void Answer();		//回答処理
+	void Tutorial4();	//説明4処理
+
 	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];	//スコアUI 
+	CObject2D *m_pTutorial;							//説明UI
+
+	PHASE m_phase;									//フェーズ
 };
 
 #endif // !_FIND_WOLF_SCENE_H_

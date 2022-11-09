@@ -33,6 +33,8 @@
 CFindWolfScene::CFindWolfScene()
 {	
 	memset(m_apScoreUi, NULL, sizeof(m_apScoreUi[MAX_OBJECT_PLAYER_NUM]));
+	m_phase = PHASE::NONE;
+	m_pTutorial = nullptr;
 }
 
 //=============================================================================
@@ -47,6 +49,10 @@ CFindWolfScene::~CFindWolfScene()
 // 初期化処理
 //=============================================================================
 void CFindWolfScene::Init(void) {
+
+	//変数初期化
+	m_phase = PHASE::TUTORIAL_1;
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -90,7 +96,6 @@ void CFindWolfScene::Init(void) {
 	//------------------------------
 	//オブジェクトの初期設定
 	//------------------------------
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_RESULT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -141,6 +146,10 @@ void CFindWolfScene::Init(void) {
 		m_apScoreUi[nIdxPlayer]->GetScore()->SetScore(40 - (CGameScene::GetRanking(nIdxPlayer) - 1) * 10);
 	}
 
+	//説明UIの生成
+	m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_1, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	//------------------------------
 	//BGMの再生
 	//------------------------------
@@ -184,4 +193,132 @@ void CFindWolfScene::Uninit(void) {
 //=============================================================================
 void CFindWolfScene::Update(void) {		
 	
+	//処理分け
+	switch (m_phase)
+	{
+	case CFindWolfScene::PHASE::TUTORIAL_1:
+		Tutorial1();	//説明1処理
+		break;
+	case CFindWolfScene::PHASE::TUTORIAL_2:
+		Tutorial2();	//説明2処理
+		break;
+	case CFindWolfScene::PHASE::WOLF_DECIDE:
+		WolfDecide();	//人狼決定処理
+		break;
+	case CFindWolfScene::PHASE::TUTORIAL_3:
+		Tutorial3();	//説明3処理
+		break;
+	case CFindWolfScene::PHASE::WAIT:
+		Wait();		//待つ処理
+		break;
+	case CFindWolfScene::PHASE::ANSWER:
+		Answer();		//回答処理
+		break;
+	case CFindWolfScene::PHASE::TUTORIAL_4:
+		Tutorial4();	//説明4処理
+		break;
+	default:
+		break;
+	}
+
+}
+
+//=============================================================================
+//説明1
+//=============================================================================
+void CFindWolfScene::Tutorial1()
+{
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	CInput* pInput = nullptr;
+	if (pManager != nullptr) {
+		//現在の入力デバイスの取得
+		pInput = pManager->GetInputCur();
+	}
+
+	//ボタンを押したら
+	if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT), 0))
+	{
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+		//次のフェーズにする
+		m_phase = PHASE::TUTORIAL_2;
+
+		//テクスチャを変える
+		m_pTutorial->SetTexType(CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_2);
+	}
+}
+
+//=============================================================================
+//説明2
+//=============================================================================
+void CFindWolfScene::Tutorial2()
+{
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	CInput* pInput = nullptr;
+	if (pManager != nullptr) {
+		//現在の入力デバイスの取得
+		pInput = pManager->GetInputCur();
+	}
+
+	//ボタンを押したら
+	if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT), 0))
+	{
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+		//次のフェーズにする
+		m_phase = PHASE::WOLF_DECIDE;
+
+		//消す
+		m_pTutorial->Uninit();
+		m_pTutorial = nullptr;
+	}
+}
+
+//=============================================================================
+//人狼決定処理
+//=============================================================================
+void CFindWolfScene::WolfDecide()
+{
+}
+
+//=============================================================================
+//説明3
+//=============================================================================
+void CFindWolfScene::Tutorial3()
+{
+}
+
+//=============================================================================
+//待つ処理
+//=============================================================================
+void CFindWolfScene::Wait()
+{
+}
+
+//=============================================================================
+//回答処理
+//=============================================================================
+void CFindWolfScene::Answer()
+{
+}
+
+//=============================================================================
+//説明4
+//=============================================================================
+void CFindWolfScene::Tutorial4()
+{
 }
