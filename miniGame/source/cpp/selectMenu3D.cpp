@@ -220,7 +220,7 @@ void CSelectMenu3D::RouletteMenu(void) {
 		}
 		else {
 			//回転量をへらす
-			m_fSpeedRotModel *= 0.99f;
+			m_fSpeedRotModel *= m_fRouletteSpeedRate;
 		}
 	}
 	//ルーレット終了後　目標位置まで移動

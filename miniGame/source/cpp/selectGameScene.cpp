@@ -206,7 +206,7 @@ void CSelectGameScene::Update(void) {
 				nIdxCurSelect = rand() % MAX_GAME_NUM;	//ランダムな選択
 				//メニューの設定
 				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
-				m_pMenuGame->BeginRoulette(FPS * 5, 0.2f * D3DX_PI, 0.99f);	//ルーレット開始
+				m_pMenuGame->BeginRoulette(FPS * 3, 0.2f * D3DX_PI, 0.985f);	//ルーレット開始
 			}
 
 			m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);	//次のシーンの決定
