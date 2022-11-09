@@ -14,7 +14,7 @@
 //*****************************************************************************
 //コンストラクタ
 //*****************************************************************************
-CBezierBill::CBezierBill(int nPriority) : CBillEffect(nPriority)
+CBezierBill::CBezierBill() : CBillEffect()
 {
 
 }
@@ -192,7 +192,6 @@ HRESULT CBezierBill::Init(D3DXVECTOR3 Size,
 	}
 	//PredictTraject();
 	m_Oldpos = m_pos;
-	SetPos(m_pos);
 	return S_OK;
 }
 
@@ -212,27 +211,27 @@ void CBezierBill::Update()
 	D3DXVECTOR3 pos;
 	m_TrajectSize += m_TrajectAddSize;
 
-	//リアルタイム更新
-	if (m_bHoming == true)
-	{
-		CScene *pScene = GetScene(CManager::PRIORITY_SET);
-		while (pScene)
-		{
-			CScene *pSceneNext;
-			pSceneNext = pScene->GetNext();
-			if (pScene->GetObjType() == CScene::OBJECTTYPE_PLAYER)
-			{
-				pos = pScene->GetPos();
-			}
-			pScene = pSceneNext;
-		}
+	////リアルタイム更新
+	//if (m_bHoming == true)
+	//{
+	//	CScene *pScene = GetScene(CManager::PRIORITY_SET);
+	//	while (pScene)
+	//	{
+	//		CScene *pSceneNext;
+	//		pSceneNext = pScene->GetNext();
+	//		if (pScene->GetObjType() == CScene::OBJECTTYPE_PLAYER)
+	//		{
+	//			pos = pScene->GetPos();
+	//		}
+	//		pScene = pSceneNext;
+	//	}
 
-		//目標地点
-		m_Bezier.P3[0] = pos.x;
-		m_Bezier.P3[1] = pos.y;
-		m_Bezier.P3[2] = pos.z;
+	//	//目標地点
+	//	m_Bezier.P3[0] = pos.x;
+	//	m_Bezier.P3[1] = pos.y;
+	//	m_Bezier.P3[2] = pos.z;
 
-	}
+	//}
 
 	double P01[3], P12[3], P23[3];
 	double P02[3], P13[3];
@@ -302,7 +301,6 @@ void CBezierBill::Update()
 
 
 
-	SetPos(m_pos);
 	m_Oldpos = m_pos;
 	CBillEffect::Update();
 }
@@ -346,7 +344,7 @@ CBezierBill *CBezierBill::Create(D3DXVECTOR3 Size,
 	bool bHoming)
 {
 	CBezierBill * pBezierBill = NULL;
-	pBezierBill = new CBezierBill(CManager::PRIORITY_EFFECT);
+	pBezierBill = new CBezierBill();
 	if (pBezierBill != NULL)
 	{
 		pBezierBill->Init(Size, MinSize, color, Mincolor,

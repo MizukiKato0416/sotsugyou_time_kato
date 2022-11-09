@@ -52,7 +52,7 @@ CResultScene::~CResultScene()
 }
 
 //=============================================================================
-// ゲームシーンの初期化処理
+// 初期化処理
 //=============================================================================
 void CResultScene::Init(void) {
 
@@ -206,7 +206,7 @@ void CResultScene::Init(void) {
 }
 
 //=============================================================================
-// ゲームシーンの終了処理
+// 終了処理
 //=============================================================================
 void CResultScene::Uninit(void) {
 	//シーンの終了処理
@@ -225,7 +225,7 @@ void CResultScene::Uninit(void) {
 }
 
 //=============================================================================
-// ゲームシーンの更新処理
+// 更新処理
 //=============================================================================
 void CResultScene::Update(void) {
 
@@ -252,7 +252,7 @@ void CResultScene::Update(void) {
 		if (CGameScene::GetWereWolfMode())
 		{
 			if (m_nPointUiCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FIND_WOLF, 0.02f, 60);
 		}
 		else
 		{

@@ -36,7 +36,7 @@ HRESULT CStraight3D::Init(D3DXVECTOR3 pos,
 	int nLife,
 	CStraight3D::MOVE_PATTERN Pattrn,
 	D3DXVECTOR3 Target,
-	int Synsetic,
+	int Synthetic,
 	float Destance,
 	CStraight3D::RAND_PATTEN RandPattern,
 	CStraight3D::POS_PATTERN PosPattern,
@@ -48,11 +48,9 @@ HRESULT CStraight3D::Init(D3DXVECTOR3 pos,
 {
 	CBillEffect::Init(Size, MinSize, color, Mincolor, nType, nLife, TexNum, TexMove, nAnimCounter, nSplit, AnimPattern);
 
-	m_nSynthenic = Synsetic;
+	m_nSynthenic = Synthetic;
 	m_Pattern = Pattrn;
 	m_Target = Target;
-	m_MinSize = MinSize;
-	m_Size = Size;
 
 	float fRandAngle = CIRCLE;
 	float fRandAngle2 = CIRCLE;
@@ -248,7 +246,7 @@ CStraight3D *CStraight3D::Create(D3DXVECTOR3 pos,
 	int nLife,
 	CStraight3D::MOVE_PATTERN Pattrn,
 	D3DXVECTOR3 Target,
-	int Synsetic,
+	int Synthetic,
 	float Destance,
 	CStraight3D::RAND_PATTEN RandPattern,
 	CStraight3D::POS_PATTERN PosPattern,
@@ -262,7 +260,7 @@ CStraight3D *CStraight3D::Create(D3DXVECTOR3 pos,
 
 	if (pStraight3D != NULL)
 	{
-		pStraight3D->Init(pos, Size, MinSize, move, color, Mincolor, nType, nLife, Pattrn, Target, Synsetic, Destance, RandPattern, PosPattern, TexMove,
+		pStraight3D->Init(pos, Size, MinSize, move, color, Mincolor, nType, nLife, Pattrn, Target, Synthetic, Destance, RandPattern, PosPattern, TexMove,
 			TexNum, nAnimCounter, nSplit, AnimPattern);
 	}
 

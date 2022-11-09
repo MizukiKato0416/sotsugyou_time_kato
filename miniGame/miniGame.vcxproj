@@ -162,7 +162,9 @@
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\create_bom_manager.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
+    <ClCompile Include="source\cpp\Effect\BezierBill.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\BulletHoll.cpp" />
     <ClCompile Include="source\cpp\Effect\FieldEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
     <ClCompile Include="source\cpp\Effect\LoadEffect.cpp" />
@@ -174,7 +176,9 @@
     <ClCompile Include="source\cpp\Effect\Sphere.cpp" />
     <ClCompile Include="source\cpp\Effect\SphereEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
+    <ClCompile Include="source\cpp\Effect\Trajectory.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
+    <ClCompile Include="source\cpp\find_wolf_camera.cpp" />
     <ClCompile Include="source\cpp\find_wolf_scene.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
     <ClCompile Include="source\cpp\float_object.cpp" />
@@ -231,9 +235,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h" />
+    <ClInclude Include="source\h\BezierBillh.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
     <ClInclude Include="source\h\bom.h" />
+    <ClInclude Include="source\h\BulletHoll.h" />
     <ClInclude Include="source\h\camera.h" />
     <ClInclude Include="source\h\check.h" />
     <ClInclude Include="source\h\check_icon.h" />
@@ -242,6 +248,7 @@
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
+    <ClInclude Include="source\h\find_wolf_camera.h" />
     <ClInclude Include="source\h\find_wolf_scene.h" />
     <ClInclude Include="source\h\finish_ui.h" />
     <ClInclude Include="source\h\float_object.h" />
@@ -303,6 +310,7 @@
     <ClInclude Include="source\h\titleCamera.h" />
     <ClInclude Include="source\h\titleScene.h" />
     <ClInclude Include="source\h\ToScreen.h" />
+    <ClInclude Include="source\h\Trajectory.h" />
     <ClInclude Include="source\h\wallCylinder.h" />
     <ClInclude Include="source\h\wolf_decide.h" />
   </ItemGroup>

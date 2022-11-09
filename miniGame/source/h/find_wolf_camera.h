@@ -1,14 +1,13 @@
 //=============================================================================
 //
-// 人狼決定処理 [find_wolf_scene.h]
+// 人狼決定シーンカメラ処理 [find_wolf_camera.h]
 // Author : 加藤瑞葵
 //
 //=============================================================================
-#ifndef _FIND_WOLF_SCENE_H_
-#define _FIND_WOLF_SCENE_H_
+#ifndef _FIND_WOLF_CAMERA_H_
+#define _FIND_WOLF_CAMERA_H_
 
-#include "scene.h"
-#include "object_player.h"
+#include "camera.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -17,23 +16,22 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CObject2D;
-class CScoreUi;
 
 //*****************************************************************************
-// クラスの定義
+// ゲームカメラクラス
 //*****************************************************************************
-class CFindWolfScene : public CScene
+class CFindWolfCamera : public CCamera
 {
 public:
-	CFindWolfScene();	        //デフォルトコンストラクタ
-	virtual ~CFindWolfScene();	//デストラクタ
-	void Init(void);	    //初期化処理
-	void Uninit(void);	    //終了処理
-	void Update(void);	    //更新処理
+	CFindWolfCamera();		//デフォルトコンストラクタ
+	~CFindWolfCamera();	//デストラクタ
+	static CFindWolfCamera* Create(void);	//生成処理
+	HRESULT Init(void);	//初期化処理
+	void Uninit(void);	//終了処理
+	void Update(void);	//更新処理
 
 private:
-	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];	//スコアUI 
+
 };
 
-#endif // !_FIND_WOLF_SCENE_H_
+#endif // !_FIND_WOLF_CAMERA_H_

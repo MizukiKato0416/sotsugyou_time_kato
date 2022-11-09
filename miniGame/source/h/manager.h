@@ -46,6 +46,7 @@ public:
 	void ChangeScene(int nTypeScene);	//シーンの変更
 
 	CRenderer* GetRenderer(void) { return m_pRenderer; }	//レンダラーの取得
+	CInput* GetInputKeyboard(void) { return (CInput*)m_pInputKeyboard; }		//キーボードの入力デバイスの取得
 	CInput* GetInputCur(void) { return m_pInputCur; }		//現在の入力デバイスの取得
 	bool GetEnableXInput(void) { return m_bEnableXInput; }	//現在の入力デバイスがXinputかどうかの取得
 	void SetCamera(CCamera* pCamera);	//カメラの設定
