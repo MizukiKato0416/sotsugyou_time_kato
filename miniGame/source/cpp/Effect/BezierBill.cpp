@@ -192,6 +192,7 @@ HRESULT CBezierBill::Init(D3DXVECTOR3 Size,
 	}
 	//PredictTraject();
 	m_Oldpos = m_pos;
+
 	return S_OK;
 }
 
@@ -299,9 +300,9 @@ void CBezierBill::Update()
 		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		m_TjajectTex, m_TrajectLife, m_TrajectSynthetic);
 
-
-
 	m_Oldpos = m_pos;
+	ChangeSize(m_Size);
+
 	CBillEffect::Update();
 }
 

@@ -171,7 +171,7 @@ void CObjectPlayerAttackCar::Update(void) {
 			{
 				//m_nFallEffectCounter = 0;
 				//落下エフェクト
-				CPresetDelaySet::Create(3, GetPos());
+				CPresetDelaySet::Create(3, GetPos(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 90.0f, 0.0));
 			}
 		}
 
@@ -246,7 +246,7 @@ void CObjectPlayerAttackCar::Update(void) {
 		{
 			//m_nFallEffectCounter = 0;
 			//落下エフェクト
-			CPresetDelaySet::Create(3, GetPos());
+			CPresetDelaySet::Create(3, GetPos(),D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, pCamera->GetRot().y, 0.0));
 		}
 	}
 
@@ -787,7 +787,7 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
 
 			//衝突エフェクト
-			CPresetDelaySet::Create(1, playerPos);
+			CPresetDelaySet::Create(1, playerPos, {}, {});
 
 			//マネージャーの取得
 			CManager* pManager = CManager::GetManager();

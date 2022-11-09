@@ -54,9 +54,9 @@ private:
 	bool m_bConversion;	//•ÏŠ·‚ÌI—¹
 
 
-
-
 	int m_nLife;	//õ–½
+
+
 };
 
 #endif

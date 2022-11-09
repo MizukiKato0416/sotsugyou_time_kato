@@ -152,7 +152,7 @@ HRESULT CTrajectory::Init(D3DXVECTOR3 Vtxpos1,
 	}
 	SetPosBill(m_pos1, m_pos2, m_pos3, m_pos4);
 
-	bUninit = false;
+	m_bUninit = false;
 	return S_OK;
 }
 
@@ -160,6 +160,14 @@ HRESULT CTrajectory::Init(D3DXVECTOR3 Vtxpos1,
 // 終了
 //=============================================================================
 void CTrajectory::Uninit(void)
+{
+	CPlane::Uninit();
+}
+
+//=============================================================================
+// 更新
+//=============================================================================
+void CTrajectory::Update(void)
 {
 
 	//1.0を上回る
@@ -207,21 +215,20 @@ void CTrajectory::Uninit(void)
 	m_nLife--;
 	if (m_nLife < 0)
 	{
-		bUninit = true;
+		m_bUninit = true;
 	}
 
-	SetPosBill(m_pos1, m_pos2, m_pos3, m_pos4);
+	SetPosBill(m_pos1 - m_pos, m_pos2 - m_pos, m_pos3 - m_pos, m_pos4 - m_pos);
 
 
-	CPlane::Uninit();
-}
-
-//=============================================================================
-// 更新
-//=============================================================================
-void CTrajectory::Update(void)
-{
 	CPlane::Update();
+
+	//抹消
+	if (m_bUninit == true)
+	{
+		Uninit();
+	}
+
 }
 
 //=============================================================================
@@ -245,6 +252,8 @@ CTrajectory *CTrajectory::Create(D3DXVECTOR3 Vtxpos1, D3DXVECTOR3 Vtxpos2, D3DXV
 	if (pTrajectory != NULL)
 	{
 		pTrajectory->Init(Vtxpos1, Vtxpos2, VtxOldpos1, VtxOldpos2, color, Mincolor, Trajectcolor, TrajectMincolor, Size, MinSize, nTex, nLife, Synthetic);
+		pTrajectory->SetTexture(nTex);
+
 	}
 
 	return pTrajectory;
