@@ -192,7 +192,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
 	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE
 	ControllVoice(SOUND_LABEL::SE_ITEM_SHIELD_GET	, 1.2f);		//盾アイテム獲得SE
-	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN		, 4.0f);		//風船スポーンSE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN		, 2.0f);		//風船スポーンSE
 
 	return S_OK;
 }

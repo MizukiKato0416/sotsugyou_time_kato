@@ -9,6 +9,7 @@
 
 #include "scene.h"
 #include "main.h"
+#include "object_player.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -32,8 +33,13 @@ public:
 	void Update(void);	//更新処理
 
 private:
-	int m_nCntScene;	//シーン開始時からのカウント
-	CObject2D *m_pBg;	//背景
+	void PointUI();		//ポイントUIの処理
+
+	int m_nCntScene;			//シーン開始時からのカウント
+	int m_nPointUiCounter;		//ポイントUIのカウンター
+
+	CObject2D *m_pBg;								//背景
+	CObject2D *m_apPointUi[MAX_OBJECT_PLAYER_NUM];	//ポイント用UI
 };
 
 #endif // !_RESULT_SCENE_H_
