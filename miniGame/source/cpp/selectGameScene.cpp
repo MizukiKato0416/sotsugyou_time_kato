@@ -12,6 +12,7 @@
 #include "fade.h"
 #include "object2D.h"
 #include "selectMenu3D.h"
+#include "gameScene.h"
 
 #include "titleCamera.h"
 
@@ -30,7 +31,10 @@
 //=============================================================================
 CSelectGameScene::CSelectGameScene()
 {
+	m_pMenuBG = nullptr;
+	m_pMenuGame = nullptr;
 	m_nFadeTime = FPS;
+	m_bWolfMode = false;
 }
 
 //=============================================================================
@@ -89,7 +93,7 @@ void CSelectGameScene::Init(void) {
 	//UIの生成
 	//------------------------------
 	// 背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -106,7 +110,7 @@ void CSelectGameScene::Init(void) {
 		{	
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
-			CModel::MODELTYPE::OBJ_BANANA,
+			CModel::MODELTYPE::OBJ_HATENA,
 		};
 
 		//全モデルの設定
@@ -114,14 +118,16 @@ void CSelectGameScene::Init(void) {
 		{
 			//メニューのUIオブジェクトの取得
 			CObjectModelUI* pObjModelUI = m_pMenuGame->GetModelUI(nIdxModel);
-			if (pObjModelUI != nullptr) {
-				//UIオブジェクトのモデルの取得
-				CModel* pModel = pObjModelUI->GetPtrModel();
-				if (pModel != nullptr) {
-					//モデルを設定
-					pModel->SetModelType(typeModelGame[nIdxModel]);
-				}
-			}
+			if (pObjModelUI == nullptr) continue;
+
+			//UIオブジェクトのモデルの取得
+			CModel* pModel = pObjModelUI->GetPtrModel();
+			if (pModel == nullptr) continue;
+
+			//モデルを設定
+			pModel->SetModelType(typeModelGame[nIdxModel]);
+			pModel->SetColorGlow(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			pModel->SetPowerGlow(4.0f);
 		}
 	}
 
@@ -164,57 +170,23 @@ void CSelectGameScene::Uninit(void) {
 //=============================================================================
 void CSelectGameScene::Update(void) {
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
 
 	if (pManager != nullptr) {
-		//現在の入力デバイスの取得
-		pInput = pManager->GetInputCur();
 		//フェードの取得
 		pFade = pManager->GetFade();
 		//サウンドの取得
 		pSound = pManager->GetSound();
 	}
 
-	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
+	if (pFade == nullptr || m_pMenuGame == nullptr) return;
 
-	//現在の選択肢の番号
-	int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
-
-	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey)
-	{
-		//フェード中だった場合
-		if (pFade->GetFade())
-		{
-			//フェードをスキップ
-			pFade->SkipFade();
-		}
-		//選択ロック中ではないとき
-		else if(!m_pMenuGame->GetLockChangeSelect())
-		{
-			// 押されたフラグ
-			m_bPushKey = true;
-			//選択のロック
-			m_pMenuGame->SetLockChangeSelect(true);
-			//決定音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
-
-			//ランダム選択時
-			if (nIdxCurSelect == MAX_GAME_NUM) {
-				nIdxCurSelect = rand() % MAX_GAME_NUM;	//ランダムな選択
-				//メニューの設定
-				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
-				m_pMenuGame->BeginRoulette(FPS * 3, 0.2f * D3DX_PI, 0.985f);	//ルーレット開始
-			}
-
-			m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);	//次のシーンの決定
-		}
-	}
+	//入力処理
+	UpdateInput();
 
 	//決定キーが押されたとき
-	if (m_bPushKey)
+	if (m_bSelectGame)
 	{
 		//ランダム選択中の処理
 		if (m_pMenuGame->GetRoulette()) {
@@ -244,4 +216,98 @@ void CSelectGameScene::Update(void) {
 			m_nFadeTime--;
 		}
 	}
+}
+
+//=============================================================================
+// 入力処理
+//=============================================================================
+void CSelectGameScene::UpdateInput(void) {
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	CInput* pInput = pManager->GetInputCur();	//入力デバイスへのポインタ
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	CSound* pSound = pManager->GetSound();	//サウンドへのポインタ
+	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
+
+
+	//嘘つき切り替え
+	if (pInput->GetTrigger(CInput::CODE::CHECK_X, 0) && !m_bSelectGame) {
+		//フェード中だった場合
+		if (pFade->GetFade())
+		{
+			//フェードをスキップ
+			pFade->SkipFade();
+		}
+		else {
+			//モード切り替え
+			ChangeMode(!m_bWolfMode);
+		}
+	}
+
+	//現在の選択肢の番号
+	int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
+
+	//決定キーを押したとき
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bSelectGame)
+	{
+		//フェード中だった場合
+		if (pFade->GetFade())
+		{
+			//フェードをスキップ
+			pFade->SkipFade();
+		}
+		//選択ロック中ではないとき
+		else if(!m_pMenuGame->GetLockChangeSelect())
+		{
+			// 押されたフラグ
+			m_bSelectGame = true;
+			//選択のロック
+			m_pMenuGame->SetLockChangeSelect(true);
+			//決定音の再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+			//ランダム選択時
+			if (nIdxCurSelect == MAX_GAME_NUM) {
+				nIdxCurSelect = rand() % MAX_GAME_NUM;	//ランダムな選択
+				//メニューの設定
+				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
+				m_pMenuGame->BeginRoulette(FPS * 3, 0.2f * D3DX_PI, 0.985f);	//ルーレット開始
+			}
+
+			//次のシーンの決定
+			m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);	
+
+			//ゲームモード設定
+			CGameScene::SetWereWolfMode(m_bWolfMode);
+		}
+	}
+}
+
+//=============================================================================
+// 嘘つきモードの切り替え
+//=============================================================================
+void CSelectGameScene::ChangeMode(bool bWolf) {
+	m_bWolfMode = bWolf;
+
+	//嘘つきモードに変更
+	if (m_bWolfMode) {
+		//背景変更
+		if (m_pMenuBG != nullptr) m_pMenuBG->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU_WOLF);
+	}
+	//通常モードに変更
+	else {
+		//背景変更
+		if (m_pMenuBG != nullptr) m_pMenuBG->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU);
+	}
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	CSound* pSound = nullptr;	//サウンドへのポインタ
+
+	if (pManager != nullptr) {
+		//サウンドの取得
+		pSound = pManager->GetSound();
+	}
+
+	//変更音の設定
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BALLOON_BREAK);
 }
