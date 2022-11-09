@@ -14,7 +14,8 @@ TEXTURE_FILENAME = data/TEXTURE/EFFECT/GraySmoke.png				//ÇTäDâå
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/spin.png				//ÇUÉXÉsÉì
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Explosion00.png				//ÇVîöî≠ñå
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/ExprosionRing01.png				//ÇWè’åÇîg
-TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//ÇXÉeÉXÉg
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//ÇXéläp
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/ster.png				//ÇPÇOêØ
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/Line00.png				//ÇPÇPíå
 
 END_SCRIPT
