@@ -22,6 +22,12 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
+#define RESULT_SCENE_POINT_UI_SIZE		(D3DXVECTOR3(325.0f * 0.5f, 128.0f* 0.5f, 0.0f))	//ポイントUIのサイズ
+#define RESULT_SCENE_POINT_UI_ADD_ALPHA	(0.08f)												//ポイントUIのα値加算値
+#define RESULT_SCENE_POINT_UI_ADD_POS_Y	(3.0f)												//ポイントUIの位置加算値
+#define RESULT_SCENE_POINT_UI_COUNTER	(90)												//ポイントUIの見えるようになるまでのカウント
+
+#define RESULT_SCENE_CHANGE_SCENE_COUNTER	(120)											//シーン遷移ができるようになるまでのカウンター
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -183,7 +189,7 @@ void CResultScene::Init(void) {
 
 		//ポイントUIを生成
 		m_apPointUi[nIdxPlayer] = CObject2D::Create(posRankUI - D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::ADD_POINT_40, 
-			                                        325.0f * 0.5f, 128.0f* 0.5f);
+			                                        RESULT_SCENE_POINT_UI_SIZE.x, RESULT_SCENE_POINT_UI_SIZE.y);
 		m_apPointUi[nIdxPlayer]->SetTexType(static_cast<CTexture::TEXTURE_TYPE>
 			                               (static_cast<int> (CTexture::TEXTURE_TYPE::ADD_POINT_40) + (aPlayerRank[nIdxPlayer] - 1)));
 		m_apPointUi[nIdxPlayer]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
@@ -222,6 +228,16 @@ void CResultScene::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CResultScene::Update(void) {
+
+	if (m_pBg != nullptr)
+	{
+		//背景を動かす
+		m_pBg->SetMoveTex(0.001f, 0.001f);
+	}
+
+	//ポイントUIの処理
+	PointUI();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
@@ -232,18 +248,17 @@ void CResultScene::Update(void) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 		if (pFade == nullptr) return;
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+		//人狼モードなら
+		if (CGameScene::GetWereWolfMode())
+		{
+			if (m_nPointUiCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+		}
+		else
+		{
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+		}
 	}
-
-
-	if (m_pBg != nullptr)
-	{
-		//背景を動かす
-		m_pBg->SetMoveTex(0.001f, 0.001f);
-	}
-
-	//ポイントUIの処理
-	PointUI();
 }
 
 //=============================================================================
@@ -259,15 +274,19 @@ void CResultScene::PointUI()
 
 	m_nPointUiCounter++;
 
+	//既定の値になっていなかったら
+	if (m_nPointUiCounter > RESULT_SCENE_CHANGE_SCENE_COUNTER)
+	{
+		m_nPointUiCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER;
+	}
+
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
 		//生成されていなかったら
 		if (m_apPointUi[nIdxPlayer] == nullptr) continue;
 
 		//既定の値になっていなかったら
-		if (m_nPointUiCounter <= 60) continue;
-
-		m_nPointUiCounter = 60 + 1;
+		if (m_nPointUiCounter <= RESULT_SCENE_POINT_UI_COUNTER) continue;
 
 		//薄くなっていない状態なら
 		if (m_apPointUi[nIdxPlayer]->GetColor().a == 1.0f) continue;
@@ -275,7 +294,7 @@ void CResultScene::PointUI()
 		//カラー取得
 		D3DXCOLOR col = m_apPointUi[nIdxPlayer]->GetColor();
 		//濃くする
-		col.a += 0.03f;
+		col.a += RESULT_SCENE_POINT_UI_ADD_ALPHA;
 		if (col.a > 1.0f)
 		{
 			col.a = 1.0f;
@@ -286,7 +305,7 @@ void CResultScene::PointUI()
 		//位置取得
 		D3DXVECTOR3 pos = m_apPointUi[nIdxPlayer]->GetPos();
 		//動かす
-		pos.y -= 2.0f;
+		pos.y -= RESULT_SCENE_POINT_UI_ADD_POS_Y;
 		//位置設定
 		m_apPointUi[nIdxPlayer]->SetPos(pos);
 	}
