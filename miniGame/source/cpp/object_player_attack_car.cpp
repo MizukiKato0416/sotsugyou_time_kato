@@ -135,6 +135,22 @@ void CObjectPlayerAttackCar::Uninit(void) {
 //=============================================================================
 void CObjectPlayerAttackCar::Update(void) {
 
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+
+	CInput* pInput = nullptr;
+	CSound *pSound = nullptr;
+	CCamera* pCamera = nullptr;
+	CGameScene* pGame = nullptr;
+
+	//----------------------------
+	//カメラの設定
+	//----------------------------
+	float fRotCameraY = 0.0f;	//カメラの角度
+	if (pCamera != nullptr) {
+		fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
+	}
+
 	//更新しない設定なら
 	if (!GetPlayer()->GetUpdate())
 	{
@@ -171,7 +187,7 @@ void CObjectPlayerAttackCar::Update(void) {
 			{
 				//m_nFallEffectCounter = 0;
 				//落下エフェクト
-				CPresetDelaySet::Create(3, GetPos());
+				CPresetDelaySet::Create(3, GetPos(),D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3(0.0f, fRotCameraY,0.0f));
 			}
 		}
 
@@ -180,13 +196,7 @@ void CObjectPlayerAttackCar::Update(void) {
 		return;
 	}
 
-	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();
-
-	CInput* pInput = nullptr;
-	CSound *pSound = nullptr;
-	CCamera* pCamera = nullptr;
-	CGameScene* pGame = nullptr;
+	
 
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
@@ -200,13 +210,7 @@ void CObjectPlayerAttackCar::Update(void) {
 	//位置情報のポインタの取得
 	D3DXVECTOR3 posObjectPlayer = GetPos();
 
-	//----------------------------
-	//カメラの設定
-	//----------------------------
-	float fRotCameraY = 0.0f;	//カメラの角度
-	if (pCamera != nullptr) {
-		fRotCameraY = pCamera->GetRot().y;	//カメラの角度を取得
-	}
+	
 
 	//落ちていなかったら
 	if (GetPos().y >= 0.0f)
@@ -246,7 +250,7 @@ void CObjectPlayerAttackCar::Update(void) {
 		{
 			//m_nFallEffectCounter = 0;
 			//落下エフェクト
-			CPresetDelaySet::Create(3, GetPos());
+			CPresetDelaySet::Create(3, GetPos(),D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, fRotCameraY, 0.0f));
 
 		}
 	}
@@ -788,7 +792,7 @@ void CObjectPlayerAttackCar::CollisionObjectPlayer(void)
 			m_bCollOld[pObjectPlayer->GetPlayer()->GetIndex() - 1] = true;
 
 			//衝突エフェクト
-			CPresetDelaySet::Create(1, playerPos);
+			CPresetDelaySet::Create(1, playerPos, {}, {});
 
 			//マネージャーの取得
 			CManager* pManager = CManager::GetManager();
