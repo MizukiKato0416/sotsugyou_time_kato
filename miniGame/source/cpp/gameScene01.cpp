@@ -224,7 +224,7 @@ void CGameScene01::Update(void) {
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
+	CInput* pInput = pManager->GetInputKeyboard();
 	if (pInput == nullptr) return;
 
 	//ゲームオーバー
