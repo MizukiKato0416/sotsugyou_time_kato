@@ -105,8 +105,12 @@ void CSelectMenu3D::Uninit(void) {
 // 3D選択メニューの更新処理
 //=============================================================================
 void CSelectMenu3D::Update(void) {
-	//モデルの位置を移動
-	MoveModel();
+	if (m_bRoulette) {
+		RouletteMenu();
+	}
+	else {
+		RotateMenu();
+	}
 
 	CSelectMenu::Update();
 }
@@ -155,15 +159,9 @@ void CSelectMenu3D::CreateModelUI(void) {
 }
 
 //=============================================================================
-// モデルの移動
+// メニューを回転
 //=============================================================================
-void CSelectMenu3D::MoveModel(void) {
-	//モデルのダブルポインタがnullの場合
-	if (m_ppObjModelUIArray == nullptr) {
-		//選択の変更の制限を解除する
-		SetLockChangeSelect(false);
-	}
-
+void CSelectMenu3D::RotateMenu(void) {
 	//カウント0以下の場合終了
 	if (m_nCntRotate <= 0) return;
 
@@ -174,6 +172,7 @@ void CSelectMenu3D::MoveModel(void) {
 	m_fRotModel += m_fSpeedRotModel;
 	//超過分調整
 	if (m_fRotModel > D3DX_PI * 2) m_fRotModel -= D3DX_PI * 2;
+	if (m_fRotModel < 0) m_fRotModel += D3DX_PI * 2;
 
 	//選択の遷移が完了時
 	if (m_nCntRotate <= 0) {
@@ -186,6 +185,64 @@ void CSelectMenu3D::MoveModel(void) {
 		m_fRotModel = m_fRotModelDest;
 	}
 
+	//モデルの位置更新
+	MoveModel();
+}
+
+//=============================================================================
+// ルーレットでメニューを回転
+//=============================================================================
+void CSelectMenu3D::RouletteMenu(void) {
+	//回転を加算
+	m_fRotModel += m_fSpeedRotModel;
+	//超過分調整
+	if (m_fRotModel > D3DX_PI * 2) m_fRotModel -= D3DX_PI * 2;
+	if (m_fRotModel < 0) m_fRotModel += D3DX_PI * 2;
+
+	//ルーレットカウンターを減算
+	if (m_nCntRoulette > 0) {
+		m_nCntRoulette--;
+		if (m_nCntRoulette == 0) {
+			//目標角度を設定
+			SetRotDest(GetIdxCurSelect());
+
+			//現在のスピードを維持したまま指定位置まで回転できるフレーム数計算
+			float fRotDelta;	//目標角度への差分
+			//回転する差分を計算（ルーレットはプラス回転のみ）
+			if (m_fRotModelDest > m_fRotModel) {
+				fRotDelta = m_fRotModelDest - m_fRotModel;
+			}
+			else {
+				fRotDelta = D3DX_PI * 2 - (m_fRotModel - m_fRotModelDest);
+			}
+			//カウントを設定
+			m_nCntRotate = fRotDelta / m_fSpeedRotModel;
+		}
+		else {
+			//回転量をへらす
+			m_fSpeedRotModel *= 0.99f;
+		}
+	}
+	//ルーレット終了後　目標位置まで移動
+	else {
+		//カウンターを減算
+		if (m_nCntRotate > 0) {
+			m_nCntRotate--;
+			if (m_nCntRotate == 0) {
+				//目標角度を設定する　（floatの誤差を避けるため）
+				m_fRotModel = m_fRotModelDest;
+			}
+		}
+	}
+
+	//モデルの位置更新
+	MoveModel();
+}
+
+//=============================================================================
+// モデル移動
+//=============================================================================
+void CSelectMenu3D::MoveModel(void) {
 	int nNumSelect = GetNumSelect();	//選択肢の数を取得
 
 	//UIモデルの位置を変更

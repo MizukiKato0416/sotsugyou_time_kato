@@ -46,8 +46,16 @@ public:
 
 	void SetRotDest(int nIdxCurSelect) { m_fRotModelDest = D3DX_PI * 2 * ((float)nIdxCurSelect / GetNumSelect()); }	//目標の角度を選択のインデックスから設定
 
+	void SetRoulette(bool bRoulette) { m_bRoulette = bRoulette; }	//ルーレット状態の設定
+	bool GetRoulette(void) { return m_bRoulette; }	//ルーレット状態の取得
+	void BeginRoulette(int nCntRoulette, float fSpeedRot, float fSpeedRate) { m_bRoulette = true; m_nCntRoulette = nCntRoulette; m_fSpeedRotModel = fSpeedRot; m_fRouletteSpeedRate = fSpeedRate; }	//ルーレットの開始
+	int GetCountRoulette(void) { return m_nCntRoulette; }	//ルーレットのカウントの取得
+
+
 private:
 	void CreateModelUI(void);	//モデルの生成
+	void RotateMenu(void);		//メニューを回転
+	void RouletteMenu(void);	//ルーレットでメニューを回転
 	void MoveModel(void);	//モデル移動
 
 	const D3DXVECTOR3 m_posCenter;	//メニューの中央の位置
@@ -61,6 +69,10 @@ private:
 	float m_fRotModel;		//モデルの配置位置を決める角度
 	float m_fRotModelDest;	//モデルの目標角度
 	float m_fSpeedRotModel;	//モデル移動時の回転速度
+
+	bool m_bRoulette;	//ルーレットの回転
+	int m_nCntRoulette;		//ルーレット回転するカウント
+	float m_fRouletteSpeedRate;	//ルーレットの速度の乗算される値
 
 	float m_fDistCamera;	//メニュー用のカメラの距離
 	float m_fRotCamera;	//メニュー用のカメラのY角度

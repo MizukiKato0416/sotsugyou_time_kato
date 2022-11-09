@@ -180,7 +180,7 @@ void CSelectGameScene::Update(void) {
 	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
 
 	//現在の選択肢の番号
-	int nSelectCur = m_pMenuGame->GetIdxCurSelect();
+	int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
 
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey)
@@ -202,14 +202,14 @@ void CSelectGameScene::Update(void) {
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 
 			//ランダム選択時
-			if (nSelectCur == MAX_GAME_NUM) {
-				nSelectCur = rand() % MAX_GAME_NUM;	//ランダムな選択
+			if (nIdxCurSelect == MAX_GAME_NUM) {
+				nIdxCurSelect = rand() % MAX_GAME_NUM;	//ランダムな選択
 				//メニューの設定
-				m_pMenuGame->SetCountRotate(FPS * 3);	//回転時間の設定
-				m_pMenuGame->SetSpeedRotModel(0.2f * D3DX_PI);	//回転速度の設定
+				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
+				m_pMenuGame->BeginRoulette(FPS * 5, 0.2f * D3DX_PI, 0.99f);	//ルーレット開始
 			}
 
-			m_nextScene = (CScene::SCENE_TYPE)(nSelectCur + (int)CScene::SCENE_TYPE::GAME_01);	//次のシーンの決定
+			m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);	//次のシーンの決定
 		}
 	}
 
@@ -217,21 +217,15 @@ void CSelectGameScene::Update(void) {
 	if (m_bPushKey)
 	{
 		//ランダム選択中の処理
-		if (nSelectCur == MAX_GAME_NUM) {
-			if (m_pMenuGame->GetCountRotate() >= 0) {
-				//回転量の減算
-				m_pMenuGame->SetSpeedRotModel(m_pMenuGame->GetSpeedRotModel() * 0.99f);
-			}
-
+		if (m_pMenuGame->GetRoulette()) {
 			//終了時
-			if (m_pMenuGame->GetCountRotate() == 0) {
-				//選択を決定　これによりこのif文が通らなくなる
-				int nIdxCurSelect = (int)m_nextScene - (int)CScene::SCENE_TYPE::GAME_01;	//メニューの選択番号
-				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
-				m_pMenuGame->SetCountRotate(60);				//回転時間の設定
-				m_pMenuGame->BeginChangeSelect(true);			//次のシーンのアイコンに変更
+			if (m_pMenuGame->GetCountRoulette() == 0 && m_pMenuGame->GetCountRotate() == 0) {
 				//選択のロック
 				m_pMenuGame->SetLockChangeSelect(true);
+				//ルーレット状態の終了
+				m_pMenuGame->SetRoulette(false);	
+				//決定音の再生
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 			}
 		}
 		// 遷移する時間が0より小さくなっていたら
