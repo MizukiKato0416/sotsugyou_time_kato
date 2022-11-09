@@ -226,6 +226,9 @@
     <ClCompile Include="source\cpp\find_wolf_scene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\find_wolf_camera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -451,6 +454,9 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\find_wolf_scene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\find_wolf_camera.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>
