@@ -32,9 +32,14 @@ public:
 	void Update(void);	//更新処理
 
 private:
-	int m_nFadeTime;	//フェード開始までのカウント
-	bool m_bPushKey;	//選択キー押下時
+	void UpdateInput(void);	//入力処理
+	void ChangeMode(bool bWolf);	//嘘つきモードの切り替え
 
+	int m_nFadeTime;	//フェード開始までのカウント
+	bool m_bSelectGame;	//選択キー押下時
+
+	bool m_bWolfMode;	//嘘つきモード
+	CObject2D* m_pMenuBG;		//背景
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
 	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };

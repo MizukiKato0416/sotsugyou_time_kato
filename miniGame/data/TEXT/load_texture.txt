@@ -64,6 +64,11 @@ data/TEXTURE/UI/wolf_select_1.png
 data/TEXTURE/UI/wolf_select_2.png
 data/TEXTURE/UI/wolf_select_3.png
 data/TEXTURE/UI/wolf_select_4.png
+data/TEXTURE/UI/point_1p.png
+data/TEXTURE/UI/point_2p.png
+data/TEXTURE/UI/point_3p.png
+data/TEXTURE/UI/point_4p.png
+data/TEXTURE/UI/point_free.png
 
 data/TEXTURE/UI/40point.png
 data/TEXTURE/UI/30point.png
@@ -92,6 +97,16 @@ data/TEXTURE/UI/pause_continue.png
 data/TEXTURE/UI/shake_tutorial.png
 data/TEXTURE/UI/shake.png
 data/TEXTURE/UI/shake_start.png
+data/TEXTURE/UI/wolf_answer_1.png
+data/TEXTURE/UI/wolf_answer_2.png
+data/TEXTURE/UI/wolf_answer_3.png
+data/TEXTURE/UI/wolf_answer_4.png
+data/TEXTURE/UI/wolf_find_tutorial_1.png
+data/TEXTURE/UI/wolf_find_tutorial_2.png
+data/TEXTURE/UI/wolf_find_tutorial_3.png
+data/TEXTURE/UI/wolf_find_tutorial_4.png
+
+data/TEXTURE/UI/result_ui.png
 
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
