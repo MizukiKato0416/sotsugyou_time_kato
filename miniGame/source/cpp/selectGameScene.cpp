@@ -309,5 +309,5 @@ void CSelectGameScene::ChangeMode(bool bWolf) {
 	}
 
 	//•ÏX‰¹‚ÌÝ’è
-	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BALLOON_BREAK);
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
 }
