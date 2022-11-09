@@ -33,6 +33,8 @@
 CResultScene::CResultScene()
 {
 	m_pBg = nullptr;
+	memset(m_apPointUi, NULL, sizeof(m_apPointUi[MAX_OBJECT_PLAYER_NUM]));
+	m_nPointUiCounter = 0;
 }
 
 //=============================================================================
@@ -47,6 +49,11 @@ CResultScene::~CResultScene()
 // ゲームシーンの初期化処理
 //=============================================================================
 void CResultScene::Init(void) {
+
+	//変数初期化
+	m_nPointUiCounter = 0;
+
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -143,7 +150,6 @@ void CResultScene::Init(void) {
 
 		D3DXVECTOR3 posRankUI = WorldToScreen(posModel, pPlayerModel->GetViewMatrix());
 		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 150.0f, 150.0f);
-		CObject2D* pPointUi = CObject2D::Create(posRankUI - D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::ADD_POINT_40, 325.0f * 0.5f, 128.0f* 0.5f);
 
 		if (pModel == nullptr) continue;
 		D3DXCOLOR colModel;	//モデルのマテリアル色
@@ -170,25 +176,17 @@ void CResultScene::Init(void) {
 
 		//順位UIのテクスチャ設定
 		if (pRankUI == nullptr) continue;
+		pRankUI->SetTexType(static_cast<CTexture::TEXTURE_TYPE>(static_cast<int> (CTexture::TEXTURE_TYPE::RANKING_1) + (aPlayerRank[nIdxPlayer] - 1)));
 
-		switch (aPlayerRank[nIdxPlayer])
-		{
-		case 1:
-			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::RANKING_1);
-			break;
-		case 2:
-			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::RANKING_2);
-			break;
-		case 3:
-			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::RANKING_3);
-			break;
-		case 4:
-			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::RANKING_4);
-			break;
-		default:
-			pRankUI->SetTexType(CTexture::TEXTURE_TYPE::RANKING_1);
-			break;
-		}		
+		//人狼モードでなかったら
+		if (!CGameScene::GetWereWolfMode()) continue;
+
+		//ポイントUIを生成
+		m_apPointUi[nIdxPlayer] = CObject2D::Create(posRankUI - D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::ADD_POINT_40, 
+			                                        325.0f * 0.5f, 128.0f* 0.5f);
+		m_apPointUi[nIdxPlayer]->SetTexType(static_cast<CTexture::TEXTURE_TYPE>
+			                               (static_cast<int> (CTexture::TEXTURE_TYPE::ADD_POINT_40) + (aPlayerRank[nIdxPlayer] - 1)));
+		m_apPointUi[nIdxPlayer]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
 
@@ -242,5 +240,54 @@ void CResultScene::Update(void) {
 	{
 		//背景を動かす
 		m_pBg->SetMoveTex(0.001f, 0.001f);
+	}
+
+	//ポイントUIの処理
+	PointUI();
+}
+
+//=============================================================================
+//ポイントUIの処理
+//=============================================================================
+void CResultScene::PointUI()
+{
+	//人狼モードでなかったら
+	if (!CGameScene::GetWereWolfMode())
+	{
+		return;
+	}
+
+	m_nPointUiCounter++;
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		//生成されていなかったら
+		if (m_apPointUi[nIdxPlayer] == nullptr) continue;
+
+		//既定の値になっていなかったら
+		if (m_nPointUiCounter <= 60) continue;
+
+		m_nPointUiCounter = 60 + 1;
+
+		//薄くなっていない状態なら
+		if (m_apPointUi[nIdxPlayer]->GetColor().a == 1.0f) continue;
+
+		//カラー取得
+		D3DXCOLOR col = m_apPointUi[nIdxPlayer]->GetColor();
+		//濃くする
+		col.a += 0.03f;
+		if (col.a > 1.0f)
+		{
+			col.a = 1.0f;
+		}
+		//カラー設定
+		m_apPointUi[nIdxPlayer]->SetColor(col);
+
+		//位置取得
+		D3DXVECTOR3 pos = m_apPointUi[nIdxPlayer]->GetPos();
+		//動かす
+		pos.y -= 2.0f;
+		//位置設定
+		m_apPointUi[nIdxPlayer]->SetPos(pos);
 	}
 }
