@@ -181,9 +181,6 @@
     <ClCompile Include="source\cpp\Effect\billeffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\Effect\SphereEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
@@ -191,12 +188,6 @@
       <Filter>cpp\effect</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\Rotate3d.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\straight3d.cpp">
@@ -233,6 +224,15 @@
       <Filter>cpp\effect</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\BulletHoll.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -414,15 +414,6 @@
     <ClInclude Include="source\h\billeffect.h">
       <Filter>h\effect</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\LoadEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetDelaySet.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetSetEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
     <ClInclude Include="source\h\Rotate3d.h">
       <Filter>h\effect</Filter>
     </ClInclude>
@@ -469,6 +460,15 @@
       <Filter>h\effect</Filter>
     </ClInclude>
     <ClInclude Include="source\h\BulletHoll.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\LoadEffect.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetDelaySet.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetSetEffect.h">
       <Filter>h\effect</Filter>
     </ClInclude>
   </ItemGroup>
