@@ -229,7 +229,6 @@ void CSelectGameScene::UpdateInput(void) {
 	CSound* pSound = pManager->GetSound();	//サウンドへのポインタ
 	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
 
-
 	//嘘つき切り替え
 	if (pInput->GetTrigger(CInput::CODE::CHECK_X, 0) && !m_bSelectGame) {
 		//フェード中だった場合
@@ -244,9 +243,6 @@ void CSelectGameScene::UpdateInput(void) {
 		}
 	}
 
-	//現在の選択肢の番号
-	int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
-
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bSelectGame)
 	{
@@ -259,6 +255,9 @@ void CSelectGameScene::UpdateInput(void) {
 		//選択ロック中ではないとき
 		else if(!m_pMenuGame->GetLockChangeSelect())
 		{
+			//現在の選択肢の番号を取得
+			int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
+
 			// 押されたフラグ
 			m_bSelectGame = true;
 			//選択のロック
