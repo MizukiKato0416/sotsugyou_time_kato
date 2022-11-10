@@ -90,9 +90,9 @@ data/TEXTURE/UI/timer_frame.png
 
 data/TEXTURE/UI/pause_bg.png
 data/TEXTURE/UI/pause_frame.png
-data/TEXTURE/UI/pause_title.png
-data/TEXTURE/UI/pause_restart.png
 data/TEXTURE/UI/pause_continue.png
+data/TEXTURE/UI/pause_restart.png
+data/TEXTURE/UI/pause_menu.png
 
 data/TEXTURE/UI/shake_tutorial.png
 data/TEXTURE/UI/shake.png
