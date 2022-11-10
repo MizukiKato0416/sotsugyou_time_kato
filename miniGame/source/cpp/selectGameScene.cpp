@@ -253,7 +253,7 @@ void CSelectGameScene::UpdateInput(void) {
 	}
 
 	//チュートリアル閉じる
-	if ((pInput->GetTrigger(CInput::CODE::CHECK_A, 0) || pInput->GetTrigger(CInput::CODE::CHECK_B, 0)) && m_pTutorial != nullptr) {
+	if ((pInput->GetTrigger(CInput::CODE::SELECT, 0) || pInput->GetTrigger(CInput::CODE::BACK, 0)) && m_pTutorial != nullptr) {
 		//チュートリアル切り替え
 		ChangeTutorial();
 		return;	//選択が連続にならないように終了

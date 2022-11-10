@@ -403,7 +403,7 @@ void CRenderer::DrawFPS(void) {
 void CRenderer::BeginPassEffect(DWORD dwPassFlag) {
 	//深度バッファ描画時
 	if (m_bDrawZTex) {
-		if (m_pEffect != nullptr) m_pEffect->BeginPass(0);
+		if (m_pEffect != nullptr) m_pEffect->BeginPass((int)PASS_TYPE::BUFF_DEPTH);
 		return;
 	}
 

@@ -25,7 +25,7 @@ class CRenderer
 {
 public:
 	enum class PASS_TYPE{
-		DRAW_ZBUFF = 0,
+		BUFF_DEPTH = 0,
 
 		DEF_2D,
 		TEX_2D,
