@@ -47,18 +47,35 @@ private:
 		MAX
 	};
 
-	void Tutorial1();	//説明1処理
-	void Tutorial2();	//説明2処理
-	void WolfDecide();	//人狼決定処理
-	void Tutorial3();	//説明3処理
-	void Wait();		//待つ処理
-	void Answer();		//回答処理
-	void Tutorial4();	//説明4処理
+	//選択肢
+	enum class SELECT
+	{
+		PLAYER_1 = 0,
+		PLAYER_2,
+		PLAYER_3,
+		PLAYER_4,
+		SELECT_MAX
+	};
 
-	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];	//スコアUI 
-	CObject2D *m_pTutorial;							//説明UI
+	void Tutorial1();			//説明1処理
+	void Tutorial2();			//説明2処理
+	void WolfDecide();			//人狼決定処理
+	void Tutorial3();			//説明3処理
+	void Wait();				//待つ処理
+	void Answer();				//回答処理
+	void Tutorial4();			//説明4処理
 
-	PHASE m_phase;									//フェーズ
+	//選択用アイコンUIの位置設定処理
+	void SelectIconSetPos(const int nIdxPlayer, const SELECT select);
+
+	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];		//スコアUI 
+	CObject2D *m_pSelectIcon[MAX_OBJECT_PLAYER_NUM];	//選択用アイコン
+	CObject2D *m_pTutorial;								//説明UI
+
+	D3DXVECTOR3 m_aPosPlayer2D[MAX_OBJECT_PLAYER_NUM];		//プレイヤーの2D座標
+	SELECT m_select[MAX_OBJECT_PLAYER_NUM];	//どこが選択されているのか
+
+	PHASE m_phase;										//フェーズ
 };
 
 #endif // !_FIND_WOLF_SCENE_H_
