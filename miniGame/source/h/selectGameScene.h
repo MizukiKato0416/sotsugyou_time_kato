@@ -33,6 +33,7 @@ public:
 
 private:
 	void UpdateInput(void);	//入力処理
+	void ChangeTutorial(void);	//チュートリアル表示の切り替え
 	void ChangeMode(bool bWolf);	//嘘つきモードの切り替え
 
 	int m_nFadeTime;	//フェード開始までのカウント
@@ -42,6 +43,7 @@ private:
 	CObject2D* m_pMenuBG;		//背景
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
 	CObject2D* m_pGameName;		//ゲーム名
+	CObject2D* m_pTutorial;		//チュートリアル画面
 	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };
 
