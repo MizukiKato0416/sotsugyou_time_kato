@@ -17,6 +17,7 @@
 //=============================================================================
 #define WOLF_DECIDE_SHAKE_MAX_TIME	(180)		//振動する時間
 #define WOLF_DECIDE_SHAKE_INTERVAL	(60)		//振動する間隔
+#define WOLF_DECIDE_BRINK_INTERVAL	(30)		//点滅する間隔
 #define WOLF_DECIDE_SHAKE_NUM		(15000)		//振動する量
 #define WOLF_DECIDE_SHAKE_TIME		(45)		//一回の振動で振動する時間
 
@@ -208,7 +209,7 @@ void CWolfDecide::Shake()
 	}
 
 	//指定フレーム毎に
-	if (m_nShakeUiCounter % WOLF_DECIDE_SHAKE_INTERVAL == 0)
+	if (m_nShakeUiCounter % WOLF_DECIDE_BRINK_INTERVAL == 0)
 	{
 		//カラー取得
 		D3DXCOLOR col = m_pShakeUI->GetColor();
@@ -220,12 +221,16 @@ void CWolfDecide::Shake()
 		}
 		else
 		{//見えているなら
-			//見えないようにする
+		 //見えないようにする
 			col.a = 0.0f;
 		}
 		//カラー設定処理
 		m_pShakeUI->SetColor(col);
+	}
 
+	//指定フレーム毎に
+	if (m_nShakeUiCounter % WOLF_DECIDE_SHAKE_INTERVAL == 0)
+	{
 		//マネージャーの取得
 		CManager* pManager = CManager::GetManager();
 		CInput* pInput = nullptr;
