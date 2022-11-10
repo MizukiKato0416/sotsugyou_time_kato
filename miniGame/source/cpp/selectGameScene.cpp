@@ -35,6 +35,7 @@ CSelectGameScene::CSelectGameScene()
 	m_pMenuGame = nullptr;
 	m_nFadeTime = FPS;
 	m_bWolfMode = false;
+	m_pTutorial = nullptr;
 }
 
 //=============================================================================
@@ -132,10 +133,12 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//ゲーム名の背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MESH_BALLOON_GOLD , 500.0f, 180.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 , 500.0f, 180.0f);
 	//ゲーム名の生成
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 150.0f);
-
+	//矢印UIの生成
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 100.0f, 100.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 100.0f, 100.0f);
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
@@ -233,10 +236,33 @@ void CSelectGameScene::UpdateInput(void) {
 	CInput* pInput = pManager->GetInputCur();	//入力デバイスへのポインタ
 	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 	CSound* pSound = pManager->GetSound();	//サウンドへのポインタ
-	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
+	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr || m_bSelectGame) return;
+
+	//チュートリアル切り替え 移動可能時のみ
+	if (pInput->GetTrigger(CInput::CODE::CHECK_Y, 0) && !m_pMenuGame->GetLockChangeSelect()) {
+		//フェード中だった場合
+		if (pFade->GetFade())
+		{
+			//フェードをスキップ
+			pFade->SkipFade();
+		}
+		else {
+			//チュートリアル切り替え
+			ChangeTutorial();			
+		}
+	}
+
+	//チュートリアル閉じる
+	if ((pInput->GetTrigger(CInput::CODE::CHECK_A, 0) || pInput->GetTrigger(CInput::CODE::CHECK_B, 0)) && m_pTutorial != nullptr) {
+		//チュートリアル切り替え
+		ChangeTutorial();
+		return;	//選択が連続にならないように終了
+	}
+
+	if (m_pTutorial != nullptr) return;	//チュートリアル生成された場合後の入力はなし
 
 	//嘘つき切り替え
-	if (pInput->GetTrigger(CInput::CODE::CHECK_X, 0) && !m_bSelectGame) {
+	if (pInput->GetTrigger(CInput::CODE::CHECK_X, 0)) {
 		//フェード中だった場合
 		if (pFade->GetFade())
 		{
@@ -250,7 +276,7 @@ void CSelectGameScene::UpdateInput(void) {
 	}
 
 	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bSelectGame)
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0))
 	{
 		//フェード中だった場合
 		if (pFade->GetFade())
@@ -288,6 +314,59 @@ void CSelectGameScene::UpdateInput(void) {
 	}
 }
 
+//=============================================================================
+// チュートリアル表示の切り替え
+//=============================================================================
+void CSelectGameScene::ChangeTutorial(void) {
+	//チュートリアル生成
+	if (m_pTutorial == nullptr) {
+		CTexture::TEXTURE_TYPE typeTex;
+
+		switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
+		{
+			//風船
+		case (int)CScene::SCENE_TYPE::GAME_01:
+			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON;
+			break;
+			//超絶
+		case (int)CScene::SCENE_TYPE::GAME_02:
+			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			break;
+			//ランダム(仮)
+		case (int)CScene::SCENE_TYPE::GAME_MAX:
+			typeTex = CTexture::TEXTURE_TYPE::MESH_CLOUD;
+			break;
+		default:
+			typeTex = CTexture::TEXTURE_TYPE::BG_MENU;
+			break;
+		}
+
+		//背景変更
+		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 0.9f, SCREEN_HEIGHT * 0.9f);
+		//選択画面の移動をロック
+		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(true);
+	}
+	//通常モードに変更
+	else {
+		//チュートリアル画面の破棄
+		m_pTutorial->Uninit();
+		m_pTutorial = nullptr;
+
+		//選択画面の移動ロックを解除
+		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(false);
+	}
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	CSound* pSound = nullptr;	//サウンドへのポインタ
+
+	if (pManager != nullptr) {
+		//サウンドの取得
+		pSound = pManager->GetSound();
+	}
+
+	//変更音の設定
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
+}
 //=============================================================================
 // 嘘つきモードの切り替え
 //=============================================================================

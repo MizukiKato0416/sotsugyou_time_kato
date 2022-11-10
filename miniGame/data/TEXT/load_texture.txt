@@ -12,11 +12,14 @@ data/TEXTURE/BG/bg_result.jpg
 data/TEXTURE/BG/menu_bg.jpg
 data/TEXTURE/BG/menu_bg_wolf.jpg
 
+data/TEXTURE/UI/arrow_right.png
+data/TEXTURE/UI/arrow_left.png
+
 data/TEXTURE/UI/text_titlename.png
 data/TEXTURE/UI/press_start.png
 data/TEXTURE/UI/quit_game.png
 data/TEXTURE/UI/tutorial_balloon.png
-data/TEXTURE/UI/tutorial_attack.png
+data/TEXTURE/UI/tutorial_attack2.png
 data/TEXTURE/UI/select_icon.png
 data/TEXTURE/UI/count_down_ui_3.png
 data/TEXTURE/UI/count_down_ui_2.png
