@@ -134,14 +134,7 @@ void CItemBanana::Update(void) {
 	//プレイヤーとの当たり判定
 	if (CollisionPlayer(ITEM_BANANA_SIZE, ITEM_BANANA_COLL_HEIGHT))
 	{
-		//マネージャーの取得
-		CManager* pManager = CManager::GetManager();
-		//サウンドの取得
-		CSound *pSound = nullptr;
-		if (pManager != nullptr) pSound = pManager->GetSound();
-		//音再生
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_SPIN);
-
+		
 		//当たっていたら消す
 		Uninit();
 		return;
@@ -195,5 +188,11 @@ void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
 		//スピン(バナナヒット)
 		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pBalloonCar->GetPos().x, pBalloonCar->GetPos().y + 1, pBalloonCar->GetPos().z), {}, {});		//回るやつ
 		//ーーーーーーーーーーーーーーーーーーー
+
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_SPIN);
 	}
 }

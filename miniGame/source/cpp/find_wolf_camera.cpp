@@ -16,7 +16,7 @@
 #define FIND_WOLF_CAMERA_MAX_DRAW_DISTANCE		(4000.0f)	//描画可能な最大の距離
 #define FIND_WOLF_CAMERA_DEFAULT_CAMERA_DISTANCE (600.0f)	//視点と注視点の距離
 #define FIND_WOLF_CAMERA_DEFAULT_CAMERA_ROT_X	(-30.0f)	//カメラの向きX
-#define FIND_WOLF_CAMERA_DEFAULT_CAMERA_POS_Z	(0.0f)	//カメラの位置Z
+#define FIND_WOLF_CAMERA_DEFAULT_CAMERA_POS_Z	(30.0f)	//カメラの位置Z
 
 //=============================================================================
 // デフォルトコンストラクタ
