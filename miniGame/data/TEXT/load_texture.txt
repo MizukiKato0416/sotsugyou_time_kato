@@ -8,14 +8,15 @@
 // enumÇ∆ìØÇ∂èáÇ…
 
 data/TEXTURE/BG/bg_title.jpg
+data/TEXTURE/BG/bg_result.jpg
+data/TEXTURE/BG/menu_bg.jpg
+data/TEXTURE/BG/menu_bg_wolf.jpg
 
 data/TEXTURE/UI/text_titlename.png
 data/TEXTURE/UI/press_start.png
-data/TEXTURE/UI/text_tutorial.png
-data/TEXTURE/UI/text_credit.png
 data/TEXTURE/UI/quit_game.png
-data/TEXTURE/UI/tutorial.jpg
-data/TEXTURE/UI/credit.jpg
+data/TEXTURE/UI/tutorial_balloon.png
+data/TEXTURE/UI/tutorial_attack.png
 data/TEXTURE/UI/select_icon.png
 data/TEXTURE/UI/count_down_ui_3.png
 data/TEXTURE/UI/count_down_ui_2.png
@@ -39,6 +40,11 @@ data/TEXTURE/UI/fukidashi_2p_new.png
 data/TEXTURE/UI/fukidashi_3p_new.png
 data/TEXTURE/UI/fukidashi_4p_new.png
 
+data/TEXTURE/UI/1st.png
+data/TEXTURE/UI/2nd.png
+data/TEXTURE/UI/3rd.png
+data/TEXTURE/UI/4th.png
+
 data/TEXTURE/UI/GameStart.png
 
 data/TEXTURE/UI/tex01.png
@@ -53,6 +59,21 @@ data/TEXTURE/UI/OK01.png
 data/TEXTURE/UI/OK02.png
 data/TEXTURE/UI/OK03.png
 data/TEXTURE/UI/OK04.png
+
+data/TEXTURE/UI/wolf_select_1.png
+data/TEXTURE/UI/wolf_select_2.png
+data/TEXTURE/UI/wolf_select_3.png
+data/TEXTURE/UI/wolf_select_4.png
+data/TEXTURE/UI/point_1p.png
+data/TEXTURE/UI/point_2p.png
+data/TEXTURE/UI/point_3p.png
+data/TEXTURE/UI/point_4p.png
+data/TEXTURE/UI/point_free.png
+
+data/TEXTURE/UI/40point.png
+data/TEXTURE/UI/30point.png
+data/TEXTURE/UI/20point.png
+data/TEXTURE/UI/10point.png
 
 data/TEXTURE/UI/1P_frame_score.png
 data/TEXTURE/UI/2P_frame_score.png
@@ -73,6 +94,20 @@ data/TEXTURE/UI/pause_title.png
 data/TEXTURE/UI/pause_restart.png
 data/TEXTURE/UI/pause_continue.png
 
+data/TEXTURE/UI/shake_tutorial.png
+data/TEXTURE/UI/shake.png
+data/TEXTURE/UI/shake_start.png
+data/TEXTURE/UI/wolf_answer_1.png
+data/TEXTURE/UI/wolf_answer_2.png
+data/TEXTURE/UI/wolf_answer_3.png
+data/TEXTURE/UI/wolf_answer_4.png
+data/TEXTURE/UI/wolf_find_tutorial_1.png
+data/TEXTURE/UI/wolf_find_tutorial_2.png
+data/TEXTURE/UI/wolf_find_tutorial_3.png
+data/TEXTURE/UI/wolf_find_tutorial_4.png
+
+data/TEXTURE/UI/result_ui.png
+
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
 data/TEXTURE/MESH/BalloonGold3_01.png
@@ -92,6 +127,7 @@ data/TEXTURE/MESH/towerwall2.png
 data/TEXTURE/MESH/towerwall.png
 data/TEXTURE/MESH/stone_ground.png
 data/TEXTURE/MESH/tower_object.jpg
+data/TEXTURE/MESH/item_shield.png
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png

@@ -32,7 +32,9 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/cursor.wav", 0 },
 	{ "data/SOUND/SE/clash.wav", 0 },
 	{ "data/SOUND/SE/fall.wav", 0 },
-	{ "data/SOUND/SE/explosion.wav", 0 }
+	{ "data/SOUND/SE/explosion.wav", 0 },
+	{ "data/SOUND/SE/shield.wav", 0 },
+	{ "data/SOUND/SE/balloonspawn.wav", 0 }
 };
 
 //=============================================================================
@@ -189,6 +191,8 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_CRASH				, 4.0f);		//衝突SE
 	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
 	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE
+	ControllVoice(SOUND_LABEL::SE_ITEM_SHIELD_GET	, 1.2f);		//盾アイテム獲得SE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN		, 1.0f);		//風船スポーンSE
 
 	return S_OK;
 }

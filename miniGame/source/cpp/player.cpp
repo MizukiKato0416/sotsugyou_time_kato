@@ -14,7 +14,6 @@
 // 静的メンバ変数宣言
 //=============================================================================
 int CPlayer::m_nObjectPlayerNum = 0;
-int CPlayer::m_nRank = 0;
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -23,10 +22,7 @@ CPlayer::CPlayer()
 {
 	//総数を加算
 	m_nObjectPlayerNum++;
-	//決まっているランキングを増やす
-	m_nRank++;
 	m_nIndex = m_nObjectPlayerNum;
-	m_nRanking = 0;
 	m_bUpdate = false;
 
 }
@@ -58,7 +54,6 @@ HRESULT CPlayer::Init(void) {
 	
 	//変数初期化
 	m_bUpdate = true;
-	m_nRanking = 0;
 
 	return S_OK;
 }
@@ -70,8 +65,6 @@ void CPlayer::Uninit(void) {
 
 	//総数を減らす
 	m_nObjectPlayerNum--;
-	//決まっているランキングをリセット
-	m_nRank = 0;
 
 	//オブジェクトの破棄
 	Release();
@@ -82,13 +75,4 @@ void CPlayer::Uninit(void) {
 //=============================================================================
 void CPlayer::Update(void) {
 	
-}
-
-//=============================================================================
-// ランキング設定処理
-//=============================================================================
-void CPlayer::SetRanking()
-{
-	m_nRanking = m_nRank;
-	m_nRank--;
 }

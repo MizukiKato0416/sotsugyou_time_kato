@@ -44,6 +44,10 @@ public:
 	void SetTexPos(float startU, float startV, float endU, float endV);	//テクスチャ座標の設定
 	void SetTexNumber(int nNumber);	//数字に対応したテクスチャ座標の設定
 
+	//テクスチャUVの移動設定
+	void SetMoveTex(float fMoveTexU, float fMoveTexV);
+
+
 	void SetUseZBuffTexture(bool bUse) { m_bUseZBuffTexture = bUse; }
 
 private:

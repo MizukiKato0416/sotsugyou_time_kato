@@ -26,7 +26,9 @@ float4 g_matEmissive;	//マテリアルのエミッシブ色
 float4 g_matSpecular;	//マテリアルのスペキュラー色　
 float g_matPower;		//マテリアルの反射の強度
 
+//輪郭
 float4 g_colGlow;	//輪郭の発光色
+float g_powGlow;	//輪郭の強度
 
 //フォグ
 bool g_bEnableFog;	//フォグが有効かどうか	//if文は良くないらしいので後に方法を調べる
@@ -170,7 +172,7 @@ VS_OUTPUT RenderSceneVSLight(
 	Out.Specular = saturate(dot(nor, vecHarf));
 
 	//輪郭を光らせる
-	if(g_colGlow.w) Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
+	if(g_colGlow.w) Out.Diffuse += (pow(1.0 - saturate(dot(vecView, nor)), g_powGlow) + 0.1) * (g_colGlow - Out.Diffuse);
 
 	//テクスチャ座標
 	Out.TexUV = vTexUV;

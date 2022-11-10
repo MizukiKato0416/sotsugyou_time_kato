@@ -162,7 +162,9 @@
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\create_bom_manager.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
+    <ClCompile Include="source\cpp\Effect\BezierBill.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
+    <ClCompile Include="source\cpp\Effect\BulletHoll.cpp" />
     <ClCompile Include="source\cpp\Effect\FieldEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\Fountain.cpp" />
     <ClCompile Include="source\cpp\Effect\LoadEffect.cpp" />
@@ -174,7 +176,10 @@
     <ClCompile Include="source\cpp\Effect\Sphere.cpp" />
     <ClCompile Include="source\cpp\Effect\SphereEffect.cpp" />
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
+    <ClCompile Include="source\cpp\Effect\Trajectory.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
+    <ClCompile Include="source\cpp\find_wolf_camera.cpp" />
+    <ClCompile Include="source\cpp\find_wolf_scene.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
     <ClCompile Include="source\cpp\float_object.cpp" />
     <ClCompile Include="source\cpp\font.cpp" />
@@ -189,6 +194,7 @@
     <ClCompile Include="source\cpp\item.cpp" />
     <ClCompile Include="source\cpp\itemBox.cpp" />
     <ClCompile Include="source\cpp\item_banana.cpp" />
+    <ClCompile Include="source\cpp\item_shield.cpp" />
     <ClCompile Include="source\cpp\main.cpp" />
     <ClCompile Include="source\cpp\manager.cpp" />
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
@@ -212,6 +218,7 @@
     <ClCompile Include="source\cpp\scene.cpp" />
     <ClCompile Include="source\cpp\score.cpp" />
     <ClCompile Include="source\cpp\score_ui.cpp" />
+    <ClCompile Include="source\cpp\selectGameScene.cpp" />
     <ClCompile Include="source\cpp\selectMenu.cpp" />
     <ClCompile Include="source\cpp\selectMenu2D.cpp" />
     <ClCompile Include="source\cpp\selectMenu3D.cpp" />
@@ -224,13 +231,15 @@
     <ClCompile Include="source\cpp\titleScene.cpp" />
     <ClCompile Include="source\cpp\ToScreen.cpp" />
     <ClCompile Include="source\cpp\wallCylinder.cpp" />
+    <ClCompile Include="source\cpp\wolf_decide.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resultScene.h" />
     <ClInclude Include="source\h\balloon.h" />
+    <ClInclude Include="source\h\BezierBillh.h" />
     <ClInclude Include="source\h\billboard.h" />
     <ClInclude Include="source\h\billeffect.h" />
     <ClInclude Include="source\h\bom.h" />
+    <ClInclude Include="source\h\BulletHoll.h" />
     <ClInclude Include="source\h\camera.h" />
     <ClInclude Include="source\h\check.h" />
     <ClInclude Include="source\h\check_icon.h" />
@@ -239,6 +248,8 @@
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
+    <ClInclude Include="source\h\find_wolf_camera.h" />
+    <ClInclude Include="source\h\find_wolf_scene.h" />
     <ClInclude Include="source\h\finish_ui.h" />
     <ClInclude Include="source\h\float_object.h" />
     <ClInclude Include="source\h\font.h" />
@@ -254,6 +265,7 @@
     <ClInclude Include="source\h\item.h" />
     <ClInclude Include="source\h\itemBox.h" />
     <ClInclude Include="source\h\item_banana.h" />
+    <ClInclude Include="source\h\item_shield.h" />
     <ClInclude Include="source\h\LoadEffect.h" />
     <ClInclude Include="source\h\main.h" />
     <ClInclude Include="source\h\manager.h" />
@@ -277,11 +289,13 @@
     <ClInclude Include="source\h\PresetDelaySet.h" />
     <ClInclude Include="source\h\PresetSetEffect.h" />
     <ClInclude Include="source\h\renderer.h" />
+    <ClInclude Include="source\h\resultScene.h" />
     <ClInclude Include="source\h\Rotate3d.h" />
     <ClInclude Include="source\h\scene.h" />
     <ClInclude Include="source\h\scene3d.h" />
     <ClInclude Include="source\h\score.h" />
     <ClInclude Include="source\h\score_ui.h" />
+    <ClInclude Include="source\h\selectGameScene.h" />
     <ClInclude Include="source\h\selectMenu.h" />
     <ClInclude Include="source\h\selectMenu2D.h" />
     <ClInclude Include="source\h\selectMenu3D.h" />
@@ -296,7 +310,9 @@
     <ClInclude Include="source\h\titleCamera.h" />
     <ClInclude Include="source\h\titleScene.h" />
     <ClInclude Include="source\h\ToScreen.h" />
+    <ClInclude Include="source\h\Trajectory.h" />
     <ClInclude Include="source\h\wallCylinder.h" />
+    <ClInclude Include="source\h\wolf_decide.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,7 +24,14 @@ CObject3D::CObject3D()
 	m_pIdxBuff = nullptr;
 	m_nNumVtx = 0;
 	m_nNumIdx = 0;
-	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+	m_mat.MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_mat.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_mat.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_mat.MatD3D.Power = 1.0f;
+	m_colGlow = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_powGlow = 2.0f;
+
 	m_bAlphaBlend = false;
 	m_bEnableLight = true;
 }
@@ -144,12 +151,12 @@ void CObject3D::Draw(void) {
 	if (dwEnableLight && m_bEnableLight) dwPassFlag |= PASS_LIGHT;	
 
 	//モデルが設定したマテリアルの影響を受けないようにマテリアルの設定
-	pRenderer->SetEffectMaterialDiffuse(m_col);
-	pRenderer->SetEffectMaterialEmissive(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-	pRenderer->SetEffectMaterialSpecular(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-	pRenderer->SetEffectMaterialPower(2.0f);
+	pRenderer->SetEffectMaterialDiffuse(m_mat.MatD3D.Diffuse);
+	pRenderer->SetEffectMaterialEmissive(m_mat.MatD3D.Emissive);
+	pRenderer->SetEffectMaterialSpecular(m_mat.MatD3D.Specular);
+	pRenderer->SetEffectMaterialPower(m_mat.MatD3D.Power);
 	//輪郭の発光色の設定
-	pRenderer->SetEffectColorGlow(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	pRenderer->SetEffectGlow(m_colGlow, m_powGlow);
 
 	//パスの開始
 	pRenderer->BeginPassEffect(dwPassFlag);

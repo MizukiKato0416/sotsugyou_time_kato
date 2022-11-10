@@ -5,7 +5,7 @@
 #*********************************************************
 # テクスチャファイル名
 #*********************************************************
-TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect000.jpg				//０パーティクル
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect000.png				//０パーティクル
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/BrownSmoke2.png				//１土埃
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/CycleEffect00.png				//２衝撃波
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Effect001.jpg				//３キラキラ
@@ -14,6 +14,8 @@ TEXTURE_FILENAME = data/TEXTURE/EFFECT/GraySmoke.png				//５灰煙
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/spin.png				//６スピン
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/Explosion00.png				//７爆発膜
 TEXTURE_FILENAME = data/TEXTURE/EFFECT/ExprosionRing01.png				//８衝撃波
-TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//９テスト
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/trans.png				//９四角
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/ster.png				//１０星
+TEXTURE_FILENAME = data/TEXTURE/EFFECT/Line00.png				//１１柱
 
 END_SCRIPT

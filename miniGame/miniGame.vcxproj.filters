@@ -31,9 +31,6 @@
     <ClCompile Include="source\cpp\fade.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\finish_ui.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -139,9 +136,6 @@
     <ClCompile Include="source\cpp\scene.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
-      <Filter>cpp</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\score.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -187,9 +181,6 @@
     <ClCompile Include="source\cpp\Effect\billeffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\Effect\SphereEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
@@ -199,12 +190,6 @@
     <ClCompile Include="source\cpp\Effect\Rotate3d.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
-    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
-      <Filter>cpp\effect</Filter>
-    </ClCompile>
     <ClCompile Include="source\cpp\Effect\straight3d.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
@@ -212,6 +197,45 @@
       <Filter>cpp\effect</Filter>
     </ClCompile>
     <ClCompile Include="source\cpp\Effect\plane.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\selectGameScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\scene3d.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\item_shield.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\FieldEffect.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\wolf_decide.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\find_wolf_scene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\find_wolf_camera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\BezierBill.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\Trajectory.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\BulletHoll.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\LoadEffect.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetDelaySet.cpp">
+      <Filter>cpp\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
   </ItemGroup>
@@ -244,9 +268,6 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\fade.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\FieldEffect.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\finish_ui.h">
@@ -348,13 +369,7 @@
     <ClInclude Include="source\h\renderer.h">
       <Filter>h</Filter>
     </ClInclude>
-    <ClInclude Include="resultScene.h">
-      <Filter>h</Filter>
-    </ClInclude>
     <ClInclude Include="source\h\scene.h">
-      <Filter>h</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\scene3d.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\score.h">
@@ -402,15 +417,6 @@
     <ClInclude Include="source\h\billeffect.h">
       <Filter>h\effect</Filter>
     </ClInclude>
-    <ClInclude Include="source\h\LoadEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetDelaySet.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
-    <ClInclude Include="source\h\PresetSetEffect.h">
-      <Filter>h\effect</Filter>
-    </ClInclude>
     <ClInclude Include="source\h\Rotate3d.h">
       <Filter>h\effect</Filter>
     </ClInclude>
@@ -427,6 +433,48 @@
       <Filter>h\effect</Filter>
     </ClInclude>
     <ClInclude Include="source\h\Fountain.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\scene3d.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\item_shield.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\selectGameScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\resultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\FieldEffect.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\wolf_decide.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\find_wolf_scene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\find_wolf_camera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\BezierBillh.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\Trajectory.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\BulletHoll.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\LoadEffect.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetDelaySet.h">
+      <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\PresetSetEffect.h">
       <Filter>h\effect</Filter>
     </ClInclude>
   </ItemGroup>

@@ -393,3 +393,52 @@ void CObject2D::SetTexNumber(int nNumber) {
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
+
+//=============================================================================
+//テクスチャUVの移動設定
+//=============================================================================
+void CObject2D::SetMoveTex(float fMoveTexU, float fMoveTexV)
+{
+	VERTEX_2D *pVtx;
+	//頂点バッファのロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報を設定
+	pVtx[0].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[1].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[2].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[3].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+
+	if (pVtx[0].tex.x < -1.0f)
+	{
+		pVtx[0].tex.x += 2.0f;
+		pVtx[1].tex.x += 2.0f;
+		pVtx[2].tex.x += 2.0f;
+		pVtx[3].tex.x += 2.0f;
+	}
+	else if (pVtx[0].tex.x > 1.0f)
+	{
+		pVtx[0].tex.x -= 2.0f;
+		pVtx[1].tex.x -= 2.0f;
+		pVtx[2].tex.x -= 2.0f;
+		pVtx[3].tex.x -= 2.0f;
+	}
+
+	if (pVtx[0].tex.y < -1.0f)
+	{
+		pVtx[0].tex.y += 2.0f;
+		pVtx[1].tex.y += 2.0f;
+		pVtx[2].tex.y += 2.0f;
+		pVtx[3].tex.y += 2.0f;
+	}
+	else if (pVtx[0].tex.y > 1.0f)
+	{
+		pVtx[0].tex.y -= 2.0f;
+		pVtx[1].tex.y -= 2.0f;
+		pVtx[2].tex.y -= 2.0f;
+		pVtx[3].tex.y -= 2.0f;
+	}
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}

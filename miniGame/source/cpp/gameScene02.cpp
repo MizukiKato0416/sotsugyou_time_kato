@@ -20,24 +20,25 @@
 #include "create_bom_manager.h"
 #include "meshwall.h"
 #include "float_object.h"
+#include "player_icon.h"
+#include "ToScreen.h"
+#include "check.h"
+#include "item_shield.h"
+
 
 //エフェクト
 #include "plane.h"
 #include "PresetSetEffect.h"
 
-#include "player_icon.h"
-#include "ToScreen.h"
-#include "check.h"
-
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define GAME_02_TIME							(20)								//ゲームの時間
+#define GAME_02_TIME							(60)								//ゲームの時間
 #define GAME_02_HURRY_UP_TIME					(10)								//ハリーアップの時間
 
-#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f))	//フォグの色晴れ
+#define GAME_02_FOG_COLOR_SUNNY					(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色晴れ
 #define GAME_02_FOG_COLOR_CLOUDY				(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//フォグの色曇り
-#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.0f, 0.1f, 0.2f, 1.0f))	//バックバッファーの色晴れ
+#define GAME_02_BACK_BUFF_COLOR_SUNNY			(D3DXCOLOR(0.1f, 0.3f, 0.5f, 1.0f))	//バックバッファーの色晴れ
 #define GAME_02_BACK_BUFF_COLOR_CLOUDY			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))	//バックバッファーの色曇り
 
 #define GAME_02_PLAYER_ICON_SCALE				(0.35f)								//プレイヤーアイコンのスケール
@@ -49,16 +50,20 @@
 
 #define GAME_02_NEX_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
-#define GAME_02_BOM_CREATE_COUNT	(20)		//ボムを生成する間隔
-#define GAME_02_BOM_NUM				(5)			//ボムを生成する個数
+#define GAME_02_BOM_CREATE_COUNT	(30)		//ボムを生成する間隔
+#define GAME_02_BOM_NUM				(1)			//ボムを生成する個数
 
-#define GAME_02_CLOUD_NUM					(2)											//雲の数
+#define GAME_02_CLOUD_NUM					(1)											//雲の数
 #define GAME_02_CLOUD_POS					(D3DXVECTOR3(0.0f, -1500.0f, -6000.0f))		//雲の位置
 #define GAME_02_CLOUD_SIZE					(12000.0f)									//雲のサイズ
 #define GAME_02_CLOUD_MESH_NUM				(8)											//メッシュを敷き詰める数
 #define GAME_02_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
 #define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
-#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
+#define GAME_02_CLOUD_COLOR					(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))			//雲の色
+
+#define GAME_02_ITEM_SPAWN_COUNT			(60 * 12)						//アイテムの生成間隔
+#define GAME_02_ITEM_SPAWN_DIFFER_MAX		(GAME_02_STAGE_SIZE - 100.0f)	//ステージ中央からどれだけ離れた位置にアイテムを生成するか最大値
+#define GAME_02_ITEM_SPAWN_POS_Y			(1000.0f)						//アイテムの生成位置Y
 
 
 //=============================================================================
@@ -74,9 +79,11 @@ CGameScene02::CGameScene02()
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bHurryUp = false;
+	m_bReady = false;
 	m_pCreateBomManager = nullptr;
 	m_pCloud.clear();
 	m_weatherState = WEATHER_STATE::CLOUDY;
+	m_nSavePlayerNum = 0;
 }
 
 //=============================================================================
@@ -96,6 +103,8 @@ void CGameScene02::Init(void) {
 	m_bHurryUp = false;
 	m_pCreateBomManager = nullptr;
 	m_weatherState = WEATHER_STATE::CLOUDY;
+	m_bReady = true;
+	m_nSavePlayerNum = MAX_OBJECT_PLAYER_NUM;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -161,7 +170,7 @@ void CGameScene02::Init(void) {
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(backBuffColor);
 		pRenderer->SetEffectFogColor(fogColor);
-		pRenderer->SetEffectFogRange(20.0f, 12000.0f);
+		pRenderer->SetEffectFogRange(20.0f, 10000.0f);
 		
 	}
 
@@ -179,14 +188,15 @@ void CGameScene02::Init(void) {
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -700.0f, 2500.0f), D3DXVECTOR3(-0.3f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.004f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER);
 
-	//塔の生成
+	//車の生成
 	CFloatObject::Create(D3DXVECTOR3(-1900.0f, -500.0f, 2500.0f), D3DXVECTOR3(0.1f, 0.0f, -0.3f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0030f, -0.004f, 0.0f), CModel::MODELTYPE::OBJ_CAR);
 
-	//がれきの生成
-	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+	CFloatObject::Create(D3DXVECTOR3(1300.0f, -800.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.001f, -0.001f, 0.0014f), CModel::MODELTYPE::OBJ_CAR);
 
+	//がれきの生成
+	//奥のがれき
 	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.001f, -0.002f, 0.005f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_02);
 
@@ -201,6 +211,19 @@ void CGameScene02::Init(void) {
 
 	CFloatObject::Create(D3DXVECTOR3(1500.0f, -500.0f, 2400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0025f, 0.0f, 0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06);
+
+	//手前のがれき
+	CFloatObject::Create(D3DXVECTOR3(-1000.0f, -800.0f, -300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0005f, -0.001f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_01);
+
+	CFloatObject::Create(D3DXVECTOR3(1000.0f, -800.0f, -300.0f), D3DXVECTOR3(1.0f, -0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0001f, 0.0008f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_06); 
+
+	CFloatObject::Create(D3DXVECTOR3(1200.0f, -500.0f, 0.0f), D3DXVECTOR3(-1.0f, 0.0f, 1.2f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.0008f, 0.0008f, 0.0f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_03);
+
+	CFloatObject::Create(D3DXVECTOR3(-1400.0f, -500.0f, 0.0f), D3DXVECTOR3(0.0f, 0.3f, -1.2f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0016f, -0.0005f, -0.001f), CModel::MODELTYPE::OBJ_BROKEN_TOWER_FRAGMENT_05);
 
 	//雲の生成
 	for (int nCntCloud = 0; nCntCloud < GAME_02_CLOUD_NUM; nCntCloud++)
@@ -274,11 +297,12 @@ void CGameScene02::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene02::Update(void) {
+
 #ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
+	CInput* pInput = pManager->GetInputKeyboard();
 	if (pInput == nullptr) return;
 
 	//ゲームオーバー
@@ -293,36 +317,19 @@ void CGameScene02::Update(void) {
 
 #endif
 
-	//チェック出来ていなかったら
-	if (!m_bAllCheck)
-	{
-		if (m_pCheck != nullptr)
-		{
-			//全員がチェック出来たら
-			if (m_pCheck->GetUninitAll())
-			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-				{
-					//プレイヤーアイコンの生成処理
-					CreatePlayerIcon(nCntPlayer);
-				}
-				//全員がチェック出来た状態にする
-				m_bAllCheck = true;
-			}
-		}
-		
+	
+	//ゲームオーバー時
+	if (m_bGameOver) {
+		UpdateGameOver();
 	}
+	//準備状態時
+	else if (m_bReady) {
+		UpdateReady();
+	}
+	//ゲーム中
 	else
 	{
-		//ゲームオーバー時
-		if (m_bGameOver) {
-			UpdateGameOver();
-		}
-		//ゲーム中
-		else
-		{
-			UpdateGame();
-		}
+		UpdateGame();
 	}
 
 	//雲の処理
@@ -357,12 +364,7 @@ void CGameScene02::UpdateGame(void) {
 	if (m_pCheck != nullptr)
 	{
 		//カウントダウンUIが生成されていたら
-		if (m_pCheck->GetCountDownUi() != nullptr)
-		{
-			//カウントダウンUIの処理
-			CountDownUi();
-		}
-		else
+		if (m_pCheck->GetCountDownUi() == nullptr)
 		{
 			//チェックアイコンを消す
 			m_pCheck->Uninit();
@@ -401,6 +403,9 @@ void CGameScene02::UpdateGame(void) {
 		}
 	}
 
+	//アイテムの生成
+	CreateItem();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
@@ -414,9 +419,9 @@ void CGameScene02::UpdateGame(void) {
 	if (pFade == nullptr) return;
 
 	//ポーズ
-	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
-		//ポーズメニュークラスを生成
-		m_pMenuPause = CPauseMenu::Create();
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade() && !m_bLockPauseMenu) {
+		//ポーズメニューを生成
+		CreatePauseMenu();
 		//サウンドを再生
 		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}
@@ -442,6 +447,49 @@ void CGameScene02::UpdateGameOver(void) {
 	}
 }
 
+//=============================================================================
+//準備状態中の更新
+//=============================================================================
+void CGameScene02::UpdateReady(void) {
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck == nullptr)
+		{
+			return;
+		}
+		
+		if (!m_pCheck->GetUninitAll())
+		{
+			return;
+		}
+
+		//全員がチェック出来たら
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//プレイヤーアイコンの生成処理
+			CreatePlayerIcon(nCntPlayer);
+		}
+		//全員がチェック出来た状態にする
+		m_bAllCheck = true;
+	}
+	else
+	{
+		if (m_pCheck == nullptr)
+		{
+			return;
+		}
+		
+		if (m_pCheck->GetCountDownUi() == nullptr)
+		{
+			return;
+		}
+
+		//カウントダウンUIが生成されていたら
+		//カウントダウンUIの処理
+		CountDownUi();
+	}
+}
 
 //=============================================================================
 // ゲームオーバー
@@ -462,13 +510,6 @@ void CGameScene02::GameOver(void) {
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		//ランキングが設定されていないなら
-		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() == 0)
-		{
-			//一位に設定
-			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking(1);
-		}
-
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
@@ -491,6 +532,9 @@ void CGameScene02::GameOver(void) {
 		m_pCreateBomManager->Uninit();
 		m_pCreateBomManager = nullptr;
 	}
+
+	//ランキング設定処理
+	SetRanking();
 
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
@@ -548,6 +592,13 @@ void CGameScene02::CountDownUi(void)
 	//スタート状態なら
 	if (m_pCheck->GetCountDownUi()->GetStart())
 	{
+		//準備状態なら
+		if (m_bReady)
+		{
+			//準備状態を終了する
+			m_bReady = false;
+		}
+
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//生成されていたら
@@ -588,7 +639,11 @@ void CGameScene02::CountDownUi(void)
 //=============================================================================
 bool CGameScene02::Finish(void)
 {
-	int nCntGameOver = 0;
+	//ゲームオーバー状態なら
+	if (m_bGameOver)
+	{
+		return false;
+	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
@@ -598,25 +653,14 @@ bool CGameScene02::Finish(void)
 			continue;
 		}
 
-		//二位が決まっていなかったら
-		if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 2)
+		//生き残っている人が2人以上いたら
+		if (GetSavePlayerNum() > 1)
 		{
 			continue;
 		}
 
-		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-		{
-			//ランキングが決まっていない人を1位にする
-			if (m_apPlayer[nCntPlayer]->GetPlayer()->GetRanking() != 0)
-			{
-				continue;
-			}
-
-			m_apPlayer[nCntPlayer]->GetPlayer()->SetRanking();
-			//ゲーム終了
-			GameOver();
-			return true;
-		}
+		//ゲーム終了
+		GameOver();
 	}
 	return false;
 }
@@ -647,5 +691,51 @@ void CGameScene02::Cloud(void)
 
 		//テクスチャ座標移動処理
 		m_pCloud[nCntCloud]->SetMoveTex(GAME_02_CLOUD_MOVE_SPEED + GAME_02_CLOUD_MOVE_SPEED_INTERVAL * nCntCloud, 0.0f);
+	}
+}
+
+//=============================================================================
+//アイテム生成処理
+//=============================================================================
+void CGameScene02::CreateItem()
+{
+	m_nItemCounter++;
+
+	if (m_nItemCounter > GAME_02_ITEM_SPAWN_COUNT)
+	{
+		m_nItemCounter = 0;
+
+		//向きをランダムで決める
+		float fRot = (rand() % 629 + -314) / 100.0f;
+		//遠さをランダムで決める
+		float fDiffer = (rand() % (int)(GAME_02_ITEM_SPAWN_DIFFER_MAX) * 100.0f) / 100.0f;
+
+		//出す位置
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, GAME_02_ITEM_SPAWN_POS_Y, 0.0f);
+
+		//決めた位置に出す
+		pos.x = sinf(fRot) * fDiffer;
+		pos.z = cosf(fRot) * fDiffer;
+
+		//アイテムの生成
+		CItemShield::Create(pos);
+	}
+}
+
+//=============================================================================
+//ランキング設定処理
+//=============================================================================
+void CGameScene02::SetRanking()
+{
+	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
+	{
+		//残った人をランキング1位にする
+		if (GetRanking(nCntSavePlayer) != 0)
+		{
+			continue;
+		}
+
+		//ランキング設定処理
+		CGameScene::SetRanking(1, nCntSavePlayer);
 	}
 }

@@ -17,10 +17,17 @@
 #include "ToScreen.h"
 
 #include "gameCamera.h"
+#include "gameScene.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
+#define RESULT_SCENE_POINT_UI_SIZE		(D3DXVECTOR3(325.0f * 0.5f, 128.0f* 0.5f, 0.0f))	//ポイントUIのサイズ
+#define RESULT_SCENE_POINT_UI_ADD_ALPHA	(0.08f)												//ポイントUIのα値加算値
+#define RESULT_SCENE_POINT_UI_ADD_POS_Y	(3.0f)												//ポイントUIの位置加算値
+#define RESULT_SCENE_POINT_UI_COUNTER	(90)												//ポイントUIの見えるようになるまでのカウント
+
+#define RESULT_SCENE_CHANGE_SCENE_COUNTER	(120)											//シーン遷移ができるようになるまでのカウンター
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -31,7 +38,9 @@
 //=============================================================================
 CResultScene::CResultScene()
 {
-
+	m_pBg = nullptr;
+	memset(m_apPointUi, NULL, sizeof(m_apPointUi[MAX_OBJECT_PLAYER_NUM]));
+	m_nPointUiCounter = 0;
 }
 
 //=============================================================================
@@ -43,9 +52,14 @@ CResultScene::~CResultScene()
 }
 
 //=============================================================================
-// ゲームシーンの初期化処理
+// 初期化処理
 //=============================================================================
 void CResultScene::Init(void) {
+
+	//変数初期化
+	m_nPointUiCounter = 0;
+
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -89,13 +103,51 @@ void CResultScene::Init(void) {
 	//------------------------------
 	//オブジェクトの初期設定
 	//------------------------------
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_RESULT, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//------------------------------
+	//ランキング表示
+	//------------------------------
+	int aPlayerRank[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランクの配列 インデックスはプレイヤーのインデックスと対応
 
-	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	//プレイヤーランクの取得
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
-		const float fDist = 180.0f;
-		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + nCnt * fDist, 0.0f, 0.0f);
+		aPlayerRank[nIdxPlayer] = CGameScene::GetRanking(nIdxPlayer);
+	}
+
+	//プレイヤーの表示順の設定
+	int aOrderPlayer[MAX_OBJECT_PLAYER_NUM];
+	memset(aOrderPlayer, -1, sizeof(aOrderPlayer));
+	int nCurRank = 1;	//現在のランク
+	int nIdxOrder = 0;	//順番のインデックス
+
+	while (nCurRank <= MAX_OBJECT_PLAYER_NUM)
+	{
+		bool bDecision = false;	//順番の決定
+
+		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+		{
+			if (aOrderPlayer[nIdxPlayer] != -1) continue;	//順番が決定されていた場合除外
+
+			//ランクが一致していた場合
+			if (aPlayerRank[nIdxPlayer] == nCurRank) {
+				aOrderPlayer[nIdxPlayer] = nIdxOrder;	//順番の設定
+				nIdxOrder++;	//順番の加算
+				bDecision = true;	//順番の決定
+				break;
+			}
+		}
+		//ランクが一致しなかった場合
+		if (!bDecision) {
+			nCurRank++;	//ランクの加算
+		}
+	}
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		const float fDist = 180.0f;	//プレイヤー同士の距離
+		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (aOrderPlayer[nIdxPlayer]) * fDist, 0.0f, 0.0f);	//左端から1位を並べる
 		CObjectModelUI* pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (pPlayerModel == nullptr) continue;
@@ -103,11 +155,11 @@ void CResultScene::Init(void) {
 		CModel* pModel = pPlayerModel->GetPtrModel();
 
 		D3DXVECTOR3 posRankUI = WorldToScreen(posModel, pPlayerModel->GetViewMatrix());
-		CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 100.0f, 50.0f);
+		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 150.0f, 150.0f);
 
 		if (pModel == nullptr) continue;
-		D3DXCOLOR colModel;
-		switch (nCnt)
+		D3DXCOLOR colModel;	//モデルのマテリアル色
+		switch (nIdxPlayer)
 		{
 		case 0:
 			colModel = OBJECT_PLAYER_COLOR_1P;
@@ -125,10 +177,28 @@ void CResultScene::Init(void) {
 			colModel = OBJECT_PLAYER_COLOR_1P;
 			break;
 		}
-		pModel->SetMaterialDiffuse(colModel, 0);
+		pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
+
+
+		//順位UIのテクスチャ設定
+		if (pRankUI == nullptr) continue;
+		pRankUI->SetTexType(static_cast<CTexture::TEXTURE_TYPE>(static_cast<int> (CTexture::TEXTURE_TYPE::RANKING_1) + (aPlayerRank[nIdxPlayer] - 1)));
+
+		//人狼モードでなかったら
+		if (!CGameScene::GetWereWolfMode()) continue;
+
+		//ポイントUIを生成
+		m_apPointUi[nIdxPlayer] = CObject2D::Create(posRankUI - D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::ADD_POINT_40, 
+			                                        RESULT_SCENE_POINT_UI_SIZE.x, RESULT_SCENE_POINT_UI_SIZE.y);
+		m_apPointUi[nIdxPlayer]->SetTexType(static_cast<CTexture::TEXTURE_TYPE>
+			                               (static_cast<int> (CTexture::TEXTURE_TYPE::ADD_POINT_40) + (aPlayerRank[nIdxPlayer] - 1)));
+		m_apPointUi[nIdxPlayer]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
+
+	//------------------------------
 	//BGMの再生
+	//------------------------------
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
@@ -136,7 +206,7 @@ void CResultScene::Init(void) {
 }
 
 //=============================================================================
-// ゲームシーンの終了処理
+// 終了処理
 //=============================================================================
 void CResultScene::Uninit(void) {
 	//シーンの終了処理
@@ -155,9 +225,19 @@ void CResultScene::Uninit(void) {
 }
 
 //=============================================================================
-// ゲームシーンの更新処理
+// 更新処理
 //=============================================================================
 void CResultScene::Update(void) {
+
+	if (m_pBg != nullptr)
+	{
+		//背景を動かす
+		m_pBg->SetMoveTex(0.001f, 0.001f);
+	}
+
+	//ポイントUIの処理
+	PointUI();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
@@ -168,7 +248,65 @@ void CResultScene::Update(void) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 		if (pFade == nullptr) return;
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
+		//人狼モードなら
+		if (CGameScene::GetWereWolfMode())
+		{
+			if (m_nPointUiCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FIND_WOLF, 0.02f, 60);
+		}
+		else
+		{
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+		}
+	}
+}
+
+//=============================================================================
+//ポイントUIの処理
+//=============================================================================
+void CResultScene::PointUI()
+{
+	//人狼モードでなかったら
+	if (!CGameScene::GetWereWolfMode())
+	{
+		return;
 	}
 
+	m_nPointUiCounter++;
+
+	//既定の値になっていなかったら
+	if (m_nPointUiCounter > RESULT_SCENE_CHANGE_SCENE_COUNTER)
+	{
+		m_nPointUiCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER;
+	}
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		//生成されていなかったら
+		if (m_apPointUi[nIdxPlayer] == nullptr) continue;
+
+		//既定の値になっていなかったら
+		if (m_nPointUiCounter <= RESULT_SCENE_POINT_UI_COUNTER) continue;
+
+		//薄くなっていない状態なら
+		if (m_apPointUi[nIdxPlayer]->GetColor().a == 1.0f) continue;
+
+		//カラー取得
+		D3DXCOLOR col = m_apPointUi[nIdxPlayer]->GetColor();
+		//濃くする
+		col.a += RESULT_SCENE_POINT_UI_ADD_ALPHA;
+		if (col.a > 1.0f)
+		{
+			col.a = 1.0f;
+		}
+		//カラー設定
+		m_apPointUi[nIdxPlayer]->SetColor(col);
+
+		//位置取得
+		D3DXVECTOR3 pos = m_apPointUi[nIdxPlayer]->GetPos();
+		//動かす
+		pos.y -= RESULT_SCENE_POINT_UI_ADD_POS_Y;
+		//位置設定
+		m_apPointUi[nIdxPlayer]->SetPos(pos);
+	}
 }

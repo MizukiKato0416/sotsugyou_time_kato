@@ -72,7 +72,7 @@ HRESULT CPauseMenu::Init(void) {
 	//選択肢UIの詳細設定
 	SetSelectUI(0, SELECT_TITLE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_CONTINUE);
 	SetSelectUI(1, SELECT_RESTATE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_RESTATE);
-	SetSelectUI(2, SELECT_CONTINUE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::PAUSE_TITLE);
+	SetSelectUI(2, SELECT_CONTINUE_POS, SELECT_UI_WIDTH, SELECT_UI_HEIGHT, CTexture::TEXTURE_TYPE::COUNT_DOWN_START);
 	//選択肢アイコンの生成
 	CreateSelectIcon(SELECT_ICON_POS, SELECT_ICON_WIDTH, SELECT_ICON_HEIGHT, CTexture::TEXTURE_TYPE::SELECT_ICON);
 	SetIconPosOffset(1, D3DXVECTOR3(-230.0f, 0.0f, 0.0f));
@@ -131,18 +131,18 @@ void CPauseMenu::Update(void) {
 			case 1:
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
-				//タイトルへシーン遷移
-				pFade->SetFade(CScene::SCENE_TYPE::GAME_01, 0.02f, 60);
+				//現在のシーンをリロード
+				pFade->SetFade(CScene::GetSceneType(), 0.02f, 60);
 				//サウンドを再生
 				pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 				break;
 
-				//タイトルに戻る
+				//ゲーム選択に戻る
 			case 2:
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
-				//タイトルへシーン遷移
-				pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 60);
+				//ゲーム選択シーン遷移
+				pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME , 0.02f, 60);
 				//サウンドを再生
 				pSound->PlaySound(CSound::SOUND_LABEL::SE_CANCEL);
 				break;

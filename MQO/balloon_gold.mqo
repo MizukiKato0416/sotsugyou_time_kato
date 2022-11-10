@@ -4,8 +4,8 @@ Format Text Ver 1.0
 Scene {
 	pos -0.0000 0.0000 8279.6230
 	lookat -35.8333 762.4582 18.5212
-	head 18.8965
-	pich -0.0492
+	head 19.1265
+	pich -0.0392
 	bank 6.2900
 	ortho 0
 	zoom2 0.9058
@@ -18,7 +18,7 @@ Scene {
 	}
 }
 Material 2 {
-	"colorGold" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\gold.jpg") proj_type(3) proj_pos(0.000 -876.143 249.174) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
+	"colorGold" col(0.906 0.835 0.114 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) proj_type(3) proj_pos(0.000 -876.143 249.174) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
 	"number3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Documents\Visual Studio 2015\Projects\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\BalloonGold3_01.png") proj_type(1) proj_pos(-0.947 -8033.471 0.000) proj_scale(3170.161 3170.161 3170.161) proj_angle(0.000 0.000 0.000)
 }
 Object "balloon1" {

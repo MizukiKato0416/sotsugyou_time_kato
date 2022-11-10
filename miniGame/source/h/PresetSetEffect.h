@@ -194,6 +194,12 @@ public:
 		D3DCOLORVALUE TherdChangecolor,
 		int SecondTex);
 
+	static void SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot);	//パターン、出現位置、目標地点、回転
+	static void ResetPattern() {
+		m_nEffectPattern2d = 0;
+		m_nEffectPattern3d = 0;
+	}
+
 	////オーダー処理
 	//typedef struct
 	//{
@@ -206,11 +212,6 @@ public:
 	//} ORDER_PRESET;
 
 	//static void SetEffect2D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 PlayerPos, D3DXVECTOR3 rot);	//パターン番号、出現位置、比較位置、位置
-	static void SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot);	//パターン、出現位置、目標地点、回転
-	static void ResetPattern() {
-		m_nEffectPattern2d = 0;
-		m_nEffectPattern3d = 0;
-	}
 
 
 	////ディレイ付き再生

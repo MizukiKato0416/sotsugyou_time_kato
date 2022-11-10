@@ -13,6 +13,8 @@
 CPresetDelaySet::CPresetDelaySet() : CScene3D()
 {
 	m_pos = {};			// 位置
+	m_Endpos = {};	//比較
+	m_rot = {};	//回転
 	m_nDelay = 0;		// ディレイ
 	m_nCallCnt = 0;		// 呼び出しカウント 
 	m_nArray = 0;		// 番号
@@ -30,9 +32,11 @@ CPresetDelaySet::~CPresetDelaySet()
 //=============================================================================
 // 初期化
 //=============================================================================
-HRESULT CPresetDelaySet::Init(D3DXVECTOR3 pos)
+HRESULT CPresetDelaySet::Init(D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot)
 {
 	m_pos = pos;	// 位置
+	m_Endpos = Endpos;	//比較
+	m_rot = rot;	//回転
 
 	return S_OK;
 }
@@ -58,7 +62,7 @@ void CPresetDelaySet::Update()
 	{
 		for (int nCnt = 0; nCnt < CallPreset.m_nPresetNum[m_nCallCnt]; nCnt++)
 		{
-			CPresetEffect::SetEffect3D(CallPreset.m_nType[m_nCallCnt].at(nCnt), m_pos, {}, {});
+			CPresetEffect::SetEffect3D(CallPreset.m_nType[m_nCallCnt].at(nCnt), m_pos, m_Endpos, m_rot);
 		}
 		m_nCallCnt++;
 	}
@@ -84,7 +88,7 @@ void CPresetDelaySet::Draw()
 //=============================================================================
 // 生成
 //=============================================================================
-CPresetDelaySet* CPresetDelaySet::Create(int nArray, D3DXVECTOR3 pos)
+CPresetDelaySet* CPresetDelaySet::Create(int nArray, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot)
 {
 	// メモリ確保
 	CPresetDelaySet *pPresetDelay = nullptr;
@@ -93,7 +97,7 @@ CPresetDelaySet* CPresetDelaySet::Create(int nArray, D3DXVECTOR3 pos)
 	if (pPresetDelay)
 	{
 		pPresetDelay->m_nArray = nArray;
-		pPresetDelay->Init(pos);
+		pPresetDelay->Init(pos, Endpos, rot);
 	}
 
 	return pPresetDelay;
@@ -102,7 +106,7 @@ CPresetDelaySet* CPresetDelaySet::Create(int nArray, D3DXVECTOR3 pos)
 //=============================================================================
 // 生成
 //=============================================================================
-CPresetDelaySet* CPresetDelaySet::Create(std::string sName, D3DXVECTOR3 pos)
+CPresetDelaySet* CPresetDelaySet::Create(std::string sName, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot)
 {
-	return Create(CLoadEffect::GetPresetName(sName), pos);
+	return Create(CLoadEffect::GetPresetName(sName), pos, Endpos, rot);
 }

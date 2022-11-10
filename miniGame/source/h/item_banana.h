@@ -17,6 +17,7 @@
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
+class CObjectPlayerBalloonCar;
 
 //*****************************************************************************
 // アイテムバナナクラス
@@ -34,7 +35,7 @@ public:
 	virtual void Draw(void);				//描画処理
 
 	//プレイヤーにヒットしたときの処理
-	virtual void HitPlayer(CObjectPlayerBalloonCar *pPlayer);
+	virtual void HitPlayer(CObjectPlayer *pPlayer);
 
 private:
 	D3DXVECTOR3 m_move;		//移動量

@@ -19,11 +19,11 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
+#define BALLOON_PLAYER_COLL_SIZE	(40.0f)		//当たり判定の時のプレイヤーのサイズ
 #define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
-#define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
-#define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
+#define BALLOON_UP_POS				(15.0f)		//風船の上がる位置
+#define BALLOON_DOWN_POS			(5.0f)		//風船の下がる位置
 #define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
 #define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
 #define BALLOON_SCORE_MAX			(99)		//スコアの最大値
@@ -106,7 +106,7 @@ HRESULT CBalloon::Init(void) {
 		{
 			//指定したマテリアルの色を設定
 			pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), nIdxMat);
-			pModel->SetMaterialPower(8.0f, nIdxMat);
+			pModel->SetMaterialPower(12.0f, nIdxMat);
 		}
 	}
 
@@ -214,7 +214,6 @@ void CBalloon::Update(void) {
 		Uninit();
 		return;
 	}
-
 	CObjectModel::Update();
 }
 
@@ -279,9 +278,7 @@ bool CBalloon::CollisionPlayer(void)
 			}
 			return true;
 		}
-
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
-
 	return false;
 }

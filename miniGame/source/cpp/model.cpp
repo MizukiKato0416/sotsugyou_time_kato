@@ -37,6 +37,7 @@ CModel::CModel()
 	memset(&m_aMat, 0, sizeof(m_aMat));
 	memset(&m_aChangeDiffuse, 0, sizeof(m_aChangeDiffuse));
 	m_colGlow = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_powGlow = 2.0f;
 
 	m_bOutline = false;
 	m_colOutline = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -372,7 +373,7 @@ void CModel::Draw(void) {
 			pRenderer->SetEffectMaterialSpecular(m_aMat[nCntMat].MatD3D.Specular);
 			pRenderer->SetEffectMaterialPower(m_aMat[nCntMat].MatD3D.Power);
 			//輪郭の発光色の設定
-			pRenderer->SetEffectColorGlow(m_colGlow);
+			pRenderer->SetEffectGlow(m_colGlow, m_powGlow);
 
 			DWORD dwPassFlag = PASS_3D | PASS_LIGHT;
 			//テクスチャがある場合フラグを追加
@@ -487,6 +488,12 @@ void CModel::SetModelType(MODELTYPE type) {
 		m_modelType = (MODELTYPE)0;
 	}
 
+	//マテリアルをデフォルトに設定
+	for (int nIdxMat = 0; nIdxMat < MAX_MATERIAL; nIdxMat++)
+	{
+		m_aMat[nIdxMat] = m_aMatDefault[(int)m_modelType][nIdxMat];
+	}
+
 	//輪郭がある場合
 	if (m_pCloneMesh != nullptr) {
 		//複製メッシュの破棄
@@ -597,13 +604,6 @@ void CModel::StartChangeMaterialDiffuse(int nIdxMat, D3DXCOLOR colDest, int nTim
 	//初期化
 	m_aChangeDiffuse[nIdxMat].nTimeFinish = nTimeFin;
 	m_aChangeDiffuse[nIdxMat].nCnt = 0;
-}
-
-//=============================================================================
-// 輪郭の発光色の設定
-//=============================================================================
-void CModel::SetColorGlow(D3DXCOLOR col) {
-	m_colGlow = col;
 }
 
 //=============================================================================

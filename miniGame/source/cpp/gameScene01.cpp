@@ -4,6 +4,7 @@
 // Author : 鶴間俊樹
 //
 //=============================================================================
+#include <functional>		//比較用
 #include "gameScene01.h"
 #include "manager.h"
 #include "input.h"
@@ -22,6 +23,8 @@
 #include "finish_ui.h"
 #include "player.h"
 #include "float_object.h"
+#include "score.h"
+#include "score_ui.h"
 
 //エフェクト
 #include "plane.h"
@@ -76,6 +79,7 @@ CGameScene01::CGameScene01()
 	m_nCreateItemBoxCounter = 0;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
+	m_bReady = false;
 }
 
 //=============================================================================
@@ -93,6 +97,7 @@ void CGameScene01::Init(void) {
 
 	//変数初期化
 	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
+	m_bReady = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -147,13 +152,19 @@ void CGameScene01::Init(void) {
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_STADIUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
-	//観客席の風船
-	CFloatObject::Create(D3DXVECTOR3(400.0f, 300.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.005f, 0.001f, 0.008f), CModel::MODELTYPE::OBJ_BALLOON_PINK);
-
 	//円柱の壁の生成
-	CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::NONE, false);
-	CMeshcylinder::Create(D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE, GAME_STAGE_SIZE + 50.0f, 1, 0.0f, true, CTexture::TEXTURE_TYPE::NONE);
+	CMeshcylinder* pWall = CWallCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), GAME_STAGE_SIZE, 40.0f, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL, false);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	pWall = CMeshcylinder::Create(D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE, GAME_STAGE_SIZE + 50.0f, 1, 0.0f, true, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	pWall = CMeshcylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100, GAME_STAGE_SIZE + 50.0f, GAME_STAGE_SIZE + 50.0f, 1, 40.0f, true, CTexture::TEXTURE_TYPE::MESH_STAGE_WALL);
+	if (pWall != nullptr) {
+		pWall->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 
 	//風船を生成する
 	for (int nCntBalloon = 0; nCntBalloon < BALLOON_MAX_NUM; nCntBalloon++)
@@ -213,7 +224,7 @@ void CGameScene01::Update(void) {
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
 	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
+	CInput* pInput = pManager->GetInputKeyboard();
 	if (pInput == nullptr) return;
 
 	//ゲームオーバー
@@ -228,36 +239,18 @@ void CGameScene01::Update(void) {
 
 #endif
 
-	//チェック出来ていなかったら
-	if (!m_bAllCheck)
-	{
-		if (m_pCheck != nullptr)
-		{
-			//全員がチェック出来たら
-			if (m_pCheck->GetUninitAll())
-			{
-				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-				{
-					//プレイヤーアイコンの生成処理
-					CreatePlayerIcon(nCntPlayer);
-				}
-				//全員がチェック出来た状態にする
-				m_bAllCheck = true;
-			}
-		}
-		
+	//ゲームオーバー時
+	if (m_bGameOver) {
+		UpdateGameOver();
 	}
+	//準備状態時
+	else if (m_bReady) {
+		UpdateReady();
+	}
+	//ゲーム中
 	else
 	{
-		//ゲームオーバー時
-		if (m_bGameOver) {
-			UpdateGameOver();
-		}
-		//ゲーム中
-		else
-		{
-			UpdateGame();
-		}
+		UpdateGame();
 	}
 
 	//ゲームシーンの更新処理
@@ -286,12 +279,7 @@ void CGameScene01::UpdateGame(void) {
 	if (m_pCheck != nullptr)
 	{
 		//カウントダウンUIが生成されていたら
-		if (m_pCheck->GetCountDownUi() != nullptr)
-		{
-			//カウントダウンUIの処理
-			CountDownUi();
-		}
-		else
+		if (m_pCheck->GetCountDownUi() == nullptr)
 		{
 			//チェックアイコンを消す
 			m_pCheck->Uninit();
@@ -338,9 +326,9 @@ void CGameScene01::UpdateGame(void) {
 	if (pFade == nullptr) return;
 
 	//ポーズ
-	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade()) {
-		//ポーズメニュークラスを生成
-		m_pMenuPause = CPauseMenu::Create();
+	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade() && !m_bLockPauseMenu) {
+		//ポーズメニューを生成
+		CreatePauseMenu();
 		//サウンドを再生
 		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}
@@ -366,6 +354,41 @@ void CGameScene01::UpdateGameOver(void) {
 	}
 }
 
+//=============================================================================
+//準備状態中の更新
+//=============================================================================
+void CGameScene01::UpdateReady(void){
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck != nullptr)
+		{
+			//全員がチェック出来たら
+			if (m_pCheck->GetUninitAll())
+			{
+				for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+				{
+					//プレイヤーアイコンの生成処理
+					CreatePlayerIcon(nCntPlayer);
+				}
+				//全員がチェック出来た状態にする
+				m_bAllCheck = true;
+			}
+		}
+	}
+	else
+	{
+		if (m_pCheck != nullptr)
+		{
+			//カウントダウンUIが生成されていたら
+			if (m_pCheck->GetCountDownUi() != nullptr)
+			{
+				//カウントダウンUIの処理
+				CountDownUi();
+			}
+		}
+	}
+}
 
 //=============================================================================
 // ゲームオーバー
@@ -404,6 +427,9 @@ void CGameScene01::GameOver(void) {
 
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
+
+	//ランキング設定処理
+	SetRanking();
 }
 
 //=============================================================================
@@ -480,8 +506,6 @@ void CGameScene01::CreateBalloon(void)
 					//遠さをランダムで決める
 					fDiffer = (rand() % (int)(GAME_BALLOON_CREATE_DIFFER) * 100.0f) / 100.0f;
 				}
-
-				
 
 				//決めた位置に出す
 				balloonPos.x = originPos.x + sinf(fRot) * fDiffer;
@@ -586,6 +610,14 @@ void CGameScene01::CreateBalloon(void)
 			//ーーーーーーーーーーーーーーーーーーー
 
 		}
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_BALLOON_SPAWN);
 	}
 }
 
@@ -660,6 +692,13 @@ void CGameScene01::CountDownUi(void)
 	//スタート状態なら
 	if (m_pCheck->GetCountDownUi()->GetStart())
 	{
+		//準備状態なら
+		if (m_bReady)
+		{
+			//準備状態を終了する
+			m_bReady = false;
+		}
+
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//生成されていたら
@@ -701,6 +740,58 @@ void CGameScene01::CountDownUi(void)
 			//タイマーの生成
 			m_pTimerFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 61.0f, 0.0f), CTexture::TEXTURE_TYPE::TIMER_FRAME, 220.0f, 80.0f);
 			m_pTimer = CTimer::Create(GAME_TIME, 2, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 75.0f, 40.0f, 0.0f), 50.0f);
+		}
+	}
+}
+
+//=============================================================================
+//ランキング設定処理
+//=============================================================================
+void CGameScene01::SetRanking()
+{
+	std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
+	}
+	//降順でソート
+	std::sort(nSocre.begin(), nSocre.end(), std::greater<int>());
+
+	//直前で順位を決定したプレイヤー
+	int nLastRank = 0;
+
+	for (int nCntScore = 0; nCntScore < MAX_OBJECT_PLAYER_NUM; nCntScore++)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//取得したプレイヤーのスコアと一致していなかったら
+			if (nSocre[nCntScore] != m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore())
+			{
+				continue;
+			}
+
+			
+
+			//一番最初なら
+			if (nCntScore == 0)
+			{
+				//ランキング設定処理
+				CGameScene::SetRanking(nCntScore + 1, nCntPlayer);
+				nLastRank = nCntScore + 1;
+			}
+
+			//前のスコアと一致していたら
+			else if (nSocre[nCntScore] == nSocre[nCntScore - 1])
+			{
+				//前の順位と同じにする
+				CGameScene::SetRanking(nLastRank, nCntPlayer);
+			}
+			else
+			{
+				//ランキング設定処理
+				CGameScene::SetRanking(nCntScore + 1, nCntPlayer);
+				nLastRank = nCntScore + 1;
+			}
 		}
 	}
 }

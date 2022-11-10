@@ -34,14 +34,28 @@ public:
 	virtual void Update(void);	//更新処理
 	virtual void Draw(void) {}	//描画処理
 
-	virtual void BeginChangeSelect(void);	//選択の変更が開始されたときの処理
+	virtual void BeginChangeSelect(bool bChangePlus);	//選択の変更が開始されたときの処理
 	virtual void EndChangeSelect(void) {}	//選択の変更が終了したときの処理
 
 	CObjectModelUI* GetModelUI(int nIdx);	//UIモデルオブジェクトのポインタを取得
 	void SetSpeedRotModel(float fSpeed) { m_fSpeedRotModel = fSpeed; }	//モデル移動時の回転速度の設定
+	float GetSpeedRotModel(void) { return m_fSpeedRotModel; }			//モデル移動時の回転速度の取得
+	void SetCountRotate(int nCnt) { m_nCntRotate = nCnt; }		//回転するカウントの設定
+	int GetCountRotate(void) { return m_nCntRotate; }			//回転するカウントの設定
+	void SetSpanRotate(int nSpan) { m_nSpanRotate = nSpan; }	//回転スパンの設定
+
+	void SetRotDest(int nIdxCurSelect) { m_fRotModelDest = D3DX_PI * 2 * ((float)nIdxCurSelect / GetNumSelect()); }	//目標の角度を選択のインデックスから設定
+
+	void SetRoulette(bool bRoulette) { m_bRoulette = bRoulette; }	//ルーレット状態の設定
+	bool GetRoulette(void) { return m_bRoulette; }	//ルーレット状態の取得
+	void BeginRoulette(int nCntRoulette, float fSpeedRot, float fSpeedRate) { m_bRoulette = true; m_nCntRoulette = nCntRoulette; m_fSpeedRotModel = fSpeedRot; m_fRouletteSpeedRate = fSpeedRate; }	//ルーレットの開始
+	int GetCountRoulette(void) { return m_nCntRoulette; }	//ルーレットのカウントの取得
+
 
 private:
 	void CreateModelUI(void);	//モデルの生成
+	void RotateMenu(void);		//メニューを回転
+	void RouletteMenu(void);	//ルーレットでメニューを回転
 	void MoveModel(void);	//モデル移動
 
 	const D3DXVECTOR3 m_posCenter;	//メニューの中央の位置
@@ -49,11 +63,19 @@ private:
 
 	CObjectModelUI** m_ppObjModelUIArray;	//UIモデルオブジェクトの配列のダブルポインタ
 	CModel::MODELTYPE m_typeModel;	//生成するモデルの種類
-	bool m_bMoveModel;		//モデル移動中かどうか
-	float m_fRotModelY;		//モデルの配置位置を決める角度
+
+	int m_nSpanRotate;		//回転のスパン
+	int m_nCntRotate;		//回転するカウント
+	float m_fRotModel;		//モデルの配置位置を決める角度
+	float m_fRotModelDest;	//モデルの目標角度
 	float m_fSpeedRotModel;	//モデル移動時の回転速度
+
+	bool m_bRoulette;	//ルーレットの回転
+	int m_nCntRoulette;		//ルーレット回転するカウント
+	float m_fRouletteSpeedRate;	//ルーレットの速度の乗算される値
+
 	float m_fDistCamera;	//メニュー用のカメラの距離
-	float m_fRotCameraY;	//メニュー用のカメラのY角度
+	float m_fRotCamera;	//メニュー用のカメラのY角度
 	float m_fHeightCamera;	//メニュー用のカメラの位置の高さ
 };
 

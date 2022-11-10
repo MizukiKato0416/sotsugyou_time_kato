@@ -38,11 +38,13 @@ public:
 private:
 	void UpdateGame(void);					//ゲーム中の更新
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
+	void UpdateReady(void);					//準備状態中の更新
 
 	void CreateBalloon(void);				//風船生成処理
 	void CreateItemBox(void);				//アイテムボックス生成処理
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
 	void CountDownUi(void);					//カウントダウンUIの処理
+	void SetRanking();						//ランキング設定処理
 
 	CObjectPlayerBalloonCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
