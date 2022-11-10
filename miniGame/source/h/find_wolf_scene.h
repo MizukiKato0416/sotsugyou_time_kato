@@ -49,6 +49,7 @@ private:
 		ADD_PLAYER_POINT,	//人狼以外のポイント加算
 		DEC_PLAYER_POINT,	//人狼以外のポイントマイナス
 		ADD_WOLF_POINT,		//人狼のポイント加算
+		FINISH,				//フィニッシュ
 		MAX
 	};
 
@@ -78,9 +79,12 @@ private:
 
 	//選択用アイコンUIの位置設定処理
 	void SelectIconSetPos(const int nIdxPlayer, const SELECT select);
+	//ポイントUIの位置設定処理
+	void PointUiSetPos(const int nIdxPlayer, int nObjectPlayerIndex);
 
 	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];		//スコアUI 
 	CObject2D *m_pSelectIcon[MAX_OBJECT_PLAYER_NUM];	//選択用アイコン
+	CObject2D *m_pPointUi[MAX_OBJECT_PLAYER_NUM];		//ポイントUI 
 	CObject2D *m_pTutorial;								//説明UI
 	CTimer* m_pTimer;									//ゲームのタイマー
 	CObject2D* m_pTimerFrame;							//タイマーの枠
@@ -90,6 +94,7 @@ private:
 
 	PHASE m_phase;						//フェーズ
 	int m_nFrameCounter;				//Frameカウント用
+	bool m_bAddPoint;					//ポイントが加算されたかどうか
 };
 
 #endif // !_FIND_WOLF_SCENE_H_
