@@ -140,7 +140,7 @@ public:
 		MESH_RUBBLE,				//がれき
 		MESH_STAGE_02_GROUND,		//ステージの地面
 		MESH_STAGE_02_WALL,			//ステージの壁
-		MESH_CLOUD,					//雲
+		MESH_CLOUD,					//くも
 		MESH_STAGE_02_WALL_02,		//ステージの壁2
 		MESH_STAGE_02_WALL_03,		//ステージの壁3
 		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
