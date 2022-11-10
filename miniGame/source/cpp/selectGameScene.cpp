@@ -102,7 +102,7 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 200.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
@@ -130,6 +130,12 @@ void CSelectGameScene::Init(void) {
 			pModel->SetPowerGlow(4.0f);
 		}
 	}
+
+	//ゲーム名の背景
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MESH_BALLOON_GOLD , 500.0f, 180.0f);
+	//ゲーム名の生成
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 150.0f);
+
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
@@ -229,7 +235,6 @@ void CSelectGameScene::UpdateInput(void) {
 	CSound* pSound = pManager->GetSound();	//サウンドへのポインタ
 	if (pInput == nullptr || pFade == nullptr || m_pMenuGame == nullptr) return;
 
-
 	//嘘つき切り替え
 	if (pInput->GetTrigger(CInput::CODE::CHECK_X, 0) && !m_bSelectGame) {
 		//フェード中だった場合
@@ -244,9 +249,6 @@ void CSelectGameScene::UpdateInput(void) {
 		}
 	}
 
-	//現在の選択肢の番号
-	int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
-
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bSelectGame)
 	{
@@ -259,6 +261,9 @@ void CSelectGameScene::UpdateInput(void) {
 		//選択ロック中ではないとき
 		else if(!m_pMenuGame->GetLockChangeSelect())
 		{
+			//現在の選択肢の番号を取得
+			int nIdxCurSelect = m_pMenuGame->GetIdxCurSelect();
+
 			// 押されたフラグ
 			m_bSelectGame = true;
 			//選択のロック

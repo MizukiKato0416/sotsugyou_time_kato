@@ -125,7 +125,7 @@ void CGameScene01::Init(void) {
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
 	//ライトのビューマトリックスを生成
 	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
-	//シェーダのライトを設定
+	//シェーダのライトを設定する
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectLightMatrixView(mtxLightView);
 		pRenderer->SetEffectLightVector(D3DXVECTOR4(vecLight, 1.0f));
