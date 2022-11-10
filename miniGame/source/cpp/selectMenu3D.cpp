@@ -133,8 +133,11 @@ void CSelectMenu3D::CreateModelUI(void) {
 	D3DXMATRIX mtxView;	//ビューマトリックス
 	D3DXVECTOR3 posR, posV;	//視点と注視点
 
-	posR = m_posCenter;
-	posV = D3DXVECTOR3(m_posCenter.x, m_posCenter.y + m_fHeightCamera, m_posCenter.z - m_fDistCamera);
+	//posR = m_posCenter;
+	//posV = D3DXVECTOR3(m_posCenter.x, m_posCenter.y + m_fHeightCamera, m_posCenter.z - m_fDistCamera);
+	posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	posV = D3DXVECTOR3(0.0f, m_fHeightCamera, -m_fDistCamera);
+
 	//ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&mtxView,
 		&posV,
