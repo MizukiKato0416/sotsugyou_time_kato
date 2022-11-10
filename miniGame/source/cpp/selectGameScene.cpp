@@ -253,9 +253,10 @@ void CSelectGameScene::UpdateInput(void) {
 	}
 
 	//チュートリアル閉じる
-	if (pInput->GetTrigger(CInput::CODE::CHECK_B, 0) && m_pTutorial != nullptr) {
+	if ((pInput->GetTrigger(CInput::CODE::CHECK_A, 0) || pInput->GetTrigger(CInput::CODE::CHECK_B, 0)) && m_pTutorial != nullptr) {
 		//チュートリアル切り替え
 		ChangeTutorial();
+		return;	//選択が連続にならないように終了
 	}
 
 	if (m_pTutorial != nullptr) return;	//チュートリアル生成された場合後の入力はなし
@@ -341,7 +342,7 @@ void CSelectGameScene::ChangeTutorial(void) {
 		}
 
 		//背景変更
-		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH, SCREEN_HEIGHT);
+		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 0.9f, SCREEN_HEIGHT * 0.9f);
 		//選択画面の移動をロック
 		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(true);
 	}
