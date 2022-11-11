@@ -103,13 +103,13 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//選択メニューの背景
-	CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 300.0f, 300.0f);
+	CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 250.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 1000.0f, 450.0f);
 	if (pMenuStencil != nullptr) {
 		pMenuStencil->SetDrawStencil(true);
 	}
 
 	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 500.0f), 500.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 100.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
@@ -336,11 +336,21 @@ void CSelectGameScene::ChangeTutorial(void) {
 		{
 			//風船
 		case (int)CScene::SCENE_TYPE::GAME_01:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON;
+			if (m_bWolfMode) {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON_WOLF;
+			}
+			else {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON;
+			}
 			break;
 			//超絶
 		case (int)CScene::SCENE_TYPE::GAME_02:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			if (m_bWolfMode) {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK_WOLF;
+			}
+			else {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			}
 			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
