@@ -23,11 +23,13 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_X			(440.0f * 0.2f)							//選択アイコンのサイズX
-#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_Y			(314.0f * 0.2f)							//選択アイコンのサイズY
-#define FIND_WOLF_SCENE_SELECT_ICON_POS_Y			(150.0f)								//選択アイコンの位置Y
-#define FIND_WOLF_SCENE_SELECT_ICON_POS_X_DIFFER	(40.0f)									//選択アイコンの位置Xの間隔
-#define FIND_WOLF_SCENE_SELECT_ICON_DECIDE_COLOR	(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f))		//選択アイコンの決定時のカラー
+#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_X			(440.0f * 0.2f)						//選択アイコンのサイズX
+#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_Y			(314.0f * 0.2f)						//選択アイコンのサイズY
+#define FIND_WOLF_SCENE_SELECT_ICON_POS_Y			(130.0f)							//選択アイコンの位置Y
+#define FIND_WOLF_SCENE_SELECT_ICON_POS_X_DIFFER	(40.0f)								//選択アイコンの位置Xの間隔
+#define FIND_WOLF_SCENE_SELECT_ICON_DECIDE_COLOR	(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f))	//選択アイコンの決定時のカラー
+#define FIND_WOLF_SCENE_SELECT_ICON_MOVE			(0.08f)								//選択アイコンの移動量
+#define FIND_WOLF_SCENE_SELECT_ICON_ADD_MOVE_POS	((rand() % 101 + 100) / 10.0f)		//選択アイコンが加速できる範囲
 
 #define FIND_WOLF_SCENE_SELECT_TIME					(10)		//選択できる時間
 #define FIND_WOLF_SCENE_SELECT_ALL_INTERVAL			(90)		//全員が選択してから次のフェーズに行くまでの間隔
@@ -1048,7 +1050,7 @@ void CFindWolfScene::SelectIconMove()
 		D3DXVECTOR3 pos = m_pSelectIcon[nCntPlayer]->GetPos();
 
 		//移動量
-		float fMove = 0.08f;
+		float fMove = FIND_WOLF_SCENE_SELECT_ICON_MOVE;
 		//切替なら移動量を逆向きにする
 		if (m_bSelectFloat[nCntPlayer]) fMove *= -1;
 
@@ -1068,7 +1070,7 @@ void CFindWolfScene::SelectIconMove()
 		float fDefaultPos = m_aPosPlayer2D[nCntPlayer].y - FIND_WOLF_SCENE_SELECT_ICON_POS_Y;
 
 		//加速できる範囲をランダムで設定
-		float fAddMovePos = (rand() % 51 + 50) / 10.0f;
+		float fAddMovePos = FIND_WOLF_SCENE_SELECT_ICON_ADD_MOVE_POS;
 
 		//加速できる最大の位置を設定
 		float fMaxPos = 0.0f;
