@@ -111,6 +111,8 @@ data/TEXTURE/UI/wolf_find_tutorial_2.png
 data/TEXTURE/UI/wolf_find_tutorial_3.png
 data/TEXTURE/UI/wolf_find_tutorial_4.png
 
+data/TEXTURE/UI/circle.png
+
 data/TEXTURE/UI/result_ui.png
 
 data/TEXTURE/MESH/floor_01.jpg

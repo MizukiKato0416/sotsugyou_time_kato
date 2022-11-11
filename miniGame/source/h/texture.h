@@ -128,6 +128,8 @@ public:
 		WOLF_FIND_TUTORIAL_3,
 		WOLF_FIND_TUTORIAL_4,
 
+		CIRCLE,
+
 		RESULT_UI,
 
 		//メッシュのテクスチャ
