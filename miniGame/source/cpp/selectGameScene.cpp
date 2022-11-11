@@ -102,8 +102,14 @@ void CSelectGameScene::Init(void) {
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
 	}
 
+	//選択メニューの背景
+	CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 300.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 300.0f, 300.0f);
+	if (pMenuStencil != nullptr) {
+		pMenuStencil->SetDrawStencil(true);
+	}
+
 	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 200.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 500.0f), 500.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
@@ -121,14 +127,18 @@ void CSelectGameScene::Init(void) {
 			CObjectModelUI* pObjModelUI = m_pMenuGame->GetModelUI(nIdxModel);
 			if (pObjModelUI == nullptr) continue;
 
+			//ステンシル有効
+			pObjModelUI->SetEnableStencil(true);
+
+			//回転速度の設定
+			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.02f, 0.0f));
+
 			//UIオブジェクトのモデルの取得
 			CModel* pModel = pObjModelUI->GetPtrModel();
 			if (pModel == nullptr) continue;
 
 			//モデルを設定
 			pModel->SetModelType(typeModelGame[nIdxModel]);
-			pModel->SetColorGlow(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			pModel->SetPowerGlow(4.0f);
 		}
 	}
 
