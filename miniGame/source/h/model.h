@@ -124,7 +124,7 @@ private:
 	ChangeDiffuse m_aChangeDiffuse[MAX_MATERIAL];	//モデルのマテリアルの色を変更する構造体の配列
 
 	D3DXCOLOR m_colGlow;	//輪郭の発光色の色
-	D3DXCOLOR m_powGlow;	//輪郭の強度
+	float m_powGlow;	//輪郭の強度
 
 	bool m_bOutline;			//輪郭があるかどうか
 	D3DXCOLOR m_colOutline;	//輪郭の色
