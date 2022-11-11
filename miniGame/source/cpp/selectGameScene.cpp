@@ -336,11 +336,21 @@ void CSelectGameScene::ChangeTutorial(void) {
 		{
 			//ïóëD
 		case (int)CScene::SCENE_TYPE::GAME_01:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON;
+			if (m_bWolfMode) {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON_WOLF;
+			}
+			else {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_BALLOON;
+			}
 			break;
 			//í¥ê‚
 		case (int)CScene::SCENE_TYPE::GAME_02:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			if (m_bWolfMode) {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK_WOLF;
+			}
+			else {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			}
 			break;
 			//ÉâÉìÉ_ÉÄ(âº)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
