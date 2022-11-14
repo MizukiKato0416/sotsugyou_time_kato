@@ -57,8 +57,8 @@
 #define FIND_WOLF_SCENE_POINT_UI_MOVE				(2.0f)				//ポイントUIの移動量
 #define FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER		(60)				//ポイントUIが消え始めるまでの時間
 
-#define STENCIL_CIRCLE_SIZE (250.0f)	//ステンシルマスクのサイズ
-#define STENCIL_CIRCLE_SPEED (16.0f)	//ステンシルマスクの速度
+#define STENCIL_CIRCLE_SIZE (280.0f)	//ステンシルマスクのサイズ
+#define STENCIL_CIRCLE_SPEED (24.0f)	//ステンシルマスクの速度
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -564,7 +564,7 @@ void CFindWolfScene::Tutorial3()
 		m_pWaitBlack = CCoverDisplay::Create(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 
 		//ステンシルの円
-		m_pCircleStencilMask = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+		m_pCircleStencilMask = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, m_aPosPlayer2D[0].y, 0.0f),
 			CTexture::TEXTURE_TYPE::CIRCLE, STENCIL_CIRCLE_SIZE, STENCIL_CIRCLE_SIZE);
 		if (m_pCircleStencilMask != nullptr) {
 			m_pCircleStencilMask->SetStencilMask(true);
@@ -596,7 +596,7 @@ void CFindWolfScene::Wait()
 		if(colLast.a < 0.5f) m_pWaitBlack->SetColor(colLast + D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.02f));
 	}
 
-	//横移動
+	//ステンシルの円の横移動
 	if (m_pCircleStencilMask != nullptr) {
 		D3DXVECTOR3 posMask = m_pCircleStencilMask->GetPos();
 		posMask += D3DXVECTOR3(STENCIL_CIRCLE_SPEED, 0.0f, 0.0f);
@@ -609,6 +609,12 @@ void CFindWolfScene::Wait()
 	if (m_nFrameCounter < FIND_WOLF_SCENE_PLAYER_WAIT_TIME) return;
 	m_nFrameCounter = 0;
 
+	//ステンシルの円を強制移動
+	if (m_pCircleStencilMask != nullptr) {
+		//人狼プレイヤーの位置に設定
+		m_pCircleStencilMask->SetPos(m_aPosPlayer2D[CGameScene::GetWereWolfPlayerIndex() - 1]);
+	}
+
 	//次のフェーズにする
 	m_phase = PHASE::ANSWER;
 
@@ -619,18 +625,6 @@ void CFindWolfScene::Wait()
 			                            static_cast<CTexture::TEXTURE_TYPE>
 			                            (static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_ANSWER_1) + CGameScene::GetWereWolfPlayerIndex() - 1),
 			                            SCREEN_WIDTH, SCREEN_HEIGHT);
-	}
-
-	//黒い画面の破棄
-	if (m_pWaitBlack != nullptr) {
-		m_pWaitBlack->Uninit();
-		m_pWaitBlack = nullptr;
-	}
-
-	//ステンシルマスクの破棄
-	if (m_pCircleStencilMask != nullptr) {
-		m_pCircleStencilMask->Uninit();
-		m_pCircleStencilMask = nullptr;
 	}
 }
 
@@ -666,6 +660,18 @@ void CFindWolfScene::Answer()
 
 		//テクスチャを変える
 		m_pTutorial->SetTexType(CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_4);
+
+		//黒い画面の破棄
+		if (m_pWaitBlack != nullptr) {
+			m_pWaitBlack->Uninit();
+			m_pWaitBlack = nullptr;
+		}
+
+		//ステンシルマスクの破棄
+		if (m_pCircleStencilMask != nullptr) {
+			m_pCircleStencilMask->Uninit();
+			m_pCircleStencilMask = nullptr;
+		}
 	}
 }
 

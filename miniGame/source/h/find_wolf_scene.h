@@ -97,8 +97,8 @@ private:
 	CTimer* m_pTimer;									//ゲームのタイマー
 	CObject2D* m_pTimerFrame;							//タイマーの枠
 
-	CCoverDisplay* m_pWaitBlack;	//待ち時間の黒い画面
-	CObject2D* m_pCircleStencilMask;			//待ち時間のステンシルマスク
+	CCoverDisplay* m_pWaitBlack;		//待ち時間の黒い画面
+	CObject2D* m_pCircleStencilMask;	//待ち時間のステンシルマスク
 
 	D3DXVECTOR3 m_aPosPlayer2D[MAX_OBJECT_PLAYER_NUM];		//プレイヤーの2D座標
 	SELECT m_select[MAX_OBJECT_PLAYER_NUM];					//どこが選択されているのか
