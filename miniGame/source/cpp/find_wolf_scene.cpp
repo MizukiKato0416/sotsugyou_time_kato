@@ -126,13 +126,13 @@ void CFindWolfScene::Init(void) {
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	//カメラの設定
-	if (pManager != nullptr) pManager->SetCamera(CFindWolfCamera::Create());	//なにか一つカメラが無いと描画されないのでとりあえずゲームカメラ
+	if (pManager != nullptr) pManager->SetCamera(CFindWolfCamera::Create());
 
 	//------------------------------
 	//ライトの初期設定
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
-							   //ライトのプロジェクションマトリックスを生成
+	//ライトのプロジェクションマトリックスを生成
 	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
