@@ -19,8 +19,8 @@
 #include "score.h"
 #include "gameScene.h"
 #include "timer.h"
-
 #include "coverDisplay.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
@@ -59,6 +59,11 @@
 
 #define STENCIL_CIRCLE_SIZE (280.0f)	//ステンシルマスクのサイズ
 #define STENCIL_CIRCLE_SPEED (24.0f)	//ステンシルマスクの速度
+
+#define FIND_WOLF_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(960.0f, 670.0f, 0.0f))		//次に進むボタンの位置
+#define FIND_WOLF_SCENE_NEXT_BUTTON_SIZE		(D3DXVECTOR3(60.0f, 60.0f, 0.0f))		//次に進むボタンのサイズ
+#define FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -232,6 +237,11 @@ void CFindWolfScene::Init(void) {
 	m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//次へUIの生成
+	m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
+
 	//------------------------------
 	//BGMの再生
 	//------------------------------
@@ -386,6 +396,11 @@ void CFindWolfScene::Tutorial2()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
+		if (m_pNexButton != nullptr)
+		{
+			m_pNexButton->Uninit();
+			m_pNexButton = nullptr;
+		}
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
@@ -531,6 +546,11 @@ void CFindWolfScene::WolfDecide()
 	//説明UIの生成
 	m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_3, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	//次へUIの生成
+	m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 }
 
 //=============================================================================
@@ -577,6 +597,12 @@ void CFindWolfScene::Tutorial3()
 		//消す
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
+
+		if (m_pNexButton != nullptr)
+		{
+			m_pNexButton->Uninit();
+			m_pNexButton = nullptr;
+		}
 	}
 }
 
@@ -625,6 +651,11 @@ void CFindWolfScene::Wait()
 			                            static_cast<CTexture::TEXTURE_TYPE>
 			                            (static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_ANSWER_1) + CGameScene::GetWereWolfPlayerIndex() - 1),
 			                            SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		//次へUIの生成
+		m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+			                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 	}
 }
 
@@ -705,6 +736,12 @@ void CFindWolfScene::Tutorial4()
 		//消す
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
+
+		if (m_pNexButton != nullptr)
+		{
+			m_pNexButton->Uninit();
+			m_pNexButton = nullptr;
+		}
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
