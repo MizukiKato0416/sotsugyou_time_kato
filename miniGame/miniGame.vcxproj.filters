@@ -241,6 +241,12 @@
     <ClCompile Include="source\cpp\coverDisplay.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\finalResultScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\finalResultCamera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
     <ClCompile Include="source\cpp\next_button.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
@@ -484,6 +490,12 @@
       <Filter>h\effect</Filter>
     </ClInclude>
     <ClInclude Include="source\h\coverDisplay.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultCamera.h">
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\next_button.h">

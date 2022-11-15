@@ -12,6 +12,7 @@
 #include "gameScene02.h"
 #include "resultScene.h"
 #include "find_wolf_scene.h"
+#include "finalResultScene.h"
 #include "object.h"	
 
 //=============================================================================
@@ -99,6 +100,10 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	case CScene::SCENE_TYPE::FIND_WOLF:
 		pScene = new CFindWolfScene;
+		break;
+
+	case CScene::SCENE_TYPE::FINAL_RESULT:
+		pScene = new CFinalResultScene;
 		break;
 	}
 
