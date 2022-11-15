@@ -14,8 +14,8 @@
 // マクロ定義
 //=============================================================================
 #define MAX_DRAW_DISTANCE		(6000.0f)	//描画可能な最大の距離
-#define DEFAULT_CAMERA_DISTANCE (1000.0f)	//視点と注視点の距離
-#define DEFAULT_CAMERA_ROT_X	(-20.0f)	//カメラの向きX
+#define DEFAULT_CAMERA_DISTANCE (1200.0f)	//視点と注視点の距離
+#define DEFAULT_CAMERA_ROT_X	(-10.0f)	//カメラの向きX
 #define DEFAULT_CAMERA_POS_Z	(-120.0f)	//カメラの位置Z
 
 //=============================================================================
@@ -51,8 +51,8 @@ CFinalResultCamera* CFinalResultCamera::Create(void) {
 // 最終結果カメラの初期化処理
 //=============================================================================
 HRESULT CFinalResultCamera::Init(void) {
-	SetPos(D3DXVECTOR3(0.0f, 400.0f, DEFAULT_CAMERA_POS_Z));
-	SetRot(D3DXVECTOR3(DEFAULT_CAMERA_ROT_X * (D3DX_PI / 180.0f), D3DX_PI * -0.0f, 0.0f));
+	SetPos(D3DXVECTOR3(0.0f, -500.0f, 0.0f));
+	SetRot(D3DXVECTOR3(DEFAULT_CAMERA_ROT_X * (D3DX_PI / 180.0f), 0.0f, 0.0f));
 	SetLockControll(true);
 
 	//距離の設定
