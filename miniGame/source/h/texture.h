@@ -132,6 +132,8 @@ public:
 
 		RESULT_UI,
 
+		MENU_GAME_TITLE_FRAME_UI,
+
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,			//砂漠
 		MESH_STAGE_AUDIENCE,		//観衆

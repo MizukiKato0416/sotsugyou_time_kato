@@ -115,6 +115,8 @@ data/TEXTURE/UI/circle.png
 
 data/TEXTURE/UI/result_ui.png
 
+data/TEXTURE/UI/menu_game_title_frame_ui.png
+
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
 data/TEXTURE/MESH/BalloonGold3_01.png

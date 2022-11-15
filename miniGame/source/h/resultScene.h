@@ -35,9 +35,12 @@ public:
 	void Update(void);	//更新処理
 
 private:
-	void PointUI();		//ポイントUIの処理
-	void Player();		//プレイヤーの処理
-	void NextButton();	//次に進むUI処理
+	void PointUI();			//ポイントUIの処理
+	void Player();			//プレイヤーの処理
+	void NextButton();		//次に進むUI処理
+	void Bg();				//背景処理
+	void Fade();			//遷移処理
+	void FrameCounter();	//フレームカウント処理
 
 	int m_nCntScene;			//シーン開始時からのカウント
 	int m_nFrameCounter;		//ポイントUIのカウンター

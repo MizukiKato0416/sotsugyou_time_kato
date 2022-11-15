@@ -32,11 +32,23 @@
 
 #define RESULT_SCENE_PLAYER_INIT_POS_Z		(950.0f)	//プレイヤーの初期位置Z
 #define RESULT_SCENE_PLAYER_MOVE			(25.0f)		//プレイヤーの移動量
+#define RESULT_SCENE_PLAYER_ROTATE_SPEED	(0.05f)		//プレイヤーの回転速度
 
-#define RESULT_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(1100.0f, 670.0f, 0.0f))	//次に進むボタンの位置
+#define RESULT_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(1150.0f, 670.0f, 0.0f))	//次に進むボタンの位置
 #define RESULT_SCENE_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
 #define RESULT_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
+
+#define RESULT_SCENE_RESULT_UI_SIZE_X			(1230.0f * 0.7f)	//結果発表UIのサイズX
+#define RESULT_SCENE_RESULT_UI_SIZE_Y			(184.0f * 0.7f)		//結果発表UIのサイズY
+#define RESULT_SCENE_RESULT_UI_POS_Y			(100.0f)			//結果発表UIの位置Y
+
+#define RESULT_SCENE_RANKING_UI_SIZE_X			(150.0f)			//順位UIのサイズ
+#define RESULT_SCENE_RANKING_UI_SIZE_Y			(150.0f)			//順位UIのサイズ
+#define RESULT_SCENE_RANKING_UI_POS_Y			(200.0f)			//順位UIの位置調整値
+
+#define RESULT_SCENE_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -171,7 +183,8 @@ void CResultScene::Init(void) {
 
 		//ランキングのUI生成
 		D3DXVECTOR3 posRankUI = WorldToScreen(D3DXVECTOR3(posModel.x, posModel.y, 0.0f), m_pPlayerModel[nIdxPlayer]->GetViewMatrix());
-		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 150.0f, 150.0f);
+		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, RESULT_SCENE_RANKING_UI_POS_Y, 0.0f),
+			                                   CTexture::TEXTURE_TYPE::PLAYER_NUM_1, RESULT_SCENE_RANKING_UI_SIZE_X, RESULT_SCENE_RANKING_UI_SIZE_Y);
 
 		if (pModel == nullptr) continue;
 		D3DXCOLOR colModel;	//モデルのマテリアル色
@@ -211,6 +224,9 @@ void CResultScene::Init(void) {
 		m_apPointUi[nIdxPlayer]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
+	//結果発表UIの生成
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, RESULT_SCENE_RESULT_UI_POS_Y, 0.0f), CTexture::TEXTURE_TYPE::RESULT_UI,
+		              RESULT_SCENE_RESULT_UI_SIZE_X, RESULT_SCENE_RESULT_UI_SIZE_Y);
 
 	//------------------------------
 	//BGMの再生
@@ -245,22 +261,14 @@ void CResultScene::Uninit(void) {
 //=============================================================================
 void CResultScene::Update(void) {
 
-	m_nFrameCounter++;
+	//フレームカウント処理
+	FrameCounter();
 
 	//次に進むボタンUIの処理
 	NextButton();
 
-	//既定の値になっていなかったら
-	if (m_nFrameCounter > RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF)
-	{
-		m_nFrameCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF;
-	}
-
-	if (m_pBg != nullptr)
-	{
-		//背景を動かす
-		m_pBg->SetMoveTex(0.001f, 0.001f);
-	}
+	//背景処理
+	Bg();
 
 	//プレイヤーの処理
 	Player();
@@ -268,44 +276,8 @@ void CResultScene::Update(void) {
 	//ポイントUIの処理
 	PointUI();
 
-	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-	if (pManager == nullptr) return;
-	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
-	if (pInput == nullptr) return;
-
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
-		//フェードの取得
-		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-		if (pFade == nullptr) return;
-		//人狼モードなら
-		if (CGameScene::GetWereWolfMode())
-		{
-			if (m_nFrameCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF) return;
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FIND_WOLF, 0.02f, 60);
-
-			//マネージャーの取得
-			CManager* pManager = CManager::GetManager();
-			//サウンドの取得
-			CSound* pSound = nullptr;
-			if (pManager != nullptr) pSound = pManager->GetSound();
-			//音を再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
-		}
-		else
-		{
-			if (m_nFrameCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
-
-			//マネージャーの取得
-			CManager* pManager = CManager::GetManager();
-			//サウンドの取得
-			CSound* pSound = nullptr;
-			if (pManager != nullptr) pSound = pManager->GetSound();
-			//音を再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
-		}
-	}
+	//遷移処理
+	Fade();
 }
 
 //=============================================================================
@@ -412,7 +384,11 @@ void CResultScene::Player()
 			D3DXVECTOR3 pos = m_pPlayerModel[nCntPlayer]->GetPos();
 
 			//位置Zが0なら
-			if (pos.z == 0.0f) continue;
+			if (pos.z == 0.0f)
+			{
+				m_pPlayerModel[nCntPlayer]->SetRotSpeed(D3DXVECTOR3(RESULT_SCENE_PLAYER_ROTATE_SPEED, RESULT_SCENE_PLAYER_ROTATE_SPEED, RESULT_SCENE_PLAYER_ROTATE_SPEED));
+				continue;
+			}
 
 			//移動させる
 			pos.z -= RESULT_SCENE_PLAYER_MOVE;
@@ -420,7 +396,6 @@ void CResultScene::Player()
 			if (pos.z < 0.0f) pos.z = 0.0f;
 			//位置設定
 			m_pPlayerModel[nCntPlayer]->SetPos(pos);
-
 			return;
 		}
 	}
@@ -445,4 +420,69 @@ void CResultScene::NextButton()
 	m_pNexButton = CNextButton::Create(RESULT_SCENE_NEXT_BUTTON_POS, RESULT_SCENE_NEXT_BUTTON_SIZE,
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, RESULT_SCENE_NEXT_BUTTON_COUNTER,
 		                               RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA);
+}
+
+//=============================================================================
+//背景処理
+//=============================================================================
+void CResultScene::Bg()
+{
+	if (m_pBg == nullptr) return;
+
+	//背景を動かす
+	m_pBg->SetMoveTex(RESULT_SCENE_BG_MOVE_SPEED.x, RESULT_SCENE_BG_MOVE_SPEED.y);
+}
+
+//=============================================================================
+//遷移処理
+//=============================================================================
+void CResultScene::Fade()
+{
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//現在の入力デバイスの取得
+	CInput* pInput = pManager->GetInputCur();
+	if (pInput == nullptr) return;
+
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
+		//フェードの取得
+		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+		if (pFade == nullptr) return;
+
+		if (pFade->GetChangeFade()) return;
+
+		//シーン遷移するまでのカウント
+		float fChangeSceneCount = RESULT_SCENE_CHANGE_SCENE_COUNTER;
+		//遷移先
+		CScene::SCENE_TYPE sceneType = CScene::SCENE_TYPE::SELECT_GAME;
+
+		//人狼モードなら
+		if (CGameScene::GetWereWolfMode())
+		{
+			fChangeSceneCount = RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF;
+			sceneType = CScene::SCENE_TYPE::FIND_WOLF;
+		}
+
+		if (m_nFrameCounter < fChangeSceneCount) return;
+		if (pFade != nullptr) pFade->SetFade(sceneType, 0.02f, 60);
+
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
+	}
+}
+
+//=============================================================================
+//フレームカウント処理
+//=============================================================================
+void CResultScene::FrameCounter()
+{
+	m_nFrameCounter++;
+
+	//既定の値以下だったら
+	if (m_nFrameCounter <= RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF) return;
+
+	m_nFrameCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF;
 }

@@ -35,6 +35,7 @@ private:
 	void UpdateInput(void);	//入力処理
 	void ChangeTutorial(void);	//チュートリアル表示の切り替え
 	void ChangeMode(bool bWolf);	//嘘つきモードの切り替え
+	void BgMove();					//背景の動きの処理
 
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bSelectGame;	//選択キー押下時
