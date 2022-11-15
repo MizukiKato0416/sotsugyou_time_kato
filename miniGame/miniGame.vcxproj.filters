@@ -241,6 +241,12 @@
     <ClCompile Include="source\cpp\coverDisplay.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\finalResultScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\finalResultCamera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -481,6 +487,12 @@
       <Filter>h\effect</Filter>
     </ClInclude>
     <ClInclude Include="source\h\coverDisplay.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultCamera.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

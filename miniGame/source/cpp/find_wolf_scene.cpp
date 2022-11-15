@@ -885,7 +885,7 @@ void CFindWolfScene::Finish()
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 	}
 }
 

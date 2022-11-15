@@ -45,6 +45,8 @@ public:
 		OBJ_SPHERE_COVER,				//球のカバー
 		OBJ_HATENA,						//はてなマーク
 
+		OBJ_RESULT_TOWER,				//結果画面のタワー
+
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
 

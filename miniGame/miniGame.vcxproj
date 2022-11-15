@@ -179,6 +179,8 @@
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
     <ClCompile Include="source\cpp\Effect\Trajectory.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
+    <ClCompile Include="source\cpp\finalResultCamera.cpp" />
+    <ClCompile Include="source\cpp\finalResultScene.cpp" />
     <ClCompile Include="source\cpp\find_wolf_camera.cpp" />
     <ClCompile Include="source\cpp\find_wolf_scene.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
@@ -250,6 +252,8 @@
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
+    <ClInclude Include="source\h\finalResultCamera.h" />
+    <ClInclude Include="source\h\finalResultScene.h" />
     <ClInclude Include="source\h\find_wolf_camera.h" />
     <ClInclude Include="source\h\find_wolf_scene.h" />
     <ClInclude Include="source\h\finish_ui.h" />
