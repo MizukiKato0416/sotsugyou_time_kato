@@ -24,6 +24,8 @@
 #define MAX_GAME_NUM ((int)CScene::SCENE_TYPE::GAME_MAX - (int)CScene::SCENE_TYPE::GAME_01)	//ゲームの最大数
 #define MENU_SELECT_NUM (MAX_GAME_NUM + 1)	//ランダム分追加
 
+#define MENU_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -145,7 +147,7 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//ゲーム名の背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 , 500.0f, 180.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 500.0f, 180.0f);
 	//ゲーム名の生成
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 150.0f);
 	//矢印UIの生成
@@ -189,6 +191,10 @@ void CSelectGameScene::Uninit(void) {
 // ゲーム選択シーンの更新処理
 //=============================================================================
 void CSelectGameScene::Update(void) {
+
+	//背景の動きの処理
+	BgMove();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
@@ -415,4 +421,14 @@ void CSelectGameScene::ChangeMode(bool bWolf) {
 
 	//変更音の設定
 	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
+}
+
+//=============================================================================
+//背景の動きの処理
+//=============================================================================
+void CSelectGameScene::BgMove(){
+	if (m_pMenuBG == nullptr) return;
+
+	//背景を動かす
+	m_pMenuBG->SetMoveTex(MENU_BG_MOVE_SPEED.x, MENU_BG_MOVE_SPEED.y);
 }

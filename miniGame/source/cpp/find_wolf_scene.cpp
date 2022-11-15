@@ -65,6 +65,9 @@
 #define FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
+#define FIND_WOLF_SCENE_CHANGE_SCENE_COUNT	(60)			//遷移するまでの時間
+
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -913,17 +916,16 @@ void CFindWolfScene::AddWolfPoint()
 //=============================================================================
 void CFindWolfScene::Finish()
 {
+	m_nFrameCounter++;
+
+	if (m_nFrameCounter <= FIND_WOLF_SCENE_CHANGE_SCENE_COUNT) return;
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;
-	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
-	if (pInput == nullptr) return;
-
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
-		//フェードの取得
-		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
-	}
+	
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 }
 
 //=============================================================================
