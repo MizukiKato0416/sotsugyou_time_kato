@@ -12,6 +12,7 @@
 #include "score.h"
 #include "score_ui.h"
 #include "gameScene.h"
+#include "gameScene01.h"
 
 //エフェクト
 #include "PresetSetEffect.h"
@@ -26,7 +27,6 @@
 #define BALLOON_DOWN_POS			(5.0f)		//風船の下がる位置
 #define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
 #define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
-#define BALLOON_SCORE_MAX			(99)		//スコアの最大値
 
 //=============================================================================
 // 静的メンバ変数宣言

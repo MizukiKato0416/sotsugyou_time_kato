@@ -20,7 +20,9 @@
 
 #include "PresetSetEffect.h"
 #include "score_ui.h"
+#include "score.h"
 #include "player.h"
+#include "gameScene01.h"
 
 //=============================================================================
 // マクロ定義
@@ -29,12 +31,13 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED			(0.15f)		//加速
-#define DEC_MOVE_SPEED			(0.93f)		//減速
-#define MAX_MOVE_SPEED			(9.0f)		//最大速度
-#define MOVE_ZERO_RANGE			(0.08f)		//移動量を0にする範囲
-#define ROTATE_SPEED			(0.025f)	//回転速度
-#define OBJECT_PLAYER_BALLOON_CAR_BOUND_SPEED		(0.9f)		//バウンドする量
+#define ADD_MOVE_SPEED								(0.15f)			//加速
+#define DEC_MOVE_SPEED								(0.93f)			//減速
+#define MAX_MOVE_SPEED								(9.0f)			//最大速度
+#define MAX_MOVE_SPEED_STEAL_POINT					(9.0f * 1.3f)	//最大速度(ポイント奪取時)
+#define MOVE_ZERO_RANGE								(0.08f)			//移動量を0にする範囲
+#define ROTATE_SPEED								(0.025f)		//回転速度
+#define OBJECT_PLAYER_BALLOON_CAR_BOUND_SPEED		(0.9f)			//バウンドする量
 
 //--------------------------------
 //当たり判定
@@ -61,9 +64,16 @@
 //--------------------------------
 #define COLOR_OUTLINE								(D3DXCOLOR(0.2f, 0.5f, 1.0f, 1.0f))	//モデルの輪郭の色
 #define SCORE_UI_POS_Y								(650.0f)							//スコアUIの位置Y
+
+//--------------------------------
+//アイテム
+//--------------------------------
 #define OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_Y		(580.0f)							//アイテムUIの位置Y
 #define OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_X		(90.0f)								//アイテムUIの位置X調整値
 #define OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_SIZE		(50.0f)								//アイテムUIのサイズ
+#define OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT		(2)									//相手から奪うポイントの量
+#define OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT_TIME	(60 * 3)							//相手から奪う状態の時間
+
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -84,7 +94,9 @@ CObjectPlayerBalloonCar::CObjectPlayerBalloonCar()
 	m_itemType = CItem::ITEM_TYPE::NONE;
 	m_nSpinCounter = 0;
 	m_nInvincbleCounter = 0;
+	m_nStealPointCounter = 0;
 	m_bBound = false;
+	m_bStealPoint = false;
 	m_pSocreUi = nullptr;
 	m_pItemUi = nullptr;
 }
@@ -128,8 +140,10 @@ HRESULT CObjectPlayerBalloonCar::Init(void) {
 	m_nSpinCounter = 0;
 	m_nInvincbleCounter = 0;
 	m_bBound = false;
+	m_bStealPoint = false;
 	m_fSpinSpeed = OBJECT_PLAYER_BALLOON_CAR_SPIN_SPEED;
 	m_pItemUi = nullptr;
+	m_nStealPointCounter = 0;
 
 	return S_OK;
 }
@@ -228,6 +242,9 @@ void CObjectPlayerBalloonCar::Update(void) {
 		//アイテム使用
 		UseItem();
 	}
+
+	//ポイント奪取状態
+	StealPoint();
 
 	//アイテムUIの処理
 	ItemUi();
@@ -342,6 +359,10 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 		}
 	}
 
+	//最大速度
+	float fMaxSpeed = MAX_MOVE_SPEED;
+	//ポイント奪取時
+	if (m_bStealPoint) fMaxSpeed = MAX_MOVE_SPEED_STEAL_POINT;
 
 	//Aボタンを押している間向いている方向に進む
 	if (pInput->GetPress(CInput::CODE::ACCELE, GetPlayer()->GetIndex() - 1))
@@ -349,9 +370,9 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 		//加速させる
 		m_fMoveSpeed += ADD_MOVE_SPEED;
 		//最大値よりも大きくなったら
-		if (m_fMoveSpeed > MAX_MOVE_SPEED)
+		if (m_fMoveSpeed > fMaxSpeed)
 		{
-			m_fMoveSpeed = MAX_MOVE_SPEED;
+			m_fMoveSpeed = fMaxSpeed;
 		}
 		//---------------------------------
 		//煙
@@ -363,9 +384,9 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 		//加速させる
 		m_fMoveSpeed -= ADD_MOVE_SPEED;
 		//最大値よりも大きくなったら
-		if (m_fMoveSpeed < -MAX_MOVE_SPEED)
+		if (m_fMoveSpeed < -fMaxSpeed)
 		{
-			m_fMoveSpeed = -MAX_MOVE_SPEED;
+			m_fMoveSpeed = -fMaxSpeed;
 		}
 	}
 	else
@@ -618,11 +639,28 @@ void CObjectPlayerBalloonCar::CollisionObjectPlayer(void)
 			//位置設定
 			SetPos(myPos);
 
-			/*if (m_bBound || m_state == OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN)
+			if (!m_bStealPoint) return;
+
+			//ポイントを奪う状態なら
+			//相手のポイントを奪う
+
+			int nAddScore = OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT;
+			if (pObjectPlayer->GetScoreUi()->GetScore()->GetScore() <= OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT)
 			{
-				return;
+				nAddScore = pObjectPlayer->GetScoreUi()->GetScore()->GetScore();
 			}
-            */
+			m_pSocreUi->GetScore()->AddScore(nAddScore);
+
+			//スコアが最大値を超えたら
+			if (GetScoreUi()->GetScore()->GetScore() > BALLOON_SCORE_MAX)
+			{
+				//超えないようにする
+				GetScoreUi()->GetScore()->SetScore(BALLOON_SCORE_MAX);
+			}
+
+			pObjectPlayer->GetScoreUi()->GetScore()->AddScore(-nAddScore);
+			m_bStealPoint = false;
+			m_nStealPointCounter = 0;
 		}
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
@@ -769,6 +807,11 @@ void CObjectPlayerBalloonCar::UseItem(void)
 		//バナナの生成
 		CItemBanana::Create(pos, this);
 		break;
+	case CItem::ITEM_TYPE::STEAL_POINT:
+		//ポイントを奪う状態にする
+		m_bStealPoint = true;
+		m_itemType = CItem::ITEM_TYPE::NONE;
+		break;
 	default:
 		break;
 	}
@@ -802,7 +845,27 @@ void CObjectPlayerBalloonCar::ItemUi(void)
 	case CItem::ITEM_TYPE::BANANA:
 		m_pItemUi->SetTexType(CTexture::TEXTURE_TYPE::ITEM_BANANA);
 		break;
+	case CItem::ITEM_TYPE::STEAL_POINT:
+		m_pItemUi->SetTexType(CTexture::TEXTURE_TYPE::ITEM_GASOLINE);
+		break;
 	default:
 		break;
 	}
+}
+
+//=============================================================================
+//ポイント奪取処理
+//=============================================================================
+void CObjectPlayerBalloonCar::StealPoint()
+{
+	if (!m_bStealPoint) return;
+
+	//ポイントを奪う状態なら
+	m_nStealPointCounter++;
+
+	if (m_nStealPointCounter <= OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT_TIME) return;
+
+	//時間外なら
+	m_bStealPoint = false;
+	m_nStealPointCounter = 0;
 }
