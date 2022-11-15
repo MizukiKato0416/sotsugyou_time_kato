@@ -203,6 +203,7 @@
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
     <ClCompile Include="source\cpp\meshwall.cpp" />
     <ClCompile Include="source\cpp\model.cpp" />
+    <ClCompile Include="source\cpp\next_button.cpp" />
     <ClCompile Include="source\cpp\object.cpp" />
     <ClCompile Include="source\cpp\object2D.cpp" />
     <ClCompile Include="source\cpp\object3D.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="source\h\meshcylinder.h" />
     <ClInclude Include="source\h\meshwall.h" />
     <ClInclude Include="source\h\model.h" />
+    <ClInclude Include="source\h\next_button.h" />
     <ClInclude Include="source\h\object.h" />
     <ClInclude Include="source\h\object2D.h" />
     <ClInclude Include="source\h\object3D.h" />

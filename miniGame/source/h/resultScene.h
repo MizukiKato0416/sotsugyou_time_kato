@@ -19,6 +19,8 @@
 // 前方宣言
 //*****************************************************************************
 class CObject2D;
+class CObjectModelUI;
+class CNextButton;
 
 //*****************************************************************************
 // リザルトシーンクラス
@@ -34,12 +36,17 @@ public:
 
 private:
 	void PointUI();		//ポイントUIの処理
+	void Player();		//プレイヤーの処理
+	void NextButton();	//次に進むUI処理
 
 	int m_nCntScene;			//シーン開始時からのカウント
-	int m_nPointUiCounter;		//ポイントUIのカウンター
+	int m_nFrameCounter;		//ポイントUIのカウンター
 
-	CObject2D *m_pBg;								//背景
-	CObject2D *m_apPointUi[MAX_OBJECT_PLAYER_NUM];	//ポイント用UI
+	CObject2D *m_pBg;											//背景
+	CObject2D *m_apPointUi[MAX_OBJECT_PLAYER_NUM];				//ポイント用UI
+	CObjectModelUI *m_pPlayerModel[MAX_OBJECT_PLAYER_NUM];		//プレイヤーのモデル
+	CNextButton *m_pNexButton;									//次に進むボタンUI
+
 };
 
 #endif // !_RESULT_SCENE_H_

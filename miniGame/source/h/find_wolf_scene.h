@@ -21,6 +21,7 @@ class CObject2D;
 class CScoreUi;
 class CTimer;
 class CCoverDisplay;
+class CNextButton;
 
 //*****************************************************************************
 // クラスの定義
@@ -99,6 +100,7 @@ private:
 
 	CCoverDisplay* m_pWaitBlack;		//待ち時間の黒い画面
 	CObject2D* m_pCircleStencilMask;	//待ち時間のステンシルマスク
+	CNextButton *m_pNexButton;			//次に進むボタンUI
 
 	D3DXVECTOR3 m_aPosPlayer2D[MAX_OBJECT_PLAYER_NUM];		//プレイヤーの2D座標
 	SELECT m_select[MAX_OBJECT_PLAYER_NUM];					//どこが選択されているのか

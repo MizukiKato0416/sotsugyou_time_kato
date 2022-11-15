@@ -247,6 +247,9 @@
     <ClCompile Include="source\cpp\finalResultCamera.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\next_button.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -493,6 +496,9 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\finalResultCamera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\next_button.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,9 +15,9 @@
 #include "objectModelUI.h"
 #include "object_player.h"
 #include "ToScreen.h"
-
 #include "gameCamera.h"
 #include "gameScene.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
@@ -25,9 +25,18 @@
 #define RESULT_SCENE_POINT_UI_SIZE		(D3DXVECTOR3(325.0f * 0.5f, 128.0f* 0.5f, 0.0f))	//ポイントUIのサイズ
 #define RESULT_SCENE_POINT_UI_ADD_ALPHA	(0.08f)												//ポイントUIのα値加算値
 #define RESULT_SCENE_POINT_UI_ADD_POS_Y	(3.0f)												//ポイントUIの位置加算値
-#define RESULT_SCENE_POINT_UI_COUNTER	(90)												//ポイントUIの見えるようになるまでのカウント
+#define RESULT_SCENE_POINT_UI_COUNTER	(150)												//ポイントUIの見えるようになるまでのカウント
 
-#define RESULT_SCENE_CHANGE_SCENE_COUNTER	(120)											//シーン遷移ができるようになるまでのカウンター
+#define RESULT_SCENE_CHANGE_SCENE_COUNTER		(180)			//シーン遷移ができるようになるまでのカウンター
+#define RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF	(210)			//シーン遷移ができるようになるまでのカウンター人狼モード
+
+#define RESULT_SCENE_PLAYER_INIT_POS_Z		(950.0f)	//プレイヤーの初期位置Z
+#define RESULT_SCENE_PLAYER_MOVE			(25.0f)		//プレイヤーの移動量
+
+#define RESULT_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(1100.0f, 670.0f, 0.0f))	//次に進むボタンの位置
+#define RESULT_SCENE_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
+#define RESULT_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -40,7 +49,9 @@ CResultScene::CResultScene()
 {
 	m_pBg = nullptr;
 	memset(m_apPointUi, NULL, sizeof(m_apPointUi[MAX_OBJECT_PLAYER_NUM]));
-	m_nPointUiCounter = 0;
+	memset(m_pPlayerModel, NULL, sizeof(m_pPlayerModel[MAX_OBJECT_PLAYER_NUM]));
+	m_nFrameCounter = 0;
+	m_pNexButton = nullptr;
 }
 
 //=============================================================================
@@ -57,7 +68,8 @@ CResultScene::~CResultScene()
 void CResultScene::Init(void) {
 
 	//変数初期化
-	m_nPointUiCounter = 0;
+	m_nFrameCounter = 0;
+	m_pNexButton = nullptr;
 
 
 	//マネージャーの取得
@@ -146,15 +158,19 @@ void CResultScene::Init(void) {
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
+		//aOrderPlayer[nIdxPlayer] = nIdxPlayer;
+
+
 		const float fDist = 180.0f;	//プレイヤー同士の距離
-		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (aOrderPlayer[nIdxPlayer]) * fDist, 0.0f, 0.0f);	//左端から1位を並べる
-		CObjectModelUI* pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (aOrderPlayer[nIdxPlayer]) * fDist, 0.0f, RESULT_SCENE_PLAYER_INIT_POS_Z);	//左端から1位を並べる
+		m_pPlayerModel[nIdxPlayer] = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
-		if (pPlayerModel == nullptr) continue;
-		pPlayerModel->SetViewCamera(D3DXVECTOR3(0.0f, 400.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		CModel* pModel = pPlayerModel->GetPtrModel();
+		if (m_pPlayerModel == nullptr) continue;
+		m_pPlayerModel[nIdxPlayer]->SetViewCamera(D3DXVECTOR3(0.0f, 400.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		CModel* pModel = m_pPlayerModel[nIdxPlayer]->GetPtrModel();
 
-		D3DXVECTOR3 posRankUI = WorldToScreen(posModel, pPlayerModel->GetViewMatrix());
+		//ランキングのUI生成
+		D3DXVECTOR3 posRankUI = WorldToScreen(D3DXVECTOR3(posModel.x, posModel.y, 0.0f), m_pPlayerModel[nIdxPlayer]->GetViewMatrix());
 		CObject2D* pRankUI = CObject2D::Create(posRankUI + D3DXVECTOR3(0.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::PLAYER_NUM_1, 150.0f, 150.0f);
 
 		if (pModel == nullptr) continue;
@@ -229,11 +245,25 @@ void CResultScene::Uninit(void) {
 //=============================================================================
 void CResultScene::Update(void) {
 
+	m_nFrameCounter++;
+
+	//次に進むボタンUIの処理
+	NextButton();
+
+	//既定の値になっていなかったら
+	if (m_nFrameCounter > RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF)
+	{
+		m_nFrameCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF;
+	}
+
 	if (m_pBg != nullptr)
 	{
 		//背景を動かす
 		m_pBg->SetMoveTex(0.001f, 0.001f);
 	}
+
+	//プレイヤーの処理
+	Player();
 
 	//ポイントUIの処理
 	PointUI();
@@ -251,12 +281,29 @@ void CResultScene::Update(void) {
 		//人狼モードなら
 		if (CGameScene::GetWereWolfMode())
 		{
-			if (m_nPointUiCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
+			if (m_nFrameCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF) return;
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FIND_WOLF, 0.02f, 60);
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
 		}
 		else
 		{
+			if (m_nFrameCounter < RESULT_SCENE_CHANGE_SCENE_COUNTER) return;
 			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
 		}
 	}
 }
@@ -272,21 +319,13 @@ void CResultScene::PointUI()
 		return;
 	}
 
-	m_nPointUiCounter++;
-
-	//既定の値になっていなかったら
-	if (m_nPointUiCounter > RESULT_SCENE_CHANGE_SCENE_COUNTER)
-	{
-		m_nPointUiCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER;
-	}
-
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
 		//生成されていなかったら
 		if (m_apPointUi[nIdxPlayer] == nullptr) continue;
 
 		//既定の値になっていなかったら
-		if (m_nPointUiCounter <= RESULT_SCENE_POINT_UI_COUNTER) continue;
+		if (m_nFrameCounter <= RESULT_SCENE_POINT_UI_COUNTER) continue;
 
 		//薄くなっていない状態なら
 		if (m_apPointUi[nIdxPlayer]->GetColor().a == 1.0f) continue;
@@ -298,6 +337,14 @@ void CResultScene::PointUI()
 		if (col.a > 1.0f)
 		{
 			col.a = 1.0f;
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_1);
 		}
 		//カラー設定
 		m_apPointUi[nIdxPlayer]->SetColor(col);
@@ -309,4 +356,93 @@ void CResultScene::PointUI()
 		//位置設定
 		m_apPointUi[nIdxPlayer]->SetPos(pos);
 	}
+}
+
+//=============================================================================
+//プレイヤーの処理
+//=============================================================================
+void CResultScene::Player()
+{
+	int aPlayerRank[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランクの配列 インデックスはプレイヤーのインデックスと対応
+
+	//プレイヤーランクの取得
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		aPlayerRank[nIdxPlayer] = CGameScene::GetRanking(nIdxPlayer);
+	}
+	//プレイヤーの表示順の設定
+	int aOrderPlayer[MAX_OBJECT_PLAYER_NUM];
+	memset(aOrderPlayer, -1, sizeof(aOrderPlayer));
+	int nCurRank = 1;	//現在のランク
+	int nIdxOrder = 0;	//順番のインデックス
+
+	while (nCurRank <= MAX_OBJECT_PLAYER_NUM)
+	{
+		bool bDecision = false;	//順番の決定
+
+		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+		{
+			if (aOrderPlayer[nIdxPlayer] != -1) continue;	//順番が決定されていた場合除外
+
+			//ランクが一致していた場合
+			if (aPlayerRank[nIdxPlayer] == nCurRank) {
+				aOrderPlayer[nIdxPlayer] = nIdxOrder;	//順番の設定
+				nIdxOrder++;	//順番の加算
+				bDecision = true;	//順番の決定
+				break;
+			}
+		}
+		//ランクが一致しなかった場合
+		if (!bDecision) {
+			nCurRank++;	//ランクの加算
+		}
+	}
+
+	for (int nIdxPlayer = MAX_OBJECT_PLAYER_NUM - 1; nIdxPlayer >= 0; nIdxPlayer--)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			if (aOrderPlayer[nCntPlayer] != nIdxPlayer) continue;
+
+			if (m_pPlayerModel[nCntPlayer] == nullptr) continue;
+
+			//生成されていたら
+
+			//位置取得
+			D3DXVECTOR3 pos = m_pPlayerModel[nCntPlayer]->GetPos();
+
+			//位置Zが0なら
+			if (pos.z == 0.0f) continue;
+
+			//移動させる
+			pos.z -= RESULT_SCENE_PLAYER_MOVE;
+			//0より小さかったら0にする
+			if (pos.z < 0.0f) pos.z = 0.0f;
+			//位置設定
+			m_pPlayerModel[nCntPlayer]->SetPos(pos);
+
+			return;
+		}
+	}
+}
+
+//=============================================================================
+//次に進むUI処理
+//=============================================================================
+void CResultScene::NextButton()
+{
+	int nChangeSceneCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER;
+
+	//人狼モードなら
+	if (CGameScene::GetWereWolfMode()) nChangeSceneCounter = RESULT_SCENE_CHANGE_SCENE_COUNTER_WOLF;
+
+	//既定の値になっていなかったら
+	if (m_nFrameCounter < nChangeSceneCounter) return;
+
+	if (m_pNexButton != nullptr) return;
+
+	//次へUIの生成
+	m_pNexButton = CNextButton::Create(RESULT_SCENE_NEXT_BUTTON_POS, RESULT_SCENE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, RESULT_SCENE_NEXT_BUTTON_COUNTER,
+		                               RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA);
 }
