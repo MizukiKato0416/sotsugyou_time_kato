@@ -35,8 +35,9 @@ public:
 		RESULT_TEXT,	//結果発表のテキスト表示
 		SHOW_SCORE_UI,	//スコアのUI表示
 		RISE_TOWER,		//タワーの上昇
+		KING,			//表彰
 		PHASE_FINISH,	//フェーズ終了
-		MAX
+		ENUM_MAX
 	};
 
 	CFinalResultScene();	//デフォルトコンストラクタ

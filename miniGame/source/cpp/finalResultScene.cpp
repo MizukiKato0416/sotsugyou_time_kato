@@ -217,13 +217,16 @@ void CFinalResultScene::RiseCamera() {
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
 	const float fMoveMaxY = 2.0f, fMoveMinY = 0.2f;	//上昇の速度（最大、最低）
 	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.00005f;	//上昇量
+	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
 
 	//0まで上昇させる
 	if (posCamera.y < 0.0f) {
+		float fSlowHeight = -200.0f;	//減速する高さ
+
 		//減速させる
-		if (posCamera.y > -200.0f) {
-			fMoveY = -posCamera.y * 0.01f;
+		if (posCamera.y > fSlowHeight) {
+			fMoveY = -posCamera.y * (fMoveMaxY / -fSlowHeight);
 			if (fMoveY < fMoveMinY) fMoveY = fMoveMinY;
 		}
 		//位置上昇
@@ -241,10 +244,11 @@ void CFinalResultScene::RiseCamera() {
 	float fRotCameraLastY = rotCamera.y;	//回転させる前の角度
 
 	float fRotSpeed = 0.01f;	//回転速度
+	float fSlowRot = -0.2f;		//減速する角度
 
 	//目標地点までカメラが登った場合、正面ギリギリで減速
-	if (posCamera.y >= 0.0f && rotCamera.y < 0.0f && rotCamera.y >= -0.2f) {
-		fRotSpeed = -rotCamera.y * 0.05f;
+	if (posCamera.y >= 0.0f && rotCamera.y < 0.0f && rotCamera.y >= fSlowRot) {
+		fRotSpeed = -rotCamera.y * (fRotSpeed / -fSlowRot);
 		if (fRotSpeed < 0.001f) fRotSpeed = 0.001f;
 	}
 
@@ -276,7 +280,16 @@ void CFinalResultScene::ResultText() {
 
 	if (m_nCntPhase == 120) {
 		//結果発表テキストの表示
-		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 200.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 100.0f);
+		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, -200.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 100.0f);
+	}
+
+	if (m_pTextResult != nullptr) {
+		D3DXVECTOR3 pos = m_pTextResult->GetPos();
+		pos.y += 5.0f;
+		if (pos.y > 200.0f) {
+			pos.y = 200.0f;
+		}
+		m_pTextResult->SetPos(pos);
 	}
 
 	//フェーズ切り替え
