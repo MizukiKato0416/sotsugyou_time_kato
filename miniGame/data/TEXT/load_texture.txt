@@ -86,6 +86,7 @@ data/TEXTURE/UI/3P_frame_score.png
 data/TEXTURE/UI/4P_frame_score.png
 
 data/TEXTURE/UI/banana_bark.png
+data/TEXTURE/UI/gasoline_frame.png
 data/TEXTURE/UI/1P_frame_item.png
 data/TEXTURE/UI/2P_frame_item.png
 data/TEXTURE/UI/3P_frame_item.png
@@ -116,6 +117,8 @@ data/TEXTURE/UI/circle.png
 data/TEXTURE/UI/result_ui.png
 
 data/TEXTURE/UI/menu_game_title_frame_ui.png
+data/TEXTURE/UI/select_decision.png
+data/TEXTURE/UI/select_turn_back.png
 
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png

@@ -154,6 +154,15 @@ void CSelectGameScene::Init(void) {
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 100.0f, 100.0f);
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 100.0f, 100.0f);
 
+	//決定UIの生成
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - 514.0f * 0.4f / 2.0f + 20.0f, SCREEN_HEIGHT - 216.0f * 0.4f / 2.0f + 20.0f, 0.0f),
+		              CTexture::TEXTURE_TYPE::MENU_DECIDE_UI, 514.0f * 0.4f, 216.0f * 0.4f);
+
+	//戻るUIの生成
+	CObject2D::Create(D3DXVECTOR3(514.0f * 0.4f / 2.0f - 20.0f, SCREEN_HEIGHT - 216.0f * 0.4f / 2.0f + 20.0f, 0.0f),
+		              CTexture::TEXTURE_TYPE::MENU_BACK_UI, 514.0f * 0.4f, 216.0f * 0.4f);
+
+
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 

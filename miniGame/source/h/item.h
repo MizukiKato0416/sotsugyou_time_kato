@@ -30,6 +30,7 @@ public:
 	{
 		NONE = 0,
 		BANANA,
+		STEAL_POINT,
 		BALLOON_GAME_MAX,
 
 		SHIELD = 0,
