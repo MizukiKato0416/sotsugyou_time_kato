@@ -25,7 +25,7 @@
 
 #define MENU_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
 
-#define MENU_NEXT_BUTTON_POS			(D3DXVECTOR3(1180.0f, 645.0f, 0.0f))	//次に進むボタンの位置
+#define MENU_NEXT_BUTTON_POS			(D3DXVECTOR3(1240.0f, 680.0f, 0.0f))	//次に進むボタンの位置
 #define MENU_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
 #define MENU_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define MENU_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
@@ -153,7 +153,7 @@ void CSelectGameScene::Init(void) {
 	//ゲーム名の背景
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 500.0f, 180.0f);
 	//ゲーム名の生成
-	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 150.0f);
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 150.0f);
 	//矢印UIの生成
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 100.0f, 100.0f);
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 100.0f, 100.0f);
@@ -415,6 +415,17 @@ void CSelectGameScene::ChangeTutorial(void) {
 	//変更音の設定
 	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
 }
+
+//=============================================================================
+//ゲームタイトルの切替
+//=============================================================================
+void CSelectGameScene::ChangeGameTitle()
+{
+	switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
+	{
+	}
+}
+
 //=============================================================================
 // 嘘つきモードの切り替え
 //=============================================================================
