@@ -205,12 +205,6 @@ void CSelectGameScene::Uninit(void) {
 //=============================================================================
 void CSelectGameScene::Update(void) {
 
-	//背景の動きの処理
-	BgMove();
-
-	//ゲームタイトルの切替
-	ChangeGameTitle();
-
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
@@ -258,6 +252,12 @@ void CSelectGameScene::Update(void) {
 			m_nFadeTime--;
 		}
 	}
+
+	//ゲームタイトルの切替
+	ChangeGameTitle();
+
+	//背景の動きの処理
+	BgMove();
 }
 
 //=============================================================================
@@ -428,11 +428,11 @@ void CSelectGameScene::ChangeGameTitle()
 	switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
 	{
 	case (int)CScene::SCENE_TYPE::GAME_01:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON) return;
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON);
 		break;
 	case (int)CScene::SCENE_TYPE::GAME_02:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK) return;
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
 		break;
 	case (int)CScene::SCENE_TYPE::GAME_MAX:
