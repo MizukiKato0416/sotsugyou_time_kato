@@ -151,7 +151,7 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//ゲーム名の背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 500.0f, 180.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 478.0f * 1.3f, 225.0f * 1.3f);
 	//ゲーム名の生成
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 150.0f);
 	//矢印UIの生成
@@ -207,6 +207,9 @@ void CSelectGameScene::Update(void) {
 
 	//背景の動きの処理
 	BgMove();
+
+	//ゲームタイトルの切替
+	ChangeGameTitle();
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CFade* pFade = nullptr;		//フェードへのポインタ
@@ -421,8 +424,23 @@ void CSelectGameScene::ChangeTutorial(void) {
 //=============================================================================
 void CSelectGameScene::ChangeGameTitle()
 {
+	//現在選ばれているゲームによってタイトルの名前を変える
 	switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
 	{
+	case (int)CScene::SCENE_TYPE::GAME_01:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON);
+		break;
+	case (int)CScene::SCENE_TYPE::GAME_02:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
+		break;
+	case (int)CScene::SCENE_TYPE::GAME_MAX:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);
+		break;
+	default:
+		break;
 	}
 }
 

@@ -17,6 +17,7 @@ data/TEXTURE/UI/arrow_left.png
 
 data/TEXTURE/UI/text_titlename.png
 data/TEXTURE/UI/text_titlename2.png
+data/TEXTURE/UI/text_titlename_random.png
 data/TEXTURE/UI/press_start.png
 data/TEXTURE/UI/quit_game.png
 data/TEXTURE/UI/tutorial_balloon.png

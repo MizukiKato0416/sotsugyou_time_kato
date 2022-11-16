@@ -276,7 +276,7 @@ void CFinalResultScene::ResultText() {
 
 	if (m_nCntPhase == 120) {
 		//結果発表テキストの表示
-		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 200.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 100.0f);
+		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 200.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 100.0f);
 	}
 
 	//フェーズ切り替え
