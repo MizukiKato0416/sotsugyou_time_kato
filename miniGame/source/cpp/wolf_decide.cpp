@@ -86,7 +86,7 @@ HRESULT CWolfDecide::Init(void) {
 		                              CTexture::TEXTURE_TYPE::WOLF_SHAKE_TUTORIAL, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//次へUIの生成
-	m_pNexButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
+	m_pNextButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, WOLF_DECIDE_NEXT_BUTTON_COUNTER, WOLF_DECIDE_NEXT_BUTTON_DEC_ALPHA);
 	return S_OK;
 }
@@ -177,10 +177,10 @@ void CWolfDecide::ShakeTutorial()
 			m_pTutorialUI = nullptr;
 		}
 
-		if (m_pNexButton != nullptr)
+		if (m_pNextButton != nullptr)
 		{
-			m_pNexButton->Uninit();
-			m_pNexButton = nullptr;
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 
 		//次のフェーズにする
@@ -222,7 +222,7 @@ void CWolfDecide::Shake()
 			                              CTexture::TEXTURE_TYPE::WOLF_SHAKE_START, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		//次へUIの生成
-		m_pNexButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
+		m_pNextButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
 			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, WOLF_DECIDE_NEXT_BUTTON_COUNTER, WOLF_DECIDE_NEXT_BUTTON_DEC_ALPHA);
 
 		return;
@@ -304,10 +304,10 @@ void CWolfDecide::GameStart()
 			m_pTutorialUI = nullptr;
 		}
 
-		if (m_pNexButton != nullptr)
+		if (m_pNextButton != nullptr)
 		{
-			m_pNexButton->Uninit();
-			m_pNexButton = nullptr;
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 
 		//フェーズを次にする

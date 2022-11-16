@@ -63,7 +63,7 @@ CResultScene::CResultScene()
 	memset(m_apPointUi, NULL, sizeof(m_apPointUi[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_pPlayerModel, NULL, sizeof(m_pPlayerModel[MAX_OBJECT_PLAYER_NUM]));
 	m_nFrameCounter = 0;
-	m_pNexButton = nullptr;
+	m_pNextButton = nullptr;
 }
 
 //=============================================================================
@@ -81,7 +81,7 @@ void CResultScene::Init(void) {
 
 	//変数初期化
 	m_nFrameCounter = 0;
-	m_pNexButton = nullptr;
+	m_pNextButton = nullptr;
 
 
 	//マネージャーの取得
@@ -414,10 +414,10 @@ void CResultScene::NextButton()
 	//既定の値になっていなかったら
 	if (m_nFrameCounter < nChangeSceneCounter) return;
 
-	if (m_pNexButton != nullptr) return;
+	if (m_pNextButton != nullptr) return;
 
 	//次へUIの生成
-	m_pNexButton = CNextButton::Create(RESULT_SCENE_NEXT_BUTTON_POS, RESULT_SCENE_NEXT_BUTTON_SIZE,
+	m_pNextButton = CNextButton::Create(RESULT_SCENE_NEXT_BUTTON_POS, RESULT_SCENE_NEXT_BUTTON_SIZE,
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, RESULT_SCENE_NEXT_BUTTON_COUNTER,
 		                               RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA);
 }

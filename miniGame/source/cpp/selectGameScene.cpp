@@ -13,10 +13,9 @@
 #include "object2D.h"
 #include "selectMenu3D.h"
 #include "gameScene.h"
-
 #include "titleCamera.h"
-
 #include "coverDisplay.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
@@ -25,6 +24,11 @@
 #define MENU_SELECT_NUM (MAX_GAME_NUM + 1)	//ランダム分追加
 
 #define MENU_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+
+#define MENU_NEXT_BUTTON_POS			(D3DXVECTOR3(1240.0f, 680.0f, 0.0f))	//次に進むボタンの位置
+#define MENU_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
+#define MENU_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define MENU_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -147,9 +151,9 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//ゲーム名の背景
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 500.0f, 180.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 478.0f * 1.3f, 225.0f * 1.3f);
 	//ゲーム名の生成
-	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME, 400.0f, 150.0f);
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 150.0f);
 	//矢印UIの生成
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 100.0f, 100.0f);
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 100.0f, 100.0f);
@@ -203,6 +207,9 @@ void CSelectGameScene::Update(void) {
 
 	//背景の動きの処理
 	BgMove();
+
+	//ゲームタイトルの切替
+	ChangeGameTitle();
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CFade* pFade = nullptr;		//フェードへのポインタ
@@ -378,7 +385,12 @@ void CSelectGameScene::ChangeTutorial(void) {
 		}
 
 		//背景変更
-		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 0.9f, SCREEN_HEIGHT * 0.9f);
+		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 1.0f, SCREEN_HEIGHT * 1.0f);
+		//次へUIの生成
+		m_pNextButton = CNextButton::Create(MENU_NEXT_BUTTON_POS, MENU_NEXT_BUTTON_SIZE,
+			                                CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, MENU_NEXT_BUTTON_COUNTER,
+			                                MENU_NEXT_BUTTON_DEC_ALPHA);
+
 		//選択画面の移動をロック
 		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(true);
 	}
@@ -387,6 +399,9 @@ void CSelectGameScene::ChangeTutorial(void) {
 		//チュートリアル画面の破棄
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
+
+		m_pNextButton->Uninit();
+		m_pNextButton = nullptr;
 
 		//選択画面の移動ロックを解除
 		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(false);
@@ -403,6 +418,32 @@ void CSelectGameScene::ChangeTutorial(void) {
 	//変更音の設定
 	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_GET);
 }
+
+//=============================================================================
+//ゲームタイトルの切替
+//=============================================================================
+void CSelectGameScene::ChangeGameTitle()
+{
+	//現在選ばれているゲームによってタイトルの名前を変える
+	switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
+	{
+	case (int)CScene::SCENE_TYPE::GAME_01:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON);
+		break;
+	case (int)CScene::SCENE_TYPE::GAME_02:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
+		break;
+	case (int)CScene::SCENE_TYPE::GAME_MAX:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);
+		break;
+	default:
+		break;
+	}
+}
+
 //=============================================================================
 // 嘘つきモードの切り替え
 //=============================================================================

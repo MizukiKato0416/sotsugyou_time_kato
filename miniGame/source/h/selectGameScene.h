@@ -18,6 +18,7 @@
 //*****************************************************************************
 class CObject2D;
 class CSelectMenu3D;
+class CNextButton;
 
 //*****************************************************************************
 // ゲーム選択シーンクラス
@@ -34,6 +35,7 @@ public:
 private:
 	void UpdateInput(void);	//入力処理
 	void ChangeTutorial(void);	//チュートリアル表示の切り替え
+	void ChangeGameTitle();		//ゲームタイトルの切替
 	void ChangeMode(bool bWolf);	//嘘つきモードの切り替え
 	void BgMove();					//背景の動きの処理
 
@@ -45,6 +47,7 @@ private:
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
 	CObject2D* m_pGameName;		//ゲーム名
 	CObject2D* m_pTutorial;		//チュートリアル画面
+	CNextButton* m_pNextButton;	//次へのボタン
 	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };
 

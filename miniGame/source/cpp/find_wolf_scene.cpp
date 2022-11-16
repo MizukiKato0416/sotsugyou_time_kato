@@ -241,7 +241,7 @@ void CFindWolfScene::Init(void) {
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//ŽŸ‚ÖUI‚Ì¶¬
-	m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+	m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
 		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 
@@ -399,10 +399,10 @@ void CFindWolfScene::Tutorial2()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
-		if (m_pNexButton != nullptr)
+		if (m_pNextButton != nullptr)
 		{
-			m_pNexButton->Uninit();
-			m_pNexButton = nullptr;
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
@@ -551,7 +551,7 @@ void CFindWolfScene::WolfDecide()
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_3, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//ŽŸ‚ÖUI‚Ì¶¬
-	m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+	m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
 		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 }
@@ -601,10 +601,10 @@ void CFindWolfScene::Tutorial3()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
-		if (m_pNexButton != nullptr)
+		if (m_pNextButton != nullptr)
 		{
-			m_pNexButton->Uninit();
-			m_pNexButton = nullptr;
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 	}
 }
@@ -656,7 +656,7 @@ void CFindWolfScene::Wait()
 			                            SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		//ŽŸ‚ÖUI‚Ì¶¬
-		m_pNexButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+		m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
 			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
 			                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 	}
@@ -740,10 +740,10 @@ void CFindWolfScene::Tutorial4()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
-		if (m_pNexButton != nullptr)
+		if (m_pNextButton != nullptr)
 		{
-			m_pNexButton->Uninit();
-			m_pNexButton = nullptr;
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
