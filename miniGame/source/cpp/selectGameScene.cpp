@@ -234,6 +234,8 @@ void CSelectGameScene::Update(void) {
 				m_pMenuGame->SetRoulette(false);	
 				//決定音の再生
 				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+				//ゲームタイトルの切替
+				ChangeGameTitle();
 			}
 		}
 		// 遷移する時間が0より小さくなっていたら
@@ -251,6 +253,10 @@ void CSelectGameScene::Update(void) {
 			//フェード開始カウント減少
 			m_nFadeTime--;
 		}
+	}
+	else {
+		//ゲームタイトルの切替
+		ChangeGameTitle();
 	}
 
 	//ゲームタイトルの切替
