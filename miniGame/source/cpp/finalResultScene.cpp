@@ -15,6 +15,8 @@
 #include "objectModel.h"
 #include "score.h"
 
+#include "object_player.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -97,6 +99,31 @@ void CFinalResultScene::Init(void) {
 		D3DXVECTOR3 posPlayer = D3DXVECTOR3(-fDistPlayer * (MAX_OBJECT_PLAYER_NUM / 2.0f) + fDistPlayer / 2.0f + fDistPlayer * nIdxPlayer, 0.0f, 0.0f);	//プレイヤーの位置
 		//プレイヤーのモデルの生成
 		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_CAR, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		//プレイヤーの色を設定
+		if (m_apObjPlayer[nIdxPlayer] != nullptr) {
+			CModel* pModelPlayer = m_apObjPlayer[nIdxPlayer]->GetPtrModel();
+			if (pModelPlayer != nullptr) {
+				D3DXCOLOR colPlayer = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+
+				switch (nIdxPlayer)
+				{
+				case 0:
+					colPlayer = OBJECT_PLAYER_COLOR_1P;
+					break;
+				case 1:
+					colPlayer = OBJECT_PLAYER_COLOR_2P;
+					break;
+				case 2:
+					colPlayer = OBJECT_PLAYER_COLOR_3P;
+					break;
+				case 3:
+					colPlayer = OBJECT_PLAYER_COLOR_4P;
+					break;
+				}
+
+				pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
+			}
+		}
 		//タワーの生成
 		m_apResultTower[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_TOWER, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
@@ -188,15 +215,15 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 2.0f, fMoveMinY = 0.1f;	//上昇の速度（最大、最低）
-	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.0001f;	//上昇量
+	const float fMoveMaxY = 2.0f, fMoveMinY = 0.2f;	//上昇の速度（最大、最低）
+	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.00005f;	//上昇量
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
 
 	//0まで上昇させる
 	if (posCamera.y < 0.0f) {
-		//-100以上になったら減速させる
-		if (posCamera.y > -100.0f) {
-			fMoveY = -posCamera.y * fMoveMaxY * 0.01f;
+		//減速させる
+		if (posCamera.y > -200.0f) {
+			fMoveY = -posCamera.y * 0.01f;
 			if (fMoveY < fMoveMinY) fMoveY = fMoveMinY;
 		}
 		//位置上昇
@@ -212,12 +239,22 @@ void CFinalResultScene::RiseCamera() {
 	//回転
 	D3DXVECTOR3 rotCamera = pCamera->GetRot();	//カメラの角度取得
 	float fRotCameraLastY = rotCamera.y;	//回転させる前の角度
-	rotCamera.y += 0.01f;	//回転
+
+	float fRotSpeed = 0.01f;	//回転速度
+
+	//目標地点までカメラが登った場合、正面ギリギリで減速
+	if (posCamera.y >= 0.0f && rotCamera.y < 0.0f && rotCamera.y >= -0.2f) {
+		fRotSpeed = -rotCamera.y * 0.05f;
+		if (fRotSpeed < 0.001f) fRotSpeed = 0.001f;
+	}
+
+	rotCamera.y += fRotSpeed;	//回転
 	//超過分の調整
 	if (rotCamera.y > D3DX_PI) {
 		rotCamera.y -= D3DX_PI * 2.0f;
 	}
-	//目標地点までカメラが登った場合、前回の角度が0以下の場合
+
+	//回転の終了
 	if (posCamera.y >= 0.0f && rotCamera.y >= 0.0f && fRotCameraLastY <= 0.0f) {
 		//常に正面を向かせる
 		rotCamera.y = 0.0f;
@@ -226,6 +263,7 @@ void CFinalResultScene::RiseCamera() {
 		//カウントリセット
 		m_nCntPhase = 0;
 	}
+
 	//角度の反映
 	pCamera->SetRot(rotCamera);
 }
@@ -268,7 +306,7 @@ void CFinalResultScene::ShowScoreUI() {
 		//スコアUIの表示
 		for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 		{
-			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(200.0f + nCnt * 250.0f, 600.0f, 0.0f), 100.0f);
+			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(300.0f + nCnt * 300.0f, 600.0f, 0.0f), 30.0f);
 		}
 	}
 
