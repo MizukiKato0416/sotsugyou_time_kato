@@ -18,6 +18,7 @@
 //*****************************************************************************
 class CObject2D;
 class CSelectMenu3D;
+class CNextButton;
 
 //*****************************************************************************
 // ゲーム選択シーンクラス
@@ -45,6 +46,7 @@ private:
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
 	CObject2D* m_pGameName;		//ゲーム名
 	CObject2D* m_pTutorial;		//チュートリアル画面
+	CNextButton* m_pNextButton;	//次へのボタン
 	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };
 

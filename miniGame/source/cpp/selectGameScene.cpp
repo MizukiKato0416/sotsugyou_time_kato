@@ -13,10 +13,9 @@
 #include "object2D.h"
 #include "selectMenu3D.h"
 #include "gameScene.h"
-
 #include "titleCamera.h"
-
 #include "coverDisplay.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
@@ -25,6 +24,11 @@
 #define MENU_SELECT_NUM (MAX_GAME_NUM + 1)	//ランダム分追加
 
 #define MENU_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+
+#define MENU_NEXT_BUTTON_POS			(D3DXVECTOR3(1180.0f, 645.0f, 0.0f))	//次に進むボタンの位置
+#define MENU_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
+#define MENU_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define MENU_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -378,7 +382,12 @@ void CSelectGameScene::ChangeTutorial(void) {
 		}
 
 		//背景変更
-		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 0.9f, SCREEN_HEIGHT * 0.9f);
+		m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTex, SCREEN_WIDTH * 1.0f, SCREEN_HEIGHT * 1.0f);
+		//次へUIの生成
+		m_pNextButton = CNextButton::Create(MENU_NEXT_BUTTON_POS, MENU_NEXT_BUTTON_SIZE,
+			                                CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, MENU_NEXT_BUTTON_COUNTER,
+			                                MENU_NEXT_BUTTON_DEC_ALPHA);
+
 		//選択画面の移動をロック
 		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(true);
 	}
@@ -387,6 +396,9 @@ void CSelectGameScene::ChangeTutorial(void) {
 		//チュートリアル画面の破棄
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
+
+		m_pNextButton->Uninit();
+		m_pNextButton = nullptr;
 
 		//選択画面の移動ロックを解除
 		if (m_pMenuGame != nullptr) m_pMenuGame->SetLockChangeSelect(false);

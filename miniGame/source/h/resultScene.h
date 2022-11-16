@@ -48,7 +48,7 @@ private:
 	CObject2D *m_pBg;											//背景
 	CObject2D *m_apPointUi[MAX_OBJECT_PLAYER_NUM];				//ポイント用UI
 	CObjectModelUI *m_pPlayerModel[MAX_OBJECT_PLAYER_NUM];		//プレイヤーのモデル
-	CNextButton *m_pNexButton;									//次に進むボタンUI
+	CNextButton *m_pNextButton;									//次に進むボタンUI
 
 };
 
