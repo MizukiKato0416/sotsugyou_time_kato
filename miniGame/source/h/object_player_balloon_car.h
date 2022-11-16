@@ -67,6 +67,11 @@ public:
 	//アイテムUIのフレーム生成処理
 	void CreateItemUiFrame();
 
+	//ポイント奪う状態かどうか設定処理
+	void SetStealPoint(const bool bStealPoint) { m_bStealPoint = bStealPoint; }
+	//ポイント奪う状態かどうか取得処理
+	bool SetStealPoint(void) { return m_bStealPoint; }
+
 private:
 	void Move(CInput* pInput, float fRotCameraY);	//移動
 	void DecMove(void);								//移動量の減少
@@ -78,18 +83,21 @@ private:
 	void StateInvincble(void);						//無敵状態の処理
 	void UseItem(void);								//アイテム使用処理
 	void ItemUi(void);								//アイテムUi処理
+	void StealPoint(void);							//ポイント奪取処理
 
 	D3DXVECTOR3	m_lastPos;	//最後の位置座標
 	D3DXVECTOR3 m_move;		//移動量
 
-	float m_fMoveSpeed;				//移動する速さ
-	float m_fBoundMoveSpeed;		//跳ね返るときの速さ
-	float m_fSpinSpeed;				//スピンのスピード
+	float m_fMoveSpeed;							//移動する速さ
+	float m_fBoundMoveSpeed;					//跳ね返るときの速さ
+	float m_fSpinSpeed;							//スピンのスピード
 	OBJECT_PLAYER_BALLOON_CAR_STATE m_state;	//状態
-	bool m_bBound;					//バウンドするかどうか
-
+	bool m_bBound;								//バウンドするかどうか
+	bool m_bStealPoint;							//ポイントを奪う状態かどうか
+		
 	int m_nSpinCounter;				//スピンする時間のカウンター
 	int m_nInvincbleCounter;		//無敵時間のカウンター
+	int m_nStealPointCounter;		//ポイントを奪う時間のカウンター
 
 	CScoreUi *m_pSocreUi;			//スコアのポインタ
 	CObject2D *m_pItemUi;			//アイテムのUI

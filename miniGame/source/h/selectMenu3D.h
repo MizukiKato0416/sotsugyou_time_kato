@@ -71,7 +71,7 @@ private:
 	float m_fSpeedRotModel;	//モデル移動時の回転速度
 
 	bool m_bRoulette;	//ルーレットの回転
-	int m_nCntRoulette;		//ルーレット回転するカウント
+	int m_nCntRoulette;	//ルーレット回転するカウント
 	float m_fRouletteSpeedRate;	//ルーレットの速度の乗算される値
 
 	float m_fDistCamera;	//メニュー用のカメラの距離

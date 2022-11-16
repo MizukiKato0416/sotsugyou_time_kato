@@ -151,8 +151,13 @@ void CScore::SetScore(int nScore) {
 // スコアの追加
 //=============================================================================
 void CScore::AddScore(int nScore) {
+
+	m_nScore += nScore;
+
+	if (m_nScore < 0) m_nScore = 0;
+
 	//スコアの設定
-	SetScore(m_nScore + nScore);
+	SetScore(m_nScore);
 }
 
 //=============================================================================

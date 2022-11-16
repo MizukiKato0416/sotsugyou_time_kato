@@ -16,12 +16,15 @@ data/TEXTURE/UI/arrow_right.png
 data/TEXTURE/UI/arrow_left.png
 
 data/TEXTURE/UI/text_titlename.png
+data/TEXTURE/UI/text_titlename2.png
+data/TEXTURE/UI/text_titlename_random.png
 data/TEXTURE/UI/press_start.png
 data/TEXTURE/UI/quit_game.png
 data/TEXTURE/UI/tutorial_balloon.png
 data/TEXTURE/UI/tutorial_balloon_wolf.png
 data/TEXTURE/UI/tutorial_attack.png
 data/TEXTURE/UI/tutorial_attack_wolf.png
+data/TEXTURE/UI/tutorial_random.png
 data/TEXTURE/UI/select_icon.png
 data/TEXTURE/UI/count_down_ui_3.png
 data/TEXTURE/UI/count_down_ui_2.png
@@ -86,6 +89,7 @@ data/TEXTURE/UI/3P_frame_score.png
 data/TEXTURE/UI/4P_frame_score.png
 
 data/TEXTURE/UI/banana_bark.png
+data/TEXTURE/UI/gasoline_frame.png
 data/TEXTURE/UI/1P_frame_item.png
 data/TEXTURE/UI/2P_frame_item.png
 data/TEXTURE/UI/3P_frame_item.png
@@ -116,6 +120,8 @@ data/TEXTURE/UI/circle.png
 data/TEXTURE/UI/result_ui.png
 
 data/TEXTURE/UI/menu_game_title_frame_ui.png
+data/TEXTURE/UI/select_decision.png
+data/TEXTURE/UI/select_turn_back.png
 
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png

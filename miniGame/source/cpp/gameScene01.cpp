@@ -38,7 +38,7 @@
 // マクロ定義
 //=============================================================================
 #define GAME_TIME								 (60)									//ゲームの時間
-#define GAME_CREATE_ITEMBOX_TIME				 (30)									//アイテムを生成し始める時間	
+#define GAME_CREATE_ITEMBOX_TIME				 (60)									//アイテムを生成し始める時間	
 
 #define FOG_COLOR								 (D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))	//フォグの色
 #define FOG_COLOR_GAMECLEAR					     (D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))	//フォグの色
