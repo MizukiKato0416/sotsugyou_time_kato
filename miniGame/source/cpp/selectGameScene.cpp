@@ -111,13 +111,13 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//選択メニューの背景
-	CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 250.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 1000.0f, 450.0f);
+	/*CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 250.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 1000.0f, 450.0f);
 	if (pMenuStencil != nullptr) {
 		pMenuStencil->SetDrawStencil(true);
 	}
-
+*/
 	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 100.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 300.0f, false);
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 100.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 1000.0f, 400.0f, false);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
@@ -136,7 +136,7 @@ void CSelectGameScene::Init(void) {
 			if (pObjModelUI == nullptr) continue;
 
 			//ステンシル有効
-			pObjModelUI->SetEnableStencil(true);
+			//pObjModelUI->SetEnableStencil(true);
 
 			//回転速度の設定
 			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.02f, 0.0f));
@@ -155,8 +155,8 @@ void CSelectGameScene::Init(void) {
 	//ゲーム名の生成
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 150.0f);
 	//矢印UIの生成
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 100.0f, 100.0f);
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 100.0f, 100.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 150.0f, 150.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 150.0f, 150.0f);
 
 	//決定UIの生成
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - 514.0f * 0.4f / 2.0f + 20.0f, SCREEN_HEIGHT - 216.0f * 0.4f / 2.0f + 20.0f, 0.0f),
@@ -169,16 +169,6 @@ void CSelectGameScene::Init(void) {
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
-
-#ifdef _DEBUG
-	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 120.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
-	if (pZBuff != nullptr) {
-		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
-		pZBuff->SetUseZBuffTexture(true);
-	}
-#endif
-
 }
 
 //=============================================================================
@@ -258,9 +248,6 @@ void CSelectGameScene::Update(void) {
 		//ゲームタイトルの切替
 		ChangeGameTitle();
 	}
-
-	//ゲームタイトルの切替
-	ChangeGameTitle();
 
 	//背景の動きの処理
 	BgMove();
@@ -383,7 +370,7 @@ void CSelectGameScene::ChangeTutorial(void) {
 			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
-			typeTex = CTexture::TEXTURE_TYPE::MESH_CLOUD;
+			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_RANDOM;
 			break;
 		default:
 			typeTex = CTexture::TEXTURE_TYPE::BG_MENU;
