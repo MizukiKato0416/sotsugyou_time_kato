@@ -238,6 +238,18 @@
     <ClCompile Include="source\cpp\Effect\PresetSetEffect.cpp">
       <Filter>cpp\effect</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\coverDisplay.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\finalResultScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\finalResultCamera.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\next_button.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -476,6 +488,18 @@
     </ClInclude>
     <ClInclude Include="source\h\PresetSetEffect.h">
       <Filter>h\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\coverDisplay.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\finalResultCamera.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\next_button.h">
+      <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -45,6 +45,8 @@ public:
 		OBJ_SPHERE_COVER,				//球のカバー
 		OBJ_HATENA,						//はてなマーク
 
+		OBJ_RESULT_TOWER,				//結果画面のタワー
+
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
 
@@ -124,7 +126,7 @@ private:
 	ChangeDiffuse m_aChangeDiffuse[MAX_MATERIAL];	//モデルのマテリアルの色を変更する構造体の配列
 
 	D3DXCOLOR m_colGlow;	//輪郭の発光色の色
-	D3DXCOLOR m_powGlow;	//輪郭の強度
+	float m_powGlow;	//輪郭の強度
 
 	bool m_bOutline;			//輪郭があるかどうか
 	D3DXCOLOR m_colOutline;	//輪郭の色

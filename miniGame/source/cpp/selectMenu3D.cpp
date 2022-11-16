@@ -219,7 +219,7 @@ void CSelectMenu3D::RouletteMenu(void) {
 				fRotDelta = D3DX_PI * 2 - (m_fRotModel - m_fRotModelDest);
 			}
 			//ƒJƒEƒ“ƒg‚ğİ’è
-			m_nCntRotate = fRotDelta / m_fSpeedRotModel;
+			m_nCntRotate = (int)(fRotDelta / m_fSpeedRotModel);
 		}
 		else {
 			//‰ñ“]—Ê‚ğ‚Ö‚ç‚·

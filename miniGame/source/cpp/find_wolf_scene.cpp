@@ -19,15 +19,19 @@
 #include "score.h"
 #include "gameScene.h"
 #include "timer.h"
+#include "coverDisplay.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_X			(440.0f * 0.2f)							//選択アイコンのサイズX
-#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_Y			(314.0f * 0.2f)							//選択アイコンのサイズY
-#define FIND_WOLF_SCENE_SELECT_ICON_POS_Y			(150.0f)								//選択アイコンの位置Y
-#define FIND_WOLF_SCENE_SELECT_ICON_POS_X_DIFFER	(40.0f)									//選択アイコンの位置Xの間隔
-#define FIND_WOLF_SCENE_SELECT_ICON_DECIDE_COLOR	(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f))		//選択アイコンの決定時のカラー
+#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_X			(440.0f * 0.2f)						//選択アイコンのサイズX
+#define FIND_WOLF_SCENE_SELECT_ICON_SIZE_Y			(314.0f * 0.2f)						//選択アイコンのサイズY
+#define FIND_WOLF_SCENE_SELECT_ICON_POS_Y			(130.0f)							//選択アイコンの位置Y
+#define FIND_WOLF_SCENE_SELECT_ICON_POS_X_DIFFER	(40.0f)								//選択アイコンの位置Xの間隔
+#define FIND_WOLF_SCENE_SELECT_ICON_DECIDE_COLOR	(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f))	//選択アイコンの決定時のカラー
+#define FIND_WOLF_SCENE_SELECT_ICON_MOVE			(0.08f)								//選択アイコンの移動量
+#define FIND_WOLF_SCENE_SELECT_ICON_ADD_MOVE_POS	((rand() % 101 + 100) / 10.0f)		//選択アイコンが加速できる範囲
 
 #define FIND_WOLF_SCENE_SELECT_TIME					(10)		//選択できる時間
 #define FIND_WOLF_SCENE_SELECT_ALL_INTERVAL			(90)		//全員が選択してから次のフェーズに行くまでの間隔
@@ -48,10 +52,21 @@
 #define FIND_WOLF_SCENE_POINT_UI_SIZE_X				(80.0f)				//ポイントUIのサイズX
 #define FIND_WOLF_SCENE_POINT_UI_SIZE_Y				(80.0f)				//ポイントUIのサイズY
 #define FIND_WOLF_SCENE_POINT_UI_POS_Y				(150.0f)			//ポイントUIの位置Y
-#define FIND_WOLF_SCENE_POINT_UI_POS_X_DIFFER		(60.0f)				//ポイントUIの位置Xの間隔
+#define FIND_WOLF_SCENE_POINT_UI_POS_X_DIFFER		(40.0f)				//ポイントUIの位置Xの間隔
 #define FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA			(0.05f)				//ポイントUIのα値減算量
 #define FIND_WOLF_SCENE_POINT_UI_MOVE				(2.0f)				//ポイントUIの移動量
 #define FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER		(60)				//ポイントUIが消え始めるまでの時間
+
+#define STENCIL_CIRCLE_SIZE (280.0f)	//ステンシルマスクのサイズ
+#define STENCIL_CIRCLE_SPEED (24.0f)	//ステンシルマスクの速度
+
+#define FIND_WOLF_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(960.0f, 670.0f, 0.0f))		//次に進むボタンの位置
+#define FIND_WOLF_SCENE_NEXT_BUTTON_SIZE		(D3DXVECTOR3(60.0f, 60.0f, 0.0f))		//次に進むボタンのサイズ
+#define FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
+
+#define FIND_WOLF_SCENE_CHANGE_SCENE_COUNT	(60)			//遷移するまでの時間
+
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -66,14 +81,19 @@ CFindWolfScene::CFindWolfScene()
 	memset(m_pSelectIcon, NULL, sizeof(m_pSelectIcon[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_pPointUi, NULL, sizeof(m_pPointUi[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_select, 0, sizeof(m_select[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_bSelectFloat, false, sizeof(m_bSelectFloat[MAX_OBJECT_PLAYER_NUM]));
 	m_phase = PHASE::NONE;
 	m_pTutorial = nullptr;
 	m_nFrameCounter = 0;
 	m_bAddPoint = false;
 
+	m_pWaitBlack = nullptr;
+	m_pCircleStencilMask = nullptr;
+
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		m_aPosPlayer2D[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_fSelectMove[nCntPlayer] = 0.0f;
 	}
 }
 
@@ -95,8 +115,14 @@ void CFindWolfScene::Init(void) {
 	memset(m_pSelectIcon, NULL, sizeof(m_pSelectIcon[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_pPointUi, NULL, sizeof(m_pPointUi[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_select, 0, sizeof(m_select[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_bSelectFloat, false, sizeof(m_bSelectFloat[MAX_OBJECT_PLAYER_NUM]));
 	m_nFrameCounter = 0;
 	m_bAddPoint = false;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		m_fSelectMove[nCntPlayer] = 0.0f;
+	}
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -108,13 +134,13 @@ void CFindWolfScene::Init(void) {
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	//カメラの設定
-	if (pManager != nullptr) pManager->SetCamera(CFindWolfCamera::Create());	//なにか一つカメラが無いと描画されないのでとりあえずゲームカメラ
+	if (pManager != nullptr) pManager->SetCamera(CFindWolfCamera::Create());
 
 	//------------------------------
 	//ライトの初期設定
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
-							   //ライトのプロジェクションマトリックスを生成
+	//ライトのプロジェクションマトリックスを生成
 	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
@@ -214,6 +240,11 @@ void CFindWolfScene::Init(void) {
 	m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//次へUIの生成
+	m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
+
 	//------------------------------
 	//BGMの再生
 	//------------------------------
@@ -231,6 +262,8 @@ void CFindWolfScene::Init(void) {
 	}
 
 #endif
+
+	CGameScene::SetWereWolfPlayerIndex(2);
 }
 
 //=============================================================================
@@ -295,7 +328,7 @@ void CFindWolfScene::Update(void) {
 		AddWolfPoint();		//人狼のポイント加算処理
 		break;
 	case CFindWolfScene::PHASE::FINISH:
-		
+		Finish();			//終了処理
 		break;
 	default:
 		break;
@@ -366,6 +399,11 @@ void CFindWolfScene::Tutorial2()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
+		if (m_pNextButton != nullptr)
+		{
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
+		}
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
@@ -404,6 +442,9 @@ void CFindWolfScene::WolfDecide()
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	int nNumDecide = 0;
+
+	//選択アイコンの移動処理
+	SelectIconMove();
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
@@ -508,6 +549,11 @@ void CFindWolfScene::WolfDecide()
 	//説明UIの生成
 	m_pTutorial = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                            CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_3, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	//次へUIの生成
+	m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 }
 
 //=============================================================================
@@ -523,6 +569,9 @@ void CFindWolfScene::Tutorial3()
 		pInput = pManager->GetInputCur();
 	}
 
+	//選択アイコンの移動処理
+	SelectIconMove();
+
 	//ボタンを押したら
 	if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT), 0))
 	{
@@ -534,12 +583,29 @@ void CFindWolfScene::Tutorial3()
 		//音を再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
 
+		//黒い画面の生成
+		m_pWaitBlack = CCoverDisplay::Create(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+
+		//ステンシルの円
+		m_pCircleStencilMask = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, m_aPosPlayer2D[0].y, 0.0f),
+			CTexture::TEXTURE_TYPE::CIRCLE, STENCIL_CIRCLE_SIZE, STENCIL_CIRCLE_SIZE);
+		if (m_pCircleStencilMask != nullptr) {
+			m_pCircleStencilMask->SetStencilMask(true);
+			m_pCircleStencilMask->SetDrawStencil(true);
+		}
+
 		//次のフェーズにする
 		m_phase = PHASE::WAIT;
 
 		//消す
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
+
+		if (m_pNextButton != nullptr)
+		{
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
+		}
 	}
 }
 
@@ -550,8 +616,33 @@ void CFindWolfScene::Wait()
 {
 	m_nFrameCounter++;
 
+	//選択アイコンの移動処理
+	SelectIconMove();
+
+	//黒い画面のアルファ値の増加
+	if (m_pWaitBlack != nullptr) {
+		D3DXCOLOR colLast = m_pWaitBlack->GetColor();	//前回の色
+		if(colLast.a < 0.5f) m_pWaitBlack->SetColor(colLast + D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.02f));
+	}
+
+	//ステンシルの円の横移動
+	if (m_pCircleStencilMask != nullptr) {
+		D3DXVECTOR3 posMask = m_pCircleStencilMask->GetPos();
+		posMask += D3DXVECTOR3(STENCIL_CIRCLE_SPEED, 0.0f, 0.0f);
+		if (posMask.x > SCREEN_WIDTH + STENCIL_CIRCLE_SIZE / 2.0f) {
+			posMask.x = -STENCIL_CIRCLE_SIZE / 2.0f;
+		}
+		m_pCircleStencilMask->SetPos(posMask);
+	}
+
 	if (m_nFrameCounter < FIND_WOLF_SCENE_PLAYER_WAIT_TIME) return;
 	m_nFrameCounter = 0;
+
+	//ステンシルの円を強制移動
+	if (m_pCircleStencilMask != nullptr) {
+		//人狼プレイヤーの位置に設定
+		m_pCircleStencilMask->SetPos(m_aPosPlayer2D[CGameScene::GetWereWolfPlayerIndex() - 1]);
+	}
 
 	//次のフェーズにする
 	m_phase = PHASE::ANSWER;
@@ -563,6 +654,11 @@ void CFindWolfScene::Wait()
 			                            static_cast<CTexture::TEXTURE_TYPE>
 			                            (static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_ANSWER_1) + CGameScene::GetWereWolfPlayerIndex() - 1),
 			                            SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		//次へUIの生成
+		m_pNextButton = CNextButton::Create(FIND_WOLF_SCENE_NEXT_BUTTON_POS, FIND_WOLF_SCENE_NEXT_BUTTON_SIZE,
+			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
+			                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 	}
 }
 
@@ -578,6 +674,9 @@ void CFindWolfScene::Answer()
 		//現在の入力デバイスの取得
 		pInput = pManager->GetInputCur();
 	}
+
+	//選択アイコンの移動処理
+	SelectIconMove();
 
 	//ボタンを押したら
 	if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT), 0))
@@ -595,6 +694,18 @@ void CFindWolfScene::Answer()
 
 		//テクスチャを変える
 		m_pTutorial->SetTexType(CTexture::TEXTURE_TYPE::WOLF_FIND_TUTORIAL_4);
+
+		//黒い画面の破棄
+		if (m_pWaitBlack != nullptr) {
+			m_pWaitBlack->Uninit();
+			m_pWaitBlack = nullptr;
+		}
+
+		//ステンシルマスクの破棄
+		if (m_pCircleStencilMask != nullptr) {
+			m_pCircleStencilMask->Uninit();
+			m_pCircleStencilMask = nullptr;
+		}
 	}
 }
 
@@ -611,6 +722,9 @@ void CFindWolfScene::Tutorial4()
 		pInput = pManager->GetInputCur();
 	}
 
+	//選択アイコンの移動処理
+	SelectIconMove();
+
 	//ボタンを押したら
 	if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT), 0))
 	{
@@ -626,6 +740,12 @@ void CFindWolfScene::Tutorial4()
 		m_pTutorial->Uninit();
 		m_pTutorial = nullptr;
 
+		if (m_pNextButton != nullptr)
+		{
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
+		}
+
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
 			//消す
@@ -637,7 +757,7 @@ void CFindWolfScene::Tutorial4()
 		}
 
 		//次のフェーズにする
-		m_phase = PHASE::DEC_PLAYER_POINT;
+		m_phase = PHASE::DEC_WOLF_POINT;
 
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
@@ -671,47 +791,8 @@ void CFindWolfScene::Tutorial4()
 //=============================================================================
 void CFindWolfScene::DecWolfPoint()
 {
-	int nUninitCount = 0;
-	m_nFrameCounter++;
-
-	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) {
-			nUninitCount++;
-			continue;
-		}
-
-		//生成されていたら
-
-		//一定時間見えるようにする
-		if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) continue;
-
-
-		//カラー取得
-		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
-		if (col.a <= 0.0f)
-		{
-			//消す
-			m_pPointUi[nIdxPlayer]->Uninit();
-			m_pPointUi[nIdxPlayer] = nullptr;
-			continue;
-		}
-
-		//薄くする
-		col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-		if (col.a < 0.0f) col.a = 0.0f;
-		//カラー設定
-		m_pPointUi[nIdxPlayer]->SetColor(col);
-
-		//位置取得
-		D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
-		//上に動かす
-		pos.y -= FIND_WOLF_SCENE_POINT_UI_MOVE;
-		//位置設定
-		m_pPointUi[nIdxPlayer]->SetPos(pos);
-	}
-
-	if (nUninitCount != MAX_OBJECT_PLAYER_NUM) return;
+	//ポイント減算処理
+	if (!DecPoint()) return;
 
 	//全部消えていたら次のフェーズにする
 	m_phase = PHASE::ADD_PLAYER_POINT;
@@ -730,7 +811,7 @@ void CFindWolfScene::DecWolfPoint()
 
 			//自分の上にアイコンを生成
 			m_pPointUi[nIdxPlayer] = CObject2D::Create(m_aPosPlayer2D[nIdxPlayer],
-				                                       static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_POINT_UI_1) + nIdxPlayer),
+				                                       static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_POINT_UI_1) + CGameScene::GetWereWolfPlayerIndex() - 1),
 				                                       FIND_WOLF_SCENE_POINT_UI_SIZE_X, FIND_WOLF_SCENE_POINT_UI_SIZE_Y);
 			//見えない状態にする
 			m_pPointUi[nIdxPlayer]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
@@ -744,116 +825,38 @@ void CFindWolfScene::DecWolfPoint()
 //=============================================================================
 void CFindWolfScene::AddPlayerPoint()
 {
-	int nCntStop = 0;
-	int nCntPointGetPlayer = 0;
-	int nUninitCount = 0;
+	//ポイント加算処理
+	if (!AddPoint(false)) return;
 
+	//全部消えていたら
+	//次のフェーズにする
+	m_phase = PHASE::FINISH;
+
+	m_nFrameCounter = 0;
+	m_bAddPoint = false;
+
+	int nCntMissPlayer = 0;
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) {
-			nUninitCount++;
-			continue;
-		}
-
-		//生成されていたら
-
-		//カラー取得
-		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
-
-		//スコアが加算されていないなら
-		if (!m_bAddPoint)
+		if (m_pPointUi[nIdxPlayer] == nullptr)
 		{
-			nCntPointGetPlayer++;
-			if (col.a >= 1.0f) {
-				nCntStop++;
-				continue;
-			}
+			//人狼を選んでたら または自身が人狼だったら
+			if (m_select[nIdxPlayer] == static_cast<SELECT>(CGameScene::GetWereWolfPlayerIndex() - 1) ||
+				nIdxPlayer == CGameScene::GetWereWolfPlayerIndex() - 1) continue;
 
-			//濃くする
-			col.a += FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-			if (col.a > 1.0f) col.a = 1.0f;
-			//カラー設定
-			m_pPointUi[nIdxPlayer]->SetColor(col);
+			//人狼を選んでいなかったら且つ自身が人狼でなかったら
+			nCntMissPlayer++;
+			//自分の上にアイコンを生成
+			m_pPointUi[nIdxPlayer] = CObject2D::Create(m_aPosPlayer2D[nIdxPlayer] + D3DXVECTOR3(0.0f, -FIND_WOLF_SCENE_POINT_UI_POS_Y, 0.0f),
+				                                       static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_POINT_UI_1) + nIdxPlayer),
+				                                       FIND_WOLF_SCENE_POINT_UI_SIZE_X, FIND_WOLF_SCENE_POINT_UI_SIZE_Y);
 
-			//位置取得
-			D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
-			//下に動かす
-			pos.y += FIND_WOLF_SCENE_POINT_UI_MOVE;
-			//位置設定
-			m_pPointUi[nIdxPlayer]->SetPos(pos);
+			//スコアの設定
+			m_apScoreUi[nIdxPlayer]->GetScore()->AddScore(-10);
+
+			//次のフェーズを変える
+			m_phase = PHASE::DEC_PLAYER_POINT;
 		}
-		//スコアが加算されているなら
-		else
-		{
-			if (col.a <= 0.0f)
-			{
-				//消す
-				m_pPointUi[nIdxPlayer]->Uninit();
-				m_pPointUi[nIdxPlayer] = nullptr;
-				continue;
-			}
-
-			//薄くする
-			col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-			if (col.a < 0.0f) col.a = 0.0f;
-			//カラー設定
-			m_pPointUi[nIdxPlayer]->SetColor(col);
-		}
-	}
-
-	if (nUninitCount == MAX_OBJECT_PLAYER_NUM)
-	{
-		//全部消えていたら次のフェーズにする
-		m_phase = PHASE::NONE;
-
-		m_nFrameCounter = 0;
-		m_bAddPoint = false;
-
-		int nCntMissPlayer = 0;
-		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-		{
-			if (m_pPointUi[nIdxPlayer] == nullptr)
-			{
-				//人狼を選んでたら または自身が人狼だったら
-				if (m_select[nIdxPlayer] == static_cast<SELECT>(CGameScene::GetWereWolfPlayerIndex() - 1) ||
-					nIdxPlayer == CGameScene::GetWereWolfPlayerIndex() - 1) continue;
-
-				//人狼を選んでいなかったら且つ自身が人狼でなかったら
-				nCntMissPlayer++;
-				//自分の上にアイコンを生成
-				m_pPointUi[nIdxPlayer] = CObject2D::Create(m_aPosPlayer2D[nIdxPlayer] + D3DXVECTOR3(0.0f, -FIND_WOLF_SCENE_POINT_UI_POS_Y, 0.0f),
-					                                       static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_POINT_UI_1) + nIdxPlayer),
-					                                       FIND_WOLF_SCENE_POINT_UI_SIZE_X, FIND_WOLF_SCENE_POINT_UI_SIZE_Y);
-
-				//スコアの設定
-				m_apScoreUi[nIdxPlayer]->GetScore()->AddScore(-10);
-
-				//次のフェーズを変える
-				m_phase = PHASE::DEC_PLAYER_POINT;
-			}
-		}
-	}
-
-	//全部止まって居なかったら
-	if (nCntPointGetPlayer != nCntStop) return;
-
-	//全部止まっていたら
-	if (m_bAddPoint) return;
-
-	m_nFrameCounter++;
-
-	//一定時間見えるようにする
-	if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) return;
-
-	//ポイントが加算された状態にする
-	m_bAddPoint = true;
-	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) continue;
-
-		//生成されていたら
-		//スコアの設定
-		m_apScoreUi[nIdxPlayer]->GetScore()->AddScore(10);
 	}
 }
 
@@ -862,47 +865,8 @@ void CFindWolfScene::AddPlayerPoint()
 //=============================================================================
 void CFindWolfScene::DecPlayerPoint()
 {
-	int nUninitCount = 0;
-	m_nFrameCounter++;
-
-	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) {
-			nUninitCount++;
-			continue;
-		}
-
-		//生成されていたら
-
-		//一定時間見えるようにする
-		if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) continue;
-
-
-		//カラー取得
-		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
-		if (col.a <= 0.0f)
-		{
-			//消す
-			m_pPointUi[nIdxPlayer]->Uninit();
-			m_pPointUi[nIdxPlayer] = nullptr;
-			continue;
-		}
-
-		//薄くする
-		col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-		if (col.a < 0.0f) col.a = 0.0f;
-		//カラー設定
-		m_pPointUi[nIdxPlayer]->SetColor(col);
-
-		//位置取得
-		D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
-		//上に動かす
-		pos.y -= FIND_WOLF_SCENE_POINT_UI_MOVE;
-		//位置設定
-		m_pPointUi[nIdxPlayer]->SetPos(pos);
-	}
-
-	if (nUninitCount != MAX_OBJECT_PLAYER_NUM) return;
+	//ポイント減算処理
+	if (!DecPoint()) return;
 
 	//全部消えていたら次のフェーズにする
 	m_phase = PHASE::ADD_WOLF_POINT;
@@ -936,92 +900,32 @@ void CFindWolfScene::DecPlayerPoint()
 //=============================================================================
 void CFindWolfScene::AddWolfPoint()
 {
-	int nCntStop = 0;
-	int nCntPointGetPlayer = 0;
-	int nUninitCount = 0;
+	//ポイント加算処理
+	if (!AddPoint(true)) return;
 
-	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) {
-			nUninitCount++;
-			continue;
-		}
+	//全部消えていたら
 
-		//生成されていたら
+	//次のフェーズにする
+	m_phase = PHASE::FINISH;
 
-		//カラー取得
-		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
+	m_nFrameCounter = 0;
+}
 
-		//スコアが加算されていないなら
-		if (!m_bAddPoint)
-		{
-			nCntPointGetPlayer++;
-			if (col.a >= 1.0f) {
-				nCntStop++;
-				continue;
-			}
-
-			//濃くする
-			col.a += FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-			if (col.a > 1.0f) col.a = 1.0f;
-			//カラー設定
-			m_pPointUi[nIdxPlayer]->SetColor(col);
-
-			//位置取得
-			D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
-			//下に動かす
-			pos.y += FIND_WOLF_SCENE_POINT_UI_MOVE;
-			//位置設定
-			m_pPointUi[nIdxPlayer]->SetPos(pos);
-		}
-		//スコアが加算されているなら
-		else
-		{
-			if (col.a <= 0.0f)
-			{
-				//消す
-				m_pPointUi[nIdxPlayer]->Uninit();
-				m_pPointUi[nIdxPlayer] = nullptr;
-				continue;
-			}
-
-			//薄くする
-			col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
-			if (col.a < 0.0f) col.a = 0.0f;
-			//カラー設定
-			m_pPointUi[nIdxPlayer]->SetColor(col);
-		}
-	}
-
-	if (nUninitCount == MAX_OBJECT_PLAYER_NUM)
-	{
-		//全部消えていたら次のフェーズにする
-		m_phase = PHASE::FINISH;
-
-		m_nFrameCounter = 0;
-	}
-
-	//全部止まって居なかったら
-	if (nCntPointGetPlayer != nCntStop) return;
-
-	//全部止まっていたら
-	if (m_bAddPoint) return;
-
+//=============================================================================
+//終了処理
+//=============================================================================
+void CFindWolfScene::Finish()
+{
 	m_nFrameCounter++;
 
-	//一定時間見えるようにする
-	if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) return;
+	if (m_nFrameCounter <= FIND_WOLF_SCENE_CHANGE_SCENE_COUNT) return;
 
-	//ポイントが加算された状態にする
-	m_bAddPoint = true;
-	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
-	{
-		if (m_pPointUi[nIdxPlayer] == nullptr) continue;
-
-		//生成されていたら
-		//スコアの設定
-		m_apScoreUi[CGameScene::GetWereWolfPlayerIndex() - 1]->GetScore()->AddScore(10);
-	}
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 }
 
 //=============================================================================
@@ -1064,4 +968,210 @@ void CFindWolfScene::PointUiSetPos(const int nIdxPlayer, int nObjectPlayerIndex)
 		               -FIND_WOLF_SCENE_POINT_UI_POS_Y,
 		               0.0f);
 	m_pPointUi[nIdxPlayer]->SetPos(pos);
+}
+
+//=============================================================================
+//ポイント減算処理
+//=============================================================================
+bool CFindWolfScene::DecPoint()
+{
+	int nUninitCount = 0;
+	m_nFrameCounter++;
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		if (m_pPointUi[nIdxPlayer] == nullptr) {
+			nUninitCount++;
+			continue;
+		}
+
+		//生成されていたら
+
+		//一定時間見えるようにする
+		if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) continue;
+
+
+		//カラー取得
+		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
+		if (col.a <= 0.0f)
+		{
+			//消す
+			m_pPointUi[nIdxPlayer]->Uninit();
+			m_pPointUi[nIdxPlayer] = nullptr;
+			continue;
+		}
+
+		//薄くする
+		col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
+		if (col.a < 0.0f) col.a = 0.0f;
+		//カラー設定
+		m_pPointUi[nIdxPlayer]->SetColor(col);
+
+		//位置取得
+		D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
+		//上に動かす
+		pos.y -= FIND_WOLF_SCENE_POINT_UI_MOVE;
+		//位置設定
+		m_pPointUi[nIdxPlayer]->SetPos(pos);
+	}
+
+	if (nUninitCount != MAX_OBJECT_PLAYER_NUM) return false;
+
+	return true;
+}
+
+//=============================================================================
+//ポイント加算処理
+//=============================================================================
+bool CFindWolfScene::AddPoint(const bool bAddPointWolf)
+{
+	int nCntStop = 0;
+	int nCntPointGetPlayer = 0;
+	int nUninitCount = 0;
+
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		if (m_pPointUi[nIdxPlayer] == nullptr) {
+			nUninitCount++;
+			continue;
+		}
+
+		//生成されていたら
+
+		//カラー取得
+		D3DXCOLOR col = m_pPointUi[nIdxPlayer]->GetColor();
+
+		//スコアが加算されていないなら
+		if (!m_bAddPoint)
+		{
+			nCntPointGetPlayer++;
+			if (col.a >= 1.0f) {
+				nCntStop++;
+				continue;
+			}
+
+			//濃くする
+			col.a += FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
+			if (col.a > 1.0f) col.a = 1.0f;
+			//カラー設定
+			m_pPointUi[nIdxPlayer]->SetColor(col);
+
+			//位置取得
+			D3DXVECTOR3 pos = m_pPointUi[nIdxPlayer]->GetPos();
+			//下に動かす
+			pos.y += FIND_WOLF_SCENE_POINT_UI_MOVE;
+			//位置設定
+			m_pPointUi[nIdxPlayer]->SetPos(pos);
+		}
+		//スコアが加算されているなら
+		else
+		{
+			if (col.a <= 0.0f)
+			{
+				//消す
+				m_pPointUi[nIdxPlayer]->Uninit();
+				m_pPointUi[nIdxPlayer] = nullptr;
+				continue;
+			}
+
+			//薄くする
+			col.a -= FIND_WOLF_SCENE_POINT_UI_DEC_ALPHA;
+			if (col.a < 0.0f) col.a = 0.0f;
+			//カラー設定
+			m_pPointUi[nIdxPlayer]->SetColor(col);
+		}
+	}
+
+	//全部消えていたら
+	if (nUninitCount == MAX_OBJECT_PLAYER_NUM) return true;
+
+	//消えていないなら
+	//全部止まって居なかったら
+	if (nCntPointGetPlayer != nCntStop) return false;
+
+	//全部止まっていたら
+	if (m_bAddPoint) return false;
+
+	m_nFrameCounter++;
+
+	//一定時間見えるようにする
+	if (m_nFrameCounter < FIND_WOLF_SCENE_POINT_UI_DEC_COUNTER) return false;
+
+	//ポイントが加算された状態にする
+	m_bAddPoint = true;
+	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
+	{
+		if (m_pPointUi[nIdxPlayer] == nullptr) continue;
+
+		//生成されていたら
+		//人狼に加算しないなら
+		if (!bAddPointWolf)
+		{
+			//スコアの設定
+			m_apScoreUi[nIdxPlayer]->GetScore()->AddScore(10);
+		}
+		else
+		{//人狼に加算するなら
+			//スコアの設定
+			m_apScoreUi[CGameScene::GetWereWolfPlayerIndex() - 1]->GetScore()->AddScore(10);
+		}
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_1);
+	}
+
+	return false;
+}
+
+//=============================================================================
+//選択アイコンの処理
+//=============================================================================
+void CFindWolfScene::SelectIconMove()
+{
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		if (m_pSelectIcon[nCntPlayer] == nullptr) return;
+
+		//生成されていたら
+		//位置取得
+		D3DXVECTOR3 pos = m_pSelectIcon[nCntPlayer]->GetPos();
+
+		//移動量
+		float fMove = FIND_WOLF_SCENE_SELECT_ICON_MOVE;
+		//切替なら移動量を逆向きにする
+		if (m_bSelectFloat[nCntPlayer]) fMove *= -1;
+
+		//移動量設定
+		m_fSelectMove[nCntPlayer] += fMove;
+
+		//移動量の上限設定
+		if (m_fSelectMove[nCntPlayer] > 1.0f) m_fSelectMove[nCntPlayer] = 1.0f;
+		else if (m_fSelectMove[nCntPlayer] < -1.0f) m_fSelectMove[nCntPlayer] = -1.0f;
+
+		pos.y -= m_fSelectMove[nCntPlayer];
+
+		//位置設定
+		m_pSelectIcon[nCntPlayer]->SetPos(pos);
+
+		//デフォルトの位置を設定
+		float fDefaultPos = m_aPosPlayer2D[nCntPlayer].y - FIND_WOLF_SCENE_SELECT_ICON_POS_Y;
+
+		//加速できる範囲をランダムで設定
+		float fAddMovePos = FIND_WOLF_SCENE_SELECT_ICON_ADD_MOVE_POS;
+
+		//加速できる最大の位置を設定
+		float fMaxPos = 0.0f;
+		if (!m_bSelectFloat[nCntPlayer]) fMaxPos = fDefaultPos - fAddMovePos;
+		//切替なら逆向きにする
+		else fMaxPos = fDefaultPos + fAddMovePos;
+
+		//加速できる最大の位置を通過したら切り替える
+		if (pos.y <= fMaxPos && !m_bSelectFloat[nCntPlayer]) m_bSelectFloat[nCntPlayer] = true;
+		else if (pos.y >= fMaxPos && m_bSelectFloat[nCntPlayer]) m_bSelectFloat[nCntPlayer] = false;
+	}
 }

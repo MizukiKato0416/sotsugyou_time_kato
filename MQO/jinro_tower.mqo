@@ -6,14 +6,21 @@ Scene {
 	lookat 0.0000 0.0000 0.0000
 	head 2.5561
 	pich 0.3492
+	bank 0.0000
 	ortho 0
 	zoom2 0.0750
 	amb 0.250 0.250 0.250
+	dirlights 1 {
+		light {
+			dir 0.408 0.408 0.816
+			color 1.000 1.000 1.000
+		}
+	}
 }
 Material 3 {
-	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg")
-	"mat2" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg")
-	"mat3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg")
+	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(7076.448 7076.448 7076.448) proj_angle(90.000 -89.000 90.000)
+	"mat2" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg") proj_type(1) proj_pos(0.000 -5000.000 0.000) proj_scale(2443.747 2217.683 2953.706) proj_angle(0.000 0.000 0.000)
+	"mat3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\check-20170924_009.jpg") proj_type(1) proj_pos(0.000 -5000.000 0.000) proj_scale(2348.168 1677.264 2348.168) proj_angle(90.000 0.000 0.000)
 }
 Object "obj1" {
 	visible 15

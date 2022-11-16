@@ -160,6 +160,7 @@
     <ClCompile Include="source\cpp\check.cpp" />
     <ClCompile Include="source\cpp\check_icon.cpp" />
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
+    <ClCompile Include="source\cpp\coverDisplay.cpp" />
     <ClCompile Include="source\cpp\create_bom_manager.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
     <ClCompile Include="source\cpp\Effect\BezierBill.cpp" />
@@ -178,6 +179,8 @@
     <ClCompile Include="source\cpp\Effect\straight3d.cpp" />
     <ClCompile Include="source\cpp\Effect\Trajectory.cpp" />
     <ClCompile Include="source\cpp\fade.cpp" />
+    <ClCompile Include="source\cpp\finalResultCamera.cpp" />
+    <ClCompile Include="source\cpp\finalResultScene.cpp" />
     <ClCompile Include="source\cpp\find_wolf_camera.cpp" />
     <ClCompile Include="source\cpp\find_wolf_scene.cpp" />
     <ClCompile Include="source\cpp\finish_ui.cpp" />
@@ -200,6 +203,7 @@
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
     <ClCompile Include="source\cpp\meshwall.cpp" />
     <ClCompile Include="source\cpp\model.cpp" />
+    <ClCompile Include="source\cpp\next_button.cpp" />
     <ClCompile Include="source\cpp\object.cpp" />
     <ClCompile Include="source\cpp\object2D.cpp" />
     <ClCompile Include="source\cpp\object3D.cpp" />
@@ -244,10 +248,13 @@
     <ClInclude Include="source\h\check.h" />
     <ClInclude Include="source\h\check_icon.h" />
     <ClInclude Include="source\h\count_down_ui.h" />
+    <ClInclude Include="source\h\coverDisplay.h" />
     <ClInclude Include="source\h\create_bom_manager.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
+    <ClInclude Include="source\h\finalResultCamera.h" />
+    <ClInclude Include="source\h\finalResultScene.h" />
     <ClInclude Include="source\h\find_wolf_camera.h" />
     <ClInclude Include="source\h\find_wolf_scene.h" />
     <ClInclude Include="source\h\finish_ui.h" />
@@ -272,6 +279,7 @@
     <ClInclude Include="source\h\meshcylinder.h" />
     <ClInclude Include="source\h\meshwall.h" />
     <ClInclude Include="source\h\model.h" />
+    <ClInclude Include="source\h\next_button.h" />
     <ClInclude Include="source\h\object.h" />
     <ClInclude Include="source\h\object2D.h" />
     <ClInclude Include="source\h\object3D.h" />

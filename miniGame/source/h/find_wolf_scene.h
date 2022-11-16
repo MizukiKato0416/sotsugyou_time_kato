@@ -20,6 +20,8 @@
 class CObject2D;
 class CScoreUi;
 class CTimer;
+class CCoverDisplay;
+class CNextButton;
 
 //*****************************************************************************
 // クラスの定義
@@ -74,13 +76,20 @@ private:
 	void AddPlayerPoint();		//人狼以外のポイント加算処理
 	void DecPlayerPoint();		//人狼以外のポイントマイナス処理
 	void AddWolfPoint();		//人狼のポイント加算処理
-
-
+	void Finish();				//終了処理
 
 	//選択用アイコンUIの位置設定処理
 	void SelectIconSetPos(const int nIdxPlayer, const SELECT select);
 	//ポイントUIの位置設定処理
 	void PointUiSetPos(const int nIdxPlayer, int nObjectPlayerIndex);
+
+	//ポイント減算処理
+	bool DecPoint();
+	//ポイント加算処理(引数：人狼にポイントを加算するかどうか)
+	bool AddPoint(const bool bAddPointWolf);
+
+	//選択アイコンの移動処理
+	void SelectIconMove();
 
 	CScoreUi *m_apScoreUi[MAX_OBJECT_PLAYER_NUM];		//スコアUI 
 	CObject2D *m_pSelectIcon[MAX_OBJECT_PLAYER_NUM];	//選択用アイコン
@@ -89,8 +98,14 @@ private:
 	CTimer* m_pTimer;									//ゲームのタイマー
 	CObject2D* m_pTimerFrame;							//タイマーの枠
 
+	CCoverDisplay* m_pWaitBlack;		//待ち時間の黒い画面
+	CObject2D* m_pCircleStencilMask;	//待ち時間のステンシルマスク
+	CNextButton *m_pNextButton;			//次に進むボタンUI
+
 	D3DXVECTOR3 m_aPosPlayer2D[MAX_OBJECT_PLAYER_NUM];		//プレイヤーの2D座標
-	SELECT m_select[MAX_OBJECT_PLAYER_NUM];	//どこが選択されているのか
+	SELECT m_select[MAX_OBJECT_PLAYER_NUM];					//どこが選択されているのか
+	bool m_bSelectFloat[MAX_OBJECT_PLAYER_NUM];				//選択アイコンの浮遊切り替え用
+	float m_fSelectMove[MAX_OBJECT_PLAYER_NUM];				//選択アイコンの移動量
 
 	PHASE m_phase;						//フェーズ
 	int m_nFrameCounter;				//Frameカウント用

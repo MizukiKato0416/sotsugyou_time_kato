@@ -17,6 +17,7 @@
 //前方宣言
 //*****************************************************************************
 class CObject2D;
+class CNextButton;
 
 //*****************************************************************************
 // クラスの定義
@@ -56,7 +57,8 @@ private:
 	CObject2D *m_pBg;			//背景
 	CObject2D *m_pTutorialUI;	//説明UI
 	CObject2D *m_pShakeUI;		//振動UI
-	
+	CNextButton *m_pNextButton;	//次に進むボタン
+
 	int m_nShakeUiCounter;		//振動UI点滅カウンター
 	PHASE m_phase;				//フェーズ
 };

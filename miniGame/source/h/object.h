@@ -109,6 +109,7 @@ public:
 	static void ReleaseAll(void);	//全オブジェクトの解放処理
 	static void UpdateAll(void);	//全オブジェクトの更新処理
 	static void DrawAll(void);		//全オブジェクトの描画処理
+	static void DrawStencilAll(void);		//全オブジェクトのステンシル描画処理
 	static CObject* GetObjectTopAll(void);	//全オブジェクトのリストのTopを取得
 	static CObject* GetObjectNextAll(CObject* pObject);	//全オブジェクトのリストのNextを取得
 	static void ReleaseObjtype(int nObjtype);	//指定したタイプのオブジェクトの解放処理
@@ -134,6 +135,9 @@ public:
 	bool GetEnableCollision(void);			//当たり判定の有効状態を取得
 	void SetDraw(bool bDraw) { m_bDraw = bDraw; }	//描画状態の設定
 	bool GetDraw(void) { return m_bDraw; }			//描画状態の取得
+	void SetEnableStencil(bool bEnable) { m_bEnableStencil = bEnable; }	//ステンシル有効かどうかの設定
+	void SetDrawStencil(bool bDraw) { m_bDrawStencil = bDraw; }	//ステンシルバッファに描画するかどうかの設定
+	void SetStencilMask(bool bMask) { m_bStencilMask = bMask; }	//ステンシルマスクかどうかの設定
 
 protected:
 	void Release(void);	//オブジェクトの解放処理
@@ -147,6 +151,9 @@ private:
 	CTexture::TEXTURE_TYPE m_texType;	//テクスチャのタイプ
 	bool m_bEnableCollision;	//当たり判定が有効
 	bool m_bDraw;	//描画するかどうか
+	bool m_bEnableStencil;	//描画時にステンシル有効
+	bool m_bDrawStencil;	//ステンシルバッファに描画するかどうか
+	bool m_bStencilMask;	//ステンシルマスクかどうか（普通に描画しない）
 
 	static int m_nUpdatePauseLevel;	//更新可能なポーズレベル
 	int m_nPauseLevel;	//ポーズのレベル

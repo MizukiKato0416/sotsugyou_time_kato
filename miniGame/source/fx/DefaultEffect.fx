@@ -425,7 +425,7 @@ float4 ZBufferPlot_PS(float4 ShadowMapTex : TEXCOORD0) : COLOR
 technique RenderScene
 {
 	//深度バッファ描画用
-	pass P0
+	pass PDepth
 	{
 		VertexShader = compile vs_3_0 ZBufferCalc_VS();
 		PixelShader = compile ps_3_0 ZBufferPlot_PS();

@@ -33,6 +33,7 @@ public:
 		GAME_MAX,	//ランダム選択のためゲームシーンの最大を設定
 		RESULT,
 		FIND_WOLF,
+		FINAL_RESULT,
 		ENUM_MAX
 	};
 

@@ -11,15 +11,24 @@
 #include "sound.h"
 #include "object_player.h"
 #include "gameScene.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define WOLF_DECIDE_SHAKE_MAX_TIME	(180)		//振動する時間
-#define WOLF_DECIDE_SHAKE_INTERVAL	(60)		//振動する間隔
-#define WOLF_DECIDE_BRINK_INTERVAL	(30)		//点滅する間隔
-#define WOLF_DECIDE_SHAKE_NUM		(15000)		//振動する量
-#define WOLF_DECIDE_SHAKE_TIME		(45)		//一回の振動で振動する時間
+#define WOLF_DECIDE_SHAKE_MAX_TIME	(180)				//振動する時間
+#define WOLF_DECIDE_SHAKE_INTERVAL	(60)				//振動する間隔
+#define WOLF_DECIDE_BRINK_INTERVAL	(30)				//点滅する間隔
+#define WOLF_DECIDE_SHAKE_NUM		(15000)				//振動する量
+#define WOLF_DECIDE_SHAKE_TIME		(45)				//一回の振動で振動する時間
+#define WOLF_DECIDE_SHAKE_UI_SIZE_X	(1282.0f * 0.7f)	//振動UIのサイズX
+#define WOLF_DECIDE_SHAKE_UI_SIZE_Y	(167.0f * 0.7f)		//振動UIのサイズY
+
+#define WOLF_DECIDE_NEXT_BUTTON_POS			(D3DXVECTOR3(960.0f, 670.0f, 0.0f))		//次に進むボタンの位置
+#define WOLF_DECIDE_NEXT_BUTTON_SIZE		(D3DXVECTOR3(60.0f, 60.0f, 0.0f))		//次に進むボタンのサイズ
+#define WOLF_DECIDE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define WOLF_DECIDE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
+
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -76,7 +85,9 @@ HRESULT CWolfDecide::Init(void) {
 	m_pTutorialUI = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                              CTexture::TEXTURE_TYPE::WOLF_SHAKE_TUTORIAL, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
+	//次へUIの生成
+	m_pNextButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
+		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, WOLF_DECIDE_NEXT_BUTTON_COUNTER, WOLF_DECIDE_NEXT_BUTTON_DEC_ALPHA);
 	return S_OK;
 }
 
@@ -115,7 +126,6 @@ void CWolfDecide::Uninit(void) {
 // 更新処理
 //=============================================================================
 void CWolfDecide::Update(void) {
-	
 	//処理分け
 	switch (m_phase)
 	{
@@ -167,6 +177,12 @@ void CWolfDecide::ShakeTutorial()
 			m_pTutorialUI = nullptr;
 		}
 
+		if (m_pNextButton != nullptr)
+		{
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
+		}
+
 		//次のフェーズにする
 		m_phase = PHASE::SHAKE;
 
@@ -174,7 +190,7 @@ void CWolfDecide::ShakeTutorial()
 		if (m_pShakeUI == nullptr)
 		{
 			m_pShakeUI = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
-		                                   CTexture::TEXTURE_TYPE::WOLF_SHAKE, 1282.0f * 0.7f, 167.0f * 0.7f);
+		                                   CTexture::TEXTURE_TYPE::WOLF_SHAKE, WOLF_DECIDE_SHAKE_UI_SIZE_X, WOLF_DECIDE_SHAKE_UI_SIZE_Y);
 		}
 	}
 }
@@ -204,6 +220,10 @@ void CWolfDecide::Shake()
 		//説明UI
 		m_pTutorialUI = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 			                              CTexture::TEXTURE_TYPE::WOLF_SHAKE_START, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		//次へUIの生成
+		m_pNextButton = CNextButton::Create(WOLF_DECIDE_NEXT_BUTTON_POS, WOLF_DECIDE_NEXT_BUTTON_SIZE,
+			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, WOLF_DECIDE_NEXT_BUTTON_COUNTER, WOLF_DECIDE_NEXT_BUTTON_DEC_ALPHA);
 
 		return;
 	}
@@ -282,6 +302,12 @@ void CWolfDecide::GameStart()
 		{
 			m_pTutorialUI->Uninit();
 			m_pTutorialUI = nullptr;
+		}
+
+		if (m_pNextButton != nullptr)
+		{
+			m_pNextButton->Uninit();
+			m_pNextButton = nullptr;
 		}
 
 		//フェーズを次にする
