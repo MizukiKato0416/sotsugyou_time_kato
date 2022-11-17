@@ -104,6 +104,14 @@ void CSelectGameScene::Init(void) {
 	// ”wŒi
 	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//‘Ñ‚Ì¶¬
+	CObject2D *pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 0.0f + 80.0f / 2.0f, 0.0f),
+		                                     CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
+	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));
+	pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 80.0f / 2.0f, 0.0f),
+		                          CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
+	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));
+
 	//BGM‚ÌÄ¶
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);

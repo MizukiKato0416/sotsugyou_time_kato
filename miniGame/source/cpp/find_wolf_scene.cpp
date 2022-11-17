@@ -1124,7 +1124,6 @@ bool CFindWolfScene::AddPoint(const bool bAddPointWolf)
 		//‰¹‚ðÄ¶
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_1);
 	}
-
 	return false;
 }
 
