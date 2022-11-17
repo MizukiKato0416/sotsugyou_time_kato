@@ -14,8 +14,9 @@
 #include "object2D.h"
 #include "objectModel.h"
 #include "score.h"
-
+#include "gameScene.h"
 #include "object_player.h"
+#include "meshwall.h"
 
 //=============================================================================
 // マクロ定義
@@ -24,6 +25,7 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 0, 0, 0, 0 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -94,6 +96,10 @@ void CFinalResultScene::Init(void) {
 	//------------------------------
 	//モデルの生成
 	//------------------------------
+	//仮の背景
+	CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 100.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, 2000.0f, 8000.0f, CTexture::TEXTURE_TYPE::BG_TITLE);
+
+	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++) {
 		D3DXVECTOR3 posPlayer = D3DXVECTOR3(-fDistPlayer * (MAX_OBJECT_PLAYER_NUM / 2.0f) + fDistPlayer / 2.0f + fDistPlayer * nIdxPlayer, 0.0f, 0.0f);	//プレイヤーの位置
@@ -215,14 +221,14 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 2.0f, fMoveMinY = 0.2f;	//上昇の速度（最大、最低）
-	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.00005f;	//上昇量
+	const float fMoveMaxY = 1.5f, fMoveMinY = 0.8f;	//上昇の速度（最大、最低）
+	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.001f;	//上昇量
 	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
 
 	//0まで上昇させる
 	if (posCamera.y < 0.0f) {
-		float fSlowHeight = -200.0f;	//減速する高さ
+		float fSlowHeight = -100.0f;	//減速する高さ
 
 		//減速させる
 		if (posCamera.y > fSlowHeight) {
@@ -243,7 +249,7 @@ void CFinalResultScene::RiseCamera() {
 	D3DXVECTOR3 rotCamera = pCamera->GetRot();	//カメラの角度取得
 	float fRotCameraLastY = rotCamera.y;	//回転させる前の角度
 
-	float fRotSpeed = 0.01f;	//回転速度
+	float fRotSpeed = 0.013f;	//回転速度
 	float fSlowRot = -0.2f;		//減速する角度
 
 	//目標地点までカメラが登った場合、正面ギリギリで減速
@@ -315,16 +321,19 @@ void CFinalResultScene::ResultText() {
 void CFinalResultScene::ShowScoreUI() {
 	m_nCntPhase++;
 
-	if (m_nCntPhase == 120) {
-		//スコアUIの表示
-		for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
-		{
+	//スコアUIの表示
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		//生成タイミング
+		if (m_nCntPhase == 120 + nCnt * 30) {
 			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(300.0f + nCnt * 300.0f, 600.0f, 0.0f), 30.0f);
+			//通常モードの場合非表示
+			if (m_apScoreResult[nCnt] != nullptr && !CGameScene::GetWereWolfMode()) m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 	}
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 120) {
+	if (m_nCntPhase > 270) {
 		//フェーズの変更
 		m_phase = PHASE::RISE_TOWER;
 		//カウントリセット
@@ -336,7 +345,79 @@ void CFinalResultScene::ShowScoreUI() {
 // タワーの上昇処理
 //=============================================================================
 void CFinalResultScene::RiseTower() {
+	bool bNextPhase = true;	//次のフェーズへ移行
 
+	m_nCntPhase++;
+
+	const float fSpeedRise = 3.0f;
+
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		//スコアが無い場合終了
+		if (m_apScoreResult[nCnt] == nullptr) continue;
+
+		//スコアがすでに上限の場合終了
+		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
+			//スコアが０の場合後の処理が通らないので、停止時の処理を最初に行う
+			if (m_nCntPhase = 1 && m_apScoreResult[nCnt]->GetScore() == 0) {
+				//音の再生
+
+				//エフェクト
+
+				//順位のテクスチャ出してもいいかも
+			}
+
+			continue;
+		}
+
+		//まだ終わっていない場合フェーズ移行しない
+		bNextPhase = false;
+
+		//塔とプレイヤーを上昇
+		if (m_apObjPlayer[nCnt] != nullptr) {
+			D3DXVECTOR3 posPlayer = m_apObjPlayer[nCnt]->GetPos();
+			posPlayer.y += fSpeedRise;
+			m_apObjPlayer[nCnt]->SetPos(posPlayer);
+		}
+		if (m_apResultTower[nCnt] != nullptr) {
+			D3DXVECTOR3 posTower = m_apResultTower[nCnt]->GetPos();
+			posTower.y += fSpeedRise;
+			m_apResultTower[nCnt]->SetPos(posTower);
+		}
+
+		//スコアUIの値の上昇
+		const int nSpanAddScore = 6;
+		if(m_nCntPhase % nSpanAddScore == 0) m_apScoreResult[nCnt]->AddScore(1);	//数フレーム毎に一度増える
+		//最大スコアの更新
+		m_nTopScore = max(m_nTopScore, m_apScoreResult[nCnt]->GetScore());
+
+		//スコア分上昇した場合ストップ
+		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
+			//音の再生
+
+			//エフェクト
+
+			//順位のテクスチャ出してもいいかも
+		}
+	}
+
+	CManager* pManager = CManager::GetManager();
+	CCamera* pCamera = nullptr;
+	if (pManager != nullptr) pCamera = pManager->GetCamera();
+	if (pCamera != nullptr) {
+		D3DXVECTOR3 posCamera = pCamera->GetPos();
+		posCamera.y += fSpeedRise;
+		//カメラの移動
+		pCamera->SetPos(posCamera);
+	}
+
+	//次のフェーズへ移行
+	if (bNextPhase) {
+		//フェーズの変更
+		m_phase = PHASE::WIN;
+		//カウントリセット
+		m_nCntPhase = 0;
+	}
 }
 
 //=============================================================================
@@ -346,6 +427,12 @@ void CFinalResultScene::Win() {
 	//王冠降りてきたり
 	
 	//紙吹雪降ってきたり
+
+
+	//フェーズの変更
+	m_phase = PHASE::PHASE_FINISH;
+	//カウントリセット
+	m_nCntPhase = 0;
 }
 
 //=============================================================================

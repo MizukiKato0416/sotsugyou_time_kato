@@ -36,6 +36,7 @@ public:
 	void AddScore(int nScore);	//スコアの追加
 	int GetScore(void);	//スコアを取得
 	void SetDigitMin(int nDigit) { m_nDigitMin = nDigit; }	//表示される桁数の最小数を設定
+	void SetNumberColor(D3DXCOLOR col);	//ナンバーの色の設定
 
 private:
 	std::vector<CObject2D*> m_vNumberPtr;	//数字のオブジェクトのポインタ配列
@@ -43,6 +44,7 @@ private:
 	float m_fSize;		//スコアのナンバーのサイズ
 	int m_nScore;		//スコアの値
 	int m_nDigitMin;	//表示される桁数の最小数
+	D3DXCOLOR m_colNumber;	//ナンバーの色
 };
 
 #endif // !_SCORE_H_

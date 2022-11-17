@@ -15,7 +15,7 @@
 //=============================================================================
 #define MAX_DRAW_DISTANCE		(6000.0f)	//描画可能な最大の距離
 #define DEFAULT_CAMERA_DISTANCE (1200.0f)	//視点と注視点の距離
-#define DEFAULT_CAMERA_ROT_X	(-10.0f)	//カメラの向きX
+#define DEFAULT_CAMERA_ROT_X	(-15.0f)	//カメラの向きX
 #define DEFAULT_CAMERA_POS_Z	(-120.0f)	//カメラの位置Z
 
 //=============================================================================
