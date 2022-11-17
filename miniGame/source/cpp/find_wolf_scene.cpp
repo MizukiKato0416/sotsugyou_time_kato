@@ -21,6 +21,7 @@
 #include "timer.h"
 #include "coverDisplay.h"
 #include "next_button.h"
+#include "finalResultScene.h"
 
 //=============================================================================
 // マクロ定義
@@ -638,12 +639,6 @@ void CFindWolfScene::Wait()
 	if (m_nFrameCounter < FIND_WOLF_SCENE_PLAYER_WAIT_TIME) return;
 	m_nFrameCounter = 0;
 
-	//ステンシルの円を強制移動
-	if (m_pCircleStencilMask != nullptr) {
-		//人狼プレイヤーの位置に設定
-		m_pCircleStencilMask->SetPos(m_aPosPlayer2D[CGameScene::GetWereWolfPlayerIndex() - 1]);
-	}
-
 	//次のフェーズにする
 	m_phase = PHASE::ANSWER;
 
@@ -673,6 +668,14 @@ void CFindWolfScene::Answer()
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
 		pInput = pManager->GetInputCur();
+	}
+
+	//ステンシルの円を強制移動
+	if (m_pCircleStencilMask != nullptr) {
+		D3DXVECTOR3 posMask = m_pCircleStencilMask->GetPos();
+		D3DXVECTOR3 posDest = m_aPosPlayer2D[CGameScene::GetWereWolfPlayerIndex() - 1];	//目標位置
+		//人狼プレイヤーの位置に移動
+		m_pCircleStencilMask->SetPos(D3DXVECTOR3(posMask.x + (posDest.x - posMask.x) * 0.4f, posMask.y, 0.0f));
 	}
 
 	//選択アイコンの移動処理
@@ -919,6 +922,12 @@ void CFindWolfScene::Finish()
 	m_nFrameCounter++;
 
 	if (m_nFrameCounter <= FIND_WOLF_SCENE_CHANGE_SCENE_COUNT) return;
+
+	//プレイヤーの最終スコアを最終結果シーンに設定
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		CFinalResultScene::SetPlayerScore(m_apScoreUi[nCnt]->GetScore()->GetScore(), nCnt);
+	}
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;

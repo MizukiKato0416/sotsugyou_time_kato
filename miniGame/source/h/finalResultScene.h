@@ -46,6 +46,8 @@ public:
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 
+	static void SetPlayerScore(int nScore, int nIdxPlayer) { m_aPlayerScore[nIdxPlayer] = nScore; }	//プレイヤーのスコアを設定
+
 private:
 	void PhaseFirst();	//フェーズ開始処理
 	void RiseCamera();	//カメラの上昇処理
@@ -57,11 +59,13 @@ private:
 
 	PHASE m_phase;		//フェーズ
 	int m_nCntPhase;	//フェースカウント
+	static int m_aPlayerScore[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのスコア
 
 	CObjectModel* m_apObjPlayer[MAX_OBJECT_PLAYER_NUM];		//プレイヤーのモデルオブジェクト
 	CObjectModel* m_apResultTower[MAX_OBJECT_PLAYER_NUM];	//プレイヤーの下にあるタワーのモデルオブジェクト
 	CObject2D* m_pTextResult;	//結果発表の表示
 	CScore* m_apScoreResult[MAX_OBJECT_PLAYER_NUM];		//スコアの表示
+	int m_nTopScore;	//最高スコア
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bEndScene;	//選択キー押下時
 

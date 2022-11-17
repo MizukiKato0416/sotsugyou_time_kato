@@ -39,7 +39,7 @@
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //=============================================================================
-bool CGameScene::m_bWereWolfMode = true;
+bool CGameScene::m_bWereWolfMode = false;
 int CGameScene::m_nWereWolfPlayerIndex = 0;
 int CGameScene::m_aRanking[MAX_OBJECT_PLAYER_NUM] = { 0, 0, 0, 0 };
 

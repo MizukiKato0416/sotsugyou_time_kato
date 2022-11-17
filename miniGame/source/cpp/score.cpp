@@ -30,6 +30,8 @@ CScore::CScore(int nNumDigit, CTexture::TEXTURE_TYPE type, D3DXVECTOR3 pos, floa
 
 	SetTexType(type);	//保存用
 
+	m_colNumber = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
 	//桁数分の2Dオブジェクトを生成
 	for (int nCnt = 0; nCnt < nNumDigit; nCnt++)
 	{
@@ -96,10 +98,9 @@ void CScore::Uninit(void) {
 //=============================================================================
 void CScore::Update(void) {
 	//ナンバーの更新処理
-	for (unsigned int nCnt = 0; nCnt < m_vNumberPtr.size(); nCnt++) {
-		if (m_vNumberPtr[nCnt] == nullptr) continue;
-		//更新処理
-		(m_vNumberPtr[nCnt])->Update();
+	for (auto& pNumber : m_vNumberPtr) {
+		if (pNumber == nullptr) continue;
+		pNumber->Update();
 	}
 }
 
@@ -125,6 +126,7 @@ void CScore::SetScore(int nScore) {
 		m_vNumberPtr[nCnt]->SetTexType(GetTexType());
 		m_vNumberPtr[nCnt]->SetPos(m_pos + D3DXVECTOR3(-m_fSize / 2.0f, m_fSize / 2.0f, 0.0f) + D3DXVECTOR3(-m_fSize, 0.0f, 0.0f) * (float)nCnt);	//スコア全体の右上がposとなるように
 		m_vNumberPtr[nCnt]->SetSize(D3DXVECTOR3(m_fSize, m_fSize, 0.0f));
+		m_vNumberPtr[nCnt]->SetColor(m_colNumber);
 	}
 
 	//桁数削除
@@ -165,4 +167,17 @@ void CScore::AddScore(int nScore) {
 //=============================================================================
 int CScore::GetScore(void) {
 	return m_nScore;
+}
+
+//=============================================================================
+// ナンバーの色の設定
+//=============================================================================
+void CScore::SetNumberColor(D3DXCOLOR col) {
+	m_colNumber = col;
+
+	//ナンバーの色の変更
+	for (auto& pNumber : m_vNumberPtr) {
+		if (pNumber == nullptr) continue;
+		pNumber->SetColor(col);
+	}
 }
