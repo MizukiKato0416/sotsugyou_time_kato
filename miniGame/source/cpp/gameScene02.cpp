@@ -24,6 +24,7 @@
 #include "ToScreen.h"
 #include "check.h"
 #include "item_shield.h"
+#include "finalResultScene.h"
 
 
 //エフェクト
@@ -442,8 +443,23 @@ void CGameScene02::UpdateGameOver(void) {
 		//フェードの取得
 		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 		if (pFade == nullptr) return;
-		//タイトルへシーン遷移
-		pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 60);
+
+		//リザルトへシーン遷移
+		if (GetWereWolfMode()) {
+			//人狼モードの場合簡素なリザルト
+			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 60);
+		}
+		//通常モードの場合
+		else {
+			for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
+			{
+				int nScore = 40 - (GetRanking(nIdx) - 1)*10;	//ランキングを取得してスコアを決定
+				//リザルトのスコアを設定
+				CFinalResultScene::SetPlayerScore(nScore, nIdx);
+			}
+			//最終リザルトに遷移
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
+		}
 	}
 }
 

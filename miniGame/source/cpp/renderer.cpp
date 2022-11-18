@@ -325,7 +325,9 @@ void CRenderer::Draw(void) {
 		//----------------------------------
 		//ステンシルバッファの描画
 		//----------------------------------
+		//ステンシルバッファのクリア
 		m_pD3DDevice->Clear(0, nullptr, D3DCLEAR_STENCIL, 0, 1.0f, 0);
+		//ステンシルオブジェクトの描画処理
 		CObject::DrawStencilAll();
 
 		//----------------------------------
@@ -358,8 +360,8 @@ void CRenderer::Draw(void) {
 		//サーフェイスとステンシルの設定
 		m_pD3DDevice->SetRenderTarget(0, m_pDefaultSurf);
 		m_pD3DDevice->SetDepthStencilSurface(m_pDefaultDepthSurf);
-		// バックバッファ＆Ｚバッファ＆ステンシルバッファのクリア
-		m_pD3DDevice->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_colBackBuff, 1.0f, 0);	//フォグと同じ色にするといい感じ
+		// バックバッファ＆Ｚバッファのクリア
+		m_pD3DDevice->Clear(0, nullptr, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_colBackBuff, 1.0f, 0);
 
 		//Z値バッファ描画中ではない
 		m_bDrawZTex = false;
