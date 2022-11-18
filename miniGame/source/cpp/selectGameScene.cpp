@@ -110,28 +110,12 @@ void CSelectGameScene::Init(void) {
 	// îwåi
 	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	//ë—ÇÃê∂ê¨
-	/*CObject2D *pObject2D = nullptr;
-	pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 0.0f + 80.0f / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
-	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));
-	pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 80.0f / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
-	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));*/
-
 	//BGMÇÃçƒê∂
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
 	}
 
-	//ëIëÉÅÉjÉÖÅ[ÇÃîwåi
-	/*CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 250.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 1000.0f, 450.0f);
-	if (pMenuStencil != nullptr) {
-		pMenuStencil->SetDrawStencil(true);
-	}
-*/
 	//ëIëÉÅÉjÉÖÅ[ÇÃê∂ê¨
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false);
 
@@ -173,10 +157,8 @@ void CSelectGameScene::Init(void) {
 		}
 	}
 
-	////ÉQÅ[ÉÄñºÇÃîwåi
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 478.0f * 1.3f, 225.0f * 1.3f);
 	//ÉQÅ[ÉÄñºÇÃê∂ê¨
-	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 0.0f, 0.0f);
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 1697.0f * 0.2f, 631.0f * 0.2f);
 	////ñÓàÛUIÇÃê∂ê¨
 	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 150.0f, 150.0f);
 	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 150.0f, 150.0f);
