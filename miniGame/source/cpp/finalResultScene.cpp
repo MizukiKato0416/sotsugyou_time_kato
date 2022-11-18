@@ -376,9 +376,6 @@ void CFinalResultScene::RiseTower() {
 	//カメラの取得
 	CCamera* pCamera = nullptr;
 	if (pManager != nullptr) pCamera = pManager->GetCamera();
-	//サウンドの取得
-	CSound* pSound = nullptr;
-	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	bool bNextPhase = true;	//次のフェーズへ移行
 
@@ -395,14 +392,8 @@ void CFinalResultScene::RiseTower() {
 		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
 			//スコアが０の場合後の処理が通らないので、停止時の処理を最初に行う
 			if (m_nCntPhase == 1 && m_apScoreResult[nCnt]->GetScore() == 0) {
-				//音の再生
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
-				//エフェクト
-
-				//順位のテクスチャ出してもいいかも
-
-				//スコアの色を変更
-				m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+				//タワー停止時の処理
+				StopTower(nCnt);
 			}
 
 			continue;
@@ -431,14 +422,8 @@ void CFinalResultScene::RiseTower() {
 
 		//スコア分上昇した場合ストップ
 		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
-			//音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
-			//エフェクト
-
-			//順位のテクスチャ出してもいいかも
-
-			//スコアの色を変更
-			m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			//タワー停止時の処理
+			StopTower(nCnt);
 		}
 	}
 
@@ -456,6 +441,25 @@ void CFinalResultScene::RiseTower() {
 		pCamera->SetPos(posCamera);
 	}
 }
+
+//タワー停止時の処理
+void CFinalResultScene::StopTower(int nIdxPlayer) {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
+	//音の再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
+	//エフェクト
+
+	//順位のテクスチャ出してもいいかも
+
+	//人狼モードの場合スコアの色を変更
+	if (m_apScoreResult[nIdxPlayer] != nullptr && CGameScene::GetWereWolfMode()) m_apScoreResult[nIdxPlayer]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+}
+
 
 //=============================================================================
 // 勝利

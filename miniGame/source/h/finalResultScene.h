@@ -57,6 +57,8 @@ private:
 	void Winner();			//勝利
 	void PhaseFinish();	//フェーズ終了処理
 
+	void StopTower(int nIdxPlayer);	//タワー停止時の処理
+
 	PHASE m_phase;		//フェーズ
 	int m_nCntPhase;	//フェースカウント
 	static int m_aPlayerScore[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのスコア
