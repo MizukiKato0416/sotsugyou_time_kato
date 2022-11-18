@@ -149,8 +149,6 @@ void CSelectGameScene::Init(void) {
 			//回転速度の設定
 			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.02f, 0.0f));
 
-			pObjModelUI->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);	//とりあえず後ろ
-
 			//UIオブジェクトのモデルの取得
 			CModel* pModel = pObjModelUI->GetPtrModel();
 			if (pModel == nullptr) continue;
