@@ -17,6 +17,7 @@
 #include "gameScene.h"
 #include "object_player.h"
 #include "meshwall.h"
+#include "ToScreen.h"
 
 //=============================================================================
 // マクロ定義
@@ -72,7 +73,7 @@ void CFinalResultScene::Init(void) {
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);		//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
-												//ライトのビューマトリックスを生成
+	//ライトのビューマトリックスを生成
 	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &D3DXVECTOR3(posLightV + vecLight), &D3DXVECTOR3(0, 1, 0));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
@@ -187,6 +188,9 @@ void CFinalResultScene::Update(void) {
 		break;
 	case CFinalResultScene::PHASE::RISE_TOWER:
 		RiseTower();
+		break;
+	case CFinalResultScene::PHASE::WINNER:
+		Winner();
 		break;
 	case CFinalResultScene::PHASE::PHASE_FINISH:
 		PhaseFinish();
@@ -319,6 +323,12 @@ void CFinalResultScene::ResultText() {
 // スコアのUI表示処理
 //=============================================================================
 void CFinalResultScene::ShowScoreUI() {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
 	m_nCntPhase++;
 
 	//スコアUIの表示
@@ -326,9 +336,18 @@ void CFinalResultScene::ShowScoreUI() {
 	{
 		//生成タイミング
 		if (m_nCntPhase == 120 + nCnt * 30) {
-			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(300.0f + nCnt * 300.0f, 600.0f, 0.0f), 30.0f);
+			float fPosX = WorldToScreen(m_apObjPlayer[nCnt]->GetPos()).x;	//プレイヤーのモデルの位置をスクリーン座標に変換してｘ座標を取得
+			//スコアの生成
+			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+
 			//通常モードの場合非表示
-			if (m_apScoreResult[nCnt] != nullptr && !CGameScene::GetWereWolfMode()) m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+			if (m_apScoreResult[nCnt] != nullptr && !CGameScene::GetWereWolfMode()) {
+				m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+			}
+			else {
+				//音の再生
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
+			}
 		}
 	}
 
@@ -345,11 +364,20 @@ void CFinalResultScene::ShowScoreUI() {
 // タワーの上昇処理
 //=============================================================================
 void CFinalResultScene::RiseTower() {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//カメラの取得
+	CCamera* pCamera = nullptr;
+	if (pManager != nullptr) pCamera = pManager->GetCamera();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
 	bool bNextPhase = true;	//次のフェーズへ移行
 
 	m_nCntPhase++;
 
-	const float fSpeedRise = 3.0f;
+	const float fSpeedRise = 2.0f;
 
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
@@ -359,9 +387,9 @@ void CFinalResultScene::RiseTower() {
 		//スコアがすでに上限の場合終了
 		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
 			//スコアが０の場合後の処理が通らないので、停止時の処理を最初に行う
-			if (m_nCntPhase = 1 && m_apScoreResult[nCnt]->GetScore() == 0) {
+			if (m_nCntPhase == 1 && m_apScoreResult[nCnt]->GetScore() == 0) {
 				//音の再生
-
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
 				//エフェクト
 
 				//順位のテクスチャ出してもいいかも
@@ -394,36 +422,32 @@ void CFinalResultScene::RiseTower() {
 		//スコア分上昇した場合ストップ
 		if (m_apScoreResult[nCnt]->GetScore() >= m_aPlayerScore[nCnt]) {
 			//音の再生
-
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
 			//エフェクト
 
 			//順位のテクスチャ出してもいいかも
 		}
 	}
 
-	CManager* pManager = CManager::GetManager();
-	CCamera* pCamera = nullptr;
-	if (pManager != nullptr) pCamera = pManager->GetCamera();
-	if (pCamera != nullptr) {
+	//次のフェーズへ移行
+	if (bNextPhase) {
+		//フェーズの変更
+		m_phase = PHASE::WINNER;
+		//カウントリセット
+		m_nCntPhase = 0;
+	}
+	else if (pCamera != nullptr) {
 		D3DXVECTOR3 posCamera = pCamera->GetPos();
 		posCamera.y += fSpeedRise;
 		//カメラの移動
 		pCamera->SetPos(posCamera);
-	}
-
-	//次のフェーズへ移行
-	if (bNextPhase) {
-		//フェーズの変更
-		m_phase = PHASE::WIN;
-		//カウントリセット
-		m_nCntPhase = 0;
 	}
 }
 
 //=============================================================================
 // 勝利
 //=============================================================================
-void CFinalResultScene::Win() {
+void CFinalResultScene::Winner() {
 	//王冠降りてきたり
 	
 	//紙吹雪降ってきたり
