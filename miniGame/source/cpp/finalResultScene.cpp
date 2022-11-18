@@ -26,7 +26,7 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 0, 0, 0, 0 };
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 40, 30, 20, 10 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -225,24 +225,24 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 1.5f, fMoveMinY = 0.8f;	//上昇の速度（最大、最低）
+	const float fMoveMaxY = 1.5f;	//上昇の速度（最大）
 	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.001f;	//上昇量
 	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
 
+	const float fSlowHeight = -100.0f;	//減速する高さ
+	//減速させる
+	if (posCamera.y > fSlowHeight) {
+		fMoveY = -posCamera.y * (fMoveMaxY / -fSlowHeight);
+	}
+
 	//0まで上昇させる
 	if (posCamera.y < 0.0f) {
-		float fSlowHeight = -100.0f;	//減速する高さ
 
-		//減速させる
-		if (posCamera.y > fSlowHeight) {
-			fMoveY = -posCamera.y * (fMoveMaxY / -fSlowHeight);
-			if (fMoveY < fMoveMinY) fMoveY = fMoveMinY;
-		}
 		//位置上昇
 		posCamera.y += fMoveY;	
 		//0に近づいた場合調節する
-		if (posCamera.y > 0.0f) {
+		if (posCamera.y > -0.01f) {
 			posCamera.y = 0.0f;
 		}
 		//位置の設定
@@ -256,8 +256,8 @@ void CFinalResultScene::RiseCamera() {
 	float fRotSpeed = 0.013f;	//回転速度
 	float fSlowRot = -0.2f;		//減速する角度
 
-	//目標地点までカメラが登った場合、正面ギリギリで減速
-	if (posCamera.y >= 0.0f && rotCamera.y < 0.0f && rotCamera.y >= fSlowRot) {
+	//減速している時点で、正面ギリギリで減速
+	if (posCamera.y > fSlowHeight && rotCamera.y < 0.0f && rotCamera.y >= fSlowRot) {
 		fRotSpeed = -rotCamera.y * (fRotSpeed / -fSlowRot);
 		if (fRotSpeed < 0.001f) fRotSpeed = 0.001f;
 	}
@@ -269,7 +269,7 @@ void CFinalResultScene::RiseCamera() {
 	}
 
 	//回転の終了
-	if (posCamera.y >= 0.0f && rotCamera.y >= 0.0f && fRotCameraLastY <= 0.0f) {
+	if (posCamera.y > fSlowHeight && rotCamera.y >= 0.0f && fRotCameraLastY <= 0.0f) {
 		//常に正面を向かせる
 		rotCamera.y = 0.0f;
 		//フェーズの変更
@@ -331,20 +331,27 @@ void CFinalResultScene::ShowScoreUI() {
 
 	m_nCntPhase++;
 
+	bool bWolfMode = CGameScene::GetWereWolfMode();	//人狼モードのフラグ
+
 	//スコアUIの表示
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
 		//生成タイミング
-		if (m_nCntPhase == 120 + nCnt * 30) {
+		if (m_nCntPhase == 120 + nCnt * 30 || (!bWolfMode && m_nCntPhase == 1)) {
 			float fPosX = WorldToScreen(m_apObjPlayer[nCnt]->GetPos()).x;	//プレイヤーのモデルの位置をスクリーン座標に変換してｘ座標を取得
 			//スコアの生成
-			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_001, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
 
 			//通常モードの場合非表示
 			if (m_apScoreResult[nCnt] != nullptr && !CGameScene::GetWereWolfMode()) {
 				m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 			}
+			//人狼モード
 			else {
+				//スコアの背景の設定
+				CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(fPosX, 600.0f + 30.0f / 2, 0.0f), 
+					(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
+				if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
 				//音の再生
 				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
 			}
@@ -352,7 +359,7 @@ void CFinalResultScene::ShowScoreUI() {
 	}
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 270) {
+	if (m_nCntPhase > 270 || (!bWolfMode && m_nCntPhase == 120)) {
 		//フェーズの変更
 		m_phase = PHASE::RISE_TOWER;
 		//カウントリセット
@@ -377,7 +384,7 @@ void CFinalResultScene::RiseTower() {
 
 	m_nCntPhase++;
 
-	const float fSpeedRise = 2.0f;
+	const float fSpeedRise = 2.0f;	//上昇速度
 
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
@@ -393,6 +400,9 @@ void CFinalResultScene::RiseTower() {
 				//エフェクト
 
 				//順位のテクスチャ出してもいいかも
+
+				//スコアの色を変更
+				m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 			}
 
 			continue;
@@ -426,6 +436,9 @@ void CFinalResultScene::RiseTower() {
 			//エフェクト
 
 			//順位のテクスチャ出してもいいかも
+
+			//スコアの色を変更
+			m_apScoreResult[nCnt]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
 
