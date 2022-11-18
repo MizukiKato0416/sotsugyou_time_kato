@@ -118,10 +118,14 @@ data/TEXTURE/UI/wolf_find_tutorial_4.png
 data/TEXTURE/UI/circle.png
 
 data/TEXTURE/UI/result_ui.png
+data/TEXTURE/UI/result_ui2.png
 
 data/TEXTURE/UI/menu_game_title_frame_ui.png
 data/TEXTURE/UI/select_decision.png
 data/TEXTURE/UI/select_turn_back.png
+data/TEXTURE/UI/mode_normal_01.png
+data/TEXTURE/UI/mode_wolf.png
+data/TEXTURE/UI/menu_none_move_ui.png
 
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
