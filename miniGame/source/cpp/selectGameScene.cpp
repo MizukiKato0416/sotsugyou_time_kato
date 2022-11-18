@@ -156,10 +156,10 @@ void CSelectGameScene::Init(void) {
 			//モデルを設定
 			pModel->SetModelType(typeModelGame[nIdxModel]);
 
-			const float fColSpe = 0.9f;
+			const D3DXCOLOR colSpecular = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);	//スペキュラーの色
 			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
 			{
-				pModel->SetMaterialSpecular(D3DXCOLOR(fColSpe, fColSpe, fColSpe, 1.0f), nCnt);
+				pModel->SetMaterialSpecular(colSpecular, nCnt);
 				pModel->SetMaterialPower(6.0f, nCnt);
 			}
 		}
