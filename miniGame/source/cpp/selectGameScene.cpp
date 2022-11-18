@@ -159,17 +159,9 @@ void CSelectGameScene::Init(void) {
 
 	//ÉQÅ[ÉÄñºÇÃê∂ê¨
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 1697.0f * 0.2f, 631.0f * 0.2f);
-	////ñÓàÛUIÇÃê∂ê¨
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 150.0f, 150.0f);
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 150.0f, 150.0f);
-
-	////åàíËUIÇÃê∂ê¨
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - MENU_DECIDE_UI_SIZE_X / 2.0f + MENU_DECIDE_UI_POS, SCREEN_HEIGHT - MENU_DECIDE_UI_SIZE_Y / 2.0f + MENU_DECIDE_UI_POS, 0.0f),
-	//	              CTexture::TEXTURE_TYPE::MENU_DECIDE_UI, MENU_DECIDE_UI_SIZE_X, MENU_DECIDE_UI_SIZE_Y);
-
-	////ñﬂÇÈUIÇÃê∂ê¨
-	//CObject2D::Create(D3DXVECTOR3(MENU_DECIDE_UI_SIZE_X / 2.0f - MENU_DECIDE_UI_POS, SCREEN_HEIGHT - MENU_DECIDE_UI_SIZE_Y / 2.0f + MENU_DECIDE_UI_POS, 0.0f),
-	//	              CTexture::TEXTURE_TYPE::MENU_BACK_UI, MENU_DECIDE_UI_SIZE_X, MENU_DECIDE_UI_SIZE_Y);
+	//ñÓàÛUIÇÃê∂ê¨
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 90.0f, 90.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 90.0f, 90.0f);
 
 	////ÉÇÅ[ÉhUIÇÃê∂ê¨
 	//m_pModeUi = CObject2D::Create(D3DXVECTOR3(500.0f * 0.6f / 2.0f /*- 10.0f*/, 200.0f * 0.6f / 2.0f /*- 10.0f*/, 0.0f),
