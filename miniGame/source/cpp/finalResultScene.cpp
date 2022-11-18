@@ -98,7 +98,7 @@ void CFinalResultScene::Init(void) {
 	//モデルの生成
 	//------------------------------
 	//仮の背景
-	CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 100.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, 2000.0f, 8000.0f, CTexture::TEXTURE_TYPE::BG_TITLE);
+	CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
 
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
@@ -465,15 +465,54 @@ void CFinalResultScene::StopTower(int nIdxPlayer) {
 // 勝利
 //=============================================================================
 void CFinalResultScene::Winner() {
-	//王冠降りてきたり
-	
-	//紙吹雪降ってきたり
+	m_nCntPhase++;
 
+	const int nTimeCreateCrown = 180;
+	const float fposCrownFirst = 500.0f;	//王冠の初期位置（プレイヤーの位置からの差分）
 
-	//フェーズの変更
-	m_phase = PHASE::PHASE_FINISH;
-	//カウントリセット
-	m_nCntPhase = 0;
+	if (m_nCntPhase == nTimeCreateCrown) {
+		//王冠降りてきたり
+		for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+		{
+			if (m_apScoreResult[nCnt] == nullptr || m_apObjPlayer[nCnt] == nullptr) continue;
+			if (m_apScoreResult[nCnt]->GetScore() != m_nTopScore) continue;
+
+			D3DXVECTOR3 posPlayer = m_apObjPlayer[nCnt]->GetPos();	//プレイヤーの位置を取得
+			posPlayer.y += fposCrownFirst;	//差分を追加
+			//王冠を生成
+			CObjectModel* pObjCrown = CObjectModel::Create(CModel::MODELTYPE::OBJ_BANANA, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+			if (pObjCrown != nullptr) {
+				pObjCrown->SetRotSpeed(D3DXVECTOR3(0.0f, 0.05f, 0.0f));	//回転させる
+				m_vObjCrown.push_back(pObjCrown);
+			}
+		}
+		//紙吹雪降ってきたり
+
+	}
+
+	//王冠の移動
+	const float fposCrownDest = 100.0f;	//王冠の目標の位置（プレイヤーの位置からの差分）
+	const int nTimeFallCrown = 60;	//王冠が落ちている時間
+
+	//王冠生成後から数秒王冠が落下
+	if (m_nCntPhase > nTimeCreateCrown && m_nCntPhase < nTimeCreateCrown + nTimeFallCrown) {
+		for (auto& pCrown : m_vObjCrown)
+		{
+			if (pCrown == nullptr) continue;
+			D3DXVECTOR3 posCrown = pCrown->GetPos();
+			posCrown.y -= (fposCrownFirst - fposCrownDest) / nTimeFallCrown;
+			//位置の設定
+			pCrown->SetPos(posCrown);
+		}
+	}
+
+	//フェーズ終了
+	if (m_nCntPhase == 180 + nTimeFallCrown) {
+		//フェーズの変更
+		m_phase = PHASE::PHASE_FINISH;
+		//カウントリセット
+		m_nCntPhase = 0;
+	}
 }
 
 //=============================================================================

@@ -102,11 +102,12 @@ HRESULT CBalloon::Init(void) {
 	CModel *pModel = GetPtrModel();
 	if (pModel != nullptr)
 	{
+		const D3DXCOLOR colSpecular = D3DXCOLOR(0.95f, 0.95f, 0.95f, 1.0f);	//スペキュラーの色
 		for (int nIdxMat = 0; nIdxMat < MAX_MATERIAL; nIdxMat++)
 		{
-			//指定したマテリアルの色を設定
-			pModel->SetMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), nIdxMat);
+			pModel->SetMaterialSpecular(colSpecular, nIdxMat);
 			pModel->SetMaterialPower(12.0f, nIdxMat);
+
 		}
 	}
 

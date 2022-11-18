@@ -68,6 +68,7 @@ private:
 	CObject2D* m_pTextResult;	//結果発表の表示
 	CScore* m_apScoreResult[MAX_OBJECT_PLAYER_NUM];		//スコアの表示
 	int m_nTopScore;	//最高スコア
+	std::vector<CObjectModel*> m_vObjCrown;	//王冠のモデルの配列
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bEndScene;	//選択キー押下時
 
