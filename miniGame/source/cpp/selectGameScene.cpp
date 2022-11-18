@@ -157,12 +157,21 @@ void CSelectGameScene::Init(void) {
 			//回転速度の設定
 			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.02f, 0.0f));
 
+			pObjModelUI->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);	//とりあえず後ろ
+
 			//UIオブジェクトのモデルの取得
 			CModel* pModel = pObjModelUI->GetPtrModel();
 			if (pModel == nullptr) continue;
 
 			//モデルを設定
 			pModel->SetModelType(typeModelGame[nIdxModel]);
+
+			const float fColSpe = 0.9f;
+			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
+			{
+				pModel->SetMaterialSpecular(D3DXCOLOR(fColSpe, fColSpe, fColSpe, 1.0f), nCnt);
+				pModel->SetMaterialPower(6.0f, nCnt);
+			}
 		}
 	}
 
@@ -356,6 +365,18 @@ void CSelectGameScene::UpdateInput(void) {
 			//ゲームモード設定
 			CGameScene::SetWereWolfMode(m_bWolfMode);
 		}
+	}
+	//戻るキー押下
+	else if (pInput->GetTrigger(CInput::CODE::BACK, 0)) {
+		// 押されたフラグ
+		m_bSelectGame = true;
+		//選択のロック
+		m_pMenuGame->SetLockChangeSelect(true);
+		//決定音の再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+		//次のシーンの決定
+		m_nextScene = CScene::SCENE_TYPE::TITLE;
 	}
 }
 

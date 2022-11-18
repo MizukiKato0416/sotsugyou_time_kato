@@ -35,7 +35,7 @@ public:
 		RESULT_TEXT,	//結果発表のテキスト表示
 		SHOW_SCORE_UI,	//スコアのUI表示
 		RISE_TOWER,		//タワーの上昇
-		WIN,			//勝利
+		WINNER,			//勝利
 		PHASE_FINISH,	//フェーズ終了
 		ENUM_MAX
 	};
@@ -54,8 +54,10 @@ private:
 	void ResultText();	//結果発表のテキスト表示処理
 	void ShowScoreUI();	//スコアのUI表示処理
 	void RiseTower();	//タワーの上昇処理
-	void Win();			//勝利
+	void Winner();			//勝利
 	void PhaseFinish();	//フェーズ終了処理
+
+	void StopTower(int nIdxPlayer);	//タワー停止時の処理
 
 	PHASE m_phase;		//フェーズ
 	int m_nCntPhase;	//フェースカウント

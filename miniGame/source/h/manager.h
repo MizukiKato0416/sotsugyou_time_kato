@@ -50,7 +50,7 @@ public:
 	CInput* GetInputCur(void) { return m_pInputCur; }		//現在の入力デバイスの取得
 	bool GetEnableXInput(void) { return m_bEnableXInput; }	//現在の入力デバイスがXinputかどうかの取得
 	void SetCamera(CCamera* pCamera);	//カメラの設定
-	CCamera* GetCamera(void) { return m_pCamera; }				//カメラの取得
+	CCamera* GetCamera(void) { return m_pCamera; }	//カメラの取得
 	CSound* GetSound(void) { return m_pSound; }	//サウンドの取得
 	CFade* GetFade(void) { return m_pFade; }	//フェードの取得
 	CScene* GetScene(void) { return m_pScene; }	//シーンの取得
