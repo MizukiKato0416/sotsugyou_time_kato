@@ -47,6 +47,7 @@ private:
 	CSelectMenu3D* m_pMenuGame;	//開始するゲームの選択メニュー
 	CObject2D* m_pGameName;		//ゲーム名
 	CObject2D* m_pTutorial;		//チュートリアル画面
+	CObject2D *m_pModeUi;		//モードUIのポインタ
 	CNextButton* m_pNextButton;	//次へのボタン
 	CScene::SCENE_TYPE m_nextScene;	//開始するゲームシーンのタイプ
 };
