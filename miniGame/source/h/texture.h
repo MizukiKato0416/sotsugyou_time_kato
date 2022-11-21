@@ -28,6 +28,7 @@ public:
 		BG_RESULT,
 		BG_MENU,
 		BG_MENU_WOLF,
+		BG_FIND_WOLF,
 
 		ARROW_RIGHT,
 		ARROW_LEFT,
@@ -166,6 +167,10 @@ public:
 		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
 		MESH_TOWER_PILLAR,			//タワーの柱
 		MESH_ITEM_SHIELD,			//アイテム盾
+		MESH_FIND_WOLF_TOWER,		//人狼発見シーンのたわー
+		MESH_FIND_WOLF_FACE_OBJ_01,	//人狼発見シーンの顔オブジェクト
+		MESH_FIND_WOLF_FACE_OBJ_02,	//人狼発見シーンの顔オブジェクト
+		MESH_FIND_WOLF_FACE_OBJ_03,	//人狼発見シーンの顔オブジェクト
 
 		//ナンバーのテクスチャ
 		NUMBER_001,
