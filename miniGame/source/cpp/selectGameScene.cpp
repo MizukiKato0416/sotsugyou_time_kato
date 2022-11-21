@@ -30,10 +30,23 @@
 #define MENU_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define MENU_NEXT_BUTTON_DEC_ALPHA		(0.015f)								//次に進むボタンのα値減算量
 
-#define MENU_DECIDE_UI_SIZE_X			(514.0f * 0.4f)				//決定UIのサイズX
-#define MENU_DECIDE_UI_SIZE_Y			(216.0f * 0.4f)				//決定UIのサイズY
-#define MENU_DECIDE_UI_POS				(20.0f)						//決定UIの位置調整値
+#define MENU_DECIDE_UI_SIZE_X			(514.0f * 0.4f)		//決定UIのサイズX
+#define MENU_DECIDE_UI_SIZE_Y			(216.0f * 0.4f)		//決定UIのサイズY
+#define MENU_DECIDE_UI_POS				(20.0f)				//決定UIの位置調整値
 
+#define MENU_ALOW_UI_SIZE				(320.0f * 0.28f)	//矢印UIのサイズ
+#define MENU_ALOW_UI_INIT_POS_X			(270.0f)			//矢印UIの位置調整値X
+#define MENU_ALOW_UI_INIT_POS_Y			(630.0f)			//矢印UIの位置Y
+#define MENU_ALOW_UI_POS_MIN			(260.0f)			//矢印UIの位置最小値
+#define MENU_ALOW_UI_POS_MAX			(280.0f)			//矢印UIの位置最大値
+#define MENU_ALOW_UI_MOVE_MAX			(0.8f)				//矢印UIの移動量最大値
+#define MENU_ALOW_UI_MOVE				(0.08f)				//矢印UIの移動量
+
+#define MENU_GAME_TITLE_UI_SIZE_X		(1697.0f * 0.2f)	//ゲームタイトルUIのサイズX
+#define MENU_GAME_TITLE_UI_SIZE_Y		(631.0f * 0.2f)		//ゲームタイトルUIのサイズY
+
+#define MENU_GAME_MODE_UI_SIZE_X		(480.0f * 0.7f)		//モードUIのサイズX
+#define MENU_GAME_MODE_UI_SIZE_Y		(220.0f * 0.7f)		//モードUIのサイズY
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -50,6 +63,10 @@ CSelectGameScene::CSelectGameScene()
 	m_bWolfMode = false;
 	m_pTutorial = nullptr;
 	m_pModeUi = nullptr;
+	m_pMenuNoneMoveUi = nullptr;
+	memset(m_pAlowUi, NULL, sizeof(m_pAlowUi[SELECT_GAME_SCENE_ALOW_UI_NUM]));
+	memset(m_fAlowUiMove, 0, sizeof(m_fAlowUiMove[SELECT_GAME_SCENE_ALOW_UI_NUM]));
+	memset(m_bAlowUiMoveChange, false, sizeof(m_bAlowUiMoveChange[SELECT_GAME_SCENE_ALOW_UI_NUM]));
 }
 
 //=============================================================================
@@ -64,6 +81,14 @@ CSelectGameScene::~CSelectGameScene()
 // ゲーム選択シーンの初期化処理
 //=============================================================================
 void CSelectGameScene::Init(void) {
+
+	//変数初期化
+	memset(m_fAlowUiMove, 0, sizeof(m_fAlowUiMove[SELECT_GAME_SCENE_ALOW_UI_NUM]));
+	m_bAlowUiMoveChange[0] = false;
+	m_bAlowUiMoveChange[1] = true;
+
+
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -109,7 +134,9 @@ void CSelectGameScene::Init(void) {
 	//------------------------------
 	// 背景
 	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
+		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
+	
 	//BGMの再生
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
@@ -158,14 +185,17 @@ void CSelectGameScene::Init(void) {
 	}
 
 	//ゲーム名の生成
-	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 1697.0f * 0.2f, 631.0f * 0.2f);
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, MENU_ALOW_UI_INIT_POS_Y, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON,
+		                            MENU_GAME_TITLE_UI_SIZE_X, MENU_GAME_TITLE_UI_SIZE_Y);
 	//矢印UIの生成
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 90.0f, 90.0f);
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 90.0f, 90.0f);
+	m_pAlowUi[0] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
+		                             CTexture::TEXTURE_TYPE::ARROW_LEFT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
+	m_pAlowUi[1] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
+		                             CTexture::TEXTURE_TYPE::ARROW_RIGHT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
 
-	////モードUIの生成
-	//m_pModeUi = CObject2D::Create(D3DXVECTOR3(500.0f * 0.6f / 2.0f /*- 10.0f*/, 200.0f * 0.6f / 2.0f /*- 10.0f*/, 0.0f),
-	//	                          CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, 500.0f * 0.6f, 200.0f * 0.6f);
+	//モードUIの生成
+	m_pModeUi = CObject2D::Create(D3DXVECTOR3(MENU_GAME_MODE_UI_SIZE_X / 2.0f, MENU_GAME_MODE_UI_SIZE_Y / 2.0f, 0.0f),
+		                          CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
@@ -251,6 +281,9 @@ void CSelectGameScene::Update(void) {
 
 	//背景の動きの処理
 	BgMove();
+
+	//矢印UIの処理
+	AlowUi();
 }
 
 //=============================================================================
@@ -459,11 +492,15 @@ void CSelectGameScene::ChangeMode(bool bWolf) {
 	if (m_bWolfMode) {
 		//背景変更
 		if (m_pMenuBG != nullptr) m_pMenuBG->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU_WOLF);
+		if (m_pMenuNoneMoveUi != nullptr) m_pMenuNoneMoveUi->SetTexType(CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI_WOLF);
+		if (m_pModeUi != nullptr) m_pModeUi->SetTexType(CTexture::TEXTURE_TYPE::MENU_MODE_WOLF);
 	}
 	//通常モードに変更
 	else {
 		//背景変更
 		if (m_pMenuBG != nullptr) m_pMenuBG->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU);
+		if (m_pMenuNoneMoveUi != nullptr) m_pMenuNoneMoveUi->SetTexType(CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI);
+		if (m_pModeUi != nullptr) m_pModeUi->SetTexType(CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL);
 	}
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
@@ -486,4 +523,49 @@ void CSelectGameScene::BgMove(){
 
 	//背景を動かす
 	m_pMenuBG->SetMoveTex(MENU_BG_MOVE_SPEED.x, MENU_BG_MOVE_SPEED.y);
+}
+
+//=============================================================================
+//矢印UIの動き処理
+//=============================================================================
+void CSelectGameScene::AlowUi()
+{
+	for (int nCntAlow = 0; nCntAlow < SELECT_GAME_SCENE_ALOW_UI_NUM; nCntAlow++)
+	{
+		if (m_pAlowUi[nCntAlow] == nullptr) continue;
+
+		//位置取得
+		D3DXVECTOR3 pos = m_pAlowUi[nCntAlow]->GetPos();
+
+		//移動量加算
+		if(m_bAlowUiMoveChange[nCntAlow]) m_fAlowUiMove[nCntAlow] += MENU_ALOW_UI_MOVE;
+		else m_fAlowUiMove[nCntAlow] -= MENU_ALOW_UI_MOVE;
+		
+		//移動量最大値を超えたら
+		if (m_fAlowUiMove[nCntAlow] > MENU_ALOW_UI_MOVE_MAX) m_fAlowUiMove[nCntAlow] = MENU_ALOW_UI_MOVE_MAX;
+		else if (m_fAlowUiMove[nCntAlow] < -MENU_ALOW_UI_MOVE_MAX) m_fAlowUiMove[nCntAlow] = -MENU_ALOW_UI_MOVE_MAX;
+
+		//位置に加算
+		pos.x += m_fAlowUiMove[nCntAlow];
+
+		//位置反映
+		m_pAlowUi[nCntAlow]->SetPos(pos);
+
+		float fPosMax = SCREEN_WIDTH / 2.0f - MENU_ALOW_UI_POS_MIN;
+		float fPosMin = SCREEN_WIDTH / 2.0f - MENU_ALOW_UI_POS_MAX;
+		if (nCntAlow == 1)
+		{
+			fPosMax = SCREEN_WIDTH / 2.0f + MENU_ALOW_UI_POS_MAX;
+			fPosMin = SCREEN_WIDTH / 2.0f + MENU_ALOW_UI_POS_MIN;
+		}
+
+		if (pos.x <= fPosMin)
+		{
+			if (!m_bAlowUiMoveChange[nCntAlow]) m_bAlowUiMoveChange[nCntAlow] = true;
+		}
+		else if (pos.x >= fPosMax)
+		{
+			if (m_bAlowUiMoveChange[nCntAlow]) m_bAlowUiMoveChange[nCntAlow] = false;
+		}
+	}
 }
