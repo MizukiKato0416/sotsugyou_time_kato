@@ -263,8 +263,6 @@ void CFindWolfScene::Init(void) {
 	}
 
 #endif
-
-	CGameScene::SetWereWolfPlayerIndex(2);
 }
 
 //=============================================================================

@@ -110,28 +110,12 @@ void CSelectGameScene::Init(void) {
 	// 背景
 	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	//帯の生成
-	/*CObject2D *pObject2D = nullptr;
-	pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 0.0f + 80.0f / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
-	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));
-	pObject2D = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 80.0f / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, 80.0f);
-	pObject2D->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.7f));*/
-
 	//BGMの再生
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
 	}
 
-	//選択メニューの背景
-	/*CObject2D* pMenuStencil = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 250.0f, 0.0f), CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_2, 1000.0f, 450.0f);
-	if (pMenuStencil != nullptr) {
-		pMenuStencil->SetDrawStencil(true);
-	}
-*/
 	//選択メニューの生成
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false);
 
@@ -164,30 +148,20 @@ void CSelectGameScene::Init(void) {
 			//モデルを設定
 			pModel->SetModelType(typeModelGame[nIdxModel]);
 
-			const float fColSpe = 0.9f;
+			const D3DXCOLOR colSpecular = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);	//スペキュラーの色
 			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
 			{
-				pModel->SetMaterialSpecular(D3DXCOLOR(fColSpe, fColSpe, fColSpe, 1.0f), nCnt);
+				pModel->SetMaterialSpecular(colSpecular, nCnt);
 				pModel->SetMaterialPower(6.0f, nCnt);
 			}
 		}
 	}
 
-	////ゲーム名の背景
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_GAME_TITLE_FRAME_UI, 478.0f * 1.3f, 225.0f * 1.3f);
 	//ゲーム名の生成
-	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 0.0f, 0.0f);
-	////矢印UIの生成
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 150.0f, 150.0f);
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 350.f, 600.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 150.0f, 150.0f);
-
-	////決定UIの生成
-	//CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - MENU_DECIDE_UI_SIZE_X / 2.0f + MENU_DECIDE_UI_POS, SCREEN_HEIGHT - MENU_DECIDE_UI_SIZE_Y / 2.0f + MENU_DECIDE_UI_POS, 0.0f),
-	//	              CTexture::TEXTURE_TYPE::MENU_DECIDE_UI, MENU_DECIDE_UI_SIZE_X, MENU_DECIDE_UI_SIZE_Y);
-
-	////戻るUIの生成
-	//CObject2D::Create(D3DXVECTOR3(MENU_DECIDE_UI_SIZE_X / 2.0f - MENU_DECIDE_UI_POS, SCREEN_HEIGHT - MENU_DECIDE_UI_SIZE_Y / 2.0f + MENU_DECIDE_UI_POS, 0.0f),
-	//	              CTexture::TEXTURE_TYPE::MENU_BACK_UI, MENU_DECIDE_UI_SIZE_X, MENU_DECIDE_UI_SIZE_Y);
+	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 1697.0f * 0.2f, 631.0f * 0.2f);
+	//矢印UIの生成
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_LEFT, 90.0f, 90.0f);
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 260.f, 630.0f, 0.0f), CTexture::TEXTURE_TYPE::ARROW_RIGHT, 90.0f, 90.0f);
 
 	////モードUIの生成
 	//m_pModeUi = CObject2D::Create(D3DXVECTOR3(500.0f * 0.6f / 2.0f /*- 10.0f*/, 200.0f * 0.6f / 2.0f /*- 10.0f*/, 0.0f),
