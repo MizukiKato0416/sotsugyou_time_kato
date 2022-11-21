@@ -143,6 +143,7 @@ public:
 		MENU_MODE_NORMAL,
 		MENU_MODE_WOLF,
 		MENU_NONE_MOVE_UI,
+		MENU_NONE_MOVE_UI_WOLF,
 
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,			//砂漠
