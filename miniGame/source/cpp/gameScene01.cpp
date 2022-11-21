@@ -117,10 +117,10 @@ void CGameScene01::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 1500.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
-	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(1000.0f, 2000.0f, -1000.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
@@ -193,16 +193,6 @@ void CGameScene01::Init(void) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
 	}
-
-#ifdef _DEBUG
-	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 70.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
-	if (pZBuff != nullptr) {
-		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
-		pZBuff->SetUseZBuffTexture(true);
-	}
-#endif
-
 	//ゲームシーンの初期化処理
 	CGameScene::Init();
 
