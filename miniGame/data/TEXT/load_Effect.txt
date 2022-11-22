@@ -660,19 +660,19 @@ END_EFFECTSTATE3D
 #========================================================================
 EFFECTSTATE3D
 	PATTERN = 1				//動きのパターン
-	SIZE = 45.0						//大きさ
-	ADDSIZE = -0.8					//大きさ変動
-	SIZEY = 45.0						//Y大きさ
-	ADDSIZEY = -0.8					//Y大きさ変動
+	SIZE = 100.0						//大きさ
+	ADDSIZE = -3.0					//大きさ変動
+	SIZEY = 100.0						//Y大きさ
+	ADDSIZEY = -3.0					//Y大きさ変動
 	DENSITY = 1						//密度
 	MOVE3D = 0.0 0.0 0.0					//移動
 	DISTANCE = 1.0						//発生距離
 	TYPE = 0					//出現位置のパターン
 	SECONDTYPE = 0					//ランダム移動のパターン
 	PARTICLETIME = 1						//粒発生間隔
-	COLOR = 1000 650 0 1000			//カラー
+	COLOR = 1000 700 0 1000			//カラー
 	CHANGECOLOR = 0 -15 0 0			//カラー変動値
-	LIFE = 75						//ライフ
+	LIFE = 60						//ライフ
 	TEXTURE = 0						//テクスチャ  (Effect000.png) 球は＋１の番号
 	SYNTHETIC = 0						//合成
 	TEXMOVE = 0.000 0.000					//テクスチャ移動
@@ -688,9 +688,9 @@ END_EFFECTSTATE3D
 #========================================================================
 EFFECTSTATE3D
 	PATTERN = 5				//動きのパターン
-	SIZE = 17.0						//大きさ
+	SIZE = 30.0						//大きさ
 	ADDSIZE = 0.0					//大きさ変動
-	SIZEY = 17.0						//Y大きさ
+	SIZEY = 30.0						//Y大きさ
 	ADDSIZEY = 0.0					//Y大きさ変動
 	DENSITY = 1						//粒密度
 	ROTATE = 0.00						//回転
@@ -719,19 +719,19 @@ END_EFFECTSTATE3D
 #========================================================================
 EFFECTSTATE3D
 	PATTERN = 1				//動きのパターン
-	SIZE = 25.0						//大きさ
-	ADDSIZE = -0.2					//大きさ変動
-	SIZEY = 25.0						//Y大きさ
-	ADDSIZEY = -0.2					//Y大きさ変動
+	SIZE = 50.0						//大きさ
+	ADDSIZE = -1.0					//大きさ変動
+	SIZEY = 50.0						//Y大きさ
+	ADDSIZEY = -1.0					//Y大きさ変動
 	DENSITY = 3						//密度
-	MOVE3D = 1.0 5.0 1.0					//移動
+	MOVE3D = 1.0 0.0 1.0					//移動
 	DISTANCE = 66.0						//発生距離
 	TYPE = 4					//出現位置のパターン
 	SECONDTYPE = 0					//ランダム移動のパターン
 	PARTICLETIME = 1						//粒発生間隔
 	COLOR = 1000 400 0 1000			//カラー
 	CHANGECOLOR = 0 0 0 -10			//カラー変動値
-	LIFE = 35						//ライフ
+	LIFE = 60						//ライフ
 	TEXTURE = 1						//テクスチャ  () 球は＋１の番号
 	SYNTHETIC = 0						//合成
 	TEXMOVE = 0.000 0.000					//テクスチャ移動
