@@ -26,6 +26,13 @@ data/MODEL/OBJECT/tower_fragment_06.x
 data/MODEL/OBJECT/item_shield.x	
 data/MODEL/OBJECT/sphere_cover.x	
 data/MODEL/OBJECT/hatena.x	
+data/MODEL/OBJECT/menu_stage.x	
+data/MODEL/OBJECT/shadow.x	
+
+data/MODEL/OBJECT/find_wolf_tower.x	
+data/MODEL/OBJECT/wolf_obj_01.x	
+data/MODEL/OBJECT/wolf_obj_02.x	
+data/MODEL/OBJECT/wolf_obj_03.x	
 data/MODEL/OBJECT/result_tower.x	
 
 data/MODEL/PLAYER/00_body.x	

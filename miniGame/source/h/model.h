@@ -44,7 +44,13 @@ public:
 		OBJ_ITEM_SHIELD,				//アイテム盾
 		OBJ_SPHERE_COVER,				//球のカバー
 		OBJ_HATENA,						//はてなマーク
+		OBJ_MENU_STAGE,					//メニューのステージ
+		OBJ_SHADOW,						//影
 
+		OBJ_FIND_WOLF_TOWER,			//人狼見つけるシーンのタワー
+		OBJ_FIND_WOLF_FACE_01,			//人狼見つけるシーンの顔オブジェクト
+		OBJ_FIND_WOLF_FACE_02,			//人狼見つけるシーンの顔オブジェクト
+		OBJ_FIND_WOLF_FACE_03,			//人狼見つけるシーンの顔オブジェクト
 		OBJ_RESULT_TOWER,				//結果画面のタワー
 
 		//プレイヤー
