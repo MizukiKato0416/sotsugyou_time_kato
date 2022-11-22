@@ -19,6 +19,7 @@
 #include "item_banana.h"
 
 #include "PresetSetEffect.h"
+#include "PresetDelaySet.h"
 #include "score_ui.h"
 #include "score.h"
 #include "player.h"
@@ -862,6 +863,9 @@ void CObjectPlayerBalloonCar::StealPoint()
 
 	//ポイントを奪う状態なら
 	m_nStealPointCounter++;
+
+	//エフェクト
+	CPresetDelaySet::Create(4, GetPos(), {}, {});
 
 	if (m_nStealPointCounter <= OBJECT_PLAYER_BALLOON_CAR_STEAL_POINT_TIME) return;
 

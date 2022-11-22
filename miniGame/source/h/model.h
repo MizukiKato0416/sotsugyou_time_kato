@@ -45,6 +45,7 @@ public:
 		OBJ_SPHERE_COVER,				//球のカバー
 		OBJ_HATENA,						//はてなマーク
 		OBJ_MENU_STAGE,					//メニューのステージ
+		OBJ_SHADOW,						//影
 
 		OBJ_FIND_WOLF_TOWER,			//人狼見つけるシーンのタワー
 		OBJ_FIND_WOLF_FACE_01,			//人狼見つけるシーンの顔オブジェクト
