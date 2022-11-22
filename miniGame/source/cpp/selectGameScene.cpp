@@ -37,10 +37,10 @@
 #define MENU_ALOW_UI_SIZE				(320.0f * 0.28f)	//矢印UIのサイズ
 #define MENU_ALOW_UI_INIT_POS_X			(270.0f)			//矢印UIの位置調整値X
 #define MENU_ALOW_UI_INIT_POS_Y			(630.0f)			//矢印UIの位置Y
-#define MENU_ALOW_UI_POS_MIN			(260.0f)			//矢印UIの位置最小値
-#define MENU_ALOW_UI_POS_MAX			(280.0f)			//矢印UIの位置最大値
-#define MENU_ALOW_UI_MOVE_MAX			(0.8f)				//矢印UIの移動量最大値
-#define MENU_ALOW_UI_MOVE				(0.08f)				//矢印UIの移動量
+#define MENU_ALOW_UI_POS_MIN			(267.0f)			//矢印UIの位置最小値
+#define MENU_ALOW_UI_POS_MAX			(273.0f)			//矢印UIの位置最大値
+#define MENU_ALOW_UI_MOVE_MAX			(0.5f)				//矢印UIの移動量最大値
+#define MENU_ALOW_UI_MOVE				(0.05f)				//矢印UIの移動量
 
 #define MENU_GAME_TITLE_UI_SIZE_X		(1697.0f * 0.2f)	//ゲームタイトルUIのサイズX
 #define MENU_GAME_TITLE_UI_SIZE_Y		(631.0f * 0.2f)		//ゲームタイトルUIのサイズY
@@ -388,7 +388,7 @@ void CSelectGameScene::UpdateInput(void) {
 		//選択のロック
 		m_pMenuGame->SetLockChangeSelect(true);
 		//決定音の再生
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CANCEL);
 
 		//次のシーンの決定
 		m_nextScene = CScene::SCENE_TYPE::TITLE;
