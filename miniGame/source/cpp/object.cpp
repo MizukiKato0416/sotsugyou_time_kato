@@ -175,24 +175,32 @@ void CObject::ReleaseObjtype(int nObjtype) {
 void CObject::UpdateAll(void) {
 	//オブジェクトの更新
 	for (int nCnt = 0; nCnt < (int)UPDATE_PRIORITY::ENUM_MAX; nCnt++) {
-		CObject* pObjectUpdate = m_apTopUpdate[nCnt];	//更新するオブジェクト
-
-		while (pObjectUpdate != nullptr) {
-			CObject* pObjectNext = pObjectUpdate->m_pNextUpdate;	//次のオブジェクトを取得
-
+		//リーダブルコードを参考にしたforでのリストの更新
+		for (CObject* pObjUpdate = m_apTopUpdate[nCnt]; pObjUpdate != nullptr; pObjUpdate = pObjUpdate->m_pNextUpdate) {
 			//現在のポーズレベルより低い場合、更新せずに次のオブジェクト
-			if (pObjectUpdate->m_nPauseLevel < m_nUpdatePauseLevel) {
-				//次のオブジェクトを代入
-				pObjectUpdate = pObjectNext;
-				continue;
-			}
-
+			if (pObjUpdate->m_nPauseLevel < m_nUpdatePauseLevel) continue;
 			//死亡フラグが立っていない場合更新
-			if (!pObjectUpdate->m_bDeath) pObjectUpdate->Update();	
-
-			//次のオブジェクトを代入
-			pObjectUpdate = pObjectNext;
+			if (!pObjUpdate->m_bDeath) pObjUpdate->Update();
 		}
+
+		//CObject* pObjectUpdate = m_apTopUpdate[nCnt];	//更新するオブジェクト
+
+		//while (pObjectUpdate != nullptr) {
+		//	CObject* pObjectNext = pObjectUpdate->m_pNextUpdate;	//次のオブジェクトを取得
+
+		//	//現在のポーズレベルより低い場合、更新せずに次のオブジェクト
+		//	if (pObjectUpdate->m_nPauseLevel < m_nUpdatePauseLevel) {
+		//		//次のオブジェクトを代入
+		//		pObjectUpdate = pObjectNext;
+		//		continue;
+		//	}
+
+		//	//死亡フラグが立っていない場合更新
+		//	if (!pObjectUpdate->m_bDeath) pObjectUpdate->Update();	
+
+		//	//次のオブジェクトを代入
+		//	pObjectUpdate = pObjectNext;
+		//}
 	}
 
 	//死亡フラグが立ったオブジェクトを破棄
