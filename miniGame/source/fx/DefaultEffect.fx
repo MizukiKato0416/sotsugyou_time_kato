@@ -423,7 +423,7 @@ float4 ZBufferPlot_PS(float4 ShadowMapTex : TEXCOORD0) : COLOR
 {
 	// Z値算出
 	float3 col = ShadowMapTex.z / ShadowMapTex.w;
-	return float4(col, 1.0);	//テクスチャ表示のとき見やすいように透明度なし
+	return float4(col, 1.0);	//通常描画時のSM参照時に透明度も影響してくるので1.0にする
 }
 
 //=============================================================================
