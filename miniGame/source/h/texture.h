@@ -171,6 +171,7 @@ public:
 		MESH_FIND_WOLF_FACE_OBJ_01,	//人狼発見シーンの顔オブジェクト
 		MESH_FIND_WOLF_FACE_OBJ_02,	//人狼発見シーンの顔オブジェクト
 		MESH_FIND_WOLF_FACE_OBJ_03,	//人狼発見シーンの顔オブジェクト
+		MESH_SHADOW,				//影
 
 		//ナンバーのテクスチャ
 		NUMBER_001,
