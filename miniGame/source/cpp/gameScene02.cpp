@@ -272,15 +272,6 @@ void CGameScene02::Init(void) {
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
 	}
 
-#ifdef _DEBUG
-	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 70.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
-	if (pZBuff != nullptr) {
-		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
-		pZBuff->SetUseZBuffTexture(true);
-	}
-#endif
-
 	//ゲームシーンの初期化処理
 	CGameScene::Init();
 }

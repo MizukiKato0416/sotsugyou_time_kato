@@ -134,8 +134,6 @@ void CSelectGameScene::Init(void) {
 	//------------------------------
 	// 背景
 	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
-		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	//BGMの再生
 	if (pSound != nullptr) {
@@ -145,6 +143,18 @@ void CSelectGameScene::Init(void) {
 
 	//選択メニューの生成
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 300.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false);
+
+	//ステージの生成
+	CObjectModelUI *pModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_MENU_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	if (pModel != nullptr)
+	{
+		pModel->SetViewCamera(D3DXVECTOR3(0.0f, 200.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	}
+
+	//背景
+	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
+		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列

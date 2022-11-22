@@ -11,6 +11,7 @@ data/TEXTURE/BG/bg_title.jpg
 data/TEXTURE/BG/bg_result.jpg
 data/TEXTURE/BG/menu_bg.jpg
 data/TEXTURE/BG/menu_bg_wolf.jpg
+data/TEXTURE/BG/bg_wolf.jpg
 
 data/TEXTURE/UI/arrow_right.png
 data/TEXTURE/UI/arrow_left.png
@@ -148,6 +149,10 @@ data/TEXTURE/MESH/towerwall.png
 data/TEXTURE/MESH/stone_ground.png
 data/TEXTURE/MESH/tower_object.jpg
 data/TEXTURE/MESH/item_shield.png
+data/TEXTURE/MESH/floor_jinro.jpg
+data/TEXTURE/MESH/face01.png
+data/TEXTURE/MESH/face02.png
+data/TEXTURE/MESH/face03.png
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png

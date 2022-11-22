@@ -175,7 +175,10 @@ void CObject2D::Draw(void) {
 	//テクスチャの取得
 	LPDIRECT3DTEXTURE9 pTexture = CTexture::GetTexture(GetTexType());
 	//Zバッファのテクスチャを使用する場合取得
-	if (m_bUseZBuffTexture) pTexture = pRenderer->GetZBuffTex();
+	if (m_bUseZBuffTexture) {
+		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);	//透明無効
+		pTexture = pRenderer->GetZBuffTex();
+	}
 
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));	//頂点バッファをデバイスのデータストリームに設定	
 
@@ -213,6 +216,8 @@ void CObject2D::Draw(void) {
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
 	//アルファ値の参照値
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
+
+	if (m_bUseZBuffTexture) pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 }
 
 //=============================================================================

@@ -22,6 +22,9 @@
 #include "coverDisplay.h"
 #include "next_button.h"
 #include "finalResultScene.h"
+#include "meshwall.h"
+#include "float_object.h"
+
 
 //=============================================================================
 // マクロ定義
@@ -67,6 +70,12 @@
 #define FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
 #define FIND_WOLF_SCENE_CHANGE_SCENE_COUNT	(60)			//遷移するまでの時間
+
+#define FIND_WOLF_SCENE_BG_POS		(D3DXVECTOR3(0.0f, -250.0f, 300.0f))	//背景の位置
+#define FIND_WOLF_SCENE_BG_SIZE_X	(2000.0f)								//背景のサイズX
+#define FIND_WOLF_SCENE_BG_SIZE_Y	(500.0f)								//背景のサイズY
+
+#define FIND_WOLF_SCENE_STAGE_POS_Z	(500.0f)								//背景ステージの位置Z
 
 
 //=============================================================================
@@ -173,8 +182,22 @@ void CFindWolfScene::Init(void) {
 	//オブジェクトの初期設定
 	//------------------------------
 
+	//背景の生成
+	CMeshwall::Create(FIND_WOLF_SCENE_BG_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1, 1, FIND_WOLF_SCENE_BG_SIZE_X, FIND_WOLF_SCENE_BG_SIZE_Y,
+		              CTexture::TEXTURE_TYPE::BG_FIND_WOLF);
+
 	//スタジアムの生成
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_FIND_WOLF_TOWER, D3DXVECTOR3(0.0f, 0.0f, -FIND_WOLF_SCENE_STAGE_POS_Z), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//浮いてるオブジェクト
+	CFloatObject::Create(D3DXVECTOR3(0.0f, 50.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.005f, -0.002f, 0.005f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_01);
+
+	CFloatObject::Create(D3DXVECTOR3(300.0f, 50.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(0.0f, 0.01f, 0.02f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_02);
+
+	CFloatObject::Create(D3DXVECTOR3(-300.0f, 50.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		                 D3DXVECTOR3(-0.001f, -0.008f, 0.0f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_03);
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{

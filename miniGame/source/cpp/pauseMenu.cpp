@@ -65,8 +65,10 @@ CPauseMenu* CPauseMenu::Create(void) {
 // ポーズメニューの初期化処理
 //=============================================================================
 HRESULT CPauseMenu::Init(void) {
+#ifndef _DEBUG
 	//背景の設定
 	SetMenuBG(CTexture::TEXTURE_TYPE::PAUSE_BG, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), SCREEN_WIDTH, SCREEN_HEIGHT);	
+#endif
 	//縦選択
 	SetSelectType(CSelectMenu::SELECT_TYPE::VERTICAL);
 	//選択肢UIの詳細設定

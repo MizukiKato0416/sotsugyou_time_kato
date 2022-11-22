@@ -100,7 +100,7 @@ void CGameScene::Init(void) {
 
 #ifdef _DEBUG
 	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 70.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
+	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(100.0f, 100.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 150.0f, 150.0f);
 	if (pZBuff != nullptr) {
 		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
 		pZBuff->SetUseZBuffTexture(true);
