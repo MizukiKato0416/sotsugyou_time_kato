@@ -2,13 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos 498.4467 101.8720 16835.0059
+	pos 608.7100 -876.7152 11920.0635
 	lookat 0.0000 0.0000 0.0000
-	head 42.8430
-	pich 0.2308
+	head 52.7733
+	pich -0.1192
 	bank 0.0000
 	ortho 0
-	zoom2 0.4455
+	zoom2 0.6292
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -24,7 +24,7 @@ Material 3 {
 }
 Object "obj12" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
@@ -246,7 +246,7 @@ Object "obj12" {
 }
 Object "obj5" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
@@ -276,7 +276,7 @@ Object "obj5" {
 }
 Object "obj9" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
@@ -306,7 +306,7 @@ Object "obj9" {
 }
 Object "obj8" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
@@ -336,7 +336,7 @@ Object "obj8" {
 }
 Object "obj13" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
@@ -366,7 +366,7 @@ Object "obj13" {
 }
 Object "obj1" {
 	visible 15
-	locking 0
+	locking 1
 	shading 1
 	facet 59.5
 	color 0.898 0.498 0.698
