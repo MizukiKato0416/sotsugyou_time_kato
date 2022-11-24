@@ -172,6 +172,7 @@ public:
 		MESH_FIND_WOLF_FACE_OBJ_02,	//人狼発見シーンの顔オブジェクト
 		MESH_FIND_WOLF_FACE_OBJ_03,	//人狼発見シーンの顔オブジェクト
 		MESH_SHADOW,				//影
+		MESH_GRASS,					//草原
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

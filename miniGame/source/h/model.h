@@ -52,6 +52,7 @@ public:
 		OBJ_FIND_WOLF_FACE_02,			//人狼見つけるシーンの顔オブジェクト
 		OBJ_FIND_WOLF_FACE_03,			//人狼見つけるシーンの顔オブジェクト
 		OBJ_RESULT_TOWER,				//結果画面のタワー
+		OBJ_RESULT_CROWN,				//結果画面の冠
 
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 

@@ -194,7 +194,7 @@ void CFindWolfScene::Init(void) {
 		                 D3DXVECTOR3(0.005f, 0.002f, 0.005f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_01);
 
 	CFloatObject::Create(D3DXVECTOR3(300.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		                 D3DXVECTOR3(0.0f, 0.001f, 0.02f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_02);
+		                 D3DXVECTOR3(0.0f, 0.006f, 0.01f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_02);
 
 	CFloatObject::Create(D3DXVECTOR3(-300.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(-0.003, -0.008f, 0.0f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_03);
@@ -616,6 +616,11 @@ void CFindWolfScene::Tutorial3()
 			m_pCircleStencilMask->SetDrawStencil(true);
 		}
 
+		//音を止める
+		if (pSound != nullptr) pSound->StopSound(CSound::SOUND_LABEL::BGM_GAME);
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL);
+
 		//次のフェーズにする
 		m_phase = PHASE::WAIT;
 
@@ -676,6 +681,17 @@ void CFindWolfScene::Wait()
 			                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
 			                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 	}
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
+	//音を止める
+	if (pSound != nullptr) pSound->StopSound(CSound::SOUND_LABEL::SE_DRUM_ROLL);
+	//音を再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);
 }
 
 //=============================================================================
@@ -690,6 +706,7 @@ void CFindWolfScene::Answer()
 		//現在の入力デバイスの取得
 		pInput = pManager->GetInputCur();
 	}
+	
 
 	//ステンシルの円を強制移動
 	if (m_pCircleStencilMask != nullptr) {
@@ -712,6 +729,11 @@ void CFindWolfScene::Answer()
 		if (pManager != nullptr) pSound = pManager->GetSound();
 		//音を再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
+
+		if (pSound != nullptr) {
+			pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
+			pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+		}
 
 		//次のフェーズにする
 		m_phase = PHASE::TUTORIAL_4;

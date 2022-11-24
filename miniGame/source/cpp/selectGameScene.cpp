@@ -137,8 +137,8 @@ void CSelectGameScene::Init(void) {
 	
 	//BGM‚ÌÄ¶
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_MENU);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_MENU);
 	}
 
 	//‘I‘ðƒƒjƒ…[‚Ì¶¬

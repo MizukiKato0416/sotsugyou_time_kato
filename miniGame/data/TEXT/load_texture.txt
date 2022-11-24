@@ -154,6 +154,7 @@ data/TEXTURE/MESH/face01.png
 data/TEXTURE/MESH/face02.png
 data/TEXTURE/MESH/face03.png
 data/TEXTURE/MESH/shadow.png
+data/TEXTURE/MESH/grass001.png
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png

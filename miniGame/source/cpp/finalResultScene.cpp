@@ -18,10 +18,15 @@
 #include "object_player.h"
 #include "meshwall.h"
 #include "ToScreen.h"
+#include "next_button.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
+#define FINAL_RESULT_SCENE_NEXT_BUTTON_POS			(D3DXVECTOR3(1150.0f, 670.0f, 0.0f))	//次に進むボタンの位置
+#define FINAL_RESULT_SCENE_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
+#define FINAL_RESULT_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
+#define FINAL_RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -290,11 +295,11 @@ void CFinalResultScene::ResultText() {
 
 	if (m_nCntPhase == 120) {
 		//結果発表テキストの表示
-		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, -200.0f, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON, 400.0f, 100.0f);
+		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, -200.0f, 0.0f), CTexture::TEXTURE_TYPE::FINAL_RESULT_UI, 500.0f, 200.0f);
 	}
 
 	if (m_pTextResult != nullptr) {
-		D3DXVECTOR3 pos = m_pTextResult->GetPos();
+		D3DXVECTOR3 pos = m_pTextResult->GetPos();	
 		pos.y += 5.0f;
 		if (pos.y > 200.0f) {
 			pos.y = 200.0f;
@@ -395,7 +400,6 @@ void CFinalResultScene::RiseTower() {
 				//タワー停止時の処理
 				StopTower(nCnt);
 			}
-
 			continue;
 		}
 
@@ -480,7 +484,7 @@ void CFinalResultScene::Winner() {
 			D3DXVECTOR3 posPlayer = m_apObjPlayer[nCnt]->GetPos();	//プレイヤーの位置を取得
 			posPlayer.y += fposCrownFirst;	//差分を追加
 			//王冠を生成
-			CObjectModel* pObjCrown = CObjectModel::Create(CModel::MODELTYPE::OBJ_BANANA, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+			CObjectModel* pObjCrown = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_CROWN, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 			if (pObjCrown != nullptr) {
 				pObjCrown->SetRotSpeed(D3DXVECTOR3(0.0f, 0.05f, 0.0f));	//回転させる
 				m_vObjCrown.push_back(pObjCrown);
@@ -512,6 +516,11 @@ void CFinalResultScene::Winner() {
 		m_phase = PHASE::PHASE_FINISH;
 		//カウントリセット
 		m_nCntPhase = 0;
+
+		//次へボタンの生成
+		CNextButton::Create(FINAL_RESULT_SCENE_NEXT_BUTTON_POS, FINAL_RESULT_SCENE_NEXT_BUTTON_SIZE,
+		                    CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FINAL_RESULT_SCENE_NEXT_BUTTON_COUNTER,
+		                    FINAL_RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA);
 	}
 }
 
