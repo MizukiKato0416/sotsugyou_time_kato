@@ -13,7 +13,7 @@
 #include "object2D.h"
 #include "selectMenu3D.h"
 #include "gameScene.h"
-#include "titleCamera.h"
+#include "default_camera.h"
 #include "coverDisplay.h"
 #include "next_button.h"
 
@@ -99,7 +99,7 @@ void CSelectGameScene::Init(void) {
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	//カメラの設定
-	if (pManager != nullptr) pManager->SetCamera(CTitleCamera::Create());	//仮でタイトルカメラ
+	if (pManager != nullptr) pManager->SetCamera(CDefaultCamera::Create());	//仮でデフォルトカメラ
 
 	//------------------------------
 	//ライトの初期設定

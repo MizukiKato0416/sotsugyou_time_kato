@@ -146,6 +146,13 @@ public:
 		MENU_NONE_MOVE_UI,
 		MENU_NONE_MOVE_UI_WOLF,
 
+		TITLE_LOGO,
+		TITLE_LOGO_CHARACTOR_00,
+		TITLE_LOGO_CHARACTOR_01,
+		TITLE_LOGO_CHARACTOR_02,
+		TITLE_LOGO_CHARACTOR_03,
+		TITLE_LOGO_THE_FINAL,
+
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,			//砂漠
 		MESH_STAGE_AUDIENCE,		//観衆
@@ -173,6 +180,7 @@ public:
 		MESH_FIND_WOLF_FACE_OBJ_03,	//人狼発見シーンの顔オブジェクト
 		MESH_SHADOW,				//影
 		MESH_GRASS,					//草原
+		MESH_WOOD,					//年輪
 
 		//ナンバーのテクスチャ
 		NUMBER_001,
