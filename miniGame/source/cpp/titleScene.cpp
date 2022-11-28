@@ -32,7 +32,7 @@
 #define TITLE_SCENE_PLAYER_MOVE				(30.0f)				//プレイヤーの移動量
 
 #define TITLE_SCENE_CLOUD_NUM					(1)											//雲の数
-#define TITLE_SCENE_CLOUD_POS					(D3DXVECTOR3(0.0f, 0.0f, 1000.0f))			//雲の位置
+#define TITLE_SCENE_CLOUD_POS					(D3DXVECTOR3(0.0f, 0.0f, 2000.0f))			//雲の位置
 #define TITLE_SCENE_CLOUD_SIZE					(2000.0f)									//雲のサイズ
 #define TITLE_SCENE_CLOUD_MESH_NUM				(2)											//メッシュを敷き詰める数
 #define TITLE_SCENE_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
@@ -42,9 +42,28 @@
 #define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//フォグの色
 #define TITLE_BACK_BUFF							(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//バックバッファーの色
 
-#define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)		//カメラの最終的な向きX
-#define TITLE_SCENE_END_CAMERA_POS_Z			(-550.0f)	//カメラの最終的な位置Z
-#define TITLE_SCENE_END_CAMERA_POS_Y			(20.0f)		//カメラの最終的な位置Y
+#define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)			//カメラの最終的な向きX
+#define TITLE_SCENE_END_CAMERA_POS_Z			(-550.0f)		//カメラの最終的な位置Z
+#define TITLE_SCENE_END_CAMERA_POS_Y			(20.0f)			//カメラの最終的な位置Y
+
+#define TITLE_SCENE_THE_FINAL_LOGO_SIZE_X			(654.0f)			//ザファイナルロゴのサイズX
+#define TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y			(74.0f)				//ザファイナルロゴのサイズY
+#define TITLE_SCENE_THE_FINAL_LOGO_INIT_SIZE_X		(654.0f * 20.0f)	//ザファイナルロゴの初期サイズX
+#define TITLE_SCENE_THE_FINAL_LOGO_INIT_SIZE_Y		(74.0f * 20.0f)		//ザファイナルロゴの初期サイズY
+#define TITLE_SCENE_THE_FINAL_LOGO_POS_Y			(365.0f)			//ザファイナルロゴの位置Y
+#define TITLE_SCENE_THE_FINAL_LOGO_CREATE_COUNTER	(20)				//ザファイナルロゴの生成するタイミング
+#define TITLE_SCENE_THE_FINAL_LOGO_DEC_SIZE			(0.89f)				//ザファイナルロゴのサイズ減算量
+
+#define TITLE_SCENE_CHARA_LOGO_SIZE				(170.0f)			//文字ロゴのサイズ
+#define TITLE_SCENE_CHARA_LOGO_INIT_SIZE		(170.0f * 10.0f)	//文字ロゴの初期サイズ
+#define TITLE_SCENE_CHARA_LOGO_POS_Y			(220.0f)			//文字ロゴの位置Y
+#define TITLE_SCENE_CHARA_DEC_SIZE				(0.91f)				//文字ロゴのサイズ減算量
+#define TITLE_SCENE_CHARA_CREATE_COUNTER		(30)				//文字ロゴの生成するタイミング
+
+#define TITLE_SCENE_EXPLOSION_LOGO_POS		(D3DXVECTOR3(850.0f, 174.0f, 0.0f))			//爆発UIの位置
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_X	(362.0f)									//爆発UIのサイズX
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y	(316.0f)									//爆発UIのサイズY
+
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -60,7 +79,15 @@ CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
 	m_nFadeTime = 120;
 	m_nColorTime = 0;
 	memset(m_pPlayerModel, NULL, sizeof(m_pPlayerModel[MAX_OBJECT_PLAYER_NUM]));
+	memset(m_pTitleLogoChara, NULL, sizeof(m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM]));
 	m_pCloud.clear();
+	m_pTheFinalLogo = nullptr;
+	m_pTitleLogo = nullptr;
+	m_nFrameCounter = 0;
+	m_phase = PHASE::NONE;
+	m_fBoundMove = 0.0f;
+	m_pExplosionLogo = nullptr;
+	m_bExplosionAddSize = false;
 }
 
 //=============================================================================
@@ -75,6 +102,17 @@ CTitleScene::~CTitleScene()
 // タイトルシーンの初期化処理
 //=============================================================================
 void CTitleScene::Init(void) {
+
+	//変数初期化
+	memset(m_pTitleLogoChara, NULL, sizeof(m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM]));
+	m_pTheFinalLogo = nullptr;
+	m_nFrameCounter = 0;
+	m_phase = PHASE::CHARACTOR_LOGO;
+	m_pTitleLogo = nullptr;
+	m_fBoundMove = 1.02f;
+	m_pExplosionLogo = nullptr;
+	m_bExplosionAddSize = true;
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -135,7 +173,7 @@ void CTitleScene::Init(void) {
 	}
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 8, 4, 1000.0f, 500.0f,
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f), 8, 4, 1000.0f, 1000.0f,
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//プレイヤーの生成
@@ -176,8 +214,7 @@ void CTitleScene::Init(void) {
 
 	// ゲーム終了UI
 	CObject2D::Create(ESC_POS, CTexture::TEXTURE_TYPE::QUIT_GAME, ESC_WIDTH, ESC_HEIGHT);
-	// タイトルロゴ
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	// 次に行かせるロゴ
 	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_GAMESTART, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
 
@@ -231,6 +268,30 @@ void CTitleScene::Update(void) {
 	CFade* pFade = nullptr;		//フェードへのポインタ
 	CSound* pSound = nullptr;	//サウンドへのポインタ
 	D3DXCOLOR col = m_pNext->GetColor(); // 次に行かせるロゴの色の取得
+
+	//フェーズによって処理分け
+	switch (m_phase)
+	{
+	case CTitleScene::PHASE::CHARACTOR_LOGO:
+		//文字のロゴの処理
+		CharactorLogo();
+		break;
+	case CTitleScene::PHASE::THE_FINAL_LOGO:
+		//ザファイナルのロゴの処理
+		TheFinalLogo();
+		break;
+	case CTitleScene::PHASE::BOUND_LOGO:
+		//ザロゴのバウンドの処理
+		BoundLogo();
+		break;
+	case CTitleScene::PHASE::STOP_TITLE_LOGO:
+		//タイトルロゴ停止の処理
+		StopTitleLogo();
+		break;
+	default:
+		break;
+	}
+
 
 	//雲の処理
 	Cloud();
@@ -401,4 +462,202 @@ void CTitleScene::Camera()
 
 	//向き設定
 	pCamera->SetRot(rot);
+}
+
+//=============================================================================
+//文字のロゴの処理
+//=============================================================================
+void CTitleScene::CharactorLogo()
+{
+	//カウンターを加算
+	m_nFrameCounter++;
+
+	if (m_nFrameCounter < TITLE_SCENE_CHARA_CREATE_COUNTER) return;
+
+	m_nFrameCounter = TITLE_SCENE_CHARA_CREATE_COUNTER;
+
+	for (int nCntCharaLogo = 0; nCntCharaLogo < TITLE_LOGO_CHARA_NUM; nCntCharaLogo++)
+	{
+		//最初以外
+		if (nCntCharaLogo > 0)
+		{
+			//サイズを取得
+			D3DXVECTOR3 beforeSize = m_pTitleLogoChara[nCntCharaLogo - 1]->GetSize();
+
+			if (beforeSize.x != TITLE_SCENE_CHARA_LOGO_SIZE || beforeSize.y != TITLE_SCENE_CHARA_LOGO_SIZE) return;
+		}
+		
+		//生成されていなかったら
+		if (m_pTitleLogoChara[nCntCharaLogo] == nullptr)
+		{
+			//生成する
+			m_pTitleLogoChara[nCntCharaLogo] = 
+			CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f -
+			                              ((TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) * (TITLE_LOGO_CHARA_NUM / 2.0f)) + ((TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) / 2.0f) +
+				                          (TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) * nCntCharaLogo,
+				                          TITLE_SCENE_CHARA_LOGO_POS_Y,
+				                          0.0f),
+			                  static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::TITLE_LOGO_CHARACTOR_00) + nCntCharaLogo),
+				              TITLE_SCENE_CHARA_LOGO_INIT_SIZE, TITLE_SCENE_CHARA_LOGO_INIT_SIZE);
+		}
+
+		//サイズを取得
+		D3DXVECTOR3 size = m_pTitleLogoChara[nCntCharaLogo]->GetSize();
+		//小さくする
+		size *= TITLE_SCENE_CHARA_DEC_SIZE;
+		if (size.x < TITLE_SCENE_CHARA_LOGO_SIZE) size.x = TITLE_SCENE_CHARA_LOGO_SIZE;
+		if (size.y < TITLE_SCENE_CHARA_LOGO_SIZE) size.y = TITLE_SCENE_CHARA_LOGO_SIZE;
+		//サイズ設定
+		m_pTitleLogoChara[nCntCharaLogo]->SetSize(size);
+	}
+
+	if (m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM - 1] == nullptr) return;
+	//生成されていたら
+	
+	//サイズを取得
+	D3DXVECTOR3 size = m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM - 1]->GetSize();
+	if (size.x != TITLE_SCENE_CHARA_LOGO_SIZE || size.y != TITLE_SCENE_CHARA_LOGO_SIZE) return;
+
+	//次のフェーズにする
+	m_phase = PHASE::THE_FINAL_LOGO;
+
+	//初期化
+	m_nFrameCounter = 0;
+}
+
+//=============================================================================
+//ザファイナルのロゴの処理
+//=============================================================================
+void CTitleScene::TheFinalLogo()
+{
+	//カウンターを加算
+	m_nFrameCounter++;
+
+	if (m_nFrameCounter < TITLE_SCENE_THE_FINAL_LOGO_CREATE_COUNTER) return;
+
+	m_nFrameCounter = TITLE_SCENE_THE_FINAL_LOGO_CREATE_COUNTER;
+
+	//生成されていなかったら
+	if (m_pTheFinalLogo == nullptr)
+	{
+		//爆発ロゴ
+		m_pExplosionLogo = CObject2D::Create(TITLE_SCENE_EXPLOSION_LOGO_POS, CTexture::TEXTURE_TYPE::TITLE_LOGO_EXPLOSION,
+			                                 TITLE_SCENE_EXPLOSION_LOGO_SIZE_X, TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y);
+
+		// タイトルロゴ
+		m_pTitleLogo = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO,
+			                             SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		//ザファイナルロゴ
+		m_pTheFinalLogo = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, TITLE_SCENE_THE_FINAL_LOGO_POS_Y, 0.0f),
+			                                CTexture::TEXTURE_TYPE::TITLE_LOGO_THE_FINAL,
+		                                    TITLE_SCENE_THE_FINAL_LOGO_INIT_SIZE_X, TITLE_SCENE_THE_FINAL_LOGO_INIT_SIZE_Y);
+
+		for (int nCntCharaLogo = 0; nCntCharaLogo < TITLE_LOGO_CHARA_NUM; nCntCharaLogo++)
+		{
+			//生成されていなかったら
+			if (m_pTitleLogoChara[nCntCharaLogo] == nullptr) continue;
+			//消す
+			m_pTitleLogoChara[nCntCharaLogo]->Uninit();
+			m_pTitleLogoChara[nCntCharaLogo] = nullptr;
+		}
+	}
+
+	//サイズを取得
+	D3DXVECTOR3 size = m_pTheFinalLogo->GetSize();
+
+	//小さくする
+	size *= TITLE_SCENE_THE_FINAL_LOGO_DEC_SIZE;
+	if (size.x < TITLE_SCENE_THE_FINAL_LOGO_SIZE_X) size.x = TITLE_SCENE_THE_FINAL_LOGO_SIZE_X;
+	if (size.y < TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y) size.y = TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y;
+	//サイズ設定
+	m_pTheFinalLogo->SetSize(size);
+
+	if (size.x != TITLE_SCENE_THE_FINAL_LOGO_SIZE_X || size.y != TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y) return;
+	//フェーズをバウンドにする
+	m_phase = PHASE::BOUND_LOGO;
+	//初期化
+	m_nFrameCounter = 0;
+}
+
+//=============================================================================
+//ロゴのバウンドの処理
+//=============================================================================
+void CTitleScene::BoundLogo()
+{
+	//if (m_pExplosionLogo != nullptr)
+	//{
+	//	//サイズを取得
+	//	D3DXVECTOR3 size = m_pExplosionLogo->GetSize();
+	//	//小さくする
+	//	size *= m_fBoundMove;
+	//	if (size.x < TITLE_SCENE_EXPLOSION_LOGO_SIZE_X) size.x = TITLE_SCENE_EXPLOSION_LOGO_SIZE_X;
+	//	if (size.y < TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y) size.y = TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y;
+	//	//サイズ設定
+	//	m_pExplosionLogo->SetSize(size);
+	//}
+
+	if (m_pTitleLogo != nullptr)
+	{
+		//サイズを取得
+		D3DXVECTOR3 size = m_pTitleLogo->GetSize();
+		//小さくする
+		size *= m_fBoundMove;
+		if (size.x < SCREEN_WIDTH) size.x = SCREEN_WIDTH;
+		if (size.y < SCREEN_HEIGHT) size.y = SCREEN_HEIGHT;
+		//サイズ設定
+		m_pTitleLogo->SetSize(size);
+	}
+
+	if (m_pTheFinalLogo != nullptr)
+	{
+		//サイズを取得
+		D3DXVECTOR3 size = m_pTheFinalLogo->GetSize();
+		//小さくする
+		size *= m_fBoundMove;
+		if (size.x < TITLE_SCENE_THE_FINAL_LOGO_SIZE_X) size.x = TITLE_SCENE_THE_FINAL_LOGO_SIZE_X;
+		if (size.y < TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y) size.y = TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y;
+		//サイズ設定
+		m_pTheFinalLogo->SetSize(size);
+	}
+
+	m_fBoundMove -= 0.001f;
+
+	if (m_pTheFinalLogo->GetSize().x == TITLE_SCENE_THE_FINAL_LOGO_SIZE_X && m_pTheFinalLogo->GetSize().y == TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y &&
+		m_pTitleLogo->GetSize().x == SCREEN_WIDTH && m_pTitleLogo->GetSize().y == SCREEN_HEIGHT)
+	{
+		//フェーズをタイトルロゴ停止にする
+		m_phase = PHASE::STOP_TITLE_LOGO;
+		m_fBoundMove = 1.0f;
+	}
+}
+
+//=============================================================================
+//タイトルロゴ停止
+//=============================================================================
+void CTitleScene::StopTitleLogo()
+{
+	if (m_pExplosionLogo == nullptr) return;
+	
+	//サイズを取得
+	D3DXVECTOR3 size = m_pExplosionLogo->GetSize();
+
+	//サイズを変える
+	size *= m_fBoundMove;
+
+	if (size.x < TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * 0.9f) m_bExplosionAddSize = true;
+	else if(size.x > TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * 1.1f) m_bExplosionAddSize = false;
+
+	//サイズ設定
+	m_pExplosionLogo->SetSize(size);
+
+	//スケール加算量
+	float fAddScalse = 0.001f;
+	//小さくするときは逆にする
+	if (!m_bExplosionAddSize) fAddScalse *= -1.0f;
+	//スケールを加算
+	m_fBoundMove += fAddScalse;
+
+	if (m_fBoundMove > 1.01f) m_fBoundMove = 1.01f;
+	else if (m_fBoundMove < 0.99f) m_fBoundMove = 0.99f;
 }

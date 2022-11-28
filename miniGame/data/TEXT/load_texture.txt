@@ -135,6 +135,7 @@ data/TEXTURE/UI/title_logo_charactor_01.png
 data/TEXTURE/UI/title_logo_charactor_02.png
 data/TEXTURE/UI/title_logo_charactor_03.png
 data/TEXTURE/UI/title_logo_the_final.png
+data/TEXTURE/UI/title_logo_explosion.png
 
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
