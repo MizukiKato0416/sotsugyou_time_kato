@@ -3,6 +3,7 @@
 // タイトルシーン処理 [titleScene.cpp]
 // Author : 鶴間俊樹
 // Author : 佐藤瞭平
+// Author : 加藤瑞葵
 //
 //=============================================================================
 #include "titleScene.h"
@@ -13,11 +14,8 @@
 #include "input.h"
 #include "fade.h"
 #include "object2D.h"
-#include "selectMenu2D.h"
-#include "objectModel.h"
 #include "PresetSetEffect.h"
 #include "meshwall.h"
-#include "object_player.h"
 
 //=============================================================================
 // マクロ定義
