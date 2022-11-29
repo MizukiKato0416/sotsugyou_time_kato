@@ -13,8 +13,11 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/none.wav", 0 },
 
 	{ "data/SOUND/BGM/title.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
 	{ "data/SOUND/BGM/game.wav", -1 },
 	{ "data/SOUND/BGM/game2.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
 
 	{ "data/SOUND/SE/1point.wav", 0 },
 	{ "data/SOUND/SE/3point.wav", 0 },
@@ -34,7 +37,11 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/fall.wav", 0 },
 	{ "data/SOUND/SE/explosion.wav", 0 },
 	{ "data/SOUND/SE/shield.wav", 0 },
-	{ "data/SOUND/SE/balloonspawn.wav", 0 }
+	{ "data/SOUND/SE/balloonspawn.wav", 0 },
+	{ "data/SOUND/SE/drumroll.wav", 0 },
+	{ "data/SOUND/SE/drumroll2.wav", 0 },
+	{ "data/SOUND/SE/title_chara.wav", 0 },
+	{ "data/SOUND/SE/title_logo.wav", 0 }
 };
 
 //=============================================================================
@@ -170,8 +177,11 @@ HRESULT CSound::Init(HWND hWnd)
 
 	//音量調整
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
+	ControllVoice(SOUND_LABEL::BGM_MENU				, 1.0f);		//メニューBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 0.8f);		//ゲーム02BGM
+	ControllVoice(SOUND_LABEL::BGM_RESULT			, 1.0f);		//リザルトBGM
+	ControllVoice(SOUND_LABEL::BGM_FINAL_RESULT		, 1.0f);		//最終リザルトBGM
 
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f);		//3ポイント獲得SE
@@ -192,7 +202,11 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
 	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE
 	ControllVoice(SOUND_LABEL::SE_ITEM_SHIELD_GET	, 1.2f);		//盾アイテム獲得SE
-	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN		, 1.0f);		//風船スポーンSE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN     , 1.0f);		//風船スポーンSE
+	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL         , 2.9f);		//ドラムロールSE
+	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL_END		, 2.7f);		//ドラムロール最後SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 3.0f);		//タイトルの文字生成SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.0f);		//タイトルロゴの生成SE
 
 	return S_OK;
 }

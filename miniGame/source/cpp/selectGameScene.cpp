@@ -13,7 +13,7 @@
 #include "object2D.h"
 #include "selectMenu3D.h"
 #include "gameScene.h"
-#include "titleCamera.h"
+#include "default_camera.h"
 #include "coverDisplay.h"
 #include "next_button.h"
 
@@ -37,10 +37,10 @@
 #define MENU_ALOW_UI_SIZE				(320.0f * 0.28f)	//矢印UIのサイズ
 #define MENU_ALOW_UI_INIT_POS_X			(270.0f)			//矢印UIの位置調整値X
 #define MENU_ALOW_UI_INIT_POS_Y			(630.0f)			//矢印UIの位置Y
-#define MENU_ALOW_UI_POS_MIN			(260.0f)			//矢印UIの位置最小値
-#define MENU_ALOW_UI_POS_MAX			(280.0f)			//矢印UIの位置最大値
-#define MENU_ALOW_UI_MOVE_MAX			(0.8f)				//矢印UIの移動量最大値
-#define MENU_ALOW_UI_MOVE				(0.08f)				//矢印UIの移動量
+#define MENU_ALOW_UI_POS_MIN			(267.0f)			//矢印UIの位置最小値
+#define MENU_ALOW_UI_POS_MAX			(273.0f)			//矢印UIの位置最大値
+#define MENU_ALOW_UI_MOVE_MAX			(0.5f)				//矢印UIの移動量最大値
+#define MENU_ALOW_UI_MOVE				(0.05f)				//矢印UIの移動量
 
 #define MENU_GAME_TITLE_UI_SIZE_X		(1697.0f * 0.2f)	//ゲームタイトルUIのサイズX
 #define MENU_GAME_TITLE_UI_SIZE_Y		(631.0f * 0.2f)		//ゲームタイトルUIのサイズY
@@ -59,7 +59,7 @@ CSelectGameScene::CSelectGameScene()
 {
 	m_pMenuBG = nullptr;
 	m_pMenuGame = nullptr;
-	m_nFadeTime = FPS;
+	m_nFadeTime = 0;
 	m_bWolfMode = false;
 	m_pTutorial = nullptr;
 	m_pModeUi = nullptr;
@@ -86,8 +86,7 @@ void CSelectGameScene::Init(void) {
 	memset(m_fAlowUiMove, 0, sizeof(m_fAlowUiMove[SELECT_GAME_SCENE_ALOW_UI_NUM]));
 	m_bAlowUiMoveChange[0] = false;
 	m_bAlowUiMoveChange[1] = true;
-
-
+	m_nFadeTime = 30;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -99,7 +98,7 @@ void CSelectGameScene::Init(void) {
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	//カメラの設定
-	if (pManager != nullptr) pManager->SetCamera(CTitleCamera::Create());	//仮でタイトルカメラ
+	if (pManager != nullptr) pManager->SetCamera(CDefaultCamera::Create());	//仮でデフォルトカメラ
 
 	//------------------------------
 	//ライトの初期設定
@@ -137,8 +136,8 @@ void CSelectGameScene::Init(void) {
 	
 	//BGMの再生
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_MENU);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_MENU);
 	}
 
 	//選択メニューの生成
@@ -273,8 +272,18 @@ void CSelectGameScene::Update(void) {
 		{
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;
+
+			//遷移の時間設定
+			float fDecAlpha = 0.04f;
+			int nStopCount = 30;
+			if (m_nextScene == SCENE_TYPE::TITLE)
+			{
+				fDecAlpha = 0.1f;
+				nStopCount = 10;
+			}
+
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(m_nextScene, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(m_nextScene, fDecAlpha, nStopCount);
 			//選択のロック
 			m_pMenuGame->SetLockChangeSelect(true);
 		}
@@ -388,10 +397,13 @@ void CSelectGameScene::UpdateInput(void) {
 		//選択のロック
 		m_pMenuGame->SetLockChangeSelect(true);
 		//決定音の再生
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CANCEL);
 
 		//次のシーンの決定
 		m_nextScene = CScene::SCENE_TYPE::TITLE;
+
+		//シーン遷移が始まるまでの時間を設定
+		m_nFadeTime = 0;
 	}
 }
 

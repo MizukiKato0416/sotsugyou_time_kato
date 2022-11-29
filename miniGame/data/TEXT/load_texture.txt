@@ -129,6 +129,15 @@ data/TEXTURE/UI/mode_wolf_01.png
 data/TEXTURE/UI/menu_none_move_ui.png
 data/TEXTURE/UI/menu_none_move_ui_wolf.png
 
+data/TEXTURE/UI/title_logo.png
+data/TEXTURE/UI/title_logo_charactor_00.png
+data/TEXTURE/UI/title_logo_charactor_01.png
+data/TEXTURE/UI/title_logo_charactor_02.png
+data/TEXTURE/UI/title_logo_charactor_03.png
+data/TEXTURE/UI/title_logo_the_final.png
+data/TEXTURE/UI/title_logo_explosion.png
+data/TEXTURE/UI/title_logo_car.png
+
 data/TEXTURE/MESH/floor_01.jpg
 data/TEXTURE/MESH/audience.png
 data/TEXTURE/MESH/BalloonGold3_01.png
@@ -154,6 +163,8 @@ data/TEXTURE/MESH/face01.png
 data/TEXTURE/MESH/face02.png
 data/TEXTURE/MESH/face03.png
 data/TEXTURE/MESH/shadow.png
+data/TEXTURE/MESH/grass001.png
+data/TEXTURE/MESH/wood.png
 
 data/TEXTURE/NUMBER/number_001.png
 data/TEXTURE/NUMBER/number_002.png

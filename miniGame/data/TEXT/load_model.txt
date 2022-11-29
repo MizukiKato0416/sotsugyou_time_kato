@@ -34,6 +34,8 @@ data/MODEL/OBJECT/wolf_obj_01.x
 data/MODEL/OBJECT/wolf_obj_02.x	
 data/MODEL/OBJECT/wolf_obj_03.x	
 data/MODEL/OBJECT/result_tower.x	
+data/MODEL/OBJECT/crown.x	
+
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	

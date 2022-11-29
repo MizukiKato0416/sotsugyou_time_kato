@@ -162,6 +162,7 @@
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
     <ClCompile Include="source\cpp\coverDisplay.cpp" />
     <ClCompile Include="source\cpp\create_bom_manager.cpp" />
+    <ClCompile Include="source\cpp\default_camera.cpp" />
     <ClCompile Include="source\cpp\effect.cpp" />
     <ClCompile Include="source\cpp\Effect\BezierBill.cpp" />
     <ClCompile Include="source\cpp\Effect\billeffect.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="source\h\count_down_ui.h" />
     <ClInclude Include="source\h\coverDisplay.h" />
     <ClInclude Include="source\h\create_bom_manager.h" />
+    <ClInclude Include="source\h\default_camera.h" />
     <ClInclude Include="source\h\effect.h" />
     <ClInclude Include="source\h\fade.h" />
     <ClInclude Include="source\h\FieldEffect.h" />
