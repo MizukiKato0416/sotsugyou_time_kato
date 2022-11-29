@@ -59,7 +59,7 @@ CSelectGameScene::CSelectGameScene()
 {
 	m_pMenuBG = nullptr;
 	m_pMenuGame = nullptr;
-	m_nFadeTime = FPS;
+	m_nFadeTime = 0;
 	m_bWolfMode = false;
 	m_pTutorial = nullptr;
 	m_pModeUi = nullptr;
@@ -86,8 +86,7 @@ void CSelectGameScene::Init(void) {
 	memset(m_fAlowUiMove, 0, sizeof(m_fAlowUiMove[SELECT_GAME_SCENE_ALOW_UI_NUM]));
 	m_bAlowUiMoveChange[0] = false;
 	m_bAlowUiMoveChange[1] = true;
-
-
+	m_nFadeTime = 30;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -273,8 +272,18 @@ void CSelectGameScene::Update(void) {
 		{
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;
+
+			//遷移の時間設定
+			float fDecAlpha = 0.04f;
+			int nStopCount = 30;
+			if (m_nextScene == SCENE_TYPE::TITLE)
+			{
+				fDecAlpha = 0.1f;
+				nStopCount = 10;
+			}
+
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(m_nextScene, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(m_nextScene, fDecAlpha, nStopCount);
 			//選択のロック
 			m_pMenuGame->SetLockChangeSelect(true);
 		}
@@ -392,6 +401,9 @@ void CSelectGameScene::UpdateInput(void) {
 
 		//次のシーンの決定
 		m_nextScene = CScene::SCENE_TYPE::TITLE;
+
+		//シーン遷移が始まるまでの時間を設定
+		m_nFadeTime = 0;
 	}
 }
 

@@ -54,6 +54,10 @@ private:
 	void TheFinalLogo();		//ザファイナルのロゴの処理
 	void BoundLogo();			//ロゴのバウンドの処理
 	void StopTitleLogo();		//タイトルロゴ停止
+	void ExplosionLogo();		//爆発ロゴの処理
+	void CarLogo();				//車ロゴの処理
+	bool CreateAllLogo();		//全てのロゴを生成する処理
+	void DeleteLogo();			//ロゴ消す処理
 
 
 	static CObject2D * m_pNext;	// オブジェクト2Dの静的ポインター生成
@@ -71,11 +75,15 @@ private:
 	CObject2D *m_pTheFinalLogo;									//ザファイナルロゴ
 	CObject2D *m_pTitleLogo;									//タイトルロゴ
 	CObject2D *m_pExplosionLogo;								//爆発ロゴ
+	CObject2D *m_pTitleLogoCar;									//車ロゴ
 
 	int m_nFrameCounter;					//フレームカウンター
 	PHASE m_phase;							//フェーズ
 	float m_fBoundMove;						//バウンド移動量
 	bool m_bExplosionAddSize;				//サイズを大きくするかどうか
+	bool m_bCarLogoRight;					//右にいるかどうか
+	float m_fCarLogoMove;					//車ロゴの移動量
+	bool m_bCreateAllLogo;					//全てのロゴを生成した状態かどうか
 };
 
 #endif // !_TITLE_SCENE_H_

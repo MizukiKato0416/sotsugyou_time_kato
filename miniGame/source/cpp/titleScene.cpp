@@ -45,6 +45,7 @@
 #define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)			//カメラの最終的な向きX
 #define TITLE_SCENE_END_CAMERA_POS_Z			(-550.0f)		//カメラの最終的な位置Z
 #define TITLE_SCENE_END_CAMERA_POS_Y			(20.0f)			//カメラの最終的な位置Y
+#define TITLE_SCENE_CAMERA_ROTATE_SPEED			(0.01f)			//カメラの回転スピード
 
 #define TITLE_SCENE_THE_FINAL_LOGO_SIZE_X			(654.0f)			//ザファイナルロゴのサイズX
 #define TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y			(74.0f)				//ザファイナルロゴのサイズY
@@ -57,13 +58,23 @@
 #define TITLE_SCENE_CHARA_LOGO_SIZE				(170.0f)			//文字ロゴのサイズ
 #define TITLE_SCENE_CHARA_LOGO_INIT_SIZE		(170.0f * 10.0f)	//文字ロゴの初期サイズ
 #define TITLE_SCENE_CHARA_LOGO_POS_Y			(220.0f)			//文字ロゴの位置Y
+#define TITLE_SCENE_CHARA_LOGO_POS_X			(15.0f)				//文字ロゴの位置X調整値
 #define TITLE_SCENE_CHARA_DEC_SIZE				(0.91f)				//文字ロゴのサイズ減算量
 #define TITLE_SCENE_CHARA_CREATE_COUNTER		(30)				//文字ロゴの生成するタイミング
 
-#define TITLE_SCENE_EXPLOSION_LOGO_POS		(D3DXVECTOR3(850.0f, 174.0f, 0.0f))			//爆発UIの位置
-#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_X	(362.0f)									//爆発UIのサイズX
-#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y	(316.0f)									//爆発UIのサイズY
+#define TITLE_SCENE_EXPLOSION_LOGO_POS				(D3DXVECTOR3(850.0f, 174.0f, 0.0f))		//爆発UIの位置
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_X			(362.0f)								//爆発UIのサイズX
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y			(316.0f)								//爆発UIのサイズY
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_MIN			(0.9f)									//爆発UIのサイズ最小値
+#define TITLE_SCENE_EXPLOSION_LOGO_SIZE_MAX			(1.1f)									//爆発UIのサイズ最大値
+#define TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE		(0.001f)								//爆発UIのスケール加算量
+#define TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MIN	(0.99f)									//爆発UIのスケール加算量最小値
+#define TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MAX	(1.01f)									//爆発UIのスケール加算量最大値
 
+#define TITLE_SCENE_CAR_LOGO_ADD_MOVE		(0.2f)						//車ロゴの移動量加算量
+#define TITLE_SCENE_CAR_LOGO_ADD_MOVE_MAX	(30.0f)						//車ロゴの移動量最大値
+#define TITLE_SCENE_CAR_LOGO_LEFT_MOVE		(22.8f)						//車ロゴの左から来るときの移動量初速
+#define TITLE_SCENE_CAR_LOGO_STOP_COUNTER	(180)						//車ロゴが停止している時間
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -88,6 +99,10 @@ CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
 	m_fBoundMove = 0.0f;
 	m_pExplosionLogo = nullptr;
 	m_bExplosionAddSize = false;
+	m_pTitleLogoCar = nullptr;
+	m_bCarLogoRight = false;
+	m_fCarLogoMove = 0.0f;
+	m_bCreateAllLogo = false;
 }
 
 //=============================================================================
@@ -112,6 +127,10 @@ void CTitleScene::Init(void) {
 	m_fBoundMove = 1.02f;
 	m_pExplosionLogo = nullptr;
 	m_bExplosionAddSize = true;
+	m_pTitleLogoCar = nullptr;
+	m_bCarLogoRight = true;
+	m_fCarLogoMove = 0.0f;
+	m_bCreateAllLogo = false;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -302,6 +321,12 @@ void CTitleScene::Update(void) {
 	//カメラの処理
 	Camera();
 
+	//ロゴ消す処理
+	DeleteLogo();
+
+	//全てのロゴを生成する処理
+	if (CreateAllLogo()) return;
+
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
 		pInput = pManager->GetInputCur();
@@ -311,7 +336,7 @@ void CTitleScene::Update(void) {
 		pSound = pManager->GetSound();
 	}
 
-	if (pInput == nullptr || pFade == nullptr) return;
+	if (pInput == nullptr || pFade == nullptr || !m_bCreateAllLogo) return;
 
 	//決定キーを押したとき
 	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey) 
@@ -456,7 +481,7 @@ void CTitleScene::Camera()
 	if (rot.x <= TITLE_SCENE_END_CAMERA_ROT_X * (D3DX_PI / 180.0f)) return;
 
 	//向きを動かす
-	rot.x -= 0.01f;
+	rot.x -= TITLE_SCENE_CAMERA_ROTATE_SPEED;
 	//既定の値以下になったら
 	if (rot.x < TITLE_SCENE_END_CAMERA_ROT_X * (D3DX_PI / 180.0f)) rot.x = TITLE_SCENE_END_CAMERA_ROT_X * (D3DX_PI / 180.0f);
 
@@ -486,27 +511,46 @@ void CTitleScene::CharactorLogo()
 
 			if (beforeSize.x != TITLE_SCENE_CHARA_LOGO_SIZE || beforeSize.y != TITLE_SCENE_CHARA_LOGO_SIZE) return;
 		}
-		
+
 		//生成されていなかったら
 		if (m_pTitleLogoChara[nCntCharaLogo] == nullptr)
 		{
 			//生成する
-			m_pTitleLogoChara[nCntCharaLogo] = 
-			CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f -
-			                              ((TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) * (TITLE_LOGO_CHARA_NUM / 2.0f)) + ((TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) / 2.0f) +
-				                          (TITLE_SCENE_CHARA_LOGO_SIZE - 15.0f) * nCntCharaLogo,
-				                          TITLE_SCENE_CHARA_LOGO_POS_Y,
-				                          0.0f),
-			                  static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::TITLE_LOGO_CHARACTOR_00) + nCntCharaLogo),
-				              TITLE_SCENE_CHARA_LOGO_INIT_SIZE, TITLE_SCENE_CHARA_LOGO_INIT_SIZE);
+			m_pTitleLogoChara[nCntCharaLogo] =
+				CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f -
+				((TITLE_SCENE_CHARA_LOGO_SIZE - TITLE_SCENE_CHARA_LOGO_POS_X) * (TITLE_LOGO_CHARA_NUM / 2.0f)) + ((TITLE_SCENE_CHARA_LOGO_SIZE - TITLE_SCENE_CHARA_LOGO_POS_X) / 2.0f) +
+					(TITLE_SCENE_CHARA_LOGO_SIZE - TITLE_SCENE_CHARA_LOGO_POS_X) * nCntCharaLogo,
+					TITLE_SCENE_CHARA_LOGO_POS_Y,
+					0.0f),
+					static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::TITLE_LOGO_CHARACTOR_00) + nCntCharaLogo),
+					TITLE_SCENE_CHARA_LOGO_INIT_SIZE, TITLE_SCENE_CHARA_LOGO_INIT_SIZE);
 		}
 
 		//サイズを取得
 		D3DXVECTOR3 size = m_pTitleLogoChara[nCntCharaLogo]->GetSize();
-		//小さくする
-		size *= TITLE_SCENE_CHARA_DEC_SIZE;
-		if (size.x < TITLE_SCENE_CHARA_LOGO_SIZE) size.x = TITLE_SCENE_CHARA_LOGO_SIZE;
-		if (size.y < TITLE_SCENE_CHARA_LOGO_SIZE) size.y = TITLE_SCENE_CHARA_LOGO_SIZE;
+
+		if (size.x > TITLE_SCENE_CHARA_LOGO_SIZE || size.y > TITLE_SCENE_CHARA_LOGO_SIZE)
+		{
+			//小さくする
+			size *= TITLE_SCENE_CHARA_DEC_SIZE;
+		}
+
+		if (size.x < TITLE_SCENE_CHARA_LOGO_SIZE) 
+		{ 
+			size.x = TITLE_SCENE_CHARA_LOGO_SIZE;
+		}
+		if (size.y < TITLE_SCENE_CHARA_LOGO_SIZE)
+		{
+			size.y = TITLE_SCENE_CHARA_LOGO_SIZE;
+
+			CManager* pManager = CManager::GetManager();	//マネージャーの取得
+			if (pManager == nullptr) return;
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TITLE_CHAR_CREATE);
+		}
 		//サイズ設定
 		m_pTitleLogoChara[nCntCharaLogo]->SetSize(size);
 	}
@@ -543,6 +587,10 @@ void CTitleScene::TheFinalLogo()
 		//爆発ロゴ
 		m_pExplosionLogo = CObject2D::Create(TITLE_SCENE_EXPLOSION_LOGO_POS, CTexture::TEXTURE_TYPE::TITLE_LOGO_EXPLOSION,
 			                                 TITLE_SCENE_EXPLOSION_LOGO_SIZE_X, TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y);
+
+		//車ロゴ
+		m_pTitleLogoCar = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO_CAR,
+			                                SCREEN_WIDTH, SCREEN_HEIGHT);
 
 		// タイトルロゴ
 		m_pTitleLogo = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO,
@@ -585,18 +633,6 @@ void CTitleScene::TheFinalLogo()
 //=============================================================================
 void CTitleScene::BoundLogo()
 {
-	//if (m_pExplosionLogo != nullptr)
-	//{
-	//	//サイズを取得
-	//	D3DXVECTOR3 size = m_pExplosionLogo->GetSize();
-	//	//小さくする
-	//	size *= m_fBoundMove;
-	//	if (size.x < TITLE_SCENE_EXPLOSION_LOGO_SIZE_X) size.x = TITLE_SCENE_EXPLOSION_LOGO_SIZE_X;
-	//	if (size.y < TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y) size.y = TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y;
-	//	//サイズ設定
-	//	m_pExplosionLogo->SetSize(size);
-	//}
-
 	if (m_pTitleLogo != nullptr)
 	{
 		//サイズを取得
@@ -629,6 +665,8 @@ void CTitleScene::BoundLogo()
 		//フェーズをタイトルロゴ停止にする
 		m_phase = PHASE::STOP_TITLE_LOGO;
 		m_fBoundMove = 1.0f;
+		//全てのロゴを生成した状態にする
+		m_bCreateAllLogo = true;
 	}
 }
 
@@ -637,27 +675,275 @@ void CTitleScene::BoundLogo()
 //=============================================================================
 void CTitleScene::StopTitleLogo()
 {
+	//爆発ロゴの処理
+	ExplosionLogo();
+
+	//車ロゴの処理
+	CarLogo();
+}
+
+//=============================================================================
+//爆発ロゴの処理
+//=============================================================================
+void CTitleScene::ExplosionLogo()
+{
 	if (m_pExplosionLogo == nullptr) return;
-	
+
 	//サイズを取得
 	D3DXVECTOR3 size = m_pExplosionLogo->GetSize();
 
 	//サイズを変える
 	size *= m_fBoundMove;
 
-	if (size.x < TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * 0.9f) m_bExplosionAddSize = true;
-	else if(size.x > TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * 1.1f) m_bExplosionAddSize = false;
+	if (size.x < TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * TITLE_SCENE_EXPLOSION_LOGO_SIZE_MIN) m_bExplosionAddSize = true;
+	else if (size.x > TITLE_SCENE_EXPLOSION_LOGO_SIZE_X * TITLE_SCENE_EXPLOSION_LOGO_SIZE_MAX) m_bExplosionAddSize = false;
 
 	//サイズ設定
 	m_pExplosionLogo->SetSize(size);
 
 	//スケール加算量
-	float fAddScalse = 0.001f;
+	float fAddScalse = TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE;
 	//小さくするときは逆にする
 	if (!m_bExplosionAddSize) fAddScalse *= -1.0f;
 	//スケールを加算
 	m_fBoundMove += fAddScalse;
 
-	if (m_fBoundMove > 1.01f) m_fBoundMove = 1.01f;
-	else if (m_fBoundMove < 0.99f) m_fBoundMove = 0.99f;
+	if (m_fBoundMove > TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MAX) m_fBoundMove = TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MAX;
+	else if (m_fBoundMove < TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MIN) m_fBoundMove = TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MIN;
+}
+
+//=============================================================================
+//車ロゴの処理
+//=============================================================================
+void CTitleScene::CarLogo()
+{
+	if (m_bPushKey) return;
+
+	if (m_pTitleLogoCar == nullptr) return;
+
+	if (m_nFrameCounter == 0)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pTitleLogoCar->GetPos();
+		//加算量
+		float fAddMove = TITLE_SCENE_CAR_LOGO_ADD_MOVE;
+		//左から来るときは減速するようにする
+		if(!m_bCarLogoRight) fAddMove *= -1.0f;
+
+		//移動量加算
+		m_fCarLogoMove += fAddMove;
+
+		//移動量最大値と最小値を設定
+		if (m_fCarLogoMove > TITLE_SCENE_CAR_LOGO_ADD_MOVE_MAX) m_fCarLogoMove = TITLE_SCENE_CAR_LOGO_ADD_MOVE_MAX;
+		else if(m_fCarLogoMove < 0.0f) m_fCarLogoMove = 0.0f;
+
+		//動かす
+		pos.x += m_fCarLogoMove;
+
+		if (pos.x >= SCREEN_WIDTH + SCREEN_WIDTH / 2.0f)
+		{
+			//位置をずらす
+			pos.x = -SCREEN_WIDTH + SCREEN_WIDTH / 2.0f;
+			//右にいない状態にする
+			m_bCarLogoRight = false;
+			//ギリギリ止まれるような速度にする
+			m_fCarLogoMove = TITLE_SCENE_CAR_LOGO_LEFT_MOVE;
+		}
+
+		if (!m_bCarLogoRight && pos.x > SCREEN_WIDTH / 2.0f)
+		{
+			pos.x = SCREEN_WIDTH / 2.0f;
+			m_nFrameCounter++;
+		}
+
+		//位置設定
+		m_pTitleLogoCar->SetPos(pos);
+
+		return;
+	}
+
+	m_nFrameCounter++;
+	if (m_nFrameCounter < TITLE_SCENE_CAR_LOGO_STOP_COUNTER) return;
+
+	m_nFrameCounter = 0;
+	//右にいる状態にする
+	m_bCarLogoRight = true;
+	//0にする
+	m_fCarLogoMove = 0.0f;
+}
+
+//=============================================================================
+//全てのロゴを生成する処理
+//=============================================================================
+bool CTitleScene::CreateAllLogo()
+{
+	if (m_bCreateAllLogo) return false;
+	//ロゴが全て生成されていないなら
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	CInput* pInput = nullptr;	//入力デバイスへのポインタ
+	if (pManager != nullptr) {
+		//現在の入力デバイスの取得
+		pInput = pManager->GetInputCur();
+	}
+	if (pInput == nullptr) return false;
+
+	if (!pInput->GetTrigger(CInput::CODE::SELECT, 0)) return false;
+
+	//決定キーを押したとき
+
+	for (int nCntCharaLogo = 0; nCntCharaLogo < TITLE_LOGO_CHARA_NUM; nCntCharaLogo++)
+	{
+		//生成されていなかったら
+		if (m_pTitleLogoChara[nCntCharaLogo] == nullptr) continue;
+		//消す
+		m_pTitleLogoChara[nCntCharaLogo]->Uninit();
+		m_pTitleLogoChara[nCntCharaLogo] = nullptr;
+	}
+
+	//生成されていなかったら
+	if (m_pExplosionLogo == nullptr)
+	{
+		//爆発ロゴ
+		m_pExplosionLogo = CObject2D::Create(TITLE_SCENE_EXPLOSION_LOGO_POS, CTexture::TEXTURE_TYPE::TITLE_LOGO_EXPLOSION,
+			                                 TITLE_SCENE_EXPLOSION_LOGO_SIZE_X, TITLE_SCENE_EXPLOSION_LOGO_SIZE_Y);
+	}
+
+	//生成されていなかったら
+	if (m_pTitleLogoCar == nullptr)
+	{
+		//車ロゴ
+		m_pTitleLogoCar = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO_CAR,
+			                                SCREEN_WIDTH, SCREEN_HEIGHT);
+	}
+
+	//生成されていなかったら
+	if (m_pTitleLogo == nullptr)
+	{
+		// タイトルロゴ
+		m_pTitleLogo = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TITLE_LOGO,
+			                             SCREEN_WIDTH, SCREEN_HEIGHT);
+	}
+	else
+	{
+		//サイズ設定
+		m_pTitleLogo->SetSize(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f));
+	}
+
+	//生成されていなかったら
+	if (m_pTheFinalLogo == nullptr)
+	{
+		//ザファイナルロゴ
+		m_pTheFinalLogo = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, TITLE_SCENE_THE_FINAL_LOGO_POS_Y, 0.0f),
+			                                CTexture::TEXTURE_TYPE::TITLE_LOGO_THE_FINAL,
+		                                    TITLE_SCENE_THE_FINAL_LOGO_SIZE_X, TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y);
+	}
+	else
+	{
+		//サイズ設定
+		m_pTheFinalLogo->SetSize(D3DXVECTOR3(TITLE_SCENE_THE_FINAL_LOGO_SIZE_X, TITLE_SCENE_THE_FINAL_LOGO_SIZE_Y, 0.0f));
+	}
+
+	//全てのロゴが生成されている状態にする
+	m_bCreateAllLogo = true;
+
+	//フェーズをタイトルロゴ停止にする
+	m_phase = PHASE::STOP_TITLE_LOGO;
+
+	//変数初期化
+	m_fBoundMove = 1.0f;
+	m_nFrameCounter = 0;
+
+	return true;
+}
+
+//=============================================================================
+//ロゴ消す処理
+//=============================================================================
+void CTitleScene::DeleteLogo()
+{
+	if (!m_bPushKey) return;
+
+	//決定ボタンが押されていたら
+
+	//生成されていたら
+	if (m_pExplosionLogo != nullptr)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pExplosionLogo->GetPos();
+		//サイズ取得
+		D3DXVECTOR3 size = m_pExplosionLogo->GetSize();
+		//動かす
+		pos.y -= 20.0f;
+		//位置設定
+		m_pExplosionLogo->SetPos(pos);
+
+		if (pos.y <= 0.0f - size.y / 2.0f)
+		{
+			//消す
+			m_pExplosionLogo->Uninit();
+			m_pExplosionLogo = nullptr;
+		}
+	}
+
+	//生成されていたら
+	if (m_pTitleLogoCar != nullptr)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pTitleLogoCar->GetPos();
+		//サイズ取得
+		D3DXVECTOR3 size = m_pTitleLogoCar->GetSize();
+		//動かす
+		pos.y -= 20.0f;
+		pos.x = SCREEN_WIDTH / 2.0f;
+		//位置設定
+		m_pTitleLogoCar->SetPos(pos);
+
+		if (pos.y <= 0.0f - size.y / 2.0f)
+		{
+			//消す
+			m_pTitleLogoCar->Uninit();
+			m_pTitleLogoCar = nullptr;
+		}
+	}
+
+	//生成されていたら
+	if (m_pTitleLogo != nullptr)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pTitleLogo->GetPos();
+		//サイズ取得
+		D3DXVECTOR3 size = m_pTitleLogo->GetSize();
+		//動かす
+		pos.y -= 20.0f;
+		//位置設定
+		m_pTitleLogo->SetPos(pos);
+
+		if (pos.y <= 0.0f - size.y / 2.0f)
+		{
+			//消す
+			m_pTitleLogo->Uninit();
+			m_pTitleLogo = nullptr;
+		}
+	}
+
+	//生成されていたら
+	if (m_pTheFinalLogo != nullptr)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pTheFinalLogo->GetPos();
+		//サイズ取得
+		D3DXVECTOR3 size = m_pTheFinalLogo->GetSize();
+		//動かす
+		pos.y -= 20.0f;
+		//位置設定
+		m_pTheFinalLogo->SetPos(pos);
+
+		if (pos.y <= 0.0f - size.y / 2.0f)
+		{
+			//消す
+			m_pTheFinalLogo->Uninit();
+			m_pTheFinalLogo = nullptr;
+		}
+	}
 }
