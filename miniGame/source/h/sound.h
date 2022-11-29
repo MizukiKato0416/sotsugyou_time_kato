@@ -47,6 +47,7 @@ public:
 		SE_DRUM_ROLL_END,		//ドラムロール最後SE
 		SE_TITLE_CHAR_CREATE,	//タイトルの文字生成SE
 		SE_TITLE_LOGO_CREATE,	//タイトルロゴの生成SE
+		SE_TITLE_CAR,			//タイトルの車通過SE
 
 		ENUM_MAX
 	};
