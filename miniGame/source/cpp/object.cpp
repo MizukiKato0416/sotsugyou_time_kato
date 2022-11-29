@@ -175,32 +175,13 @@ void CObject::ReleaseObjtype(int nObjtype) {
 void CObject::UpdateAll(void) {
 	//オブジェクトの更新
 	for (int nCnt = 0; nCnt < (int)UPDATE_PRIORITY::ENUM_MAX; nCnt++) {
-		//リーダブルコードを参考にしたforでのリストの更新
-		for (CObject* pObjUpdate = m_apTopUpdate[nCnt]; pObjUpdate != nullptr; pObjUpdate = pObjUpdate->m_pNextUpdate) {
+		//リストを順に取得
+		for (CObject* pObj = m_apTopUpdate[nCnt]; pObj != nullptr; pObj = pObj->m_pNextUpdate) {
 			//現在のポーズレベルより低い場合、更新せずに次のオブジェクト
-			if (pObjUpdate->m_nPauseLevel < m_nUpdatePauseLevel) continue;
+			if (pObj->m_nPauseLevel < m_nUpdatePauseLevel) continue;
 			//死亡フラグが立っていない場合更新
-			if (!pObjUpdate->m_bDeath) pObjUpdate->Update();
+			if (!pObj->m_bDeath) pObj->Update();
 		}
-
-		//CObject* pObjectUpdate = m_apTopUpdate[nCnt];	//更新するオブジェクト
-
-		//while (pObjectUpdate != nullptr) {
-		//	CObject* pObjectNext = pObjectUpdate->m_pNextUpdate;	//次のオブジェクトを取得
-
-		//	//現在のポーズレベルより低い場合、更新せずに次のオブジェクト
-		//	if (pObjectUpdate->m_nPauseLevel < m_nUpdatePauseLevel) {
-		//		//次のオブジェクトを代入
-		//		pObjectUpdate = pObjectNext;
-		//		continue;
-		//	}
-
-		//	//死亡フラグが立っていない場合更新
-		//	if (!pObjectUpdate->m_bDeath) pObjectUpdate->Update();	
-
-		//	//次のオブジェクトを代入
-		//	pObjectUpdate = pObjectNext;
-		//}
 	}
 
 	//死亡フラグが立ったオブジェクトを破棄
@@ -237,35 +218,27 @@ void CObject::DrawAll(void) {
 	if (pDevice == nullptr) return;
 
 	// ステンシル設定
-	//pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);
-	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);
-	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);
-
-	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);		//通常はステンシル無効
+	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);	//参照値とマスクが同じ場合
+	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);			//ステンシル描画時のときと同じ参照値
+	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
+	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);				//?
 
 	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
 		//UIの描画に切り替わった場合、Zバッファを1.0fでクリアする
 		if(nCnt == (int)DRAW_PRIORITY::UI_BG && pDevice != nullptr) pDevice->Clear(0, nullptr, (D3DCLEAR_ZBUFFER), D3DXCOLOR(), 1.0f, 0);
 
-		CObject* pObject = m_apTopDraw[nCnt];
-		while (pObject != nullptr) {
-			CObject* pObjectNext = pObject->m_pNextDraw;	//次のオブジェクト取得
-
-			//ステンシルの設定
-			if(pObject->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
+		//リストを順に取得
+		for (CObject* pObj = m_apTopDraw[nCnt]; pObj != nullptr; pObj = pObj->m_pNextDraw) {
+			//ステンシル有効のオブジェクトの場合ステンシル情報を設定
+			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
 
 			//描画可能時の場合描画
-			if(pObject->m_bDraw && !pObject->m_bStencilMask && !pObject->m_bDeath) pObject->Draw();
+			if (pObj->m_bDraw && !pObj->m_bStencilMask && !pObj->m_bDeath) pObj->Draw();
 
 			//ステンシルを戻す
-			pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
-
-			//次のオブジェクトを代入
-			pObject = pObjectNext;
+			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
 		}
 	}
 }
@@ -285,29 +258,27 @@ void CObject::DrawStencilAll(void) {
 	if (pDevice == nullptr) return;
 
 	// ステンシル設定
-	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);
-	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_REPLACE);
-	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);					//ステンシル有効
+	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);			//ステンシル合格確定
+	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);					//ステンシルバッファに反映する参照値
+	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);	//ステンシル成功時：参照値で置き換え
+	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_REPLACE);	//Zテスト失敗時：参照値で置き換え
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);					//ステンシルマスク：ビットが削られない
 
 	// Z設定
-	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_NEVER);
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_NEVER);	//Zテスト失敗確定　ステンシルバッファのみに反映させる
 
 	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
-		CObject* pObject = m_apTopDraw[nCnt];
-		while (pObject != nullptr) {
-			CObject* pObjectNext = pObject->m_pNextDraw;	//次のオブジェクト取得
+		//リストを順に取得
+		for (CObject* pObj = m_apTopDraw[nCnt]; pObj != nullptr; pObj = pObj->m_pNextDraw) {
 			//描画可能時の場合描画
-			if(pObject->m_bDraw && pObject->m_bDrawStencil && !pObject->m_bDeath) pObject->Draw();
-			//次のオブジェクトを代入
-			pObject = pObjectNext;
+			if (pObj->m_bDraw && pObj->m_bDrawStencil && !pObj->m_bDeath) pObj->Draw();
 		}
 	}
 
-	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
+	//描画設定を戻す
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);	//ステンシル無効
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);	//Zテスト方法を戻す
 
 }
 
