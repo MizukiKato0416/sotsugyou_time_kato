@@ -46,7 +46,8 @@ public:
 
 	//テクスチャUVの移動設定
 	void SetMoveTex(float fMoveTexU, float fMoveTexV);
-
+	//テクスチャのUV取得処理
+	D3DXVECTOR2 GetUV(const int nCntVtx);
 
 	void SetUseZBuffTexture(bool bUse) { m_bUseZBuffTexture = bUse; }
 

@@ -447,3 +447,20 @@ void CObject2D::SetMoveTex(float fMoveTexU, float fMoveTexV)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
+
+//=============================================================================
+//テクスチャのUV取得処理
+//=============================================================================
+D3DXVECTOR2 CObject2D::GetUV(const int nCntVtx)
+{
+	VERTEX_2D *pVtx;
+	//頂点バッファのロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	D3DXVECTOR2 vtxUV = pVtx[nCntVtx].tex;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+	return vtxUV;
+}

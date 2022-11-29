@@ -449,7 +449,7 @@ void CGameScene02::UpdateGameOver(void) {
 				CFinalResultScene::SetPlayerScore(nScore, nIdx);
 			}
 			//ÅIƒŠƒUƒ‹ƒg‚É‘JˆÚ
-			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 30);
 		}
 	}
 }
