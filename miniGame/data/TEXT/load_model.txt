@@ -35,6 +35,9 @@ data/MODEL/OBJECT/wolf_obj_02.x
 data/MODEL/OBJECT/wolf_obj_03.x	
 data/MODEL/OBJECT/result_tower.x	
 data/MODEL/OBJECT/crown.x	
+data/MODEL/OBJECT/cloud01.x	
+data/MODEL/OBJECT/cloud02.x	
+data/MODEL/OBJECT/cloud03.x	
 
 
 data/MODEL/PLAYER/00_body.x	

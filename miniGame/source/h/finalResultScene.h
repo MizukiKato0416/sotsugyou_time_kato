@@ -72,6 +72,9 @@ private:
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bEndScene;	//選択キー押下時
 
+	std::vector<float> m_fDifferCloud;		//雲生成時の距離
+	std::vector<float> m_fRotCloud;			//雲生成時の向き
+	std::vector<CObjectModel*> m_pCloud;	//雲のポインタ
 };
 
 #endif // !_FINAL_RESULT_SCENE_H_

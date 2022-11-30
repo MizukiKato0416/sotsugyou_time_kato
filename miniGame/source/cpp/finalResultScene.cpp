@@ -28,6 +28,13 @@
 #define FINAL_RESULT_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define FINAL_RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
+#define FINAL_RESULT_SCENE_RESULT_UI_SIZE_X			(618.0f * 1.5f)		//結果発表UIのサイズX
+#define FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y			(182.0f * 1.5f)		//結果発表UIのサイズY
+#define FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_X	(618.0f * 5.0f)		//結果発表UIの初期サイズX
+#define FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_Y	(182.0f * 5.0f)		//結果発表UIの初期サイズY
+#define FINAL_RESULT_SCENE_RESULT_UI_ADD_SIZE		(0.94f)				//結果発表UIの初期サイズ加算量
+#define FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA		(0.1f)				//結果発表UIのα値加算量
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -40,6 +47,9 @@ CFinalResultScene::CFinalResultScene()
 {
 	m_nFadeTime = FPS;
 	m_pTextResult = nullptr;
+	m_fDifferCloud.clear();
+	m_fRotCloud.clear();
+	m_pCloud.clear();
 }
 
 //=============================================================================
@@ -92,6 +102,8 @@ void CFinalResultScene::Init(void) {
 	//------------------------------
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(false);
+		//バックバッファをフォグの色に合わせる
+		pRenderer->SetBackBuffColor(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f));
 	}
 
 	//------------------------------
@@ -103,7 +115,42 @@ void CFinalResultScene::Init(void) {
 	//モデルの生成
 	//------------------------------
 	//仮の背景
-	CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
+	//CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
+
+	//雲の総数
+	int nNumCloud = 0;
+	//雲の生成
+	for (int nCntCloudY = 0; nCntCloudY < 12; nCntCloudY++)
+	{
+		for (int nCntCloudX = 0; nCntCloudX < 10; nCntCloudX++, nNumCloud++)
+		{
+			//中心からの距離の設定
+			m_fDifferCloud.push_back(float(rand() % 18401 + 1600));
+			//向きをランダムで決める
+			m_fRotCloud.push_back(float(rand() % 629 + -314) / 100.0f);
+
+			//生成位置の設定
+			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, -5000.0f + (800.0f * nCntCloudY), 0.0f);
+			pos.y += float(rand() % 1001 + -500);
+			pos.x += cosf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
+			pos.z += sinf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
+
+			//向きの設定
+			D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, D3DX_PI / 2.0f - m_fRotCloud[nNumCloud], 0.0f);
+
+			//雲の向きをランダムで裏返す
+			if (rand() % 2 == 0) rot.y += D3DX_PI;
+
+			//モデルの種類
+			int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_02) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_00);
+
+			//モデルをランダムで設定
+			int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_00);
+
+			m_pCloud.push_back(CObjectModel::Create(static_cast<CModel::MODELTYPE>(nModel), pos, rot, false));
+		}
+	}
+
 
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
@@ -230,7 +277,7 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 1.5f;	//上昇の速度（最大）
+	const float fMoveMaxY = 1.6f;	//上昇の速度（最大）
 	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.001f;	//上昇量
 	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
@@ -295,32 +342,59 @@ void CFinalResultScene::ResultText() {
 
 	if (m_nCntPhase == 120) {
 		//結果発表テキストの表示
-		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, -200.0f, 0.0f), CTexture::TEXTURE_TYPE::FINAL_RESULT_UI, 500.0f, 200.0f);
+		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+			                              CTexture::TEXTURE_TYPE::FINAL_RESULT_UI,
+			                              FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_X, FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_Y);
+		m_pTextResult->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
-	if (m_pTextResult != nullptr) {
-		D3DXVECTOR3 pos = m_pTextResult->GetPos();	
-		pos.y += 5.0f;
-		if (pos.y > 200.0f) {
-			pos.y = 200.0f;
-		}
-		m_pTextResult->SetPos(pos);
-	}
+	if (m_pTextResult == nullptr) return;
+
+	//生成されいたら
+
+	
+
+	//サイズ取得
+	D3DXVECTOR3 size = m_pTextResult->GetSize();
+	//サイズを大きくする
+	size *= FINAL_RESULT_SCENE_RESULT_UI_ADD_SIZE;
+	if (size.x < FINAL_RESULT_SCENE_RESULT_UI_SIZE_X) size.x = FINAL_RESULT_SCENE_RESULT_UI_SIZE_X;
+	if (size.y < FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y) size.y = FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y;
+	//サイズ設定
+	m_pTextResult->SetSize(size);
 
 	//フェーズ切り替え
 	if (m_nCntPhase > 300) {
-		//フェーズの変更
-		m_phase = PHASE::SHOW_SCORE_UI;
 
-		//結果発表テキストの破棄
-		if (m_pTextResult != nullptr) {
+		//カラー取得
+		D3DXCOLOR col = m_pTextResult->GetColor();
+		//α値減算
+		col.a -= FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA;
+		//カラー設定
+		m_pTextResult->SetColor(col);
+
+		if (col.a < 0.0f)
+		{
+			//フェーズの変更
+			m_phase = PHASE::SHOW_SCORE_UI;
+
+			//結果発表テキストの破棄
 			m_pTextResult->Uninit();
 			m_pTextResult = nullptr;
+			//カウントリセット
+			m_nCntPhase = 0;
+			return;
 		}
-
-
-		//カウントリセット
-		m_nCntPhase = 0;
+	}
+	else
+	{
+		//カラー取得
+		D3DXCOLOR col = m_pTextResult->GetColor();
+		//α値加算
+		col.a += FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA;
+		if (col.a > 1.0f) col.a = 1.0f;
+		//カラー設定
+		m_pTextResult->SetColor(col);
 	}
 }
 

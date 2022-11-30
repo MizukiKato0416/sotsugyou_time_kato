@@ -206,9 +206,9 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN     , 1.0f);		//風船スポーンSE
 	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL         , 2.9f);		//ドラムロールSE
 	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL_END		, 2.7f);		//ドラムロール最後SE
-	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.8f);		//タイトルの文字生成SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.5f);		//タイトルの文字生成SE
 	ControllVoice(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.2f);		//タイトルロゴの生成SE
-	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.5f);		//タイトルの車SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.0f);		//タイトルの車SE
 
 	return S_OK;
 }

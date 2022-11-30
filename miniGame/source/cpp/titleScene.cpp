@@ -354,6 +354,8 @@ void CTitleScene::Update(void) {
 
 			//Œˆ’è‰¹‚ÌÄ¶
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+			m_nFrameCounter = 0;
 		}
 	}
 
