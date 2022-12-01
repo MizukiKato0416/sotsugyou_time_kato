@@ -35,6 +35,15 @@
 #define FINAL_RESULT_SCENE_RESULT_UI_ADD_SIZE		(0.94f)				//結果発表UIの初期サイズ加算量
 #define FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA		(0.1f)				//結果発表UIのα値加算量
 
+#define FINAL_RESULT_SCENE_CLOUD_NUM_Y		(12)									//雲の縦の総数
+#define FINAL_RESULT_SCENE_CLOUD_NUM_X		(10)									//雲の横の総数
+#define FINAL_RESULT_SCENE_CLOUD_DIFFER		(float(rand() % 18401 + 1600))			//雲の距離
+#define FINAL_RESULT_SCENE_CLOUD_ROT		(float(rand() % 629 + -314) / 100.0f)	//雲の生成方向
+#define FINAL_RESULT_SCENE_CLOUD_MIN_POS_Y	(-5000.0f)								//雲の生成位置Y最小値
+#define FINAL_RESULT_SCENE_CLOUD_POS_Y		(800.0f)								//雲の生成間隔
+#define FINAL_RESULT_SCENE_CLOUD_POS_Y_RAND	(float(rand() % 1001 + -500))			//雲の生成位置Yランダム値
+#define FINAL_RESULT_SCENE_CLOUD_MOVE_SPEED	(-(float(rand() % 6 + 2) / 10000.0f))	//雲の移動速度
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -49,6 +58,7 @@ CFinalResultScene::CFinalResultScene()
 	m_pTextResult = nullptr;
 	m_fDifferCloud.clear();
 	m_fRotCloud.clear();
+	m_fMoveSpeedCloud.clear();
 	m_pCloud.clear();
 }
 
@@ -120,18 +130,18 @@ void CFinalResultScene::Init(void) {
 	//雲の総数
 	int nNumCloud = 0;
 	//雲の生成
-	for (int nCntCloudY = 0; nCntCloudY < 12; nCntCloudY++)
+	for (int nCntCloudY = 0; nCntCloudY < FINAL_RESULT_SCENE_CLOUD_NUM_Y; nCntCloudY++)
 	{
-		for (int nCntCloudX = 0; nCntCloudX < 10; nCntCloudX++, nNumCloud++)
+		for (int nCntCloudX = 0; nCntCloudX < FINAL_RESULT_SCENE_CLOUD_NUM_X; nCntCloudX++, nNumCloud++)
 		{
 			//中心からの距離の設定
-			m_fDifferCloud.push_back(float(rand() % 18401 + 1600));
+			m_fDifferCloud.push_back(FINAL_RESULT_SCENE_CLOUD_DIFFER);
 			//向きをランダムで決める
-			m_fRotCloud.push_back(float(rand() % 629 + -314) / 100.0f);
+			m_fRotCloud.push_back(FINAL_RESULT_SCENE_CLOUD_ROT);
 
 			//生成位置の設定
-			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, -5000.0f + (800.0f * nCntCloudY), 0.0f);
-			pos.y += float(rand() % 1001 + -500);
+			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, FINAL_RESULT_SCENE_CLOUD_MIN_POS_Y + (FINAL_RESULT_SCENE_CLOUD_POS_Y * nCntCloudY), 0.0f);
+			pos.y += FINAL_RESULT_SCENE_CLOUD_POS_Y_RAND;
 			pos.x += cosf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
 			pos.z += sinf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
 
@@ -148,6 +158,9 @@ void CFinalResultScene::Init(void) {
 			int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_00);
 
 			m_pCloud.push_back(CObjectModel::Create(static_cast<CModel::MODELTYPE>(nModel), pos, rot, false));
+
+			//移動速度を設定
+			m_fMoveSpeedCloud.push_back(FINAL_RESULT_SCENE_CLOUD_MOVE_SPEED);
 		}
 	}
 
@@ -223,6 +236,10 @@ void CFinalResultScene::Uninit(void) {
 // 最終結果シーンの更新処理
 //=============================================================================
 void CFinalResultScene::Update(void) {
+
+	//雲の移動処理
+	CloudMove();
+
 	//フェーズごとの更新処理
 	switch (m_phase)
 	{
@@ -538,6 +555,38 @@ void CFinalResultScene::StopTower(int nIdxPlayer) {
 	if (m_apScoreResult[nIdxPlayer] != nullptr && CGameScene::GetWereWolfMode()) m_apScoreResult[nIdxPlayer]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
+//=============================================================================
+// 雲移動処理
+//=============================================================================
+void CFinalResultScene::CloudMove()
+{
+	//雲の総数取得
+	int nCloudNum = m_pCloud.size();
+
+	for (int nCntCloud = 0; nCntCloud < nCloudNum; nCntCloud++)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pCloud[nCntCloud]->GetPos();
+		//生成している方向をずらす
+		m_fRotCloud[nCntCloud] += m_fMoveSpeedCloud[nCntCloud];
+		if (m_fRotCloud[nCntCloud] > D3DX_PI) m_fRotCloud[nCntCloud] -= D3DX_PI * 2.0f;
+
+		//位置を計算
+		pos.x = cosf(m_fRotCloud[nCntCloud]) * m_fDifferCloud[nCntCloud];
+		pos.z = sinf(m_fRotCloud[nCntCloud]) * m_fDifferCloud[nCntCloud];
+
+		//位置設定
+		m_pCloud[nCntCloud]->SetPos(pos);
+
+		//向き取得
+		D3DXVECTOR3 rot = m_pCloud[nCntCloud]->GetRot();
+		//向きをずらす
+		rot.y -= m_fMoveSpeedCloud[nCntCloud];
+		if (rot.y < -D3DX_PI) rot.y += D3DX_PI * 2.0f;
+		//向き設定
+		m_pCloud[nCntCloud]->SetRot(rot);
+	}
+}
 
 //=============================================================================
 // 勝利
@@ -618,7 +667,8 @@ void CFinalResultScene::PhaseFinish() {
 		if (m_nFadeTime < 0)
 		{
 			//シーン遷移開始			
-			pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			//pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 		}
 		else
 		{
