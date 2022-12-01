@@ -192,7 +192,7 @@ void CTitleScene::Init(void) {
 	}
 
 	//è∞ÇÃê∂ê¨
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f), 8, 4, 1000.0f, 1000.0f,
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f), 8, 8, 1000.0f, 1000.0f,
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//ÉvÉåÉCÉÑÅ[ÇÃê∂ê¨

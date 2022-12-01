@@ -695,8 +695,8 @@ void CFinalResultScene::PhaseFinish() {
 		if (m_nFadeTime < 0)
 		{
 			//シーン遷移開始			
-			//pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
-			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			//pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 		}
 		else
 		{
