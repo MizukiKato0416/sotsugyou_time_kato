@@ -183,6 +183,8 @@ public:
 		MESH_SHADOW,				//影
 		MESH_GRASS,					//草原
 		MESH_WOOD,					//年輪
+		MESH_CACTUS_00,				//サボテン00
+		MESH_CACTUS_01,				//サボテン01
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

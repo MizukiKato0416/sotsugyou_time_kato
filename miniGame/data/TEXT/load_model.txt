@@ -42,6 +42,12 @@ data/MODEL/OBJECT/result_balloon_00.x
 data/MODEL/OBJECT/result_balloon_01.x	
 data/MODEL/OBJECT/result_balloon_02.x	
 
+data/MODEL/OBJECT/dune_00.x	
+data/MODEL/OBJECT/dune_01.x	
+data/MODEL/OBJECT/dune_02.x	
+data/MODEL/OBJECT/cactus_00.x	
+data/MODEL/OBJECT/cactus_01.x	
+data/MODEL/OBJECT/cactus_02.x	
 
 data/MODEL/PLAYER/00_body.x	
 data/MODEL/PLAYER/01_armR.x	
