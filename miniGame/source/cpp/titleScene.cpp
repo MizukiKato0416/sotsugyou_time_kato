@@ -201,9 +201,14 @@ void CTitleScene::Init(void) {
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//砂丘生成
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+	//サボテン生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_00, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_01, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_02, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 
 	//プレイヤーの生成
