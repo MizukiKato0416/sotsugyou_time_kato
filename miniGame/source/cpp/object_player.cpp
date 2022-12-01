@@ -41,6 +41,7 @@ CObjectPlayer::CObjectPlayer() : CObjectModel(CModel::MODELTYPE::OBJ_CAR, false)
 	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
 	m_itemType = CItem::ITEM_TYPE::NONE;
 
+	//SetDrawStencilZ(true);
 	m_pPlayer = nullptr;
 }
 
@@ -145,7 +146,16 @@ void CObjectPlayer::Update(void) {
 // プレイヤーの描画処理
 //=============================================================================
 void CObjectPlayer::Draw(void) {
-	
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	if (pManager == nullptr) return;
+	//レンダラーの取得
+	CRenderer* pRenderer = pManager->GetRenderer();
+	if (pRenderer == nullptr) return;
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	if (pDevice == nullptr) return;
+
 	CObjectModel::Draw();
 }
 

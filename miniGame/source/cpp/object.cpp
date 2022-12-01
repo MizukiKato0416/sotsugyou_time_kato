@@ -221,9 +221,10 @@ void CObject::DrawAll(void) {
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);		//通常はステンシル無効
 	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);	//参照値とマスクが同じ場合
 	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);			//ステンシル描画時のときと同じ参照値
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
-	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);				//?
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);			//参照値とこの値の論理積（AND）がステンシルバッファと比較される	現在はビットを削らない設定
+	//ステンシルバッファ変更なし
+	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);	
+	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);
 
 	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
 		//UIの描画に切り替わった場合、Zバッファを1.0fでクリアする
@@ -234,11 +235,30 @@ void CObject::DrawAll(void) {
 			//ステンシル有効のオブジェクトの場合ステンシル情報を設定
 			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
 
+			//Zテスト失敗時にステンシルマスクを設定するオブジェクトの場合
+			if (pObj->m_bDrawStencilZ) {
+				pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
+				//このオブジェクト自体がステンシル有効でない場合
+				if (!pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);	//ステンシルテスト合格確定
+				//Zテスト失敗時：参照値で置き換え
+				pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_REPLACE);
+				pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_REPLACE);
+			}
+
 			//描画可能時の場合描画
 			if (pObj->m_bDraw && !pObj->m_bStencilMask && !pObj->m_bDeath) pObj->Draw();
 
 			//ステンシルを戻す
 			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
+
+			//Zテスト失敗時にステンシルマスクを設定するオブジェクトの場合
+			if (pObj->m_bDrawStencilZ) {
+				//ステンシルテストの設定を戻す
+				pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
+				pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);
+				pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);
+				pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_KEEP);
+			}
 		}
 	}
 }
@@ -259,11 +279,11 @@ void CObject::DrawStencilAll(void) {
 
 	// ステンシル設定
 	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);					//ステンシル有効
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);			//ステンシル合格確定
+	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);			//ステンシルテスト合格確定
 	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);					//ステンシルバッファに反映する参照値
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);					//ステンシルマスク：ビットが削られない	全て合格させるので多分いらない
 	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);	//ステンシル成功時：参照値で置き換え
 	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_REPLACE);	//Zテスト失敗時：参照値で置き換え
-	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);					//ステンシルマスク：ビットが削られない
 
 	// Z設定
 	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_NEVER);	//Zテスト失敗確定　ステンシルバッファのみに反映させる

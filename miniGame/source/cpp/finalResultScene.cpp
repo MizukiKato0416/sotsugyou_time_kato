@@ -487,6 +487,14 @@ void CFinalResultScene::Winner() {
 			CObjectModel* pObjCrown = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_CROWN, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 			if (pObjCrown != nullptr) {
 				pObjCrown->SetRotSpeed(D3DXVECTOR3(0.0f, 0.05f, 0.0f));	//‰ñ“]‚³‚¹‚é
+				CModel* pModel = pObjCrown->GetPtrModel();
+				if (pModel != nullptr) {
+					for (int i = 0; i < 3; i++)
+					{
+						pModel->SetMaterialSpecular(D3DXCOLOR(0.98f, 0.98f, 0.98f, 1.f), i);
+						pModel->SetMaterialPower(8.0f, i);
+					}
+				}
 				m_vObjCrown.push_back(pObjCrown);
 			}
 		}
