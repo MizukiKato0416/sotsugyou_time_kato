@@ -136,7 +136,8 @@ public:
 	void SetDraw(bool bDraw) { m_bDraw = bDraw; }	//描画状態の設定
 	bool GetDraw(void) { return m_bDraw; }			//描画状態の取得
 	void SetEnableStencil(bool bEnable) { m_bEnableStencil = bEnable; }	//ステンシル有効かどうかの設定
-	void SetDrawStencil(bool bDraw) { m_bDrawStencil = bDraw; }	//ステンシルバッファに描画するかどうかの設定
+	void SetDrawStencil(bool bDraw) { m_bDrawStencil = bDraw; }		//ステンシルバッファに描画するかどうかの設定
+	void SetDrawStencilZ(bool bDraw) { m_bDrawStencilZ = bDraw; }	//ステンシルバッファに描画するかどうかの設定(Zテストを考慮)
 	void SetStencilMask(bool bMask) { m_bStencilMask = bMask; }	//ステンシルマスクかどうかの設定
 
 protected:
@@ -153,6 +154,7 @@ private:
 	bool m_bDraw;	//描画するかどうか
 	bool m_bEnableStencil;	//描画時にステンシル有効
 	bool m_bDrawStencil;	//ステンシルバッファに描画するかどうか
+	bool m_bDrawStencilZ;	//ステンシルバッファに描画するかどうか(Zテストを考慮)
 	bool m_bStencilMask;	//ステンシルマスクかどうか（普通に描画しない）
 
 	static int m_nUpdatePauseLevel;	//更新可能なポーズレベル
