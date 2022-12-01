@@ -19,6 +19,7 @@
 #include "meshwall.h"
 #include "ToScreen.h"
 #include "next_button.h"
+#include "float_object.h"
 
 //=============================================================================
 // マクロ定義
@@ -44,10 +45,18 @@
 #define FINAL_RESULT_SCENE_CLOUD_POS_Y_RAND	(float(rand() % 1001 + -500))			//雲の生成位置Yランダム値
 #define FINAL_RESULT_SCENE_CLOUD_MOVE_SPEED	(-(float(rand() % 6 + 2) / 10000.0f))	//雲の移動速度
 
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_POS			(-4000.0f)							//風船の生成位置
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_POS_Y_RAND	(float(rand() % 1001 + -500))		//風船の生成位置Yランダム値
+#define FINAL_RESULT_SCENE_BALLOON_DIFFER				(float(rand() % 2801 + 1200))		//風船の距離
+#define FINAL_RESULT_SCENE_BALLOON_MOVE_SPEED			(float(rand() % 8 + 3))				//風船の移動速度
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_INTERVAL		(5)									//風船の生成間隔
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_NUM			(3)									//風船の1回での生成量
+#define FINAL_RESULT_SCENE_BALLOON_UNINIT_POS_Y			(2000.0f)							//風船の消す位置
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 40, 30, 20, 10 };
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 70, 30, 20, 10 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -60,6 +69,7 @@ CFinalResultScene::CFinalResultScene()
 	m_fRotCloud.clear();
 	m_fMoveSpeedCloud.clear();
 	m_pCloud.clear();
+	m_pBalloon.clear();
 }
 
 //=============================================================================
@@ -239,6 +249,12 @@ void CFinalResultScene::Update(void) {
 
 	//雲の移動処理
 	CloudMove();
+
+	//風船生成処理
+	CreateBalloon();
+
+	//風船の移動処理
+	BalloonMove();
 
 	//フェーズごとの更新処理
 	switch (m_phase)
@@ -691,5 +707,75 @@ void CFinalResultScene::PhaseFinish() {
 		m_bEndScene = true;
 		//決定音の再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+	}
+}
+
+//=============================================================================
+//風船生成処理
+//=============================================================================
+void CFinalResultScene::CreateBalloon()
+{
+	m_fBalloonCreateCounter++;
+	if (m_fBalloonCreateCounter <= FINAL_RESULT_SCENE_BALLOON_CREATE_INTERVAL) return;
+
+	for (int nCntBalloon = 0; nCntBalloon < FINAL_RESULT_SCENE_BALLOON_CREATE_NUM; nCntBalloon++)
+	{
+		//生成する場所の設定
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, FINAL_RESULT_SCENE_BALLOON_CREATE_POS, 0.0f);
+		//生成場所の設定
+
+		//中心からの距離の設定
+		float fDiffer = FINAL_RESULT_SCENE_BALLOON_DIFFER;
+		//向きをランダムで決める
+		float fRot = FINAL_RESULT_SCENE_CLOUD_ROT;
+
+		//生成位置の設定
+		pos.y += FINAL_RESULT_SCENE_BALLOON_CREATE_POS_Y_RAND;
+		pos.x += cosf(fRot) * fDiffer;
+		pos.z += sinf(fRot) * fDiffer;
+
+		//移動量を設定
+		float fMoveSpeed = FINAL_RESULT_SCENE_BALLOON_MOVE_SPEED;
+
+		//モデルの種類
+		int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_02) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
+
+		//モデルをランダムで設定
+		int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
+
+
+
+		//風船の生成
+		m_pBalloon.push_back(CFloatObject::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, fMoveSpeed, 0.0f),
+			                 D3DXVECTOR3(0.0f, 0.0f, 0.0f), static_cast<CModel::MODELTYPE>(nModel)));
+	}
+	
+	//初期化
+	m_fBalloonCreateCounter = 0;
+}
+
+//=============================================================================
+//風船移動処理
+//=============================================================================
+void CFinalResultScene::BalloonMove()
+{
+	//風船の総数取得
+	int nNum = m_pBalloon.size();
+
+	for (int nCntBalloon = 0; nCntBalloon < nNum; nCntBalloon++)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pBalloon[nCntBalloon]->GetPos();
+
+		if (pos.y < FINAL_RESULT_SCENE_BALLOON_UNINIT_POS_Y) continue;
+		//上限になったら
+		//消す
+		m_pBalloon[nCntBalloon]->Uninit();
+		m_pBalloon[nCntBalloon] = nullptr;
+		m_pBalloon.erase(m_pBalloon.begin() + nCntBalloon);
+
+		//総数を減らす
+		nNum--;
+		nCntBalloon--;
 	}
 }
