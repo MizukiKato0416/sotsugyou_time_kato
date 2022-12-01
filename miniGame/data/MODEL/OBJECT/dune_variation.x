@@ -889,16 +889,9 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\sotsugyou_time_kato\\miniGame\\data\\TEXTURE\\MESH\\floor_01.jpg";
+    "data\\TEXTURE\\MESH\\floor_01.jpg";
    }
   }
-  Material {
-   0.800000;0.800000;0.800000;1.000000;;
-   5.000000;
-   0.000000;0.000000;0.000000;;
-   0.000000;0.000000;0.000000;;
-  }
- }
  MeshNormals {
   256;
   -0.033562;0.913776;-0.404829;,
