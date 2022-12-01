@@ -343,7 +343,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\フリー素材\\1281645_s.png";
+    "data/TEXTURE/MESH/cactus.png";
    }
   }
   Material {
@@ -352,7 +352,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\フリー素材\\1281645_s.png";
+    "data/TEXTURE/MESH/cactus.png";
    }
   }
  }
