@@ -202,6 +202,7 @@
     <ClCompile Include="source\cpp\main.cpp" />
     <ClCompile Include="source\cpp\manager.cpp" />
     <ClCompile Include="source\cpp\meshcylinder.cpp" />
+    <ClCompile Include="source\cpp\meshdome.cpp" />
     <ClCompile Include="source\cpp\meshwall.cpp" />
     <ClCompile Include="source\cpp\model.cpp" />
     <ClCompile Include="source\cpp\next_button.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="source\h\main.h" />
     <ClInclude Include="source\h\manager.h" />
     <ClInclude Include="source\h\meshcylinder.h" />
+    <ClInclude Include="source\h\meshdome.h" />
     <ClInclude Include="source\h\meshwall.h" />
     <ClInclude Include="source\h\model.h" />
     <ClInclude Include="source\h\next_button.h" />

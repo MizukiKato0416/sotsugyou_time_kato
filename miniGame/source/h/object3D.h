@@ -39,6 +39,9 @@ public:
 	void SetNumIdx(int nNumVtx);	//インデックス数の設定
 	int GetNumIdx(void);			//インデックス数の取得
 
+	void SetMove(D3DXVECTOR3 move) { m_move = move; }			//移動量の設定
+	void SetRotate(D3DXVECTOR3 rotate) { m_rotate = rotate; }	//回転量の設定
+
 	void SetMaterialDiffuse(D3DXCOLOR col) { m_mat.MatD3D.Diffuse = col; }			//マテリアルの色の設定
 	D3DXCOLOR GetMaterialDiffuse(void) { return m_mat.MatD3D.Diffuse; }				//マテリアルの色の取得
 	void SetMaterialDiffuseAlpha(float fAlpha) { m_mat.MatD3D.Diffuse.a = fAlpha; }	//マテリアルのアルファ値を設定
@@ -69,6 +72,9 @@ private:
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff; //インデックスバッファへのポインタ
 	int m_nNumVtx;	//頂点数
 	int m_nNumIdx;	//インデックス数
+
+	D3DXVECTOR3 m_move;		//移動量
+	D3DXVECTOR3 m_rotate;	//回転量
 
 	D3DXMATERIAL m_mat;		//ポリゴンのマテリアル
 	D3DXCOLOR m_colGlow;	//輪郭の発光色の色

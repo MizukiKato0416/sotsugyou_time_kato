@@ -279,7 +279,7 @@ void CMeshcylinder::SetVtxBuffPos(void) {
 			cosf(fRotXZ) * (m_fRadiusTop + (m_fRadiusBottom - m_fRadiusTop) * ((nCntVtx / (m_nNumXZ + 1))) / (float)m_nNumY));
 
 		pVtx[nCntVtx].tex = D3DXVECTOR2((float)(nCntVtx % (m_nNumXZ + 1)) / m_nNumXZ, (float)(nCntVtx / (m_nNumXZ + 1)) / m_nNumY);	//メッシュ全体で画像１枚分
-																																	//pVtx[nCntVtx].tex = D3DXVECTOR2((float)(nCntVtx % (m_nNumXZ + 1)), (float)(nCntVtx / (m_nNumXZ + 1)));	//メッシュごとに画像一枚分
+		//pVtx[nCntVtx].tex = D3DXVECTOR2((float)(nCntVtx % (m_nNumXZ + 1)), (float)(nCntVtx / (m_nNumXZ + 1)));	//メッシュごとに画像一枚分
 	}
 	//頂点バッファをアンロックする
 	(*ppVtxBuff)->Unlock();

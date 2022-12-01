@@ -16,6 +16,7 @@
 #include "object2D.h"
 #include "PresetSetEffect.h"
 #include "meshwall.h"
+#include "meshdome.h"
 
 //=============================================================================
 // マクロ定義
@@ -31,13 +32,11 @@
 #define TITLE_SCENE_PLAYER_POS_Z			(3000.0f)			//プレイヤーの位置Z
 #define TITLE_SCENE_PLAYER_MOVE				(30.0f)				//プレイヤーの移動量
 
-#define TITLE_SCENE_CLOUD_NUM					(1)											//雲の数
-#define TITLE_SCENE_CLOUD_POS					(D3DXVECTOR3(0.0f, 0.0f, 2000.0f))			//雲の位置
-#define TITLE_SCENE_CLOUD_SIZE					(2000.0f)									//雲のサイズ
-#define TITLE_SCENE_CLOUD_MESH_NUM				(2)											//メッシュを敷き詰める数
-#define TITLE_SCENE_CLOUD_MOVE_SPEED			(0.00035f)									//テクスチャを動かす速さ
-#define TITLE_SCENE_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
-#define TITLE_SCENE_CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
+#define CLOUD_POS					(D3DXVECTOR3(0.0f, -5.0f, 2000.0f))			//雲の位置
+#define CLOUD_RADIUS				(5000.0f)									//雲の半径
+#define CLOUD_MESH_NUM				(12)										//メッシュを敷き詰める数
+#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.35f, 0.0f))			//雲の回転量
+#define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
 #define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//フォグの色
 #define TITLE_BACK_BUFF							(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//バックバッファーの色
@@ -91,7 +90,6 @@ CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
 	m_nColorTime = 0;
 	memset(m_pPlayerModel, NULL, sizeof(m_pPlayerModel[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_pTitleLogoChara, NULL, sizeof(m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM]));
-	m_pCloud.clear();
 	m_pTheFinalLogo = nullptr;
 	m_pTitleLogo = nullptr;
 	m_nFrameCounter = 0;
@@ -170,25 +168,26 @@ void CTitleScene::Init(void) {
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(true);
 		pRenderer->SetEffectFogColor(TITLE_FOG_COLOR);
-		pRenderer->SetEffectFogRange(200.0f, 4000.0f);
+		pRenderer->SetEffectFogRange(200.0f, 12000.0f);
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(TITLE_BACK_BUFF);
 	}	
 
 	//雲の生成
-	for (int nCntCloud = 0; nCntCloud < TITLE_SCENE_CLOUD_NUM; nCntCloud++)
+	CMeshdome* pCloudDome = CMeshdome::Create(CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, false,
+		CTexture::TEXTURE_TYPE::MESH_CLOUD);
+	//雲の設定
+	if (pCloudDome != nullptr)
 	{
-		m_pCloud.push_back(CMeshwall::Create(TITLE_SCENE_CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-			                                 TITLE_SCENE_CLOUD_MESH_NUM, TITLE_SCENE_CLOUD_MESH_NUM, TITLE_SCENE_CLOUD_SIZE, TITLE_SCENE_CLOUD_SIZE,
-			                                 CTexture::TEXTURE_TYPE::MESH_CLOUD));
+		pCloudDome->SetRotate(CLOUD_ROTATE_SPEED);
 		//加算合成をする
-		m_pCloud[nCntCloud]->SetAlphaBlend(true);
+		pCloudDome->SetAlphaBlend(true);
 		//描画順の設定
-		m_pCloud[nCntCloud]->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
+		pCloudDome->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
 		//ライトをオフにする
-		m_pCloud[nCntCloud]->SetLight(false);
+		pCloudDome->SetLight(false);
 		//色の設定
-		m_pCloud[nCntCloud]->SetColor(TITLE_SCENE_CLOUD_COLOR);
+		pCloudDome->SetColor(CLOUD_COLOR);
 	}
 
 	//床の生成
@@ -314,10 +313,6 @@ void CTitleScene::Update(void) {
 		break;
 	}
 
-
-	//雲の処理
-	Cloud();
-
 	//プレイヤーモデルの処理
 	PlayerModel();
 
@@ -422,23 +417,6 @@ bool CTitleScene::ChangeColTime(bool bCol)
 	}
 
 	return bCol;
-}
-
-//=============================================================================
-//雲の処理
-//=============================================================================
-void CTitleScene::Cloud()
-{
-	for (int nCntCloud = 0; nCntCloud < TITLE_SCENE_CLOUD_NUM; nCntCloud++)
-	{
-		if (m_pCloud[nCntCloud] == nullptr)
-		{
-			continue;
-		}
-
-		//テクスチャ座標移動処理
-		m_pCloud[nCntCloud]->SetMoveTex(TITLE_SCENE_CLOUD_MOVE_SPEED + TITLE_SCENE_CLOUD_MOVE_SPEED_INTERVAL * nCntCloud, 0.0f);
-	}
 }
 
 //=============================================================================
