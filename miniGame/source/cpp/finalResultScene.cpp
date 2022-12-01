@@ -19,6 +19,7 @@
 #include "meshwall.h"
 #include "ToScreen.h"
 #include "next_button.h"
+#include "float_object.h"
 
 //=============================================================================
 // マクロ定義
@@ -28,10 +29,34 @@
 #define FINAL_RESULT_SCENE_NEXT_BUTTON_COUNTER		(15)									//次に進むボタンの見えるようになるまでのカウンター
 #define FINAL_RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA	(0.015f)								//次に進むボタンのα値減算量
 
+#define FINAL_RESULT_SCENE_RESULT_UI_SIZE_X			(618.0f * 1.5f)		//結果発表UIのサイズX
+#define FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y			(182.0f * 1.5f)		//結果発表UIのサイズY
+#define FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_X	(618.0f * 5.0f)		//結果発表UIの初期サイズX
+#define FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_Y	(182.0f * 5.0f)		//結果発表UIの初期サイズY
+#define FINAL_RESULT_SCENE_RESULT_UI_ADD_SIZE		(0.94f)				//結果発表UIの初期サイズ加算量
+#define FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA		(0.1f)				//結果発表UIのα値加算量
+
+#define FINAL_RESULT_SCENE_CLOUD_NUM_Y		(12)									//雲の縦の総数
+#define FINAL_RESULT_SCENE_CLOUD_NUM_X		(10)									//雲の横の総数
+#define FINAL_RESULT_SCENE_CLOUD_DIFFER		(float(rand() % 18401 + 1600))			//雲の距離
+#define FINAL_RESULT_SCENE_CLOUD_ROT		(float(rand() % 629 + -314) / 100.0f)	//雲の生成方向
+#define FINAL_RESULT_SCENE_CLOUD_MIN_POS_Y	(-5000.0f)								//雲の生成位置Y最小値
+#define FINAL_RESULT_SCENE_CLOUD_POS_Y		(800.0f)								//雲の生成間隔
+#define FINAL_RESULT_SCENE_CLOUD_POS_Y_RAND	(float(rand() % 1001 + -500))			//雲の生成位置Yランダム値
+#define FINAL_RESULT_SCENE_CLOUD_MOVE_SPEED	(-(float(rand() % 6 + 2) / 10000.0f))	//雲の移動速度
+
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_POS			(-4000.0f)							//風船の生成位置
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_POS_Y_RAND	(float(rand() % 1001 + -500))		//風船の生成位置Yランダム値
+#define FINAL_RESULT_SCENE_BALLOON_DIFFER				(float(rand() % 2801 + 1200))		//風船の距離
+#define FINAL_RESULT_SCENE_BALLOON_MOVE_SPEED			(float(rand() % 8 + 3))				//風船の移動速度
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_INTERVAL		(5)									//風船の生成間隔
+#define FINAL_RESULT_SCENE_BALLOON_CREATE_NUM			(3)									//風船の1回での生成量
+#define FINAL_RESULT_SCENE_BALLOON_UNINIT_POS_Y			(2000.0f)							//風船の消す位置
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 40, 30, 20, 10 };
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 70, 30, 20, 10 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -40,6 +65,11 @@ CFinalResultScene::CFinalResultScene()
 {
 	m_nFadeTime = FPS;
 	m_pTextResult = nullptr;
+	m_fDifferCloud.clear();
+	m_fRotCloud.clear();
+	m_fMoveSpeedCloud.clear();
+	m_pCloud.clear();
+	m_pBalloon.clear();
 }
 
 //=============================================================================
@@ -92,6 +122,8 @@ void CFinalResultScene::Init(void) {
 	//------------------------------
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(false);
+		//バックバッファをフォグの色に合わせる
+		pRenderer->SetBackBuffColor(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f));
 	}
 
 	//------------------------------
@@ -103,7 +135,45 @@ void CFinalResultScene::Init(void) {
 	//モデルの生成
 	//------------------------------
 	//仮の背景
-	CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
+	//CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
+
+	//雲の総数
+	int nNumCloud = 0;
+	//雲の生成
+	for (int nCntCloudY = 0; nCntCloudY < FINAL_RESULT_SCENE_CLOUD_NUM_Y; nCntCloudY++)
+	{
+		for (int nCntCloudX = 0; nCntCloudX < FINAL_RESULT_SCENE_CLOUD_NUM_X; nCntCloudX++, nNumCloud++)
+		{
+			//中心からの距離の設定
+			m_fDifferCloud.push_back(FINAL_RESULT_SCENE_CLOUD_DIFFER);
+			//向きをランダムで決める
+			m_fRotCloud.push_back(FINAL_RESULT_SCENE_CLOUD_ROT);
+
+			//生成位置の設定
+			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, FINAL_RESULT_SCENE_CLOUD_MIN_POS_Y + (FINAL_RESULT_SCENE_CLOUD_POS_Y * nCntCloudY), 0.0f);
+			pos.y += FINAL_RESULT_SCENE_CLOUD_POS_Y_RAND;
+			pos.x += cosf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
+			pos.z += sinf(m_fRotCloud[nNumCloud]) * m_fDifferCloud[nNumCloud];
+
+			//向きの設定
+			D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, D3DX_PI / 2.0f - m_fRotCloud[nNumCloud], 0.0f);
+
+			//雲の向きをランダムで裏返す
+			if (rand() % 2 == 0) rot.y += D3DX_PI;
+
+			//モデルの種類
+			int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_02) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_00);
+
+			//モデルをランダムで設定
+			int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_CLOUD_00);
+
+			m_pCloud.push_back(CObjectModel::Create(static_cast<CModel::MODELTYPE>(nModel), pos, rot, false));
+
+			//移動速度を設定
+			m_fMoveSpeedCloud.push_back(FINAL_RESULT_SCENE_CLOUD_MOVE_SPEED);
+		}
+	}
+
 
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
@@ -176,6 +246,16 @@ void CFinalResultScene::Uninit(void) {
 // 最終結果シーンの更新処理
 //=============================================================================
 void CFinalResultScene::Update(void) {
+
+	//雲の移動処理
+	CloudMove();
+
+	//風船生成処理
+	CreateBalloon();
+
+	//風船の移動処理
+	BalloonMove();
+
 	//フェーズごとの更新処理
 	switch (m_phase)
 	{
@@ -230,7 +310,7 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 1.5f;	//上昇の速度（最大）
+	const float fMoveMaxY = 1.6f;	//上昇の速度（最大）
 	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.001f;	//上昇量
 	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
@@ -295,32 +375,59 @@ void CFinalResultScene::ResultText() {
 
 	if (m_nCntPhase == 120) {
 		//結果発表テキストの表示
-		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, -200.0f, 0.0f), CTexture::TEXTURE_TYPE::FINAL_RESULT_UI, 500.0f, 200.0f);
+		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+			                              CTexture::TEXTURE_TYPE::FINAL_RESULT_UI,
+			                              FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_X, FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_Y);
+		m_pTextResult->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
-	if (m_pTextResult != nullptr) {
-		D3DXVECTOR3 pos = m_pTextResult->GetPos();	
-		pos.y += 5.0f;
-		if (pos.y > 200.0f) {
-			pos.y = 200.0f;
-		}
-		m_pTextResult->SetPos(pos);
-	}
+	if (m_pTextResult == nullptr) return;
+
+	//生成されいたら
+
+	
+
+	//サイズ取得
+	D3DXVECTOR3 size = m_pTextResult->GetSize();
+	//サイズを大きくする
+	size *= FINAL_RESULT_SCENE_RESULT_UI_ADD_SIZE;
+	if (size.x < FINAL_RESULT_SCENE_RESULT_UI_SIZE_X) size.x = FINAL_RESULT_SCENE_RESULT_UI_SIZE_X;
+	if (size.y < FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y) size.y = FINAL_RESULT_SCENE_RESULT_UI_SIZE_Y;
+	//サイズ設定
+	m_pTextResult->SetSize(size);
 
 	//フェーズ切り替え
 	if (m_nCntPhase > 300) {
-		//フェーズの変更
-		m_phase = PHASE::SHOW_SCORE_UI;
 
-		//結果発表テキストの破棄
-		if (m_pTextResult != nullptr) {
+		//カラー取得
+		D3DXCOLOR col = m_pTextResult->GetColor();
+		//α値減算
+		col.a -= FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA;
+		//カラー設定
+		m_pTextResult->SetColor(col);
+
+		if (col.a < 0.0f)
+		{
+			//フェーズの変更
+			m_phase = PHASE::SHOW_SCORE_UI;
+
+			//結果発表テキストの破棄
 			m_pTextResult->Uninit();
 			m_pTextResult = nullptr;
+			//カウントリセット
+			m_nCntPhase = 0;
+			return;
 		}
-
-
-		//カウントリセット
-		m_nCntPhase = 0;
+	}
+	else
+	{
+		//カラー取得
+		D3DXCOLOR col = m_pTextResult->GetColor();
+		//α値加算
+		col.a += FINAL_RESULT_SCENE_RESULT_UI_ADD_ALPHA;
+		if (col.a > 1.0f) col.a = 1.0f;
+		//カラー設定
+		m_pTextResult->SetColor(col);
 	}
 }
 
@@ -464,6 +571,38 @@ void CFinalResultScene::StopTower(int nIdxPlayer) {
 	if (m_apScoreResult[nIdxPlayer] != nullptr && CGameScene::GetWereWolfMode()) m_apScoreResult[nIdxPlayer]->SetNumberColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
+//=============================================================================
+// 雲移動処理
+//=============================================================================
+void CFinalResultScene::CloudMove()
+{
+	//雲の総数取得
+	int nCloudNum = m_pCloud.size();
+
+	for (int nCntCloud = 0; nCntCloud < nCloudNum; nCntCloud++)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pCloud[nCntCloud]->GetPos();
+		//生成している方向をずらす
+		m_fRotCloud[nCntCloud] += m_fMoveSpeedCloud[nCntCloud];
+		if (m_fRotCloud[nCntCloud] > D3DX_PI) m_fRotCloud[nCntCloud] -= D3DX_PI * 2.0f;
+
+		//位置を計算
+		pos.x = cosf(m_fRotCloud[nCntCloud]) * m_fDifferCloud[nCntCloud];
+		pos.z = sinf(m_fRotCloud[nCntCloud]) * m_fDifferCloud[nCntCloud];
+
+		//位置設定
+		m_pCloud[nCntCloud]->SetPos(pos);
+
+		//向き取得
+		D3DXVECTOR3 rot = m_pCloud[nCntCloud]->GetRot();
+		//向きをずらす
+		rot.y -= m_fMoveSpeedCloud[nCntCloud];
+		if (rot.y < -D3DX_PI) rot.y += D3DX_PI * 2.0f;
+		//向き設定
+		m_pCloud[nCntCloud]->SetRot(rot);
+	}
+}
 
 //=============================================================================
 // 勝利
@@ -552,7 +691,8 @@ void CFinalResultScene::PhaseFinish() {
 		if (m_nFadeTime < 0)
 		{
 			//シーン遷移開始			
-			pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			//pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 		}
 		else
 		{
@@ -575,5 +715,75 @@ void CFinalResultScene::PhaseFinish() {
 		m_bEndScene = true;
 		//決定音の再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+	}
+}
+
+//=============================================================================
+//風船生成処理
+//=============================================================================
+void CFinalResultScene::CreateBalloon()
+{
+	m_fBalloonCreateCounter++;
+	if (m_fBalloonCreateCounter <= FINAL_RESULT_SCENE_BALLOON_CREATE_INTERVAL) return;
+
+	for (int nCntBalloon = 0; nCntBalloon < FINAL_RESULT_SCENE_BALLOON_CREATE_NUM; nCntBalloon++)
+	{
+		//生成する場所の設定
+		D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, FINAL_RESULT_SCENE_BALLOON_CREATE_POS, 0.0f);
+		//生成場所の設定
+
+		//中心からの距離の設定
+		float fDiffer = FINAL_RESULT_SCENE_BALLOON_DIFFER;
+		//向きをランダムで決める
+		float fRot = FINAL_RESULT_SCENE_CLOUD_ROT;
+
+		//生成位置の設定
+		pos.y += FINAL_RESULT_SCENE_BALLOON_CREATE_POS_Y_RAND;
+		pos.x += cosf(fRot) * fDiffer;
+		pos.z += sinf(fRot) * fDiffer;
+
+		//移動量を設定
+		float fMoveSpeed = FINAL_RESULT_SCENE_BALLOON_MOVE_SPEED;
+
+		//モデルの種類
+		int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_02) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
+
+		//モデルをランダムで設定
+		int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
+
+
+
+		//風船の生成
+		m_pBalloon.push_back(CFloatObject::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, fMoveSpeed, 0.0f),
+			                 D3DXVECTOR3(0.0f, 0.0f, 0.0f), static_cast<CModel::MODELTYPE>(nModel)));
+	}
+	
+	//初期化
+	m_fBalloonCreateCounter = 0;
+}
+
+//=============================================================================
+//風船移動処理
+//=============================================================================
+void CFinalResultScene::BalloonMove()
+{
+	//風船の総数取得
+	int nNum = m_pBalloon.size();
+
+	for (int nCntBalloon = 0; nCntBalloon < nNum; nCntBalloon++)
+	{
+		//位置取得
+		D3DXVECTOR3 pos = m_pBalloon[nCntBalloon]->GetPos();
+
+		if (pos.y < FINAL_RESULT_SCENE_BALLOON_UNINIT_POS_Y) continue;
+		//上限になったら
+		//消す
+		m_pBalloon[nCntBalloon]->Uninit();
+		m_pBalloon[nCntBalloon] = nullptr;
+		m_pBalloon.erase(m_pBalloon.begin() + nCntBalloon);
+
+		//総数を減らす
+		nNum--;
+		nCntBalloon--;
 	}
 }

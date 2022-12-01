@@ -354,6 +354,8 @@ void CTitleScene::Update(void) {
 
 			//決定音の再生
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+
+			m_nFrameCounter = 0;
 		}
 	}
 
@@ -458,6 +460,19 @@ void CTitleScene::PlayerModel()
 		//煙
 		CPresetEffect::SetEffect3D(0, pos, {}, {});
 		//---------------------------------
+
+		m_nFrameCounter++;
+
+		if (m_nFrameCounter == 1)
+		{
+			CManager* pManager = CManager::GetManager();	//マネージャーの取得
+			if (pManager == nullptr) return;
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TITLE_CAR);
+		}
 	}
 }
 
@@ -626,6 +641,14 @@ void CTitleScene::TheFinalLogo()
 	m_phase = PHASE::BOUND_LOGO;
 	//初期化
 	m_nFrameCounter = 0;
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//音を再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TITLE_LOGO_CREATE);
 }
 
 //=============================================================================

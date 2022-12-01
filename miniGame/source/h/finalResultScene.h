@@ -20,6 +20,7 @@
 class CObject2D;
 class CObjectModel;
 class CScore;
+class CFloatObject;
 
 //*****************************************************************************
 // 最終結果シーンクラス
@@ -49,15 +50,17 @@ public:
 	static void SetPlayerScore(int nScore, int nIdxPlayer) { m_aPlayerScore[nIdxPlayer] = nScore; }	//プレイヤーのスコアを設定
 
 private:
-	void PhaseFirst();	//フェーズ開始処理
-	void RiseCamera();	//カメラの上昇処理
-	void ResultText();	//結果発表のテキスト表示処理
-	void ShowScoreUI();	//スコアのUI表示処理
-	void RiseTower();	//タワーの上昇処理
-	void Winner();			//勝利
-	void PhaseFinish();	//フェーズ終了処理
-
-	void StopTower(int nIdxPlayer);	//タワー停止時の処理
+	void PhaseFirst();					//フェーズ開始処理
+	void RiseCamera();					//カメラの上昇処理
+	void ResultText();					//結果発表のテキスト表示処理
+	void ShowScoreUI();					//スコアのUI表示処理
+	void RiseTower();					//タワーの上昇処理
+	void Winner();						//勝利
+	void PhaseFinish();					//フェーズ終了処理
+	void StopTower(int nIdxPlayer);		//タワー停止時の処理
+	void CloudMove();					//雲移動処理
+	void CreateBalloon();				//風船生成処理
+	void BalloonMove();					//風船移動処理
 
 	PHASE m_phase;		//フェーズ
 	int m_nCntPhase;	//フェースカウント
@@ -72,6 +75,13 @@ private:
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bEndScene;	//選択キー押下時
 
+	std::vector<float> m_fDifferCloud;		//雲生成時の距離
+	std::vector<float> m_fRotCloud;			//雲生成時の向き
+	std::vector<float> m_fMoveSpeedCloud;	//雲の移動速度
+	std::vector<CObjectModel*> m_pCloud;	//雲のポインタ
+
+	std::vector<CFloatObject*> m_pBalloon;	//風船のポインタ
+	float m_fBalloonCreateCounter;			//風船の生成間隔用
 };
 
 #endif // !_FINAL_RESULT_SCENE_H_
