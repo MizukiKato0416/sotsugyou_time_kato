@@ -38,13 +38,15 @@ public:
 	virtual void Update(void);	//更新処理
 	virtual void Draw(void) {}	//描画処理
 
-	virtual void BeginChangeSelect(void) = 0;	//選択の変更が開始されたときの処理
+	virtual void BeginChangeSelect(bool bChangePlus) = 0;	//選択の変更が開始されたときの処理
 	virtual void EndChangeSelect(void) = 0;		//選択の変更が終了したときの処理
 	void SetMenuBG(CTexture::TEXTURE_TYPE typeTex, D3DXVECTOR3 pos, float fWidth, float fHeight);	//メニューの背景の設定
 
+	void SetFirstFrame(bool b) { m_bFirstFrame = b; }	//最初のフレームの設定
 	void SetSelectType(SELECT_TYPE type) { m_typeSelect = type; }	//入力の種類を設定
 	int GetNumSelect(void) { return m_nNumSelect; }	//選択肢の数を取得
-	int GetIdxCurSelect(void) { return m_nIdxCurSelect; }	//現在の選択の番号を取得
+	void SetIdxCurSelect(int nIdx) { m_nIdxCurSelect = nIdx; }	//現在の選択の番号を設定
+	int GetIdxCurSelect(void) { return m_nIdxCurSelect; }		//現在の選択の番号を取得
 	void SetLockChangeSelect(bool bLock) { m_bLockChangeSelect = bLock; }	//選択の変更の制限状態の設定
 	bool GetLockChangeSelect(void) { return m_bLockChangeSelect; }			//選択の変更の制限状態の取得
 

@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // タイトルカメラ処理 [titleCamera.cpp]
-// Author : 鶴間俊樹
+// Author : 加藤瑞葵
 //
 //=============================================================================
 #include "titleCamera.h"
@@ -11,13 +11,16 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MAX_DRAW_DISTANCE (4000.0f)		//描画可能な最大の距離
-#define DEFAULT_CAMERA_DISTANCE (1000.0f)	//視点と注視点の距離
+#define TITLE_CAMERA_MAX_DRAW_DISTANCE			(4000.0f)	//描画可能な最大の距離
+#define TITLE_CAMERA_DEFAULT_CAMERA_DISTANCE	(50.0f)		//視点と注視点の距離
+#define TITLE_CAMERA_ROT_X						(40.0f)		//カメラの向きX
+#define TITLE_CAMERA_POS_Z						(-550.0f)	//カメラの位置Z
+#define TITLE_CAMERA_POS_Y						(20.0f)		//カメラの位置Y
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CTitleCamera::CTitleCamera() : CCamera(MAX_DRAW_DISTANCE)
+CTitleCamera::CTitleCamera() : CCamera(TITLE_CAMERA_MAX_DRAW_DISTANCE)
 {
 
 }
@@ -31,7 +34,7 @@ CTitleCamera::~CTitleCamera()
 }
 
 //=============================================================================
-// タイトルカメラの生成処理
+// ゲームカメラの生成処理
 //=============================================================================
 CTitleCamera* CTitleCamera::Create(void) {
 	CTitleCamera* pTitleCamera;
@@ -44,51 +47,58 @@ CTitleCamera* CTitleCamera::Create(void) {
 }
 
 //=============================================================================
-// タイトルカメラの初期化処理
+// ゲームカメラの初期化処理
 //=============================================================================
 HRESULT CTitleCamera::Init(void) {
-	SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	SetRot(D3DXVECTOR3(D3DX_PI * -0.1f, D3DX_PI * 0.0f, 0.0f));
+	SetPos(D3DXVECTOR3(0.0f, TITLE_CAMERA_POS_Y, TITLE_CAMERA_POS_Z));
+	SetRot(D3DXVECTOR3(TITLE_CAMERA_ROT_X * (D3DX_PI / 180.0f), D3DX_PI * -0.0f, 0.0f));
+	SetLockControll(true);
+
 	//距離の設定
-	SetDistance(DEFAULT_CAMERA_DISTANCE);
+	SetDistance(TITLE_CAMERA_DEFAULT_CAMERA_DISTANCE);
+
+	//------------------------------------
+	//視点と注視点の設定
+	//------------------------------------
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	float fDist = TITLE_CAMERA_DEFAULT_CAMERA_DISTANCE;
+
+	SetPosR(pos);
+	SetPosV(pos + D3DXVECTOR3(sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
+		sinf(rot.x + D3DX_PI) * fDist,
+		cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));
 
 	CCamera::Init();
-
-	//カメラのコントロール不可
-	SetLockControll(true);
 
 	return S_OK;
 }
 
 //=============================================================================
-// タイトルカメラの終了処理
+// ゲームカメラの終了処理
 //=============================================================================
 void CTitleCamera::Uninit(void) {
 	CCamera::Uninit();
 }
 
 //=============================================================================
-// タイトルカメラの更新処理
+// ゲームカメラの更新処理
 //=============================================================================
 void CTitleCamera::Update(void) {
 	CCamera::Update();
 
-	D3DXVECTOR3 rot = GetRot();
-	//回転させる
-	rot.y += 0.005f;
-	if (rot.y > D3DX_PI) {
-		rot.y -= D3DX_PI * 2;
-	}
-	SetRot(rot);
+	D3DXVECTOR3 posCamera = GetPos();
+	//位置の設定
+	SetPos(posCamera);
 
 	//------------------------------------
 	//視点と注視点の設定
 	//------------------------------------
-	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
 	float fDist = GetDistance();
 
-	SetPosR(pos);
-	SetPosV(D3DXVECTOR3(pos.x + sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
-		pos.y + sinf(rot.x + D3DX_PI) * fDist,
-		pos.z + cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));	//視点が中心の場合から変更したときに移動がないようにX回転にPIを足している
+	SetPosR(posCamera);
+	SetPosV(posCamera + D3DXVECTOR3(sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
+		sinf(rot.x + D3DX_PI) * fDist,
+		cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));
 }

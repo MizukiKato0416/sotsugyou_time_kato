@@ -10,7 +10,7 @@
 #include "input.h"
 #include "scene.h"
 #include "gameScene.h"
-#include "player.h"
+#include "object_player.h"
 
 //=============================================================================
 // É}ÉNÉçíËã`

@@ -8,12 +8,12 @@
 #include "manager.h"
 #include "renderer.h"
 #include "gameScene.h"
-#include "player.h"
+#include "object_player.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MAX_DRAW_DISTANCE		(5000.0f)	//描画可能な最大の距離
+#define MAX_DRAW_DISTANCE		(8000.0f)	//描画可能な最大の距離
 #define DEFAULT_CAMERA_DISTANCE (1500.0f)	//視点と注視点の距離
 #define DEFAULT_CAMERA_ROT_X	(-42.0f)	//カメラの向きX
 #define DEFAULT_CAMERA_POS_Z	(-120.0f)	//カメラの位置Z

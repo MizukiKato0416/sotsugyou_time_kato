@@ -21,7 +21,7 @@ class CObject2D;
 //*****************************************************************************
 // クラスの定義
 //*****************************************************************************
-class CPlayerIcon : public CObject
+class CObjectPlayerIcon : public CObject
 {
 public:
 	enum class STATE
@@ -32,9 +32,9 @@ public:
 		MAX
 	};
 
-	CPlayerIcon();		//デフォルトコンストラクタ
-	~CPlayerIcon();	//デストラクタ
-	static CPlayerIcon* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
+	CObjectPlayerIcon();		//デフォルトコンストラクタ
+	~CObjectPlayerIcon();	//デストラクタ
+	static CObjectPlayerIcon* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
 		                       const CTexture::TEXTURE_TYPE texTypeFrame, const CTexture::TEXTURE_TYPE texTypePlayerNum);	//生成処理
 	HRESULT Init(void);	//初期化処理
 	void Uninit(void);	//終了処理

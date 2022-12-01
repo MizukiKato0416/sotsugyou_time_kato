@@ -38,9 +38,28 @@ public:
 	int GetNumVtx(void);			//頂点数の取得
 	void SetNumIdx(int nNumVtx);	//インデックス数の設定
 	int GetNumIdx(void);			//インデックス数の取得
-	void SetColor(D3DXCOLOR col) { m_col = col; }	//色の設定
-	void AddColor(D3DXCOLOR col) { m_col += col; }	//色の加算
-	D3DXCOLOR GetColor(void) { return m_col; }	//色の取得
+
+	void SetMaterialDiffuse(D3DXCOLOR col) { m_mat.MatD3D.Diffuse = col; }			//マテリアルの色の設定
+	D3DXCOLOR GetMaterialDiffuse(void) { return m_mat.MatD3D.Diffuse; }				//マテリアルの色の取得
+	void SetMaterialDiffuseAlpha(float fAlpha) { m_mat.MatD3D.Diffuse.a = fAlpha; }	//マテリアルのアルファ値を設定
+	float GetMaterialDiffuseAlpha(void) { return m_mat.MatD3D.Diffuse.a; }			//マテリアルのアルファ値を取得
+	void SetMaterialSpecular(D3DXCOLOR col) { m_mat.MatD3D.Specular = col; }		//マテリアルのスペキュラー色の設定
+	void SetMaterialEmissive(D3DXCOLOR col) { m_mat.MatD3D.Emissive = col; }		//マテリアルの発光色の設定
+	void SetMaterialPower(float fPower) { m_mat.MatD3D.Power = fPower; }			//マテリアルの反射の質感の設定
+	void SetColorGlow(D3DXCOLOR col) { m_colGlow = col; }	//輪郭の発光色の設定
+	void SetPowerGlow(float fPower) { m_powGlow = fPower; }	//輪郭の強度の設定
+
+	void SetMoveTex(float fMoveTexU, float fMoveTexV);		//テクスチャ移動設定処理
+
+	//加算合成設定処理
+	void SetAlphaBlend(const bool bAlphaBlend) { m_bAlphaBlend = bAlphaBlend; }
+	//加算合成取得処理
+	bool GetAlphaBlend() { return m_bAlphaBlend; }
+
+	//ライト設定処理
+	void SetLight(const bool bEnableLight) { m_bEnableLight = bEnableLight; }
+	//ライト取得処理
+	bool GetLight() { return m_bEnableLight; }
 
 private:
 	D3DXVECTOR3	m_pos;	//ポリゴンの中心座標
@@ -50,7 +69,13 @@ private:
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff; //インデックスバッファへのポインタ
 	int m_nNumVtx;	//頂点数
 	int m_nNumIdx;	//インデックス数
-	D3DXCOLOR m_col;	//マテリアルの色
+
+	D3DXMATERIAL m_mat;		//ポリゴンのマテリアル
+	D3DXCOLOR m_colGlow;	//輪郭の発光色の色
+	float m_powGlow;	//輪郭の強度
+
+	bool m_bAlphaBlend;		//加算合成するかどうか
+	bool m_bEnableLight;	//ライト使うかどうか
 };
 
 #endif // !_OBJECT3D_H_

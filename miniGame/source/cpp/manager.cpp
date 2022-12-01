@@ -22,6 +22,7 @@
 //エフェクト
 #include "LoadEffect.h"
 #include "plane.h"
+#include "Sphere.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -127,9 +128,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	//エフェクト情報のロード
 	CLoadEffect::EffectStateLoad(LOAD_PRESET_TEXT);
 	CPlane::CreateTextureFile();
+	CSphere::CreateTextureSphere();
 
 	//シーンの生成
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::GAME);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::FINAL_RESULT);
 
 	return S_OK;
 }

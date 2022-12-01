@@ -8,8 +8,11 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "player.h"
+#include "object_player_balloon_car.h"
 #include "score.h"
+#include "score_ui.h"
+#include "gameScene.h"
+#include "gameScene01.h"
 
 //エフェクト
 #include "PresetSetEffect.h"
@@ -17,11 +20,11 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define BALLOON_PLAYER_COLL_SIZE	(30.0f)		//当たり判定の時のプレイヤーのサイズ
+#define BALLOON_PLAYER_COLL_SIZE	(40.0f)		//当たり判定の時のプレイヤーのサイズ
 #define BALLOON_ADD_MOVE			(0.02f)		//風船の加速量
 #define BALLOON_MAX_MOVE			(0.2f)		//風船の最大移動量
-#define BALLOON_UP_POS				(20.0f)		//風船の上がる位置
-#define BALLOON_DOWN_POS			(10.0f)		//風船の下がる位置
+#define BALLOON_UP_POS				(15.0f)		//風船の上がる位置
+#define BALLOON_DOWN_POS			(5.0f)		//風船の下がる位置
 #define BALLOON_NORMAL_SCORE		(1)			//風船のポイント(通常)
 #define BALLOON_GOLD_SCORE			(3)			//風船のポイント(ゴールド)
 
@@ -96,6 +99,18 @@ HRESULT CBalloon::Init(void) {
 	m_move = { 0.0f, 0.0f, 0.0f };
 	m_bUp = true;
 
+	CModel *pModel = GetPtrModel();
+	if (pModel != nullptr)
+	{
+		const D3DXCOLOR colSpecular = D3DXCOLOR(0.95f, 0.95f, 0.95f, 1.0f);	//スペキュラーの色
+		for (int nIdxMat = 0; nIdxMat < MAX_MATERIAL; nIdxMat++)
+		{
+			pModel->SetMaterialSpecular(colSpecular, nIdxMat);
+			pModel->SetMaterialPower(12.0f, nIdxMat);
+
+		}
+	}
+
 	CObjectModel::Init();
 	return S_OK;
 }
@@ -113,6 +128,14 @@ void CBalloon::Uninit(void) {
 //=============================================================================
 void CBalloon::Update(void) {
 	
+	//ゲームオーバーなら
+	if (CManager::GetManager()->GetGameScene()->GetGameOver())
+	{
+		//消す
+		Uninit();
+		return;
+	}
+
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();
 
@@ -192,7 +215,6 @@ void CBalloon::Update(void) {
 		Uninit();
 		return;
 	}
-
 	CObjectModel::Update();
 }
 
@@ -209,7 +231,6 @@ void CBalloon::Draw(void) {
 bool CBalloon::CollisionPlayer(void)
 {
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
-	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
 
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
@@ -225,7 +246,7 @@ bool CBalloon::CollisionPlayer(void)
 		}
 
 		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();
@@ -243,17 +264,22 @@ bool CBalloon::CollisionPlayer(void)
 			//色によってスコアを増やす
 			if (m_bGold)
 			{
-				pPlayer->GetScore()->AddScore(BALLOON_GOLD_SCORE);
+				pPlayer->GetScoreUi()->GetScore()->AddScore(BALLOON_GOLD_SCORE);
 			}
 			else
 			{
-				pPlayer->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+				pPlayer->GetScoreUi()->GetScore()->AddScore(BALLOON_NORMAL_SCORE);
+			}
+
+			//スコアが最大値を超えたら
+			if (pPlayer->GetScoreUi()->GetScore()->GetScore() > BALLOON_SCORE_MAX)
+			{
+				//超えないようにする
+				pPlayer->GetScoreUi()->GetScore()->SetScore(BALLOON_SCORE_MAX);
 			}
 			return true;
 		}
-
 		pObject = pObjNext;	//リストの次のオブジェクトを代入
 	}
-
 	return false;
 }

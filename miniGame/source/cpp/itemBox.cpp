@@ -8,8 +8,9 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "player.h"
+#include "object_player_balloon_car.h"
 #include "sound.h"
+#include "gameScene.h"
 
 //=============================================================================
 // マクロ定義
@@ -95,6 +96,14 @@ void CItemBox::Uninit(void) {
 //=============================================================================
 void CItemBox::Update(void) {
 
+	//ゲームオーバーなら
+	if (CManager::GetManager()->GetGameScene()->GetGameOver())
+	{
+		//消す
+		Uninit();
+		return;
+	}
+
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();
 
@@ -164,7 +173,7 @@ bool CItemBox::CollisionPlayer(void)
 		}
 
 		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+		CObjectPlayerBalloonCar *pPlayer = static_cast<CObjectPlayerBalloonCar*> (pObject);
 
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = pPlayer->GetPos();
@@ -183,7 +192,7 @@ bool CItemBox::CollisionPlayer(void)
 			if (pPlayer->GetItemType() == CItem::ITEM_TYPE::NONE)
 			{
 				//アイテムの中からランダムで取得させる
-				int nRandItem = rand() % int(int(CItem::ITEM_TYPE::MAX) - 1) + 1;
+				int nRandItem = rand() % (int(CItem::ITEM_TYPE::BALLOON_GAME_MAX) - 1) + 1;
 
 				//アイテムを取得させる
 				pPlayer->SetItemType((CItem::ITEM_TYPE)nRandItem);

@@ -5,6 +5,8 @@
 //
 //=============================================================================
 #include "finish_ui.h"
+#include "manager.h"
+#include "sound.h"
 
 //=============================================================================
 // マクロ定義
@@ -62,6 +64,14 @@ CFinishUi* CFinishUi::Create(const D3DXVECTOR3 pos, const int nDelay, const floa
 //=============================================================================
 HRESULT CFinishUi::Init(void) {
 	
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+	//音を再生
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TIME_UP);
+
 	//変数初期化
 	m_state = STATE::DEC_SIZE;
 	m_nFrameCounter = 0;

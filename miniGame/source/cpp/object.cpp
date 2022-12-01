@@ -32,6 +32,9 @@ CObject::CObject()
 	m_drawPriority = DRAW_PRIORITY::DEFAULT;
 	m_texType = CTexture::TEXTURE_TYPE::NONE;
 	m_bDraw = true;
+	m_bEnableStencil = false;
+	m_bDrawStencil = false;
+	m_bStencilMask = false;
 	m_nPauseLevel = 0;
 
 	//全オブジェクトのリストの初期設定
@@ -126,9 +129,18 @@ void CObject::ReleaseAll(void) {
 		CObject* pObjectNext = pObjectAll->m_pNextAll;
 		//終了処理を行う
 		if (!pObjectAll->m_bDeath) pObjectAll->Uninit();
+		delete pObjectAll;
 		//次のオブジェクトを代入
 		pObjectAll = pObjectNext;
 	}
+
+	m_pTopAll = nullptr;
+	m_pCurAll = nullptr;
+
+	memset(&m_apTopUpdate, NULL, sizeof(m_apTopUpdate));
+	memset(&m_apCurUpdate, NULL, sizeof(m_apCurUpdate));
+	memset(&m_apTopDraw, NULL, sizeof(m_apTopDraw));
+	memset(&m_apCurDraw, NULL, sizeof(m_apCurDraw));
 }
 
 //=============================================================================
@@ -163,23 +175,12 @@ void CObject::ReleaseObjtype(int nObjtype) {
 void CObject::UpdateAll(void) {
 	//オブジェクトの更新
 	for (int nCnt = 0; nCnt < (int)UPDATE_PRIORITY::ENUM_MAX; nCnt++) {
-		CObject* pObjectUpdate = m_apTopUpdate[nCnt];	//更新するオブジェクト
-
-		while (pObjectUpdate != nullptr) {
-			CObject* pObjectNext = pObjectUpdate->m_pNextUpdate;	//次のオブジェクトを取得
-
+		//リストを順に取得
+		for (CObject* pObj = m_apTopUpdate[nCnt]; pObj != nullptr; pObj = pObj->m_pNextUpdate) {
 			//現在のポーズレベルより低い場合、更新せずに次のオブジェクト
-			if (pObjectUpdate->m_nPauseLevel < m_nUpdatePauseLevel) {
-				//次のオブジェクトを代入
-				pObjectUpdate = pObjectNext;
-				continue;
-			}
-
+			if (pObj->m_nPauseLevel < m_nUpdatePauseLevel) continue;
 			//死亡フラグが立っていない場合更新
-			if (!pObjectUpdate->m_bDeath) pObjectUpdate->Update();	
-
-			//次のオブジェクトを代入
-			pObjectUpdate = pObjectNext;
+			if (!pObj->m_bDeath) pObj->Update();
 		}
 	}
 
@@ -208,26 +209,77 @@ void CObject::UpdateAll(void) {
 void CObject::DrawAll(void) {
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
+	if (pManager == nullptr) return;
 	//レンダラーの取得
-	CRenderer* pRenderer = nullptr;
-	if (pManager != nullptr) pRenderer= pManager->GetRenderer();
+	CRenderer* pRenderer = pManager->GetRenderer();
+	if (pRenderer == nullptr) return;
 	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = nullptr;
-	if (pRenderer != nullptr) pDevice = pRenderer->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	if (pDevice == nullptr) return;
+
+	// ステンシル設定
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);		//通常はステンシル無効
+	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);	//参照値とマスクが同じ場合
+	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);			//ステンシル描画時のときと同じ参照値
+	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
+	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);	//ステンシルバッファ変更なし
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);				//?
 
 	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
 		//UIの描画に切り替わった場合、Zバッファを1.0fでクリアする
 		if(nCnt == (int)DRAW_PRIORITY::UI_BG && pDevice != nullptr) pDevice->Clear(0, nullptr, (D3DCLEAR_ZBUFFER), D3DXCOLOR(), 1.0f, 0);
 
-		CObject* pObject = m_apTopDraw[nCnt];
-		while (pObject != nullptr) {
-			CObject* pObjectNext = pObject->m_pNextDraw;	//次のオブジェクト取得
+		//リストを順に取得
+		for (CObject* pObj = m_apTopDraw[nCnt]; pObj != nullptr; pObj = pObj->m_pNextDraw) {
+			//ステンシル有効のオブジェクトの場合ステンシル情報を設定
+			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);
+
 			//描画可能時の場合描画
-			if(pObject->m_bDraw && !pObject->m_bDeath) pObject->Draw();
-			//次のオブジェクトを代入
-			pObject = pObjectNext;
+			if (pObj->m_bDraw && !pObj->m_bStencilMask && !pObj->m_bDeath) pObj->Draw();
+
+			//ステンシルを戻す
+			if (pObj->m_bEnableStencil) pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
 		}
 	}
+}
+
+//=============================================================================
+// 全オブジェクトのステンシル描画処理
+//=============================================================================
+void CObject::DrawStencilAll(void) {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	if (pManager == nullptr) return;
+	//レンダラーの取得
+	CRenderer* pRenderer = pManager->GetRenderer();
+	if (pRenderer == nullptr) return;
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	if (pDevice == nullptr) return;
+
+	// ステンシル設定
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, TRUE);					//ステンシル有効
+	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);			//ステンシル合格確定
+	pDevice->SetRenderState(D3DRS_STENCILREF, 0x01);					//ステンシルバッファに反映する参照値
+	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_REPLACE);	//ステンシル成功時：参照値で置き換え
+	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_REPLACE);	//Zテスト失敗時：参照値で置き換え
+	pDevice->SetRenderState(D3DRS_STENCILMASK, 0xff);					//ステンシルマスク：ビットが削られない
+
+	// Z設定
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_NEVER);	//Zテスト失敗確定　ステンシルバッファのみに反映させる
+
+	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
+		//リストを順に取得
+		for (CObject* pObj = m_apTopDraw[nCnt]; pObj != nullptr; pObj = pObj->m_pNextDraw) {
+			//描画可能時の場合描画
+			if (pObj->m_bDraw && pObj->m_bDrawStencil && !pObj->m_bDeath) pObj->Draw();
+		}
+	}
+
+	//描画設定を戻す
+	pDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);	//ステンシル無効
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);	//Zテスト方法を戻す
+
 }
 
 //=============================================================================

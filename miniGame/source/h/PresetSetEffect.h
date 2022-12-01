@@ -10,48 +10,46 @@
 //*****************************************************************************
 // マクロ
 //*****************************************************************************
-#define MAX_EFFECTPATTERN_2D (8)
-#define MAX_EFFECTPATTERN_3D (8)
+#define MAX_EFFECTPATTERN_3D (32)
 
-#define MAX_ORDER_3D (8)
 
 class CPresetEffect : CObject
 {
 public:
-	//2D用のエフェクトステータス集
-	typedef struct
-	{
-		int m_nPattern;			//動きのパターン
-		float m_fRotate;		//回転
-		D3DXVECTOR3 m_Endpos;	//向かうべき位置
-		D3DXVECTOR2 m_move;		//移動量
-		D3DXVECTOR2 m_Addmove;	//移動量加算
-		int m_nDiffusion;		//拡散率
-		int m_nDestroyvec;		//消えるベクトル
-		float m_fSize;			//サイズ
-		float m_fAddSize;		//サイズ加算
-		D3DCOLORVALUE m_Col;			//カラー
-		D3DCOLORVALUE m_Changecolor;	//カラー加算
-		int m_nLife;				//寿命
-		int m_nDensity;			//密度
-		bool m_bColorRandR;		//色ランダムR
-		bool m_bColorRandG;		//色ランダムG
-		bool m_bColorRandB;		//色ランダムB
-		bool m_bMousePos;
-		int Synthetic;	//合成
-		int nTexture;	//テクスチャ
-		float m_Distance;	//距離
-		D3DXVECTOR2 m_TexMove;	//テクスチャ移動
-		D3DXVECTOR2 m_TexNum;	//テクスチャ枚数
-		int m_AnimPatternType;
-		D3DXVECTOR2 m_TexSplit;	//分割数
-		int AnimCnt;	//アニメーションカウント
-		int m_nType;	//パターン
-		int m_fHigth;	//高さ
-		float m_SecondSize;
-		D3DCOLORVALUE m_SecondCol;			//2番目カラー
-		D3DCOLORVALUE m_SecondChangecolor;	//2番目カラー加算
-	} EFFECT_STATE2D;
+	////2D用のエフェクトステータス集
+	//typedef struct
+	//{
+	//	int m_nPattern;			//動きのパターン
+	//	float m_fRotate;		//回転
+	//	D3DXVECTOR3 m_Endpos;	//向かうべき位置
+	//	D3DXVECTOR2 m_move;		//移動量
+	//	D3DXVECTOR2 m_Addmove;	//移動量加算
+	//	int m_nDiffusion;		//拡散率
+	//	int m_nDestroyvec;		//消えるベクトル
+	//	float m_fSize;			//サイズ
+	//	float m_fAddSize;		//サイズ加算
+	//	D3DCOLORVALUE m_Col;			//カラー
+	//	D3DCOLORVALUE m_Changecolor;	//カラー加算
+	//	int m_nLife;				//寿命
+	//	int m_nDensity;			//密度
+	//	bool m_bColorRandR;		//色ランダムR
+	//	bool m_bColorRandG;		//色ランダムG
+	//	bool m_bColorRandB;		//色ランダムB
+	//	bool m_bMousePos;
+	//	int Synthetic;	//合成
+	//	int nTexture;	//テクスチャ
+	//	float m_Distance;	//距離
+	//	D3DXVECTOR2 m_TexMove;	//テクスチャ移動
+	//	D3DXVECTOR2 m_TexNum;	//テクスチャ枚数
+	//	int m_AnimPatternType;
+	//	D3DXVECTOR2 m_TexSplit;	//分割数
+	//	int AnimCnt;	//アニメーションカウント
+	//	int m_nType;	//パターン
+	//	int m_fHigth;	//高さ
+	//	float m_SecondSize;
+	//	D3DCOLORVALUE m_SecondCol;			//2番目カラー
+	//	D3DCOLORVALUE m_SecondChangecolor;	//2番目カラー加算
+	//} EFFECT_STATE2D;
 
 	//3Dの情報
 	typedef struct
@@ -112,36 +110,36 @@ public:
 	~CPresetEffect();
 
 
-	//読み込んだエフェクトの情報を格納するやつ
-	static void SetEffectState2D(
-		int nPattern,
-		float fRotate,
-		D3DXVECTOR2 move,
-		D3DXVECTOR2 Addmove,
-		int Diffusion,
-		int Destroyvec,
-		float fSize,
-		float fAddSize,
-		D3DCOLORVALUE col,
-		D3DCOLORVALUE Changecolor,
-		int nLife,
-		int nDensity,
-		bool bColorRandR,
-		bool bColorRandG,
-		bool bColorRandB,
-		int Synthetic,
-		int Texture,
-		float Distance,
-		D3DXVECTOR2 m_TexMove,
-		D3DXVECTOR2 m_TexNum,
-		int m_AnimPatternType,
-		D3DXVECTOR2 m_TexSplit,
-		int AnimCnt,
-		int nType,
-		float fHigth,
-		float SecondSize,
-		D3DCOLORVALUE m_SecondCol,
-		D3DCOLORVALUE m_SecondChangecolor);
+	////読み込んだエフェクトの情報を格納するやつ
+	//static void SetEffectState2D(
+	//	int nPattern,
+	//	float fRotate,
+	//	D3DXVECTOR2 move,
+	//	D3DXVECTOR2 Addmove,
+	//	int Diffusion,
+	//	int Destroyvec,
+	//	float fSize,
+	//	float fAddSize,
+	//	D3DCOLORVALUE col,
+	//	D3DCOLORVALUE Changecolor,
+	//	int nLife,
+	//	int nDensity,
+	//	bool bColorRandR,
+	//	bool bColorRandG,
+	//	bool bColorRandB,
+	//	int Synthetic,
+	//	int Texture,
+	//	float Distance,
+	//	D3DXVECTOR2 m_TexMove,
+	//	D3DXVECTOR2 m_TexNum,
+	//	int m_AnimPatternType,
+	//	D3DXVECTOR2 m_TexSplit,
+	//	int AnimCnt,
+	//	int nType,
+	//	float fHigth,
+	//	float SecondSize,
+	//	D3DCOLORVALUE m_SecondCol,
+	//	D3DCOLORVALUE m_SecondChangecolor);
 
 	//読み込んだエフェクトの情報を格納するやつ3D
 	static void SetEffectState3D(
@@ -196,6 +194,12 @@ public:
 		D3DCOLORVALUE TherdChangecolor,
 		int SecondTex);
 
+	static void SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot);	//パターン、出現位置、目標地点、回転
+	static void ResetPattern() {
+		m_nEffectPattern2d = 0;
+		m_nEffectPattern3d = 0;
+	}
+
 	////オーダー処理
 	//typedef struct
 	//{
@@ -208,11 +212,6 @@ public:
 	//} ORDER_PRESET;
 
 	//static void SetEffect2D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 PlayerPos, D3DXVECTOR3 rot);	//パターン番号、出現位置、比較位置、位置
-	static void SetEffect3D(int nPattern, D3DXVECTOR3 pos, D3DXVECTOR3 Endpos, D3DXVECTOR3 rot);	//パターン、出現位置、目標地点、回転
-	static void ResetPattern() {
-		m_nEffectPattern2d = 0;
-		m_nEffectPattern3d = 0;
-	}
 
 
 	////ディレイ付き再生
@@ -233,7 +232,7 @@ public:
 
 	//void ResetDeley(int n) { nCntDeley[n]= 0; }
 private:
-	static EFFECT_STATE2D m_EffectState2D[MAX_EFFECTPATTERN_2D];
+	//static EFFECT_STATE2D m_EffectState2D[MAX_EFFECTPATTERN_2D];
 	static EFFECT_STATE3D m_EffectState3D[MAX_EFFECTPATTERN_3D];
 	//static ORDER_PRESET m_Order3D[MAX_ORDER_3D][MAX_ORDER_3D];
 
@@ -245,6 +244,6 @@ private:
 
 	D3DXVECTOR3 m_pos;
 	D3DXVECTOR3 m_EndPos;
-	int nCntDeley[MAX_ORDER_3D];
+	//int nCntDeley[MAX_ORDER_3D];
 };
 #endif // !_PRESETEFFECT_H_

@@ -7,8 +7,13 @@
 #include "item_banana.h"
 #include "manager.h"
 #include "sound.h"
+#include "object_player_balloon_car.h"
 #include "player.h"
 #include "wallCylinder.h"
+#include "object2D.h"
+#include "input.h"
+//エフェクト
+#include "PresetSetEffect.h"
 
 //=============================================================================
 // マクロ定義
@@ -16,6 +21,7 @@
 #define ITEM_BANANA_SIZE				(50.0f)		//バナナのサイズ半径
 #define ITEM_BANANA_ROTATE_SPEED		(0.08f)		//バナナの回転の速さ
 #define ITEM_BANANA_MOVE_SPEED			(25.0f)		//バナナの移動の速さ
+#define ITEM_BANANA_COLL_HEIGHT			(1000.0f)	//バナナの当たり判定をし始める高さ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -48,7 +54,7 @@ CItemBanana::~CItemBanana()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CPlayer *pPlayer) {
+CItemBanana* CItemBanana::Create(D3DXVECTOR3 pos, CObjectPlayerBalloonCar *pPlayer) {
 	
 	//デフォルトのモデルを設定
 	CItemBanana* pItemBanana;
@@ -83,6 +89,7 @@ HRESULT CItemBanana::Init(void) {
 	m_move.z = cosf(fRot + D3DX_PI) * ITEM_BANANA_MOVE_SPEED;
 
 	CItem::Init();
+
 	return S_OK;
 }
 
@@ -125,16 +132,9 @@ void CItemBanana::Update(void) {
 	SetPos(pos);
 
 	//プレイヤーとの当たり判定
-	if (CollisionPlayer(ITEM_BANANA_SIZE))
+	if (CollisionPlayer(ITEM_BANANA_SIZE, ITEM_BANANA_COLL_HEIGHT))
 	{
-		//マネージャーの取得
-		CManager* pManager = CManager::GetManager();
-		//サウンドの取得
-		CSound *pSound = nullptr;
-		if (pManager != nullptr) pSound = pManager->GetSound();
-		//音再生
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_SPIN);
-
+		
 		//当たっていたら消す
 		Uninit();
 		return;
@@ -153,12 +153,46 @@ void CItemBanana::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItemBanana::HitPlayer(CPlayer * pPlayer)
+void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
 {
+	CObjectPlayerBalloonCar *pBalloonCar = dynamic_cast<CObjectPlayerBalloonCar*>(pPlayer);
+
+	if (pBalloonCar == nullptr)
+	{
+		return;
+	}
+
 	//プレイヤーが通常状態だったら
-	if (pPlayer->GetState() == CPlayer::PLAYER_STATE::NORMAL)
+	if (pBalloonCar->GetState() == CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::NORMAL)
 	{
 		//プレイヤーの状態をスピン状態にする
-		pPlayer->SetState(CPlayer::PLAYER_STATE::SPIN);
+		pBalloonCar->SetState(CObjectPlayerBalloonCar::OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN);
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		CInput* pInput = nullptr;
+		CInputGamepadX *pPadX = nullptr;
+		if (pManager != nullptr) {
+			//現在の入力デバイスの取得
+			pInput = pManager->GetInputCur();
+			pPadX = dynamic_cast<CInputGamepadX*>(pInput);
+		}
+
+		if (pPadX != nullptr)
+		{
+			//振動させる
+			pPadX->SetVibration(65535, 65535, 40, pBalloonCar->GetPlayer()->GetIndex() - 1);
+		}
+
+		//ーーーーーーーーーーーーーーーーーーー
+		//スピン(バナナヒット)
+		CPresetEffect::SetEffect3D(8, D3DXVECTOR3(pBalloonCar->GetPos().x, pBalloonCar->GetPos().y + 1, pBalloonCar->GetPos().z), {}, {});		//回るやつ
+		//ーーーーーーーーーーーーーーーーーーー
+
+		//サウンドの取得
+		CSound *pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_SPIN);
 	}
 }

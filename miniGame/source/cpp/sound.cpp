@@ -13,7 +13,11 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/none.wav", 0 },
 
 	{ "data/SOUND/BGM/title.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
 	{ "data/SOUND/BGM/game.wav", -1 },
+	{ "data/SOUND/BGM/game2.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
+	{ "data/SOUND/BGM/menu.wav", -1 },
 
 	{ "data/SOUND/SE/1point.wav", 0 },
 	{ "data/SOUND/SE/3point.wav", 0 },
@@ -21,7 +25,24 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/itemget.wav", 0 },
 	{ "data/SOUND/SE/timeup.wav", 0 },
 	{ "data/SOUND/SE/slip.wav", 0 },
-	{ "data/SOUND/SE/bananathrow.wav", 0 }
+	{ "data/SOUND/SE/bananathrow.wav", 0 },
+	{ "data/SOUND/SE/countdown.wav", 0 },
+	{ "data/SOUND/SE/start.wav", 0 },
+	{ "data/SOUND/SE/player_ok.wav", 0 },
+	{ "data/SOUND/SE/decide.wav", 0 },
+	{ "data/SOUND/SE/cancel.wav", 0 },
+	{ "data/SOUND/SE/pause_open.wav", 0 },
+	{ "data/SOUND/SE/cursor.wav", 0 },
+	{ "data/SOUND/SE/clash.wav", 0 },
+	{ "data/SOUND/SE/fall.wav", 0 },
+	{ "data/SOUND/SE/explosion.wav", 0 },
+	{ "data/SOUND/SE/shield.wav", 0 },
+	{ "data/SOUND/SE/balloonspawn.wav", 0 },
+	{ "data/SOUND/SE/drumroll.wav", 0 },
+	{ "data/SOUND/SE/drumroll2.wav", 0 },
+	{ "data/SOUND/SE/title_chara.wav", 0 },
+	{ "data/SOUND/SE/title_logo.wav", 0 },
+	{ "data/SOUND/SE/title_car.wav", 0 }
 };
 
 //=============================================================================
@@ -155,16 +176,40 @@ HRESULT CSound::Init(HWND hWnd)
 		CloseHandle(hFile);
 	}
 
+	//音量調整
 	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f);		//タイトルBGM
+	ControllVoice(SOUND_LABEL::BGM_MENU				, 1.0f);		//メニューBGM
 	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f);		//ゲームBGM
+	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 0.8f);		//ゲーム02BGM
+	ControllVoice(SOUND_LABEL::BGM_RESULT			, 1.0f);		//リザルトBGM
+	ControllVoice(SOUND_LABEL::BGM_FINAL_RESULT		, 1.0f);		//最終リザルトBGM
+
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f);		//1ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.6f);		//3ポイント獲得SE
+	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f);		//3ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f);		//風船が割れるSE
 	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f);		//アイテム取得SE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f);		//タイムアップSE
 	ControllVoice(SOUND_LABEL::SE_PLAYER_SPIN		, 0.7f);		//スピンSE
 	ControllVoice(SOUND_LABEL::SE_BANANA_THROW		, 1.6f);		//バナナを投げるSE
-																	
+	ControllVoice(SOUND_LABEL::SE_COUNT_DOWN		, 1.2f);		//バナナを投げるカウントダウンSE
+	ControllVoice(SOUND_LABEL::SE_START				, 0.5f);		//スタートSE
+	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 0.8f);		//タイムアップSE
+	ControllVoice(SOUND_LABEL::SE_PLAYER_OK			, 1.0f);		//プレイヤーOKSE
+	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f);		//決定SE
+	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f);		//キャンセルSE
+	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f);		//ポーズ開くSE
+	ControllVoice(SOUND_LABEL::SE_CURSOR			, 8.0f);		//カーソルSE
+	ControllVoice(SOUND_LABEL::SE_CRASH				, 4.0f);		//衝突SE
+	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f);		//落下SE
+	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f);		//爆発SE
+	ControllVoice(SOUND_LABEL::SE_ITEM_SHIELD_GET	, 1.2f);		//盾アイテム獲得SE
+	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN     , 1.0f);		//風船スポーンSE
+	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL         , 2.9f);		//ドラムロールSE
+	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL_END		, 2.7f);		//ドラムロール最後SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.5f);		//タイトルの文字生成SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.2f);		//タイトルロゴの生成SE
+	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.0f);		//タイトルの車SE
+
 	return S_OK;
 }
 

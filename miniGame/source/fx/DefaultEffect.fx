@@ -26,7 +26,9 @@ float4 g_matEmissive;	//マテリアルのエミッシブ色
 float4 g_matSpecular;	//マテリアルのスペキュラー色　
 float g_matPower;		//マテリアルの反射の強度
 
+//輪郭
 float4 g_colGlow;	//輪郭の発光色
+float g_powGlow;	//輪郭の強度
 
 //フォグ
 bool g_bEnableFog;	//フォグが有効かどうか	//if文は良くないらしいので後に方法を調べる
@@ -78,8 +80,9 @@ struct VS_OUTPUT
 	float4 Diffuse : COLOR0;//色
 	float4 TexUV : TEXCOORD0;	//テクスチャ座標
 	float4 PosWVP : TEXCOORD1;	//変換後の位置
+	float4 Specular : TEXCOORD2;//スペキュラーの割合
 
-	float4 ZCalcTex : TEXCOORD2;   	// Z値算出用テクスチャ
+	float4 ZCalcTex : TEXCOORD3;   	// Z値算出用テクスチャ
 	float4 ColShadow : COLOR2;		//影ができる場合の色
 };
 
@@ -99,6 +102,8 @@ VS_OUTPUT RenderSceneVSDefault(
 
 	Out.PosWVP = Out.Pos;
 
+	Out.Specular = float4(0.0, 0.0, 0.0, 0.0);
+
 	//色
 	Out.Diffuse = g_matDiffuse;
 
@@ -106,9 +111,9 @@ VS_OUTPUT RenderSceneVSDefault(
 	Out.TexUV = vTexUV;
 
 	// ライトの目線によるワールドビュー射影変換をする
-	float4x4 mat = mul(g_mWorld, g_mLightView);
-	mat = mul(mat, g_mLightProj);
-	Out.ZCalcTex = mul(vPos, mat);
+	Out.ZCalcTex = mul(vPos, g_mWorld);
+	Out.ZCalcTex = mul(Out.ZCalcTex, g_mLightView);
+	Out.ZCalcTex = mul(Out.ZCalcTex, g_mLightProj);
 
 	//影の色
 	Out.ColShadow = float4(0.0, 0.0, 0.0, 0.0);
@@ -153,26 +158,29 @@ VS_OUTPUT RenderSceneVSLight(
 	}
 
 	 //ハーフランバート
-	col += 1.5;
+	col += 1.5;	//明るめにしたかったので1.0より多めに加算　実質環境光　
 	col *= 0.5;
 
 	//スペキュラーの計算
 	float3 vecHarf = normalize(-light + vecView);	//ハーフベクトル
 
 	//色と掛け合わせる
-	Out.Diffuse.xyz = g_matDiffuse.xyz * col;// +pow(g_matSpecular.xyz * saturate(dot(nor, vecHarf)), g_matPower);	//ディフューズ + スペキュラー
+	Out.Diffuse.xyz = g_matDiffuse.xyz * col;	//ディフューズ + スペキュラー
 	Out.Diffuse.w = g_matDiffuse.w;
 
+	//スペキュラーの割合
+	Out.Specular = saturate(dot(nor, vecHarf));
+
 	//輪郭を光らせる
-	if(g_colGlow.w) Out.Diffuse.xyz += (pow(1.0 - saturate(dot(vecView, nor)), 3) + 0.1) * (g_colGlow.xyz - Out.Diffuse.xyz);
+	if(g_colGlow.w) Out.Diffuse += (pow(1.0 - saturate(dot(vecView, nor)), g_powGlow) + 0.1) * (g_colGlow - Out.Diffuse);
 
 	//テクスチャ座標
 	Out.TexUV = vTexUV;
 
 	// ライトの目線によるワールドビュー射影変換をする
-	float4x4 mat = mul(g_mWorld, g_mLightView);
-	mat = mul(mat, g_mLightProj);
-	Out.ZCalcTex = mul(vPos, mat);
+	Out.ZCalcTex = mul(vPos, g_mWorld);
+	Out.ZCalcTex = mul(Out.ZCalcTex, g_mLightView);
+	Out.ZCalcTex = mul(Out.ZCalcTex, g_mLightProj);
 
 
 	return Out;
@@ -264,16 +272,23 @@ PS_OUTPUT RenderScenePSLight3D(VS_OUTPUT In)
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		// 同じ座標のZ値を抽出　少しずらす
-		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1300.0).x;
+		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1000.0);
 
 		// 算出点がシャドウマップのZ値よりも大きければ影と判断
-		if (ZValue > SM_Z + 0.001f && SM_Z < 1.0) {	//シャドウマップのZ値が1.0だったら影ができないようにする
+		// シャドウマップのZ値が1.0だったら影ができないようにする
+		if (ZValue > SM_Z + 0.01f && SM_Z < 1.0) {	
 			visibility -= 0.1;
 		}
 	}
 
-	//影の色を描画
-	Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	if (visibility == 0.0) {
+		//スペキュラーの描画
+		Out.RGB.xyz += pow(g_matSpecular.xyz * In.Specular, g_matPower);
+	}
+	else {
+		//影の色を描画
+		Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	}
 
 	//-----------------------------
 	//エミッシブを加算
@@ -335,20 +350,28 @@ PS_OUTPUT RenderScenePSLightTex3D(VS_OUTPUT In)
 		float2(0.34495938, 0.29387760)
 	};
 
+
 	//ポアソンサンプリング
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		// 同じ座標のZ値を抽出　少しずらす
-		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1300.0).x;
+		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1000.0);
 
 		// 算出点がシャドウマップのZ値よりも大きければ影と判断
-		if (ZValue > SM_Z + 0.001f && SM_Z < 1.0) {	//シャドウマップのZ値が1.0だったら影ができないようにする
+		// シャドウマップのZ値が1.0だったら影ができないようにする
+		if (ZValue > SM_Z + 0.01f && SM_Z < 1.0) {
 			visibility -= 0.1;
 		}
 	}
 
-	//影の色を描画
-	Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	if (visibility == 0.0) {
+		//スペキュラーの描画
+		Out.RGB.xyz += pow(g_matSpecular.xyz * In.Specular, g_matPower);
+	}
+	else {
+		//影の色を描画
+		Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
+	}
 
 	//-----------------------------
 	//エミッシブを加算
@@ -359,6 +382,9 @@ PS_OUTPUT RenderScenePSLightTex3D(VS_OUTPUT In)
 	//フォグを加算
 	//-----------------------------
 	if (g_bEnableFog) Out.RGB.xyz += (g_fogColor - Out.RGB) * (1.0 - saturate(g_fogRange.x + g_fogRange.y * In.PosWVP.w));
+
+	//Out.RGB.xyz = ZValue;
+	//Out.RGB.xyz = SM_Z;
 
 	return Out;
 }
@@ -396,7 +422,8 @@ VS_OUTPUT_SHADOW ZBufferCalc_VS(float4 vPos : POSITION, float4 color : COLOR0)
 float4 ZBufferPlot_PS(float4 ShadowMapTex : TEXCOORD0) : COLOR
 {
 	// Z値算出
-	return ShadowMapTex.z / ShadowMapTex.w;
+	float3 col = ShadowMapTex.z / ShadowMapTex.w;
+	return float4(col, 1.0);	//通常描画時のSM参照時に透明度も影響してくるので1.0にする
 }
 
 //=============================================================================
@@ -405,7 +432,7 @@ float4 ZBufferPlot_PS(float4 ShadowMapTex : TEXCOORD0) : COLOR
 technique RenderScene
 {
 	//深度バッファ描画用
-	pass P0
+	pass PDepth
 	{
 		VertexShader = compile vs_3_0 ZBufferCalc_VS();
 		PixelShader = compile ps_3_0 ZBufferPlot_PS();

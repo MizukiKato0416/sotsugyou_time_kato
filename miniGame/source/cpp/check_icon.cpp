@@ -8,6 +8,7 @@
 #include "object2D.h"
 #include "input.h"
 #include "manager.h"
+#include "sound.h"
 
 //=============================================================================
 // マクロ定義
@@ -126,6 +127,14 @@ void CCheckIcon::Update(void) {
 
 			//ボタンのテクスチャ変更
 			m_pButton->SetTexType(CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::CHECK_ICON_OK_1 + m_nPlayerNum - 1));
+
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
 		}
 	}
 

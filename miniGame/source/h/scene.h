@@ -16,7 +16,7 @@
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CPlayer;
+class CObjectPlayer;
 
 //*****************************************************************************
 // シーンクラス
@@ -27,7 +27,13 @@ public:
 	//シーンの種類
 	enum class SCENE_TYPE {
 		TITLE = 0,
-		GAME,
+		SELECT_GAME,
+		GAME_01,
+		GAME_02,
+		GAME_MAX,	//ランダム選択のためゲームシーンの最大を設定
+		RESULT,
+		FIND_WOLF,
+		FINAL_RESULT,
 		ENUM_MAX
 	};
 
@@ -37,12 +43,14 @@ public:
 	virtual void Uninit(void) = 0;	//終了処理
 	virtual void Update(void) = 0;	//更新処理
 	static void ChangeScene(CScene*& pScene, SCENE_TYPE typeScene);	//シーンの変更
+	static SCENE_TYPE GetSceneType(void) { return m_typeScene; }	//現在のシーンの取得
 
 	//プレイヤーのセッター・ゲッター
-	void SetPlayer(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
-	CPlayer* GetPlayer(void) { return m_pPlayer; }
+	void SetPlayer(CObjectPlayer* pPlayer) { m_pPlayer = pPlayer; }
+	CObjectPlayer* GetPlayer(void) { return m_pPlayer; }
 private:
-	CPlayer* m_pPlayer;	//プレイヤーへのポインタ
+	static SCENE_TYPE m_typeScene;
+	CObjectPlayer* m_pPlayer;	//プレイヤーへのポインタ
 
 };
 

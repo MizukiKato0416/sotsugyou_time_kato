@@ -175,7 +175,10 @@ void CObject2D::Draw(void) {
 	//テクスチャの取得
 	LPDIRECT3DTEXTURE9 pTexture = CTexture::GetTexture(GetTexType());
 	//Zバッファのテクスチャを使用する場合取得
-	if (m_bUseZBuffTexture) pTexture = pRenderer->GetZBuffTex();
+	if (m_bUseZBuffTexture) {
+		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);	//透明無効
+		pTexture = pRenderer->GetZBuffTex();
+	}
 
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));	//頂点バッファをデバイスのデータストリームに設定	
 
@@ -213,6 +216,8 @@ void CObject2D::Draw(void) {
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
 	//アルファ値の参照値
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
+
+	if (m_bUseZBuffTexture) pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 }
 
 //=============================================================================
@@ -392,4 +397,70 @@ void CObject2D::SetTexNumber(int nNumber) {
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+//テクスチャUVの移動設定
+//=============================================================================
+void CObject2D::SetMoveTex(float fMoveTexU, float fMoveTexV)
+{
+	VERTEX_2D *pVtx;
+	//頂点バッファのロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報を設定
+	pVtx[0].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[1].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[2].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+	pVtx[3].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+
+	if (pVtx[0].tex.x < -1.0f)
+	{
+		pVtx[0].tex.x += 2.0f;
+		pVtx[1].tex.x += 2.0f;
+		pVtx[2].tex.x += 2.0f;
+		pVtx[3].tex.x += 2.0f;
+	}
+	else if (pVtx[0].tex.x > 1.0f)
+	{
+		pVtx[0].tex.x -= 2.0f;
+		pVtx[1].tex.x -= 2.0f;
+		pVtx[2].tex.x -= 2.0f;
+		pVtx[3].tex.x -= 2.0f;
+	}
+
+	if (pVtx[0].tex.y < -1.0f)
+	{
+		pVtx[0].tex.y += 2.0f;
+		pVtx[1].tex.y += 2.0f;
+		pVtx[2].tex.y += 2.0f;
+		pVtx[3].tex.y += 2.0f;
+	}
+	else if (pVtx[0].tex.y > 1.0f)
+	{
+		pVtx[0].tex.y -= 2.0f;
+		pVtx[1].tex.y -= 2.0f;
+		pVtx[2].tex.y -= 2.0f;
+		pVtx[3].tex.y -= 2.0f;
+	}
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+//テクスチャのUV取得処理
+//=============================================================================
+D3DXVECTOR2 CObject2D::GetUV(const int nCntVtx)
+{
+	VERTEX_2D *pVtx;
+	//頂点バッファのロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	D3DXVECTOR2 vtxUV = pVtx[nCntVtx].tex;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+	return vtxUV;
 }

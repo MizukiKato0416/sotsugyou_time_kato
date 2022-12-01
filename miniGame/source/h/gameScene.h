@@ -9,25 +9,20 @@
 
 #include "scene.h"
 #include "main.h"
-#include "player.h"
+#include "object_player.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define BALLOON_MAX_NUM		(3)		//風船を一度に出す量
 
 //*****************************************************************************
 // 前方宣言
 //*****************************************************************************
-class CStage;
 class CTimer;
 class CObject2D;
 class CPauseMenu;
-class CSelectMenu2D;
-class CScore;
-class CCountDownUi;
-class CPlayerIcon;
-class CCheckIcon;
+class CCheck;
+class CWolfDecide;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -37,40 +32,52 @@ class CGameScene : public CScene
 public:
 	CGameScene();	//デフォルトコンストラクタ
 	virtual ~CGameScene();	//デストラクタ
-	void Init(void);	//初期化処理
-	void Uninit(void);	//終了処理
-	void Update(void);	//更新処理
+	virtual void Init(void);	//初期化処理
+	virtual void Uninit(void);	//終了処理
+	virtual void Update(void);	//更新処理
+	void CreatePauseMenu(void);	//ポーズメニューの生成
 	void DeletePauseMenu(void);	//ポーズメニューの破棄
-	void GameOver(void);	//ゲームオーバー
+	virtual void GameOver(void);	//ゲームオーバー
 
 	bool GetGameOver(void) { return m_bGameOver; }		//ゲームオーバー状態のフラグ
-	CTimer* GetTimer(void) { return m_pTimer; }	//タイマーの取得
+	CTimer* GetTimer(void) { return m_pTimer; }			//タイマーの取得
+
+	//人狼モード設定処理
+	static void SetWereWolfMode(const bool bWereWolfMode) { m_bWereWolfMode = bWereWolfMode; }
+	//人狼モード取得処理
+	static bool GetWereWolfMode(void) { return m_bWereWolfMode; }
+
+	//人狼になったプレイヤーのインデックス設定処理(1Pは1、2Pは2)
+	static void SetWereWolfPlayerIndex(const int nWereWolfPlayerIndex) { m_nWereWolfPlayerIndex = nWereWolfPlayerIndex; }
+	//人狼になったプレイヤーのインデックス取得処理
+	static int GetWereWolfPlayerIndex(void) { return m_nWereWolfPlayerIndex; }
+
+	//ランキング設定処理(0は1P1は2P)
+	static void SetRanking(const int nRanking, const int nIndex) { m_aRanking[nIndex] = nRanking; }
+	//ランキング取得処理(0は1P1は2P)
+	static int GetRanking(const int nIndex) { return m_aRanking[nIndex]; }
 
 private:
-	void UpdateGame(void);					//ゲーム中の更新
-	void UpdateGameOver(void);				//ゲームオーバー時の更新
-	void CreateMenuEndGame(void);			//ゲーム終了時の選択メニューの生成
-	void CreateBalloon(void);				//風船生成処理
-	void CreateItemBox(void);				//アイテムボックス生成処理
-	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
-	void CountDownUi(void);					//カウントダウンUIの処理
+	virtual void UpdateGame(void) = 0;		//ゲーム中の更新
+	virtual void UpdateGameOver(void) = 0;	//ゲームオーバー時の更新
+	virtual void UpdateReady(void) = 0;		//準備状態中の更新
+
+	static bool m_bWereWolfMode;					//人狼モードにするかどうか
+	static int m_nWereWolfPlayerIndex;				//人狼になったプレイヤーのインデックス
+	static int m_aRanking[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランキング
+
+protected:
 
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか
+	bool m_bReady;		//準備状態かどうか
+	bool m_bLockPauseMenu;	//ポーズメニュー生成のロック
 
-	CStage* m_pStage;								//ステージへのポインタ
-	CTimer* m_pTimer;								//ゲームのタイマー
-	CObject2D* m_pTimerFrame;						//タイマーの枠
-	int m_nGameScore;								//ゲーム終了時のスコア
-	CPauseMenu* m_pMenuPause;						//ポーズメニュー
-	CSelectMenu2D* m_pMenuGameEnd;					//ゲーム終了時の選択メニュー
-	CCountDownUi *m_pCountDownUi;					//カウントダウンUIのポインタ
-	CPlayer* m_apPlayer[MAX_PLAYER_NUM];			//プレイヤーのポインタ
-	CPlayerIcon *m_apPlayerIcon[MAX_PLAYER_NUM];	//プレイヤーアイコンのポインタ
-	CCheckIcon *m_apCheckIcon[MAX_PLAYER_NUM];		//チェックアイコンのポインタ
-
-	int m_nCntGameClear;					//ゲームクリア後のカウント
-	int m_nCreateItemBoxCounter;			//アイテムボックスの生成カウンター
+	CTimer* m_pTimer;			//ゲームのタイマー
+	CObject2D* m_pTimerFrame;	//タイマーの枠
+	CPauseMenu* m_pMenuPause;	//ポーズメニュー
+	CCheck *m_pCheck;			//チェッククラスのポインタ
+	CWolfDecide *m_pWolfDecide;	//人狼決定クラスのポインタ
 };
 
 #endif // !_GAME_SCENE_H_

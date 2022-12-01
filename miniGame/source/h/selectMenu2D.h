@@ -34,7 +34,7 @@ public:
 	virtual void Update(void);	//更新処理
 	virtual void Draw(void) {}	//描画処理
 
-	virtual void BeginChangeSelect(void);	//選択の変更が開始されたときの処理
+	virtual void BeginChangeSelect(bool bChangePlus);	//選択の変更が開始されたときの処理
 	virtual void EndChangeSelect(void) {}	//選択の変更が終了したときの処理
 
 	void SetSelectUI(int nIdx, D3DXVECTOR3 pos, float fWidth, float fHeight, CTexture::TEXTURE_TYPE typeTex);	//選択肢UIの設定

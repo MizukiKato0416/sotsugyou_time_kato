@@ -8,10 +8,8 @@
 #include "manager.h"
 #include "sound.h"
 #include "objectList.h"
-#include "player.h"
-
-//エフェクト
-#include "PresetSetEffect.h"
+#include "object_player_balloon_car.h"
+#include "object2D.h"
 
 //=============================================================================
 // マクロ定義
@@ -47,31 +45,15 @@ CItem::~CItem()
 }
 
 //=============================================================================
-// 生成処理
-//=============================================================================
-CItem* CItem::Create(D3DXVECTOR3 pos, const CPlayer *pPlayer) {
-	
-	//デフォルトのモデルを設定
-	CModel::MODELTYPE typeModel = CModel::MODELTYPE::OBJ_ITEM_BOX;
-
-	CItem* pItem;
-	pItem = new CItem(typeModel);
-	if (pItem == nullptr) return nullptr;
-
-	pItem->SetPos(pos);
-	
-	pItem->Init();
-
-	return pItem;
-}
-
-//=============================================================================
 // 初期化処理
 //=============================================================================
 HRESULT CItem::Init(void) {
 
-	//何もアイテムを持っていない状態にする
-	m_pPlayer->SetItemType(ITEM_TYPE::NONE);
+	if (m_pPlayer != nullptr)
+	{
+		//何もアイテムを持っていない状態にする
+		m_pPlayer->SetItemType(ITEM_TYPE::NONE);
+	}
 
 	CObjectModel::Init();
 	return S_OK;
@@ -103,23 +85,28 @@ void CItem::Draw(void) {
 //=============================================================================
 //プレイヤーにヒットしたときの処理
 //=============================================================================
-void CItem::HitPlayer(CPlayer * pPlayer)
+void CItem::HitPlayer(CObjectPlayer * pPlayer)
 {
 }
 
 //=============================================================================
 //プレイヤーとの当たり判定
 //=============================================================================
-bool CItem::CollisionPlayer(const float fMySize)
+bool CItem::CollisionPlayer(const float fMySize, const float fHeight)
 {
+	//当たり判定を始める高さにまで到達していなかったら
+	if (GetPos().y > fHeight)
+	{
+		return false;
+	}
+
 	CObject* pObject = GetObjectTopAll();	//全オブジェクトのリストの先頭を取得
-	D3DXVECTOR3 posBullet = GetPos();	//弾の位置
 
 	while (pObject != nullptr) {
 		CObject* pObjNext = GetObjectNextAll(pObject);	//リストの次のオブジェクトのポインタを取得
 
 		//プレイヤーにキャスト
-		CPlayer *pPlayer = static_cast<CPlayer*> (pObject);
+		CObjectPlayer *pPlayer = static_cast<CObjectPlayer*> (pObject);
 
 		//オブジェクトタイプの確認
 		bool bMatchType = false;
@@ -146,11 +133,6 @@ bool CItem::CollisionPlayer(const float fMySize)
 		{
 			//ヒット時処理
 			HitPlayer(pPlayer);
-
-			//ーーーーーーーーーーーーーーーーーーー
-			//スピン(バナナヒット)
-			CPresetEffect::SetEffect3D(8, D3DXVECTOR3(GetPos().x, GetPos().y + 10, GetPos().z), {}, {});		//回るやつ
-			//ーーーーーーーーーーーーーーーーーーー
 
 			return true;
 		}

@@ -18,7 +18,7 @@
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CPlayerIcon::CPlayerIcon()
+CObjectPlayerIcon::CObjectPlayerIcon()
 {
 	m_scale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -31,7 +31,7 @@ CPlayerIcon::CPlayerIcon()
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CPlayerIcon::~CPlayerIcon()
+CObjectPlayerIcon::~CObjectPlayerIcon()
 {
 	
 }
@@ -39,10 +39,10 @@ CPlayerIcon::~CPlayerIcon()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CPlayerIcon* CPlayerIcon::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
+CObjectPlayerIcon* CObjectPlayerIcon::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
 	                             const CTexture::TEXTURE_TYPE texTypeFrame, const CTexture::TEXTURE_TYPE texTypePlayerNum) {
-	CPlayerIcon* pPlayerIcon;
-	pPlayerIcon = new CPlayerIcon();
+	CObjectPlayerIcon* pPlayerIcon;
+	pPlayerIcon = new CObjectPlayerIcon();
 	if (pPlayerIcon == nullptr) return nullptr;
 
 	pPlayerIcon->m_texTypeFrame = texTypeFrame;
@@ -57,7 +57,7 @@ CPlayerIcon* CPlayerIcon::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale,
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CPlayerIcon::Init(void) {
+HRESULT CObjectPlayerIcon::Init(void) {
 	//吹き出しの生成
 	m_pFrame = CObject2D::Create(m_pos, m_texTypeFrame, PLAYER_ICON_FRAME_SIZE.x * m_scale.x, PLAYER_ICON_FRAME_SIZE.y * m_scale.y);
 	//カラー設定
@@ -76,7 +76,7 @@ HRESULT CPlayerIcon::Init(void) {
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CPlayerIcon::Uninit(void) {
+void CObjectPlayerIcon::Uninit(void) {
 
 	if (m_pFrame != nullptr)
 	{
@@ -97,19 +97,19 @@ void CPlayerIcon::Uninit(void) {
 //=============================================================================
 // 更新処理
 //=============================================================================
-void CPlayerIcon::Update(void) {
+void CObjectPlayerIcon::Update(void) {
 	
 	switch (m_state)
 	{
-	case CPlayerIcon::STATE::ADD_ALPHA:
+	case CObjectPlayerIcon::STATE::ADD_ALPHA:
 		//α値加算処理
 		StateAddAlpha();
 		break;
-	case CPlayerIcon::STATE::NONE:
+	case CObjectPlayerIcon::STATE::NONE:
 		//何もしない処理
 		StateNone();
 		break;
-	case CPlayerIcon::STATE::DEC_ALPHA:
+	case CObjectPlayerIcon::STATE::DEC_ALPHA:
 		//α値減算処理
 		StateDecAlpha();
 		break;
@@ -121,7 +121,7 @@ void CPlayerIcon::Update(void) {
 //=============================================================================
 //α値加算処理
 //=============================================================================
-void CPlayerIcon::StateAddAlpha(){
+void CObjectPlayerIcon::StateAddAlpha(){
 
 	int nCntClear = 0;
 
@@ -174,7 +174,7 @@ void CPlayerIcon::StateAddAlpha(){
 //=============================================================================
 //何もしない処理
 //=============================================================================
-void CPlayerIcon::StateNone(){
+void CObjectPlayerIcon::StateNone(){
 
 	//生成されていたら
 	if (m_pFrame != nullptr)
@@ -208,7 +208,7 @@ void CPlayerIcon::StateNone(){
 //=============================================================================
 //α値減算処理
 //=============================================================================
-void CPlayerIcon::StateDecAlpha(){
+void CObjectPlayerIcon::StateDecAlpha(){
 	//生成されていたら
 	if (m_pFrame != nullptr)
 	{

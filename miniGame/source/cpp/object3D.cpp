@@ -24,7 +24,16 @@ CObject3D::CObject3D()
 	m_pIdxBuff = nullptr;
 	m_nNumVtx = 0;
 	m_nNumIdx = 0;
-	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+	m_mat.MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_mat.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_mat.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_mat.MatD3D.Power = 1.0f;
+	m_colGlow = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_powGlow = 2.0f;
+
+	m_bAlphaBlend = false;
+	m_bEnableLight = true;
 }
 
 //=============================================================================
@@ -39,6 +48,10 @@ CObject3D::~CObject3D()
 // 3Dオブジェクトの初期化処理
 //=============================================================================
 HRESULT CObject3D::Init(void) {
+
+	//変数初期化
+	m_bAlphaBlend = false;
+	m_bEnableLight = true;
 
 	return S_OK;
 }
@@ -108,7 +121,16 @@ void CObject3D::Draw(void) {
 	//アルファテスト
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	//アルファ値の参照値
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 10);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 50);
+
+	//加算合成を設定する状態なら
+	if (m_bAlphaBlend)
+	{
+		//αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
@@ -126,15 +148,15 @@ void CObject3D::Draw(void) {
 	//テクスチャがある場合フラグを追加
 	if (pTexture != nullptr) dwPassFlag |= PASS_TEXTURE;	
 	//ライトがある場合フラグを追加
-	if (dwEnableLight) dwPassFlag |= PASS_LIGHT;	
+	if (dwEnableLight && m_bEnableLight) dwPassFlag |= PASS_LIGHT;	
 
 	//モデルが設定したマテリアルの影響を受けないようにマテリアルの設定
-	pRenderer->SetEffectMaterialDiffuse(m_col);
-	pRenderer->SetEffectMaterialEmissive(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-	pRenderer->SetEffectMaterialSpecular(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	pRenderer->SetEffectMaterialPower(2.0f);
+	pRenderer->SetEffectMaterialDiffuse(m_mat.MatD3D.Diffuse);
+	pRenderer->SetEffectMaterialEmissive(m_mat.MatD3D.Emissive);
+	pRenderer->SetEffectMaterialSpecular(m_mat.MatD3D.Specular);
+	pRenderer->SetEffectMaterialPower(m_mat.MatD3D.Power);
 	//輪郭の発光色の設定
-	pRenderer->SetEffectColorGlow(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	pRenderer->SetEffectGlow(m_colGlow, m_powGlow);
 
 	//パスの開始
 	pRenderer->BeginPassEffect(dwPassFlag);
@@ -149,13 +171,21 @@ void CObject3D::Draw(void) {
 
 	pRenderer->EndPassEffect();//エフェクト終了
 	
+	//加算合成を設定する状態なら
+	if (m_bAlphaBlend)
+	{
+		//aブレンディングを通常に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	}
+
 	//アルファテスト　有効／無効
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	//アルファテスト
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
 	//アルファ値の参照値
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
-
 }
 
 //=============================================================================
@@ -222,4 +252,41 @@ void CObject3D::SetNumIdx(int nNumIdx) {
 //=============================================================================
 int CObject3D::GetNumIdx(void) {
 	return m_nNumIdx;
+}
+
+//=============================================================================
+//テクスチャ移動設定処理
+//=============================================================================
+void CObject3D::SetMoveTex(float fMoveTexU, float fMoveTexV)
+{
+	VERTEX_3D *pVtx;	// 頂点情報
+	//頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+
+	for (int nCntVtx = 0; nCntVtx < m_nNumVtx; nCntVtx++)
+	{
+		pVtx[nCntVtx].tex += D3DXVECTOR2(fMoveTexU, fMoveTexV);
+
+		if (pVtx[nCntVtx].tex.x < -100.0f)
+		{
+			pVtx[nCntVtx].tex.x += 200.0f;
+		}
+		else if (pVtx[nCntVtx].tex.x > 100.0f)
+		{
+			pVtx[nCntVtx].tex.x -= 200.0f;
+		}
+
+		if (pVtx[nCntVtx].tex.y < -100.0f)
+		{
+			pVtx[nCntVtx].tex.y += 200.0f;
+		}
+		else if (pVtx[nCntVtx].tex.y > 100.0f)
+		{
+			pVtx[nCntVtx].tex.y -= 200.0f;
+		}
+	}
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
