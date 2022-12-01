@@ -71,11 +71,15 @@
 #define TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MIN	(0.99f)									//爆発UIのスケール加算量最小値
 #define TITLE_SCENE_EXPLOSION_LOGO_ADD_SCALE_MAX	(1.01f)									//爆発UIのスケール加算量最大値
 
-#define TITLE_SCENE_CAR_LOGO_ADD_MOVE		(0.2f)						//車ロゴの移動量加算量
-#define TITLE_SCENE_CAR_LOGO_ADD_MOVE_MAX	(30.0f)						//車ロゴの移動量最大値
-#define TITLE_SCENE_CAR_LOGO_LEFT_MOVE		(22.8f)						//車ロゴの左から来るときの移動量初速
-#define TITLE_SCENE_CAR_LOGO_STOP_COUNTER	(180)						//車ロゴが停止している時間
+#define TITLE_SCENE_CAR_LOGO_ADD_MOVE		(0.2f)				//車ロゴの移動量加算量
+#define TITLE_SCENE_CAR_LOGO_ADD_MOVE_MAX	(30.0f)				//車ロゴの移動量最大値
+#define TITLE_SCENE_CAR_LOGO_LEFT_MOVE		(22.8f)				//車ロゴの左から来るときの移動量初速
+#define TITLE_SCENE_CAR_LOGO_STOP_COUNTER	(180)				//車ロゴが停止している時間
 
+#define TITLE_SCENE_FLOOR_POS_Z		(-1000.0f)			//床の位置Z
+#define TITLE_SCENE_FLOOR_NUM		(8)					//床の分割数
+#define TITLE_SCENE_FLOOR_SIZE		(1000.0f)			//床のサイズ
+	
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -192,8 +196,15 @@ void CTitleScene::Init(void) {
 	}
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1000.0f), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f), 8, 8, 1000.0f, 1000.0f,
+	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, TITLE_SCENE_FLOOR_POS_Z), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f),
+		              TITLE_SCENE_FLOOR_NUM, TITLE_SCENE_FLOOR_NUM, TITLE_SCENE_FLOOR_SIZE, TITLE_SCENE_FLOOR_SIZE,
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+
+	//砂丘生成
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
 
 	//プレイヤーの生成
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)

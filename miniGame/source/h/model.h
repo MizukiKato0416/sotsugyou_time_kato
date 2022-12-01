@@ -60,6 +60,10 @@ public:
 		OBJ_RESULT_BALLOON_01,			//結果画面の風船01
 		OBJ_RESULT_BALLOON_02,			//結果画面の風船02
 
+		OBJ_TITLE_DUNE_00,				//砂丘00
+		OBJ_TITLE_DUNE_01,				//砂丘01
+		OBJ_TITLE_DUNE_02,				//砂丘02
+
 		//プレイヤー
 		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
 
