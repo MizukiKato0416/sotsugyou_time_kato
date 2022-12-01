@@ -182,32 +182,36 @@ void CFinalResultScene::Init(void) {
 		//プレイヤーのモデルの生成
 		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_CAR, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 		//プレイヤーの色を設定
-		if (m_apObjPlayer[nIdxPlayer] != nullptr) {
-			CModel* pModelPlayer = m_apObjPlayer[nIdxPlayer]->GetPtrModel();
-			if (pModelPlayer != nullptr) {
-				D3DXCOLOR colPlayer = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
-
-				switch (nIdxPlayer)
-				{
-				case 0:
-					colPlayer = OBJECT_PLAYER_COLOR_1P;
-					break;
-				case 1:
-					colPlayer = OBJECT_PLAYER_COLOR_2P;
-					break;
-				case 2:
-					colPlayer = OBJECT_PLAYER_COLOR_3P;
-					break;
-				case 3:
-					colPlayer = OBJECT_PLAYER_COLOR_4P;
-					break;
-				}
-
-				pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
-			}
-		}
+		if (m_apObjPlayer[nIdxPlayer] == nullptr) continue;	//ループ飛ばす
 		//タワーの生成
 		m_apResultTower[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_TOWER, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	
+		//モデルの設定
+		CModel* pModelPlayer = m_apObjPlayer[nIdxPlayer]->GetPtrModel();
+		if (pModelPlayer == nullptr) continue;	//ループ飛ばす
+		D3DXCOLOR colPlayer = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);	//プレイヤーの色
+
+		switch (nIdxPlayer)
+		{
+		case 0:
+			colPlayer = OBJECT_PLAYER_COLOR_1P;
+			break;
+		case 1:
+			colPlayer = OBJECT_PLAYER_COLOR_2P;
+			break;
+		case 2:
+			colPlayer = OBJECT_PLAYER_COLOR_3P;
+			break;
+		case 3:
+			colPlayer = OBJECT_PLAYER_COLOR_4P;
+			break;
+		}
+
+		//マテリアルの色の設定
+		pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
+		//スペキュラーの設定
+		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);
+		pModelPlayer->SetMaterialPower(2.0f, 0);
 	}
 
 
@@ -624,17 +628,17 @@ void CFinalResultScene::Winner() {
 			posPlayer.y += fposCrownFirst;	//差分を追加
 			//王冠を生成
 			CObjectModel* pObjCrown = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_CROWN, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-			if (pObjCrown != nullptr) {
-				pObjCrown->SetRotSpeed(D3DXVECTOR3(0.0f, 0.05f, 0.0f));	//回転させる
-				CModel* pModel = pObjCrown->GetPtrModel();
-				if (pModel != nullptr) {
-					for (int i = 0; i < 3; i++)
-					{
-						pModel->SetMaterialSpecular(D3DXCOLOR(0.98f, 0.98f, 0.98f, 1.f), i);
-						pModel->SetMaterialPower(8.0f, i);
-					}
-				}
-				m_vObjCrown.push_back(pObjCrown);
+			//オブジェクトの設定
+			if (pObjCrown == nullptr) continue;	//ループ飛ばす
+			m_vObjCrown.push_back(pObjCrown);	//リストに格納
+			pObjCrown->SetRotSpeed(D3DXVECTOR3(0.0f, 0.05f, 0.0f));	//回転させる
+			//モデルの設定
+			CModel* pModel = pObjCrown->GetPtrModel();
+			if (pModel == nullptr) continue;	//ループ飛ばす
+			for (int i = 0; i < 3; i++)
+			{
+				pModel->SetMaterialSpecular(D3DXCOLOR(0.98f, 0.98f, 0.98f, 1.f), i);
+				pModel->SetMaterialPower(8.0f, i);
 			}
 		}
 		//紙吹雪降ってきたり
@@ -752,10 +756,25 @@ void CFinalResultScene::CreateBalloon()
 		int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
 
 
-
 		//風船の生成
-		m_pBalloon.push_back(CFloatObject::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, fMoveSpeed, 0.0f),
-			                 D3DXVECTOR3(0.0f, 0.0f, 0.0f), static_cast<CModel::MODELTYPE>(nModel)));
+		CFloatObject* pBallon = CFloatObject::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, fMoveSpeed, 0.0f),
+			D3DXVECTOR3(0.0f, 0.0f, 0.0f), static_cast<CModel::MODELTYPE>(nModel));
+		//風船の設定
+		if (pBallon != nullptr) {
+			//スペキュラーの設定
+			CModel *pModel = pBallon->GetPtrModel();
+			if (pModel != nullptr)
+			{
+				const D3DXCOLOR colSpecular = D3DXCOLOR(0.98f, 0.98f, 0.98f, 1.0f);	//スペキュラーの色
+				for (int nIdxMat = 0; nIdxMat < MAX_MATERIAL; nIdxMat++)
+				{
+					pModel->SetMaterialSpecular(colSpecular, nIdxMat);
+					pModel->SetMaterialPower(12.0f, nIdxMat);
+				}
+			}
+			//リストに風船を追加
+			m_pBalloon.push_back(pBallon);
+		}
 	}
 	
 	//初期化
