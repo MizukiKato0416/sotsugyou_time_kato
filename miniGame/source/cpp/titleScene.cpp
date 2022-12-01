@@ -228,6 +228,9 @@ void CTitleScene::Init(void) {
 			break;
 		}
 		pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
+		//スペキュラーの設定
+		pModel->SetMaterialSpecular(colModel / 2.0f + D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);
+		pModel->SetMaterialPower(2.0f, 0);
 	}
 
 
