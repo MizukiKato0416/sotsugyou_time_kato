@@ -1123,7 +1123,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\test.png";
+    "data/TEXTURE/MESH/cactus01.png";
    }
   }
   Material {
@@ -1132,7 +1132,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\test.png";
+    "data/TEXTURE/MESH/cactus01.png";
    }
   }
   Material {
@@ -1141,7 +1141,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\test.png";
+    "data/TEXTURE/MESH/cactus01.png";
    }
   }
   Material {
@@ -1156,7 +1156,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Pictures\\test.png";
+    "data/TEXTURE/MESH/cactus01.png";
    }
   }
  }
