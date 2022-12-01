@@ -892,6 +892,7 @@ Mesh {
     "data\\TEXTURE\\MESH\\floor_01.jpg";
    }
   }
+ }
  MeshNormals {
   256;
   -0.033562;0.913776;-0.404829;,
