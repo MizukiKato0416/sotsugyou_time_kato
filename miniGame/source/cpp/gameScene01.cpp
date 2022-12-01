@@ -187,7 +187,15 @@ void CGameScene01::Init(void) {
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
-	
+
+	////プレイヤーのステンシルに描画されるシルエット
+	//CObject2D* pSilhouettePlayer = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//if (pSilhouettePlayer != nullptr) {
+	//	pSilhouettePlayer->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	//	pSilhouettePlayer->SetEnableStencil(true);
+	//	pSilhouettePlayer->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
+	//}
+
 	//BGMの再生
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
