@@ -47,7 +47,6 @@ private:
 		MAX
 	};
 
-	void Cloud();				//雲の処理
 	void PlayerModel();			//プレイヤーのモデルの処理
 	void Camera();				//カメラの処理
 	void CharactorLogo();		//文字のロゴの処理
@@ -69,7 +68,6 @@ private:
 	bool m_bCol;				// 色を変えるかどうか
 	bool m_bPushKey;			// 押されたかどうか
 
-	std::vector<CMeshwall*> m_pCloud;							//雲のポインタ
 	CObjectModel *m_pPlayerModel[MAX_OBJECT_PLAYER_NUM];		//プレイヤーのモデル
 	CObject2D *m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM];			//タイトルロゴの文字
 	CObject2D *m_pTheFinalLogo;									//ザファイナルロゴ

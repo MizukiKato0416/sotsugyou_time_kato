@@ -25,6 +25,9 @@ CObject3D::CObject3D()
 	m_nNumVtx = 0;
 	m_nNumIdx = 0;
 
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_rotate = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	m_mat.MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_mat.MatD3D.Emissive = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	m_mat.MatD3D.Specular = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
@@ -78,7 +81,8 @@ void CObject3D::Uninit(void) {
 // 3Dオブジェクトの更新処理
 //=============================================================================
 void CObject3D::Update(void) {
-
+	m_pos += m_move;
+	m_rot += m_rotate;
 }
 
 //=============================================================================
