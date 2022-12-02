@@ -53,6 +53,8 @@ void CScene::Init(void) {
 void CScene::Uninit(void) {
 	//オブジェクトの破棄
 	CObject::ReleaseAll();
+	//テクスチャのアンロード
+	CTexture::Unload();
 }
 
 //=============================================================================

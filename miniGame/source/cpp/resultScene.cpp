@@ -78,6 +78,8 @@ CResultScene::~CResultScene()
 // 初期化処理
 //=============================================================================
 void CResultScene::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("result");
 
 	//変数初期化
 	m_nFrameCounter = 0;
@@ -464,7 +466,7 @@ void CResultScene::Fade()
 		}
 
 		if (m_nFrameCounter < fChangeSceneCount) return;
-		if (pFade != nullptr) pFade->SetFade(sceneType, 0.04f, 30);
+		if (pFade != nullptr) pFade->SetFade(sceneType, 0.04f, 0);
 
 		//サウンドの取得
 		CSound* pSound = nullptr;

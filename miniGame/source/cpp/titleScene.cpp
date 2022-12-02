@@ -121,6 +121,8 @@ CTitleScene::~CTitleScene()
 // タイトルシーンの初期化処理
 //=============================================================================
 void CTitleScene::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("title");
 
 	//変数初期化
 	memset(m_pTitleLogoChara, NULL, sizeof(m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM]));
@@ -397,7 +399,7 @@ void CTitleScene::Update(void) {
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;	
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 0);
 		}
 		else
 		{

@@ -95,6 +95,8 @@ CGameScene01::~CGameScene01()
 // ゲームシーンの初期化処理
 //=============================================================================
 void CGameScene01::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("game01");
 
 	//変数初期化
 	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
@@ -210,7 +212,6 @@ void CGameScene01::Init(void) {
 // ゲームシーンの終了処理
 //=============================================================================
 void CGameScene01::Uninit(void) {
-
 	//ゲームシーンの終了処理
 	CGameScene::Uninit();
 }
@@ -352,7 +353,7 @@ void CGameScene01::UpdateGameOver(void) {
 		//リザルトへシーン遷移
 		if (GetWereWolfMode()) {
 			//人狼モードの場合簡素なリザルト
-			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 0);
 		}
 		//通常モードの場合
 		else {
@@ -363,7 +364,7 @@ void CGameScene01::UpdateGameOver(void) {
 				CFinalResultScene::SetPlayerScore(nScore, nIdx);
 			}
 			//最終リザルトに遷移
-			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 30);
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 0);
 		}
 	}
 }

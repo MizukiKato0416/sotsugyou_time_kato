@@ -134,7 +134,7 @@ void CPauseMenu::Update(void) {
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
 				//現在のシーンをリロード
-				pFade->SetFade(CScene::GetSceneType(), 0.02f, 60);
+				pFade->SetFade(CScene::GetSceneType(), 0.02f, 0);
 				//サウンドを再生
 				pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
 				break;
@@ -144,7 +144,7 @@ void CPauseMenu::Update(void) {
 				//ゲームシーンのポーズメニューを破棄する
 				pGameScene->DeletePauseMenu();
 				//ゲーム選択シーン遷移
-				pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME , 0.02f, 60);
+				pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME , 0.02f, 0);
 				//サウンドを再生
 				pSound->PlaySound(CSound::SOUND_LABEL::SE_CANCEL);
 				break;

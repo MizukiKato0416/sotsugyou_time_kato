@@ -120,8 +120,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	//------------------------------
 	//ロード
 	//------------------------------
-	//テクスチャのロード
-	CTexture::Load();
 	//モデルのロード
 	CModel::Load();
 

@@ -85,6 +85,9 @@ CFinalResultScene::~CFinalResultScene()
 // 最終結果シーンの初期化処理
 //=============================================================================
 void CFinalResultScene::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("f_result");
+
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
@@ -693,7 +696,7 @@ void CFinalResultScene::PhaseFinish() {
 		if (m_nFadeTime < 0)
 		{
 			//シーン遷移開始			
-			pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 60);
+			pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 0);
 			//pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 60);
 		}
 		else

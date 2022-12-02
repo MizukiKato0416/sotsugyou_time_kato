@@ -204,7 +204,7 @@ public:
 	CTexture();		//デフォルトコンストラクタ
 	~CTexture();	//デストラクタ
 
-	static HRESULT Load(void);	//テクスチャデータの読み込み
+	static HRESULT Load(const char* sLoadType);	//テクスチャデータの読み込み
 	static void Unload(void);	//テクスチャデータの解放
 	static LPDIRECT3DTEXTURE9 GetTexture(TEXTURE_TYPE type);	//テクスチャの取得
 	static char* GetPathName(TEXTURE_TYPE type);				//テクスチャのパスの文字列の取得

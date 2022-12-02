@@ -81,6 +81,8 @@ CSelectGameScene::~CSelectGameScene()
 // ゲーム選択シーンの初期化処理
 //=============================================================================
 void CSelectGameScene::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("select");
 
 	//変数初期化
 	memset(m_fAlowUiMove, 0, sizeof(m_fAlowUiMove[SELECT_GAME_SCENE_ALOW_UI_NUM]));
