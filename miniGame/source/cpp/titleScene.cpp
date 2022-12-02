@@ -35,7 +35,7 @@
 #define CLOUD_POS					(D3DXVECTOR3(0.0f, -5.0f, 2000.0f))			//â_ÇÃà íu
 #define CLOUD_RADIUS				(5000.0f)									//â_ÇÃîºåa
 #define CLOUD_MESH_NUM				(12)										//ÉÅÉbÉVÉÖÇï~Ç´ãlÇﬂÇÈêî
-#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.35f, 0.0f))			//â_ÇÃâÒì]ó 
+#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.0015f, 0.0f))			//â_ÇÃâÒì]ó 
 #define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//â_ÇÃêF
 
 #define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//ÉtÉHÉOÇÃêF
@@ -200,12 +200,12 @@ void CTitleScene::Init(void) {
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//çªãuê∂ê¨
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//ÉTÉ{ÉeÉìê∂ê¨
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_00, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_00, D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_01, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_02, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
