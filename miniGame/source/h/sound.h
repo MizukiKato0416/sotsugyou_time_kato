@@ -26,6 +26,8 @@ public:
 
 		SE_POINT_1,				//1ポイント獲得SE
 		SE_POINT_3,				//3ポイント獲得SE
+		SE_POINT_MINUS,			//ポイント失点SE
+		SE_POINT_STEAL,			//ポイント奪取
 		SE_BALLOON_BREAK,		//風船が割れるSE
 		SE_ITEM_GET,			//アイテム取得SE
 		SE_TIME_UP,				//タイムアップSE
@@ -48,6 +50,7 @@ public:
 		SE_TITLE_CHAR_CREATE,	//タイトルの文字生成SE
 		SE_TITLE_LOGO_CREATE,	//タイトルロゴの生成SE
 		SE_TITLE_CAR,			//タイトルの車通過SE
+		SE_ENGINE,				//車のエンジンSE
 
 		ENUM_MAX
 	};
