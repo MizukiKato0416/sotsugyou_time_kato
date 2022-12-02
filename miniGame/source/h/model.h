@@ -136,7 +136,7 @@ private:
 	static ModelData m_aModelData[(int)MODELTYPE::ENUM_MAX];	//全モデルの情報
 	static char m_asFilePath[(int)MODELTYPE::ENUM_MAX][MAX_MODEL_FILE_PATH];	// モデルのテキストファイルのパス
 	static D3DXMATERIAL m_aMatDefault[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL];	//モデルのマテリアルの初期値
-	static CTexture::TEXTURE_TYPE m_aTexType[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL];	//マテリアルごとのテクスチャの種類
+	static char m_aTexPath[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL][MAX_TEXTURE_FILE_PATH];	//マテリアルごとのテクスチャのパスの文字列
 
 	MODELTYPE m_modelType;	//モデルの種類
 	D3DXVECTOR3 m_pos;		//位置

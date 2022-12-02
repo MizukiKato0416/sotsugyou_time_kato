@@ -13,8 +13,8 @@
 //
 // TitleScene  : title
 // SelectGame  : select
-// Game_01     : game01
-// Game_02     : game02
+// game01     : game01
+// game02     : game02
 // ResultScene : result
 // FindWolf    : find_w
 // FinalResult : f_result
@@ -137,7 +137,7 @@ data/TEXTURE/UI/circle.png = result
 data/TEXTURE/UI/result_ui.png = result
 data/TEXTURE/UI/result_ui2.png = f_result
 
-data/TEXTURE/UI/menu_game_title_frame_ui.png
+data/TEXTURE/UI/menu_game_title_frame_ui.png	= select
 data/TEXTURE/UI/select_decision.png				= select
 data/TEXTURE/UI/select_turn_back.png			= select
 data/TEXTURE/UI/mode_normal_01.png				= select
@@ -145,7 +145,7 @@ data/TEXTURE/UI/mode_wolf_01.png				= select
 data/TEXTURE/UI/menu_none_move_ui.png			= select
 data/TEXTURE/UI/menu_none_move_ui_wolf.png		= select
 
-data/TEXTURE/UI/title_logo.png = title
+data/TEXTURE/UI/title_logo.png				= title
 data/TEXTURE/UI/title_logo_charactor_00.png = title
 data/TEXTURE/UI/title_logo_charactor_01.png = title
 data/TEXTURE/UI/title_logo_charactor_02.png = title
@@ -155,26 +155,26 @@ data/TEXTURE/UI/title_logo_explosion.png = title
 data/TEXTURE/UI/title_logo_car.png = title
 
 data/TEXTURE/MESH/floor_01.jpg			= title, game01
-data/TEXTURE/MESH/audience.png			= select
-data/TEXTURE/MESH/BalloonGold3_01.png	= game_01
-data/TEXTURE/MESH/BalloonPink1_00.png	= game_01
-data/TEXTURE/MESH/black00.png			= game_01
-data/TEXTURE/MESH/doorway.png			= game_01
-data/TEXTURE/MESH/wall.png				= game_01
-data/TEXTURE/MESH/ItemBOX.jpg			= game_01
-data/TEXTURE/MESH/gold.jpg				= game_01
+data/TEXTURE/MESH/audience.png			= game01
+data/TEXTURE/MESH/BalloonGold3_01.png	= game01
+data/TEXTURE/MESH/BalloonPink1_00.png	= select, game01
+data/TEXTURE/MESH/black00.png			= all
+data/TEXTURE/MESH/doorway.png			= game01
+data/TEXTURE/MESH/wall.png				= game01
+data/TEXTURE/MESH/ItemBOX.jpg			= game01
+data/TEXTURE/MESH/gold.jpg				= game01
 data/TEXTURE/MESH/tire.png				= all
 data/TEXTURE/MESH/wheel.png				= all
-data/TEXTURE/MESH/rubble.jpeg			= game_02
-data/TEXTURE/MESH/circle.png			= game_02
-data/TEXTURE/MESH/brick.jpg				= game_02
-data/TEXTURE/MESH/cloud.jpg				= game_02
+data/TEXTURE/MESH/rubble.jpeg			= game02
+data/TEXTURE/MESH/circle.png			= game02
+data/TEXTURE/MESH/brick.jpg				= game02
+data/TEXTURE/MESH/cloud.jpg				= game02
 data/TEXTURE/MESH/cloud_dome.jpg		= title
-data/TEXTURE/MESH/towerwall2.png		= game_02
-data/TEXTURE/MESH/towerwall.png			= game_02
-data/TEXTURE/MESH/stone_ground.png		= game_02
-data/TEXTURE/MESH/tower_object.jpg		= game_02
-data/TEXTURE/MESH/item_shield.png		= game_02
+data/TEXTURE/MESH/towerwall2.png		= game02
+data/TEXTURE/MESH/towerwall.png			= game02
+data/TEXTURE/MESH/stone_ground.png		= game02
+data/TEXTURE/MESH/tower_object.jpg		= game02
+data/TEXTURE/MESH/item_shield.png		= game02
 data/TEXTURE/MESH/floor_jinro.jpg		= find_w
 data/TEXTURE/MESH/face01.png			= find_w
 data/TEXTURE/MESH/face02.png			= find_w
@@ -184,39 +184,9 @@ data/TEXTURE/MESH/grass001.png			= title
 data/TEXTURE/MESH/wood.png				= select
 data/TEXTURE/MESH/cactus.png			= title
 data/TEXTURE/MESH/rubble2.jpg			= title
-data/TEXTURE/MESH/floor_01.jpg
-data/TEXTURE/MESH/audience.png
-data/TEXTURE/MESH/BalloonGold3_01.png
-data/TEXTURE/MESH/BalloonPink1_00.png
-data/TEXTURE/MESH/black00.png
-data/TEXTURE/MESH/doorway.png
-data/TEXTURE/MESH/wall.png
-data/TEXTURE/MESH/ItemBOX.jpg
-data/TEXTURE/MESH/gold.jpg
-data/TEXTURE/MESH/tire.png
-data/TEXTURE/MESH/wheel.png
-data/TEXTURE/MESH/rubble.jpeg
-data/TEXTURE/MESH/circle.png
-data/TEXTURE/MESH/brick.jpg
-data/TEXTURE/MESH/cloud.jpg
-data/TEXTURE/MESH/cloud_dome.jpg
-data/TEXTURE/MESH/towerwall2.png
-data/TEXTURE/MESH/towerwall.png
-data/TEXTURE/MESH/stone_ground.png
-data/TEXTURE/MESH/tower_object.jpg
-data/TEXTURE/MESH/item_shield.png
-data/TEXTURE/MESH/floor_jinro.jpg
-data/TEXTURE/MESH/face01.png
-data/TEXTURE/MESH/face02.png
-data/TEXTURE/MESH/face03.png
-data/TEXTURE/MESH/shadow.png
-data/TEXTURE/MESH/grass001.png
-data/TEXTURE/MESH/wood.png
-data/TEXTURE/MESH/cactus.png
-data/TEXTURE/MESH/rubble2.jpg
-data/TEXTURE/MESH/cactus01.png
+data/TEXTURE/MESH/cactus01.png			= title
 
-data/TEXTURE/EFFECT/sun.png				= title
+data/TEXTURE/EFFECT/sun.png = title
 
 data/TEXTURE/NUMBER/number_001.png = all
 data/TEXTURE/NUMBER/number_002.png = all

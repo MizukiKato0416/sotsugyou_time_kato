@@ -21,7 +21,7 @@
 CModel::ModelData CModel::m_aModelData[(int)MODELTYPE::ENUM_MAX] = {};
 char CModel::m_asFilePath[(int)MODELTYPE::ENUM_MAX][MAX_MODEL_FILE_PATH] = {};
 D3DXMATERIAL CModel::m_aMatDefault[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL] = {};
-CTexture::TEXTURE_TYPE CModel::m_aTexType[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL] = {};
+char CModel::m_aTexPath[(int)MODELTYPE::ENUM_MAX][MAX_MATERIAL][MAX_TEXTURE_FILE_PATH] = {};
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -83,9 +83,9 @@ CModel* CModel::Create(MODELTYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, CModel*
 HRESULT CModel::Load(void) {
 	LPDIRECT3DDEVICE9 pDevice = nullptr;	//デバイスへのポインタ
 	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();	
+	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
-	CRenderer* pRenderer = nullptr;			
+	CRenderer* pRenderer = nullptr;
 	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
 	//デバイスの取得
 	if (pRenderer != nullptr) pDevice = pRenderer->GetDevice();
@@ -101,31 +101,25 @@ HRESULT CModel::Load(void) {
 	int nIdxType = 0;	//次に読み込むモデルの種類
 
 	pFile = fopen(TEXT_FILE_NAME_MODEL, "r");
+	if (pFile == nullptr) return S_OK;
 
-	if (pFile != nullptr) {
-		while (fgets(sModelText, MAX_LOAD_TEXT, pFile) != nullptr) //一行ごとに文字列を取得
-		{
-			pModelText = strtok(sModelText, " =\t\n");	//文字列の分割（空白 タブ 改行 ＝）
-			if (pModelText != nullptr) {
-				//コメント
-				if (strstr(pModelText, "//") != nullptr) {
-					continue;
-				}
-				//ディレクトリ名のコピー
-				if (strlen(pModelText) < MAX_MODEL_FILE_PATH) {
-					strcpy(m_asFilePath[nIdxType], pModelText);
-				}
-				nIdxType++;	//インデックスを加算
-				if (nIdxType >= (int)MODELTYPE::ENUM_MAX) 	break;	//読み込むモデルの最大数を超えたら終了	
-			}
+	//一行ごとに文字列を取得
+	while (fgets(sModelText, MAX_LOAD_TEXT, pFile) != nullptr) 
+	{
+		pModelText = strtok(sModelText, " =\t\n");	//文字列の分割（空白 タブ 改行 ＝）
+		if (pModelText == nullptr) continue;
+		//コメント
+		if (strstr(pModelText, "//") != nullptr) continue;
+
+		//ディレクトリ名のコピー
+		if (strlen(pModelText) < MAX_MODEL_FILE_PATH) {
+			strcpy(m_asFilePath[nIdxType], pModelText);
 		}
-		//ファイルを閉じる
-		fclose(pFile);
+		nIdxType++;	//インデックスを加算
+		if (nIdxType >= (int)MODELTYPE::ENUM_MAX) 	break;	//読み込むモデルの最大数を超えたら終了	
 	}
-	else {
-		//ファイルの読み込み失敗時
-		return S_OK;
-	}
+	//ファイルを閉じる
+	fclose(pFile);
 
 	//-------------------------------------
 	//モデルの読み込み
@@ -163,18 +157,11 @@ HRESULT CModel::Load(void) {
 			//デフォルトのマテリアルを取得
 			m_aMatDefault[nCntModel][nCntMat] = pMat[nCntMat];
 
-			if (pMat[nCntMat].pTextureFilename == nullptr) {
-				continue;
-			}
+			//パスがない場合スキップ
+			if (pMat[nCntMat].pTextureFilename == nullptr) continue;
 
-			//テクスチャクラスのパスと比較
-			for (int nCntTex = 1; nCntTex < (int)CTexture::TEXTURE_TYPE::ENUM_MAX; nCntTex++) {
-				//文字列が一致でテクスチャの番号を決める
-				if (strcmp(pMat[nCntMat].pTextureFilename, CTexture::GetPathName((CTexture::TEXTURE_TYPE)nCntTex)) == 0) {
-					m_aTexType[nCntModel][nCntMat] = (CTexture::TEXTURE_TYPE)nCntTex;
-					break;
-				}
-			}
+			//パスのコピー
+			strcpy(m_aTexPath[nCntModel][nCntMat], pMat[nCntMat].pTextureFilename);
 		}
 	}
 
@@ -364,7 +351,7 @@ void CModel::Draw(void) {
 	if (m_aModelData[(int)m_modelType].pMesh != nullptr) {
 		for (int nCntMat = 0; nCntMat < (int)m_aModelData[(int)m_modelType].nNumMat; nCntMat++) {
 			//テクスチャの取得
-			LPDIRECT3DTEXTURE9 pTexture = CTexture::GetTexture(m_aTexType[(int)m_modelType][nCntMat]);
+			LPDIRECT3DTEXTURE9 pTexture = CTexture::GetTexture(m_aTexPath[(int)m_modelType][nCntMat]);
 			//テクスチャの設定
 			pRenderer->SetEffectTexture(pTexture);
 			//マテリアルの設定

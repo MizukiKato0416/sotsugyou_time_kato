@@ -143,6 +143,20 @@ LPDIRECT3DTEXTURE9 CTexture::GetTexture(TEXTURE_TYPE type) {
 }
 
 //=============================================================================
+// テクスチャの取得
+//=============================================================================
+LPDIRECT3DTEXTURE9 CTexture::GetTexture(char* texPath) {
+	for (int nCnt = 0; nCnt < (int)TEXTURE_TYPE::ENUM_MAX; nCnt++)
+	{
+		//テクスチャのパスと一致していた場合
+		if (strcmp(m_asFilePath[nCnt], texPath) == 0) {
+			return m_apTexture[nCnt];
+		}
+	}
+	return nullptr;
+}
+
+//=============================================================================
 // テクスチャのパスの取得
 //=============================================================================
 char* CTexture::GetPathName(TEXTURE_TYPE type) {
