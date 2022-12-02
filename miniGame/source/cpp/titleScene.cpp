@@ -35,7 +35,7 @@
 #define CLOUD_POS					(D3DXVECTOR3(0.0f, -5.0f, 2000.0f))			//雲の位置
 #define CLOUD_RADIUS				(5000.0f)									//雲の半径
 #define CLOUD_MESH_NUM				(12)										//メッシュを敷き詰める数
-#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.35f, 0.0f))			//雲の回転量
+#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.0015f, 0.0f))			//雲の回転量
 #define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
 #define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//フォグの色
