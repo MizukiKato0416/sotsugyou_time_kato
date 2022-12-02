@@ -22,6 +22,7 @@ public:
 		BGM_GAME,				//ゲームBGM
 		BGM_GAME_02,			//ゲーム02BGM
 		BGM_RESULT,				//リザルトBGM
+		BGM_FIND_WOLF,			//人狼発見BGM
 		BGM_FINAL_RESULT,		//最終リザルトBGM
 
 		SE_POINT_1,				//1ポイント獲得SE
@@ -51,6 +52,7 @@ public:
 		SE_TITLE_LOGO_CREATE,	//タイトルロゴの生成SE
 		SE_TITLE_CAR,			//タイトルの車通過SE
 		SE_ENGINE,				//車のエンジンSE
+		SE_RESULT_UI,			//結果発表UISE
 
 		ENUM_MAX
 	};
