@@ -209,6 +209,15 @@ void CTitleScene::Init(void) {
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_01, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_02, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
+	//‹ó‚Ì’¹
+	CObjectModel* pBird = CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_BIRD, D3DXVECTOR3(0.0f, 3000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	if (pBird != nullptr) {
+		pBird->SetRotSpeed(D3DXVECTOR3(0.0f, 0.03f, 0.0f));
+		CModel* pBirdModel = pBird->GetPtrModel();
+		if (pBirdModel != nullptr) {
+			pBirdModel->SetPos(D3DXVECTOR3(3000.0f, 0.0f, 0.0f));
+		}
+	}
 
 	//ƒvƒŒƒCƒ„[‚Ì¶¬
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
