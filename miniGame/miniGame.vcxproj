@@ -228,6 +228,7 @@
     <ClCompile Include="source\cpp\selectMenu.cpp" />
     <ClCompile Include="source\cpp\selectMenu2D.cpp" />
     <ClCompile Include="source\cpp\selectMenu3D.cpp" />
+    <ClCompile Include="source\cpp\skydome.cpp" />
     <ClCompile Include="source\cpp\sound.cpp" />
     <ClCompile Include="source\cpp\stage.cpp" />
     <ClCompile Include="source\cpp\terrain.cpp" />
@@ -311,6 +312,7 @@
     <ClInclude Include="source\h\selectMenu.h" />
     <ClInclude Include="source\h\selectMenu2D.h" />
     <ClInclude Include="source\h\selectMenu3D.h" />
+    <ClInclude Include="source\h\skydome.h" />
     <ClInclude Include="source\h\sound.h" />
     <ClInclude Include="source\h\Sphere.h" />
     <ClInclude Include="source\h\SphereEffect.h" />

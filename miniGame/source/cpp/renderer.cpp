@@ -44,6 +44,7 @@ CRenderer::CRenderer()
 	m_pEffect = nullptr;
 	m_colBackBuff = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_bDrawZTex = false;
+	m_bEnableFog = false;
 }
 
 //=============================================================================
@@ -510,6 +511,7 @@ void CRenderer::SetEffectPosView(D3DXVECTOR4 posV) {
 
 //シェーダのフォグの有効状態を設定
 void CRenderer::SetEffectFogEnable(bool bEnable) {
+	m_bEnableFog = bEnable;
 	if (m_pEffect != nullptr) m_pEffect->SetBool("g_bEnableFog", bEnable);
 }
 

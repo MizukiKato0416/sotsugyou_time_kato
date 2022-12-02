@@ -20,6 +20,7 @@
 #include "ToScreen.h"
 #include "next_button.h"
 #include "float_object.h"
+#include "skydome.h"
 
 //=============================================================================
 // É}ÉNÉçíËã`
@@ -134,9 +135,6 @@ void CFinalResultScene::Init(void) {
 	//------------------------------
 	//ÉÇÉfÉãÇÃê∂ê¨
 	//------------------------------
-	//âºÇÃîwåi
-	//CMeshwall::Create(D3DXVECTOR3(0.0f, -2000.0f, 1000.0f), D3DXVECTOR3(0.f, 0.f, 0.f), 1, 1, SCREEN_WIDTH * 5, SCREEN_HEIGHT * 5, CTexture::TEXTURE_TYPE::BG_TITLE);
-
 	//â_ÇÃëçêî
 	int nNumCloud = 0;
 	//â_ÇÃê∂ê¨

@@ -16,7 +16,7 @@
 #include "object2D.h"
 #include "PresetSetEffect.h"
 #include "meshwall.h"
-#include "meshdome.h"
+#include "skydome.h"
 
 #include "effect.h"
 
@@ -37,10 +37,10 @@
 #define CLOUD_POS					(D3DXVECTOR3(0.0f, -5.0f, 2000.0f))			//雲の位置
 #define CLOUD_RADIUS				(5000.0f)									//雲の半径
 #define CLOUD_MESH_NUM				(12)										//メッシュを敷き詰める数
-#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.0015f, 0.0f))			//雲の回転量
+#define CLOUD_ROTATE_SPEED			(0.0015f)									//雲の回転量
 #define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
-#define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//フォグの色
+#define TITLE_FOG_COLOR							(D3DXCOLOR(1.0f, 0.9f, 0.3f, 1.0f))			//フォグの色
 #define TITLE_BACK_BUFF							(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//バックバッファーの色
 
 #define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)			//カメラの最終的な向きX
@@ -181,22 +181,8 @@ void CTitleScene::Init(void) {
 
 	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
 
-	//雲の生成
-	CMeshdome* pCloudDome = CMeshdome::Create(CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, false,
-		CTexture::TEXTURE_TYPE::MESH_CLOUD_DOME);
-	//雲の設定
-	if (pCloudDome != nullptr)
-	{
-		pCloudDome->SetRotate(CLOUD_ROTATE_SPEED);
-		//加算合成をする
-		pCloudDome->SetAlphaBlend(true);
-		//描画順の設定
-		pCloudDome->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
-		//ライトをオフにする
-		pCloudDome->SetLight(false);
-		//色の設定
-		pCloudDome->SetColor(CLOUD_COLOR);
-	}
+	////雲の生成
+	CSkyDome::Create(CLOUD_POS, CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, CLOUD_ROTATE_SPEED);
 
 	//床の生成
 	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, TITLE_SCENE_FLOOR_POS_Z), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f),
