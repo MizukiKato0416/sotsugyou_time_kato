@@ -204,9 +204,9 @@ void CTitleScene::Init(void) {
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//»‹u¶¬
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(1000.0f, -10.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	//CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	//CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//ƒTƒ{ƒeƒ“¶¬
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_00, D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -380,7 +380,7 @@ void CTitleScene::Update(void) {
 			m_bPushKey = true;
 
 			//Œˆ’è‰¹‚ÌÄ¶
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ENGINE);
 
 			m_nFrameCounter = 0;
 		}
