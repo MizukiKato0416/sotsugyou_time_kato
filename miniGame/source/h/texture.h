@@ -171,6 +171,7 @@ public:
 		MESH_STAGE_02_GROUND,		//ステージの地面
 		MESH_STAGE_02_WALL,			//ステージの壁
 		MESH_CLOUD,					//くも
+		MESH_CLOUD_DOME,			//ドーム用のくも
 		MESH_STAGE_02_WALL_02,		//ステージの壁2
 		MESH_STAGE_02_WALL_03,		//ステージの壁3
 		MESH_STAGE_02_GROUND_STONE,	//ステージの床石畳
@@ -185,6 +186,9 @@ public:
 		MESH_WOOD,					//年輪
 		MESH_CACTUS_00,				//サボテン00
 		MESH_CACTUS_01,				//サボテン01
+
+		//エフェクト
+		EFFECT_SUN,	//太陽
 
 		//ナンバーのテクスチャ
 		NUMBER_001,

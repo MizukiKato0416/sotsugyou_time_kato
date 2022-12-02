@@ -18,6 +18,8 @@
 #include "meshwall.h"
 #include "meshdome.h"
 
+#include "effect.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -177,9 +179,11 @@ void CTitleScene::Init(void) {
 		pRenderer->SetBackBuffColor(TITLE_BACK_BUFF);
 	}	
 
+	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
+
 	//雲の生成
 	CMeshdome* pCloudDome = CMeshdome::Create(CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, false,
-		CTexture::TEXTURE_TYPE::MESH_CLOUD);
+		CTexture::TEXTURE_TYPE::MESH_CLOUD_DOME);
 	//雲の設定
 	if (pCloudDome != nullptr)
 	{
@@ -209,6 +213,15 @@ void CTitleScene::Init(void) {
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_01, D3DXVECTOR3(300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_02, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
+	//空の鳥
+	CObjectModel* pBird = CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_BIRD, D3DXVECTOR3(0.0f, 2000.0f, 500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	if (pBird != nullptr) {
+		pBird->SetRotSpeed(D3DXVECTOR3(0.0f, 0.015f, 0.0f));
+		CModel* pBirdModel = pBird->GetPtrModel();
+		if (pBirdModel != nullptr) {
+			pBirdModel->SetPos(D3DXVECTOR3(2000.0f, 0.0f, 0.0f));
+		}
+	}
 
 	//プレイヤーの生成
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)

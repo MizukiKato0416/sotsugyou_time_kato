@@ -124,8 +124,8 @@ HRESULT CEffect::Init(void) {
 		m_nPatternU = 8;
 		m_nPatternV = 1;
 		break;
-	case EFFECT_TYPE::FIRE_BOLL:
-		SetTexType(CTexture::TEXTURE_TYPE::NONE);
+	case EFFECT_TYPE::SUN:
+		SetTexType(CTexture::TEXTURE_TYPE::EFFECT_SUN);
 		m_nSpanAnim = 2;
 		m_nPatternU = 5;
 		m_nPatternV = 2;
