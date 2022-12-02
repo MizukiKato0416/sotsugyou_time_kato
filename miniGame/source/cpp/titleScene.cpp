@@ -18,6 +18,8 @@
 #include "meshwall.h"
 #include "meshdome.h"
 
+#include "effect.h"
+
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
 //=============================================================================
@@ -177,9 +179,11 @@ void CTitleScene::Init(void) {
 		pRenderer->SetBackBuffColor(TITLE_BACK_BUFF);
 	}	
 
+	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
+
 	//‰_‚Ì¶¬
 	CMeshdome* pCloudDome = CMeshdome::Create(CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, false,
-		CTexture::TEXTURE_TYPE::MESH_CLOUD);
+		CTexture::TEXTURE_TYPE::MESH_CLOUD_DOME);
 	//‰_‚ÌÝ’è
 	if (pCloudDome != nullptr)
 	{
@@ -210,12 +214,12 @@ void CTitleScene::Init(void) {
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_02, D3DXVECTOR3(-300.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//‹ó‚Ì’¹
-	CObjectModel* pBird = CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_BIRD, D3DXVECTOR3(0.0f, 3000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel* pBird = CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_BIRD, D3DXVECTOR3(0.0f, 2000.0f, 500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	if (pBird != nullptr) {
-		pBird->SetRotSpeed(D3DXVECTOR3(0.0f, 0.03f, 0.0f));
+		pBird->SetRotSpeed(D3DXVECTOR3(0.0f, 0.015f, 0.0f));
 		CModel* pBirdModel = pBird->GetPtrModel();
 		if (pBirdModel != nullptr) {
-			pBirdModel->SetPos(D3DXVECTOR3(3000.0f, 0.0f, 0.0f));
+			pBirdModel->SetPos(D3DXVECTOR3(2000.0f, 0.0f, 0.0f));
 		}
 	}
 
