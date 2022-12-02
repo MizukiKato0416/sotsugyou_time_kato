@@ -218,8 +218,8 @@ void CFinalResultScene::Init(void) {
 
 	//BGMの再生
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
 	}
 
 	m_phase = PHASE::PHASE_FIRST;	//何もしないフェーズ
@@ -384,6 +384,14 @@ void CFinalResultScene::ResultText() {
 			                              CTexture::TEXTURE_TYPE::FINAL_RESULT_UI,
 			                              FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_X, FINAL_RESULT_SCENE_RESULT_UI_INIT_SIZE_Y);
 		m_pTextResult->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+
+		CManager* pManager = CManager::GetManager();	//マネージャーの取得
+		if (pManager == nullptr) return;
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_RESULT_UI);
 	}
 
 	if (m_pTextResult == nullptr) return;

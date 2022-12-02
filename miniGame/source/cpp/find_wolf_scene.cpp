@@ -273,8 +273,8 @@ void CFindWolfScene::Init(void) {
 	//BGMの再生
 	//------------------------------
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FIND_WOLF);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FIND_WOLF);
 	}
 
 #ifdef _DEBUG
@@ -617,7 +617,7 @@ void CFindWolfScene::Tutorial3()
 		}
 
 		//音を止める
-		if (pSound != nullptr) pSound->StopSound(CSound::SOUND_LABEL::BGM_GAME);
+		if (pSound != nullptr) pSound->StopSound(CSound::SOUND_LABEL::BGM_FIND_WOLF);
 		//音を再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL);
 
@@ -731,8 +731,8 @@ void CFindWolfScene::Answer()
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_PLAYER_OK);
 
 		if (pSound != nullptr) {
-			pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
-			pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+			pSound->PlaySound(CSound::SOUND_LABEL::BGM_FIND_WOLF);
+			pSound->SetBGM(CSound::SOUND_LABEL::BGM_FIND_WOLF);
 		}
 
 		//次のフェーズにする

@@ -129,7 +129,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	CSphere::CreateTextureSphere();
 
 	//ÉVÅ[ÉìÇÃê∂ê¨
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::TITLE);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::FINAL_RESULT);
 
 	return S_OK;
 }

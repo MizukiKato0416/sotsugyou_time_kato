@@ -614,7 +614,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    data/TEXTURE/MESH/floor_01.jpg";
+    "data/TEXTURE/MESH/floor_01.jpg";
    }
   }
  }

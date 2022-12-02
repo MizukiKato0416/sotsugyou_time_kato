@@ -186,6 +186,7 @@ public:
 		MESH_WOOD,					//年輪
 		MESH_CACTUS_00,				//サボテン00
 		MESH_CACTUS_01,				//サボテン01
+		MESH_CACTUS_02,				//サボテン02
 
 		//エフェクト
 		EFFECT_SUN,	//太陽

@@ -234,8 +234,8 @@ void CResultScene::Init(void) {
 	//BGM‚ÌÄ¶
 	//------------------------------
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_RESULT);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_RESULT);
 	}
 }
 

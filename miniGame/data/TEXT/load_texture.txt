@@ -184,6 +184,37 @@ data/TEXTURE/MESH/grass001.png			= title
 data/TEXTURE/MESH/wood.png				= select
 data/TEXTURE/MESH/cactus.png			= title
 data/TEXTURE/MESH/rubble2.jpg			= title
+data/TEXTURE/MESH/floor_01.jpg
+data/TEXTURE/MESH/audience.png
+data/TEXTURE/MESH/BalloonGold3_01.png
+data/TEXTURE/MESH/BalloonPink1_00.png
+data/TEXTURE/MESH/black00.png
+data/TEXTURE/MESH/doorway.png
+data/TEXTURE/MESH/wall.png
+data/TEXTURE/MESH/ItemBOX.jpg
+data/TEXTURE/MESH/gold.jpg
+data/TEXTURE/MESH/tire.png
+data/TEXTURE/MESH/wheel.png
+data/TEXTURE/MESH/rubble.jpeg
+data/TEXTURE/MESH/circle.png
+data/TEXTURE/MESH/brick.jpg
+data/TEXTURE/MESH/cloud.jpg
+data/TEXTURE/MESH/cloud_dome.jpg
+data/TEXTURE/MESH/towerwall2.png
+data/TEXTURE/MESH/towerwall.png
+data/TEXTURE/MESH/stone_ground.png
+data/TEXTURE/MESH/tower_object.jpg
+data/TEXTURE/MESH/item_shield.png
+data/TEXTURE/MESH/floor_jinro.jpg
+data/TEXTURE/MESH/face01.png
+data/TEXTURE/MESH/face02.png
+data/TEXTURE/MESH/face03.png
+data/TEXTURE/MESH/shadow.png
+data/TEXTURE/MESH/grass001.png
+data/TEXTURE/MESH/wood.png
+data/TEXTURE/MESH/cactus.png
+data/TEXTURE/MESH/rubble2.jpg
+data/TEXTURE/MESH/cactus01.png
 
 data/TEXTURE/EFFECT/sun.png				= title
 
