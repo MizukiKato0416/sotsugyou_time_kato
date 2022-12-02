@@ -66,8 +66,9 @@ public:
 	void SetEffectLightMatrixProj(D3DXMATRIX mtxProj);	//シェーダのライトのプロジェクションマトリックスを設定
 	void SetEffectPosView(D3DXVECTOR4 posV);			//シェーダの視点を設定
 
-	void SetEffectFogEnable(bool bEnable);				//シェーダのフォグの有効状態を設定
-	void SetEffectFogColor(D3DXCOLOR colFog);			//シェーダのフォグのカラーを設定
+	void SetEffectFogEnable(bool bEnable);					//シェーダのフォグの有効状態を設定
+	bool GetEffectFogEnable(void) { return m_bEnableFog; }	//シェーダのフォグの有効状態を取得
+	void SetEffectFogColor(D3DXCOLOR colFog);				//シェーダのフォグのカラーを設定
 	void SetEffectFogRange(float fFogStart, float fFogEnd);	//シェーダのフォグの範囲を設定
 
 	void SetEffectMaterialDiffuse(D3DXCOLOR matDiffuse);	//シェーダのマテリアルのディフューズ色を設定
@@ -96,6 +97,8 @@ private:
 	LPDIRECT3DTEXTURE9 m_pTexZBuff;		//Z値のテクスチャ
 	LPDIRECT3DSURFACE9 m_pZTexSurf;		//Zテクスチャのサーフェイス
 	LPDIRECT3DSURFACE9 m_pDepthBuff;	//深度バッファサーフェイス
+
+	bool m_bEnableFog;	//フォグの有効状態
 
 #ifdef _DEBUG
 	void DrawFPS(void);	//FPS描画処理

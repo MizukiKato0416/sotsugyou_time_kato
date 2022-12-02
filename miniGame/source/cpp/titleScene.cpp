@@ -16,7 +16,7 @@
 #include "object2D.h"
 #include "PresetSetEffect.h"
 #include "meshwall.h"
-#include "meshdome.h"
+#include "skydome.h"
 
 #include "effect.h"
 
@@ -37,10 +37,10 @@
 #define CLOUD_POS					(D3DXVECTOR3(0.0f, -5.0f, 2000.0f))			//‰_‚ÌˆÊ’u
 #define CLOUD_RADIUS				(5000.0f)									//‰_‚Ì”¼Œa
 #define CLOUD_MESH_NUM				(12)										//ƒƒbƒVƒ…‚ð•~‚«‹l‚ß‚é”
-#define CLOUD_ROTATE_SPEED			(D3DXVECTOR3(0.0f, 0.0015f, 0.0f))			//‰_‚Ì‰ñ“]—Ê
+#define CLOUD_ROTATE_SPEED			(0.0015f)									//‰_‚Ì‰ñ“]—Ê
 #define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//‰_‚ÌF
 
-#define TITLE_FOG_COLOR							(D3DXCOLOR(0.1f, 0.0f, 0.2f, 1.0f))			//ƒtƒHƒO‚ÌF
+#define TITLE_FOG_COLOR							(D3DXCOLOR(1.0f, 0.9f, 0.3f, 1.0f))			//ƒtƒHƒO‚ÌF
 #define TITLE_BACK_BUFF							(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//ƒoƒbƒNƒoƒbƒtƒ@[‚ÌF
 
 #define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)			//ƒJƒƒ‰‚ÌÅI“I‚ÈŒü‚«X
@@ -181,22 +181,8 @@ void CTitleScene::Init(void) {
 
 	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
 
-	//‰_‚Ì¶¬
-	CMeshdome* pCloudDome = CMeshdome::Create(CLOUD_POS, D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, false,
-		CTexture::TEXTURE_TYPE::MESH_CLOUD_DOME);
-	//‰_‚ÌÝ’è
-	if (pCloudDome != nullptr)
-	{
-		pCloudDome->SetRotate(CLOUD_ROTATE_SPEED);
-		//‰ÁŽZ‡¬‚ð‚·‚é
-		pCloudDome->SetAlphaBlend(true);
-		//•`‰æ‡‚ÌÝ’è
-		pCloudDome->SetDrawPriority(CObject::DRAW_PRIORITY::CLEAR);
-		//ƒ‰ƒCƒg‚ðƒIƒt‚É‚·‚é
-		pCloudDome->SetLight(false);
-		//F‚ÌÝ’è
-		pCloudDome->SetColor(CLOUD_COLOR);
-	}
+	////‰_‚Ì¶¬
+	CSkyDome::Create(CLOUD_POS, CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, CLOUD_ROTATE_SPEED);
 
 	//°‚Ì¶¬
 	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, TITLE_SCENE_FLOOR_POS_Z), D3DXVECTOR3(D3DX_PI* 0.5f, 0.0f, 0.0f),
@@ -204,9 +190,9 @@ void CTitleScene::Init(void) {
 		              CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//»‹u¶¬
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(0.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_00, D3DXVECTOR3(1000.0f, -10.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	//CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_01, D3DXVECTOR3(-1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	//CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_DUNE_02, D3DXVECTOR3(1000.0f, -100.0f, 3000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//ƒTƒ{ƒeƒ“¶¬
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_TITLE_CACTUS_00, D3DXVECTOR3(0.0f, 0.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -380,7 +366,7 @@ void CTitleScene::Update(void) {
 			m_bPushKey = true;
 
 			//Œˆ’è‰¹‚ÌÄ¶
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DECIDE);
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ENGINE);
 
 			m_nFrameCounter = 0;
 		}

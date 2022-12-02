@@ -256,6 +256,9 @@
     <ClCompile Include="source\cpp\meshdome.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\skydome.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -511,6 +514,9 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\meshdome.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\skydome.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>
