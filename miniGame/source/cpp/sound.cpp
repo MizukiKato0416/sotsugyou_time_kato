@@ -214,7 +214,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.5f * 1.0f);		//タイトルの文字生成SE
 	ControllVoice(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.2f * 1.0f);		//タイトルロゴの生成SE
 	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.0f * 1.0f);		//タイトルの車SE
-	ControllVoice(SOUND_LABEL::SE_ENGINE			, 1.0f * 1.0f);		//車のエンジンSE
+	ControllVoice(SOUND_LABEL::SE_ENGINE			, 2.0f * 1.0f);		//車のエンジンSE
 
 	return S_OK;
 }

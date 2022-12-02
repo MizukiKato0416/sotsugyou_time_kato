@@ -168,6 +168,7 @@ data/TEXTURE/MESH/grass001.png
 data/TEXTURE/MESH/wood.png
 data/TEXTURE/MESH/cactus.png
 data/TEXTURE/MESH/rubble2.jpg
+data/TEXTURE/MESH/cactus01.png
 
 data/TEXTURE/EFFECT/sun.png
 
