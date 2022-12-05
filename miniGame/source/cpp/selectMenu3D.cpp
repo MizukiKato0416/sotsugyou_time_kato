@@ -101,7 +101,13 @@ void CSelectMenu3D::Uninit(void) {
 		pObjModel->Uninit();
 		pObjModel = nullptr;
 	}
-
+	//UI‰e‚Ì”jŠü
+	for (auto& pObjShadow : m_vpPlaneShadow)
+	{
+		if (pObjShadow == nullptr) continue;
+		pObjShadow->Uninit();
+		pObjShadow = nullptr;
+	}
 
 	CSelectMenu::Uninit();
 }
