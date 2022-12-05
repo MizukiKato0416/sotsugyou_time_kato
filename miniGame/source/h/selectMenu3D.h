@@ -26,9 +26,9 @@ class CSelectMenu3D : public CSelectMenu
 public:
 
 	CSelectMenu3D();		//デフォルトコンストラクタ
-	CSelectMenu3D(int nNumSelect, D3DXVECTOR3 posCenter, float fRadiusModel, CModel::MODELTYPE typeModel, float fDistCamera, float fHeightCamera, bool bUseBG);	//オーバーロードされたコンストラクタ
+	CSelectMenu3D(int nNumSelect, D3DXVECTOR3 posCenter, float fRadiusModel, bool bUseBG);	//オーバーロードされたコンストラクタ
 	virtual ~CSelectMenu3D();		//デストラクタ
-	static CSelectMenu3D* Create(int nNumSelect, D3DXVECTOR3 posCenter, float fRadius, CModel::MODELTYPE typeModel, float fDistCamera, float fHeightCamera, bool bUseBG);	//生成処理
+	static CSelectMenu3D* Create(int nNumSelect, D3DXVECTOR3 posCenter, float fRadius, CModel::MODELTYPE typeModel, float fDistCamera, float fHeightCamera, bool bUseBG, bool bUseShadow);	//生成処理
 	virtual HRESULT Init(void);	//初期化処理
 	virtual void Uninit(void);	//終了処理
 	virtual void Update(void);	//更新処理
@@ -37,7 +37,7 @@ public:
 	virtual void BeginChangeSelect(bool bChangePlus);	//選択の変更が開始されたときの処理
 	virtual void EndChangeSelect(void) {}	//選択の変更が終了したときの処理
 
-	CObjectModelUI* GetModelUI(int nIdx);	//UIモデルオブジェクトのポインタを取得
+	CObjectModelUI* GetModelUI(unsigned int nIdx);	//UIモデルオブジェクトのポインタを取得
 	void SetSpeedRotModel(float fSpeed) { m_fSpeedRotModel = fSpeed; }	//モデル移動時の回転速度の設定
 	float GetSpeedRotModel(void) { return m_fSpeedRotModel; }			//モデル移動時の回転速度の取得
 	void SetCountRotate(int nCnt) { m_nCntRotate = nCnt; }		//回転するカウントの設定
@@ -56,13 +56,16 @@ private:
 	void CreateModelUI(void);	//モデルの生成
 	void RotateMenu(void);		//メニューを回転
 	void RouletteMenu(void);	//ルーレットでメニューを回転
-	void MoveModel(void);	//モデル移動
+	void MoveModel(void);		//モデル移動
+	void MoveShadow(void);		//影移動
 
 	const D3DXVECTOR3 m_posCenter;	//メニューの中央の位置
-	const float m_fRadiusModel;	//オブジェクトを配置する半径
+	const float m_fRadiusModel;		//オブジェクトを配置する半径
 
-	CObjectModelUI** m_ppObjModelUIArray;	//UIモデルオブジェクトの配列のダブルポインタ
-	CModel::MODELTYPE m_typeModel;	//生成するモデルの種類
+	std::vector<CObjectModelUI*> m_vpObjModelUI;	//UIモデルオブジェクトのポインタのベクター配列
+	CModel::MODELTYPE m_typeModel;					//生成するモデルの種類（全てのモデルはこれが初期のタイプ）
+	bool m_bUsePlaneShadow;							//影の使用
+	std::vector<CObjectModelUI*> m_vpPlaneShadow;	//UIモデルの影のポインタのベクター配列
 
 	int m_nSpanRotate;		//回転のスパン
 	int m_nCntRotate;		//回転するカウント
@@ -70,12 +73,12 @@ private:
 	float m_fRotModelDest;	//モデルの目標角度
 	float m_fSpeedRotModel;	//モデル移動時の回転速度
 
-	bool m_bRoulette;	//ルーレットの回転
-	int m_nCntRoulette;	//ルーレット回転するカウント
+	bool m_bRoulette;			//ルーレットの回転
+	int m_nCntRoulette;			//ルーレット回転するカウント
 	float m_fRouletteSpeedRate;	//ルーレットの速度の乗算される値
 
 	float m_fDistCamera;	//メニュー用のカメラの距離
-	float m_fRotCamera;	//メニュー用のカメラのY角度
+	float m_fRotCamera;		//メニュー用のカメラのY角度
 	float m_fHeightCamera;	//メニュー用のカメラの位置の高さ
 };
 

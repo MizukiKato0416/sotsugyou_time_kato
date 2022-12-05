@@ -142,9 +142,6 @@ void CSelectGameScene::Init(void) {
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_MENU);
 	}
 
-	//選択メニューの生成
-	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false);
-
 	//ステージの生成
 	CObjectModelUI *pModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_MENU_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	if (pModel != nullptr)
@@ -156,6 +153,9 @@ void CSelectGameScene::Init(void) {
 	//背景
 	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
 		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	//選択メニューの生成
+	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
 
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
@@ -187,6 +187,7 @@ void CSelectGameScene::Init(void) {
 			pModel->SetModelType(typeModelGame[nIdxModel]);
 
 			const D3DXCOLOR colSpecular = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);	//スペキュラーの色
+			//マテリアルの設定
 			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
 			{
 				pModel->SetMaterialSpecular(colSpecular, nCnt);
