@@ -4,6 +4,7 @@
 // Author : 鶴間俊樹
 //
 //=============================================================================
+#include <thread>
 #include "manager.h"
 #include "input.h"
 #include "camera.h"
@@ -28,6 +29,10 @@
 // 静的メンバ変数宣言
 //=============================================================================
 CManager* CManager::m_pManager = nullptr;
+//CObject2D* CManager::m_pLoadingUi = nullptr;
+//int CManager::m_nUiFrameCounter = 0;
+//int CManager::m_nUiAnimCounter = 0;
+//bool CManager::m_bLoading = false;
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -42,6 +47,9 @@ CManager::CManager() {
 	m_pSound = nullptr;
 	m_pFade = nullptr;
 	m_pScene = nullptr;
+	/*m_pLoadingUi = nullptr;
+	m_nUiFrameCounter = 0;
+	m_nUiAnimCounter = 0;*/
 }
 
 //=============================================================================
@@ -50,6 +58,56 @@ CManager::CManager() {
 CManager::~CManager() {
 
 }
+//
+////=============================================================================
+////ローディング画面の処理
+////=============================================================================
+//void CManager::LoadingPolygon()
+//{
+//	//生成
+//	if (m_pLoadingUi == nullptr)
+//	{
+//		m_pLoadingUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+//			                             CTexture::TEXTURE_TYPE::NOW_LOADING, 500.0f, 100.0f);
+//		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
+//	}
+//
+//	while (m_bLoading)
+//	{
+//		//フレームをカウント
+//		m_nUiFrameCounter++;
+//		if (m_nUiFrameCounter > 30)
+//		{
+//			m_nUiFrameCounter = 0;
+//			//アニメーションを進める
+//			m_nUiAnimCounter++;
+//			//最後まで行ったら最初に戻す
+//			if (m_nUiAnimCounter >= 4) m_nUiAnimCounter = 0;
+//
+//			m_pLoadingUi->SetTexAnim(0, 4, 1);
+//		}
+//	}
+//
+//	//消す
+//	if (m_pLoadingUi != nullptr)
+//	{
+//		m_pLoadingUi->Uninit();
+//		m_pLoadingUi = nullptr;
+//	}
+//}
+//
+////=============================================================================
+////ロード設定処理
+////=============================================================================
+//void CManager::SetLoad(const bool bLoad)
+//{
+//	m_bLoading = bLoad;
+//	if (!m_bLoading) return;
+//
+//	//スレッド分けする
+//	std::thread thread(LoadingPolygon);
+//	thread.detach();
+//}
 
 //=============================================================================
 // マネージャーの生成
@@ -80,6 +138,12 @@ CManager* CManager::GetManager(void) {
 // 初期化処理
 //=============================================================================
 HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
+
+	//変数初期化
+	/*m_nUiFrameCounter = 0;
+	m_nUiAnimCounter = 0;	
+	m_bLoading = false;*/
+
 	//乱数の種の初期化
 	srand((unsigned)time(nullptr));
 
@@ -117,6 +181,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	if (m_pFade == nullptr) m_pFade = new CFade;
 	if (m_pFade != nullptr) m_pFade->Init();
 
+	//ロード状態にする
+	//SetLoad(true);
+
 	//------------------------------
 	//ロード
 	//------------------------------
@@ -130,6 +197,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 
 	//シーンの生成
 	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::TITLE);
+
+	//ロード状態でなくする
+	//SetLoad(false);
 
 	return S_OK;
 }

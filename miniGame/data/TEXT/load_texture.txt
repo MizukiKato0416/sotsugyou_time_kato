@@ -154,6 +154,8 @@ data/TEXTURE/UI/title_logo_the_final.png = title
 data/TEXTURE/UI/title_logo_explosion.png = title
 data/TEXTURE/UI/title_logo_car.png = title
 
+data/TEXTURE/UI/now_loading.png = all
+
 data/TEXTURE/MESH/floor_01.jpg			= title, game01
 data/TEXTURE/MESH/audience.png			= game01
 data/TEXTURE/MESH/BalloonGold3_01.png	= game01

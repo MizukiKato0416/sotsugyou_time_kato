@@ -82,6 +82,7 @@ private:
 
 	std::vector<CFloatObject*> m_pBalloon;	//風船のポインタ
 	float m_fBalloonCreateCounter;			//風船の生成間隔用
+	int m_nCrownEffectCounter;				//王冠エフェクト生成カウンター
 };
 
 #endif // !_FINAL_RESULT_SCENE_H_

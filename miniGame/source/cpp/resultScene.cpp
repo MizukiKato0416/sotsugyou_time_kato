@@ -237,6 +237,7 @@ void CResultScene::Init(void) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_RESULT);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_RESULT);
 	}
+
 }
 
 //=============================================================================

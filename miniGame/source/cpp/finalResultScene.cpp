@@ -21,6 +21,7 @@
 #include "next_button.h"
 #include "float_object.h"
 #include "skydome.h"
+#include "PresetSetEffect.h"
 
 //=============================================================================
 // マクロ定義
@@ -54,10 +55,15 @@
 #define FINAL_RESULT_SCENE_BALLOON_CREATE_NUM			(3)									//風船の1回での生成量
 #define FINAL_RESULT_SCENE_BALLOON_UNINIT_POS_Y			(2000.0f)							//風船の消す位置
 
+#define FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Y		(70.0f)				//王冠エフェクトの位置Y
+#define FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Z		(50.0f)				//王冠エフェクトの位置Z
+#define FINAL_RESULT_SCENE_CROWN_EFFECT_COUNTER		(5)					//王冠エフェクトの生成間隔
+
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 70, 30, 20, 10 };
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 10, 10, 10, 10 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -71,6 +77,7 @@ CFinalResultScene::CFinalResultScene()
 	m_fMoveSpeedCloud.clear();
 	m_pCloud.clear();
 	m_pBalloon.clear();
+	m_nCrownEffectCounter = 0;
 }
 
 //=============================================================================
@@ -85,6 +92,11 @@ CFinalResultScene::~CFinalResultScene()
 // 最終結果シーンの初期化処理
 //=============================================================================
 void CFinalResultScene::Init(void) {
+
+	//変数初期化
+	m_nCrownEffectCounter = 0;
+
+
 	//テクスチャのロード
 	CTexture::Load("f_result");
 
@@ -622,6 +634,7 @@ void CFinalResultScene::CloudMove()
 //=============================================================================
 void CFinalResultScene::Winner() {
 	m_nCntPhase++;
+	m_nCrownEffectCounter++;
 
 	const int nTimeCreateCrown = 180;
 	const float fposCrownFirst = 500.0f;	//王冠の初期位置（プレイヤーの位置からの差分）
@@ -667,6 +680,16 @@ void CFinalResultScene::Winner() {
 			posCrown.y -= (fposCrownFirst - fposCrownDest) / nTimeFallCrown;
 			//位置の設定
 			pCrown->SetPos(posCrown);
+
+			if (m_nCrownEffectCounter % FINAL_RESULT_SCENE_CROWN_EFFECT_COUNTER == 0)
+			{
+				//調整
+				posCrown.y += FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Y;
+				posCrown.z -= FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Z;
+
+				//キラキラエフェクト
+				CPresetEffect::SetEffect3D(25, posCrown, {}, {});
+			}
 		}
 	}
 
@@ -676,6 +699,7 @@ void CFinalResultScene::Winner() {
 		m_phase = PHASE::PHASE_FINISH;
 		//カウントリセット
 		m_nCntPhase = 0;
+		m_nCrownEffectCounter = 0;
 
 		//次へボタンの生成
 		CNextButton::Create(FINAL_RESULT_SCENE_NEXT_BUTTON_POS, FINAL_RESULT_SCENE_NEXT_BUTTON_SIZE,
@@ -693,6 +717,26 @@ void CFinalResultScene::PhaseFinish() {
 	CInput* pInput = pManager->GetInputCur();	//入力デバイスへのポインタ
 	CFade* pFade = pManager->GetFade();			//フェードへのポインタ
 	CSound* pSound = pManager->GetSound();		//サウンドへのポインタ
+
+	m_nCrownEffectCounter++;
+
+	if (m_nCrownEffectCounter > FINAL_RESULT_SCENE_CROWN_EFFECT_COUNTER)
+	{
+		int  nNumCrown = m_vObjCrown.size();
+		for (int nCntCrown = 0; nCntCrown < nNumCrown; nCntCrown++)
+		{
+			if (m_vObjCrown[nCntCrown] == nullptr) continue;
+			D3DXVECTOR3 posCrown = m_vObjCrown[nCntCrown]->GetPos();
+
+			//調整
+			posCrown.y += FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Y;
+			posCrown.z -= FINAL_RESULT_SCENE_CROWN_EFFECT_POS_Z;
+			//キラキラエフェクト
+			CPresetEffect::SetEffect3D(25, posCrown, {}, {});
+		}
+		m_nCrownEffectCounter = 0;
+	}
+	
 
 	//nullの場合終了
 	if (pFade == nullptr) return;
@@ -759,7 +803,7 @@ void CFinalResultScene::CreateBalloon()
 		float fMoveSpeed = FINAL_RESULT_SCENE_BALLOON_MOVE_SPEED;
 
 		//モデルの種類
-		int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_02) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
+		int nModelNum = static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_03) + 1 - static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
 
 		//モデルをランダムで設定
 		int nModel = (rand() % nModelNum) + static_cast<int>(CModel::MODELTYPE::OBJ_RESULT_BALLOON_00);
