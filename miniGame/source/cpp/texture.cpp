@@ -52,34 +52,37 @@ HRESULT CTexture::Load(const char* sLoadType) {
 	memset(&bLoadTexture, 0, sizeof(bLoadTexture));	//falseで初期化
 
 	//ファイルを開く
-	pFile = fopen(TEXT_FILE_NAME_TEXTURE, "r");
+	fopen_s(&pFile, TEXT_FILE_NAME_TEXTURE, "r");
 	if (pFile == nullptr) return S_OK;	//ロード終了
 
 	for (int nIdxType = 1; //次に読み込むテクスチャの種類	0にNONEがあるため1から
 		fgets(sLoadText, MAX_LOAD_TEXT, pFile) != nullptr && nIdxType < (int)TEXTURE_TYPE::ENUM_MAX;) //一行ごとに文字列を取得
 	{
-		pLoadText = strtok(sLoadText, " \t\n");	//文字列の分割（空白 タブ 改行）
+		strtok_s(sLoadText, " \t\n", &pLoadText);	//文字列の分割（空白 タブ 改行）
 		//テキストがない
 		if (pLoadText == nullptr) continue;
 		//コメント
 		if (strstr(pLoadText, "//") != nullptr) continue;
 
 		//ディレクトリ名のコピー
-		if (strlen(pLoadText) < MAX_TEXTURE_FILE_PATH) {
-			strcpy(m_asFilePath[nIdxType], pLoadText);
-		}
+		/*if (strlen(pLoadText) < MAX_TEXTURE_FILE_PATH) {
+		strcpy_s(m_asFilePath[nIdxType], pLoadText);
+		}*/
+		strcpy_s(m_asFilePath[nIdxType], pLoadText);
+
 
 		//文字列の分割（空白 タブ 改行 = ,）
-		pLoadText = strtok(nullptr, " ,=\t\n");
+		strtok_s(nullptr, " ,=\t\n", &pLoadText);
 
-		while (pLoadText != nullptr)
+		//while (pLoadText != nullptr)
+		while (strcmp(pLoadText, "\0") != 0)
 		{
 			//読み込みのタイプと一致していた場合終了
 			bLoadTexture[nIdxType] = strcmp(pLoadText, sLoadType) == 0 || strcmp(pLoadText, "all") == 0;
 			if (bLoadTexture[nIdxType]) break;
 
 			//文字列の分割（空白 タブ 改行 = ,）
-			pLoadText = strtok(nullptr, " ,=\t\n");
+			strtok_s(nullptr, " ,=\t\n", &pLoadText);
 		}
 
 		//読み込むインデックスの加算
