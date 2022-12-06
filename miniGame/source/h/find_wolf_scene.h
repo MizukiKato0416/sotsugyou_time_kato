@@ -31,9 +31,10 @@ class CFindWolfScene : public CScene
 public:
 	CFindWolfScene();	        //デフォルトコンストラクタ
 	virtual ~CFindWolfScene();	//デストラクタ
-	void Init(void);	    //初期化処理
-	void Uninit(void);	    //終了処理
-	void Update(void);	    //更新処理
+	void Init(void);			//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
+	void Uninit(void);			//終了処理
+	void Update(void);			//更新処理
 
 private:
 	//フェーズ

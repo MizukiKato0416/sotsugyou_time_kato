@@ -147,6 +147,25 @@ void CFinalResultScene::Init(void) {
 	//------------------------------
 
 
+	
+
+	//BGMの再生
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
+	}
+
+	m_phase = PHASE::PHASE_FIRST;	//何もしないフェーズ
+
+	//オブジェクトのポーズが無いように設定
+	CObject::SetUpdatePauseLevel(0);
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CFinalResultScene::CreateObject(void)
+{
 	//------------------------------
 	//モデルの生成
 	//------------------------------
@@ -227,17 +246,6 @@ void CFinalResultScene::Init(void) {
 		pModelPlayer->SetMaterialPower(2.0f, 0);
 	}
 
-
-	//BGMの再生
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FINAL_RESULT);
-	}
-
-	m_phase = PHASE::PHASE_FIRST;	//何もしないフェーズ
-
-	//オブジェクトのポーズが無いように設定
-	CObject::SetUpdatePauseLevel(0);
 }
 
 //=============================================================================
@@ -263,6 +271,11 @@ void CFinalResultScene::Uninit(void) {
 // 最終結果シーンの更新処理
 //=============================================================================
 void CFinalResultScene::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
 
 	//雲の移動処理
 	CloudMove();

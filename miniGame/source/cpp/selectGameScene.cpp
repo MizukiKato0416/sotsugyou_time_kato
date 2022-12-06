@@ -130,17 +130,26 @@ void CSelectGameScene::Init(void) {
 		pRenderer->SetEffectFogEnable(false);
 	}
 
-	//------------------------------
-	//UIの生成
-	//------------------------------
-	// 背景
-	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
-	
 	//BGMの再生
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_MENU);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_MENU);
 	}
+
+	//オブジェクトのポーズが無いように設定
+	CObject::SetUpdatePauseLevel(0);
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CSelectGameScene::CreateObject(void)
+{
+	//------------------------------
+	//UIの生成
+	//------------------------------
+	// 背景
+	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//ステージの生成
 	CObjectModelUI *pModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_MENU_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -152,7 +161,7 @@ void CSelectGameScene::Init(void) {
 
 	//背景
 	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
-		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
+		SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//選択メニューの生成
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
@@ -160,7 +169,7 @@ void CSelectGameScene::Init(void) {
 	if (m_pMenuGame != nullptr) {
 		//ゲームごとのモデルの配列
 		const CModel::MODELTYPE typeModelGame[MENU_SELECT_NUM] =
-		{	
+		{
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
 			CModel::MODELTYPE::OBJ_HATENA,
@@ -187,7 +196,7 @@ void CSelectGameScene::Init(void) {
 			pModel->SetModelType(typeModelGame[nIdxModel]);
 
 			const D3DXCOLOR colSpecular = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);	//スペキュラーの色
-			//マテリアルの設定
+																				//マテリアルの設定
 			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
 			{
 				pModel->SetMaterialSpecular(colSpecular, nCnt);
@@ -198,19 +207,16 @@ void CSelectGameScene::Init(void) {
 
 	//ゲーム名の生成
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, MENU_ALOW_UI_INIT_POS_Y, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON,
-		                            MENU_GAME_TITLE_UI_SIZE_X, MENU_GAME_TITLE_UI_SIZE_Y);
+		MENU_GAME_TITLE_UI_SIZE_X, MENU_GAME_TITLE_UI_SIZE_Y);
 	//矢印UIの生成
 	m_pAlowUi[0] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
-		                             CTexture::TEXTURE_TYPE::ARROW_LEFT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
+		CTexture::TEXTURE_TYPE::ARROW_LEFT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
 	m_pAlowUi[1] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
-		                             CTexture::TEXTURE_TYPE::ARROW_RIGHT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
+		CTexture::TEXTURE_TYPE::ARROW_RIGHT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
 
 	//モードUIの生成
 	m_pModeUi = CObject2D::Create(D3DXVECTOR3(MENU_GAME_MODE_UI_SIZE_X / 2.0f, MENU_GAME_MODE_UI_SIZE_Y / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
-
-	//オブジェクトのポーズが無いように設定
-	CObject::SetUpdatePauseLevel(0);
+		CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
 }
 
 //=============================================================================
@@ -236,6 +242,11 @@ void CSelectGameScene::Uninit(void) {
 // ゲーム選択シーンの更新処理
 //=============================================================================
 void CSelectGameScene::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
 
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CFade* pFade = nullptr;		//フェードへのポインタ

@@ -86,17 +86,6 @@ void CGameScene::Init(void) {
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
-	
-	if (m_bWereWolfMode)
-	{
-		//人狼決定
-		m_pWolfDecide = CWolfDecide::Create();
-	}
-	else
-	{
-		//チェックアイコンの生成
-		m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
-	}
 
 #ifdef _DEBUG
 	//Zバッファテクスチャの表示
@@ -208,4 +197,21 @@ void CGameScene::GameOver(void) {
 
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
+}
+
+//=============================================================================
+// アイコン生成処理
+//=============================================================================
+void CGameScene::CreateIcon(void)
+{
+	if (m_bWereWolfMode)
+	{
+		//人狼決定
+		m_pWolfDecide = CWolfDecide::Create();
+	}
+	else
+	{
+		//チェックアイコンの生成
+		m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
+	}
 }

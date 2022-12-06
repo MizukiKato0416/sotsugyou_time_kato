@@ -29,10 +29,6 @@
 // 静的メンバ変数宣言
 //=============================================================================
 CManager* CManager::m_pManager = nullptr;
-//CObject2D* CManager::m_pLoadingUi = nullptr;
-//int CManager::m_nUiFrameCounter = 0;
-//int CManager::m_nUiAnimCounter = 0;
-//bool CManager::m_bLoading = false;
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -47,9 +43,9 @@ CManager::CManager() {
 	m_pSound = nullptr;
 	m_pFade = nullptr;
 	m_pScene = nullptr;
-	/*m_pLoadingUi = nullptr;
+	m_pLoadingUi = nullptr;
 	m_nUiFrameCounter = 0;
-	m_nUiAnimCounter = 0;*/
+	m_nUiAnimCounter = 0;
 }
 
 //=============================================================================
@@ -58,44 +54,46 @@ CManager::CManager() {
 CManager::~CManager() {
 
 }
-//
-////=============================================================================
-////ローディング画面の処理
-////=============================================================================
-//void CManager::LoadingPolygon()
-//{
-//	//生成
-//	if (m_pLoadingUi == nullptr)
-//	{
-//		m_pLoadingUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
-//			                             CTexture::TEXTURE_TYPE::NOW_LOADING, 500.0f, 100.0f);
-//		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
-//	}
-//
-//	while (m_bLoading)
-//	{
-//		//フレームをカウント
-//		m_nUiFrameCounter++;
-//		if (m_nUiFrameCounter > 30)
-//		{
-//			m_nUiFrameCounter = 0;
-//			//アニメーションを進める
-//			m_nUiAnimCounter++;
-//			//最後まで行ったら最初に戻す
-//			if (m_nUiAnimCounter >= 4) m_nUiAnimCounter = 0;
-//
-//			m_pLoadingUi->SetTexAnim(0, 4, 1);
-//		}
-//	}
-//
-//	//消す
-//	if (m_pLoadingUi != nullptr)
-//	{
-//		m_pLoadingUi->Uninit();
-//		m_pLoadingUi = nullptr;
-//	}
-//}
-//
+
+//=============================================================================
+//ローディング画面の処理
+//=============================================================================
+void CManager::LoadingPolygon()
+{
+	//ロード終わったら
+	if (CTexture::GetLoadFinish())
+	{
+		//消す
+		if (m_pLoadingUi != nullptr)
+		{
+			m_pLoadingUi->Uninit();
+			m_pLoadingUi = nullptr;
+		}
+		return;
+	}
+
+	//生成
+	if (m_pLoadingUi == nullptr)
+	{
+		m_pLoadingUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+			                             CTexture::TEXTURE_TYPE::NOW_LOADING, 500.0f, 100.0f);
+		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
+	}
+
+	//フレームをカウント
+	m_nUiFrameCounter++;
+	if (m_nUiFrameCounter > 30)
+	{
+		m_nUiFrameCounter = 0;
+		//アニメーションを進める
+		m_nUiAnimCounter++;
+		//最後まで行ったら最初に戻す
+		if (m_nUiAnimCounter >= 4) m_nUiAnimCounter = 0;
+
+		m_pLoadingUi->SetTexAnim(0, 4, 1);
+	}
+}
+
 ////=============================================================================
 ////ロード設定処理
 ////=============================================================================
@@ -299,6 +297,9 @@ void CManager::Update(void) {
 		m_pRenderer->Update();
 	}
 
+	//ローディング画面の処理
+	LoadingPolygon();
+
 	//シーンの更新処理
 	if (m_pScene != nullptr) m_pScene->Update();
 
@@ -307,6 +308,12 @@ void CManager::Update(void) {
 
 	//カメラの更新
 	if (m_pCamera != nullptr) m_pCamera->Update();
+
+	//ロードが終了したら
+	if (CTexture::GetLoadFinish())
+	{
+		
+	}
 }
 
 //=============================================================================

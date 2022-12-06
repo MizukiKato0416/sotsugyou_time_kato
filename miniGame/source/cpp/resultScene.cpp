@@ -126,6 +126,23 @@ void CResultScene::Init(void) {
 		pRenderer->SetEffectFogEnable(false);
 	}
 
+	
+
+	//------------------------------
+	//BGMの再生
+	//------------------------------
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_RESULT);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_RESULT);
+	}
+
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CResultScene::CreateObject(void)
+{
 	//------------------------------
 	//オブジェクトの初期設定
 	//------------------------------
@@ -229,15 +246,6 @@ void CResultScene::Init(void) {
 	//結果発表UIの生成
 	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, RESULT_SCENE_RESULT_UI_POS_Y, 0.0f), CTexture::TEXTURE_TYPE::RESULT_UI,
 		              RESULT_SCENE_RESULT_UI_SIZE_X, RESULT_SCENE_RESULT_UI_SIZE_Y);
-
-	//------------------------------
-	//BGMの再生
-	//------------------------------
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_RESULT);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_RESULT);
-	}
-
 }
 
 //=============================================================================
@@ -263,6 +271,11 @@ void CResultScene::Uninit(void) {
 // 更新処理
 //=============================================================================
 void CResultScene::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
 
 	//フレームカウント処理
 	FrameCounter();
