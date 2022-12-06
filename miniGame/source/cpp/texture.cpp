@@ -58,7 +58,9 @@ HRESULT CTexture::Load(const char* sLoadType) {
 	for (int nIdxType = 1; //次に読み込むテクスチャの種類	0にNONEがあるため1から
 		fgets(sLoadText, MAX_LOAD_TEXT, pFile) != nullptr && nIdxType < (int)TEXTURE_TYPE::ENUM_MAX;) //一行ごとに文字列を取得
 	{
-		strtok_s(sLoadText, " \t\n", &pLoadText);	//文字列の分割（空白 タブ 改行）
+		char *pText = nullptr;
+
+		pLoadText = strtok_s(sLoadText, " \t\n", &pText);	//文字列の分割（空白 タブ 改行）
 		//テキストがない
 		if (pLoadText == nullptr) continue;
 		//コメント
@@ -72,7 +74,7 @@ HRESULT CTexture::Load(const char* sLoadType) {
 
 
 		//文字列の分割（空白 タブ 改行 = ,）
-		strtok_s(nullptr, " ,=\t\n", &pLoadText);
+		pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 
 		//while (pLoadText != nullptr)
 		while (strcmp(pLoadText, "\0") != 0)
