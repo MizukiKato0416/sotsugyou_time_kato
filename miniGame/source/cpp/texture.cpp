@@ -40,17 +40,6 @@ CTexture::~CTexture()
 // テクスチャのロード
 //=============================================================================
 HRESULT CTexture::Load(const char* sLoadType) {
-	LPDIRECT3DDEVICE9 pDevice = nullptr;	//デバイスへのポインタ
-	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();
-	//レンダラーの取得
-	CRenderer* pRenderer = nullptr;
-	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
-	//デバイスの取得
-	if (pRenderer != nullptr) pDevice = pRenderer->GetDevice();
-	//デバイスがnullの場合終了
-	if (pDevice == nullptr) return S_OK;
-
 	//-------------------------------------
 	//ファイルの読み込み
 	//-------------------------------------
@@ -98,6 +87,7 @@ HRESULT CTexture::Load(const char* sLoadType) {
 	//ファイルを閉じる
 	fclose(pFile);
 
+
 	//0にNONEがあるため1から
 	for (int nCnt = 1; nCnt < (int)TEXTURE_TYPE::ENUM_MAX; nCnt++)
 	{
@@ -111,12 +101,29 @@ HRESULT CTexture::Load(const char* sLoadType) {
 		if (!bLoadTexture[nCnt]) continue;
 
 		//テクスチャの生成
-		D3DXCreateTextureFromFile(pDevice,
-			m_asFilePath[nCnt],	// テクスチャパス
-			&m_apTexture[nCnt]);
+		CreateTexture(nCnt);
 	}
 
 	return S_OK;
+}
+
+//=============================================================================
+// テクスチャの生成
+//=============================================================================
+void CTexture::CreateTexture(int nIdx) {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	if (pManager == nullptr) return;
+	//レンダラーの取得
+	CRenderer* pRenderer = pManager->GetRenderer();
+	if (pRenderer == nullptr) return;
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	if (pDevice == nullptr) return;
+
+	D3DXCreateTextureFromFile(pDevice,
+		m_asFilePath[nIdx],	// テクスチャパス
+		&m_apTexture[nIdx]);
 }
 
 //=============================================================================
