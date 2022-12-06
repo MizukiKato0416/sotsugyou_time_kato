@@ -76,15 +76,15 @@ HRESULT CTexture::Load(const char* sLoadType) {
 		//文字列の分割（空白 タブ 改行 = ,）
 		pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 
-		//while (pLoadText != nullptr)
-		while (strcmp(pLoadText, "\0") != 0)
+		while (pLoadText != nullptr)
+		//while (strcmp(pLoadText, "\0") != 0)	strtok_sを正しく使えていなかったので勘違いかも
 		{
 			//読み込みのタイプと一致していた場合終了
 			bLoadTexture[nIdxType] = strcmp(pLoadText, sLoadType) == 0 || strcmp(pLoadText, "all") == 0;
 			if (bLoadTexture[nIdxType]) break;
 
 			//文字列の分割（空白 タブ 改行 = ,）
-			strtok_s(nullptr, " ,=\t\n", &pLoadText);
+			pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 		}
 
 		//読み込むインデックスの加算
