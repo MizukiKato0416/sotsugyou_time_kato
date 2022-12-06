@@ -119,6 +119,8 @@ CFindWolfScene::~CFindWolfScene()
 // 初期化処理
 //=============================================================================
 void CFindWolfScene::Init(void) {
+	//テクスチャのロード
+	CTexture::Load("find_w");
 
 	//変数初期化
 	m_phase = PHASE::TUTORIAL_1;

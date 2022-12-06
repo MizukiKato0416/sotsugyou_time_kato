@@ -196,7 +196,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	CSphere::CreateTextureSphere();
 
 	//シーンの生成
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::FIND_WOLF);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::SELECT_GAME);
 
 	//ロード状態でなくする
 	//SetLoad(false);
