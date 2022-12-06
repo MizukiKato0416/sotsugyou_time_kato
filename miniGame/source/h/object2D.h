@@ -51,6 +51,9 @@ public:
 
 	void SetUseZBuffTexture(bool bUse) { m_bUseZBuffTexture = bUse; }
 
+	//テクスチャアニメーション設定処理
+	void SetTexAnim(const int &nPattern, const int &nMaxPatternX, const int &nMaxPatternY);
+
 private:
 	void SetVtxPos(void);	//各頂点の位置を更新
 

@@ -155,6 +155,9 @@ public:
 		TITLE_LOGO_EXPLOSION,
 		TITLE_LOGO_CAR,
 
+		NOW_LOADING,
+
+
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,			//砂漠
 		MESH_STAGE_AUDIENCE,		//観衆
@@ -212,6 +215,8 @@ public:
 	static char* GetPathName(TEXTURE_TYPE type);				//テクスチャのパスの文字列の取得
 
 private:
+	static HRESULT LoadTex(const char* sLoadType);	//テクスチャデータの読み込み
+
 	static LPDIRECT3DTEXTURE9 m_apTexture[(int)TEXTURE_TYPE::ENUM_MAX];	//テクスチャへのポインタ
 	static char m_asFilePath[(int)TEXTURE_TYPE::ENUM_MAX][MAX_TEXTURE_FILE_PATH];	// ファイルのパス
 

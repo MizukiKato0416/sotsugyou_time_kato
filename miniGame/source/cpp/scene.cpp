@@ -77,7 +77,6 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	//êVÇµÇ¢ÉVÅ[ÉìÇÃê∂ê¨
 	m_typeScene = typeScene;
-
 	switch (typeScene)
 	{
 	case CScene::SCENE_TYPE::TITLE:

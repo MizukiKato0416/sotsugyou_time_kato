@@ -121,6 +121,7 @@ CTitleScene::~CTitleScene()
 // タイトルシーンの初期化処理
 //=============================================================================
 void CTitleScene::Init(void) {
+
 	//テクスチャのロード
 	CTexture::Load("title");
 

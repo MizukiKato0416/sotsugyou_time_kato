@@ -464,3 +464,21 @@ D3DXVECTOR2 CObject2D::GetUV(const int nCntVtx)
 
 	return vtxUV;
 }
+
+//================================================
+//テクスチャ設定処理
+//================================================
+void CObject2D::SetTexAnim(const int &nPattern, const int &nMaxPatternX, const int &nMaxPatternY)
+{
+	VERTEX_2D *pVtx;	// 頂点情報
+	//頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx[0].tex = D3DXVECTOR2((1.0f / nMaxPatternX) * nPattern,        (1.0f / nMaxPatternY) * (nPattern %  nMaxPatternX));
+	pVtx[1].tex = D3DXVECTOR2((1.0f / nMaxPatternX) * (nPattern + 1),  (1.0f / nMaxPatternY) * (nPattern %  nMaxPatternX));
+	pVtx[2].tex = D3DXVECTOR2((1.0f / nMaxPatternX) * nPattern,        (1.0f / nMaxPatternY) * ((nPattern % nMaxPatternX) + 1));
+	pVtx[3].tex = D3DXVECTOR2((1.0f / nMaxPatternX) * (nPattern + 1),  (1.0f / nMaxPatternY) * ((nPattern % nMaxPatternX) + 1));
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
