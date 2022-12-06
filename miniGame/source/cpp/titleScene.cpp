@@ -40,8 +40,10 @@
 #define CLOUD_ROTATE_SPEED			(0.0015f)									//雲の回転量
 #define CLOUD_COLOR					(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))			//雲の色
 
-#define TITLE_FOG_COLOR							(D3DXCOLOR(1.0f, 0.9f, 0.3f, 1.0f))			//フォグの色
-#define TITLE_BACK_BUFF							(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//バックバッファーの色
+#define TITLE_FOG_COLOR				(D3DXCOLOR(1.0f, 0.9f, 0.3f, 1.0f))			//フォグの色
+#define TITLE_FOG_DIST_MIN			(200.0f)									//フォグの距離の最小
+#define TITLE_FOG_DIST_MAX			(18000.0f)									//フォグの距離の最大
+#define TITLE_BACK_BUFF				(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f))			//バックバッファーの色
 
 #define TITLE_SCENE_END_CAMERA_ROT_X			(10.0f)			//カメラの最終的な向きX
 #define TITLE_SCENE_END_CAMERA_POS_Z			(-550.0f)		//カメラの最終的な位置Z
@@ -177,7 +179,7 @@ void CTitleScene::Init(void) {
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(true);
 		pRenderer->SetEffectFogColor(TITLE_FOG_COLOR);
-		pRenderer->SetEffectFogRange(200.0f, 12000.0f);
+		pRenderer->SetEffectFogRange(TITLE_FOG_DIST_MIN, TITLE_FOG_DIST_MAX);
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(TITLE_BACK_BUFF);
 	}	
