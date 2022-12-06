@@ -64,7 +64,7 @@ HRESULT CTexture::Load(const char* sLoadType) {
 		//コメント
 		if (strstr(pLoadText, "//") != nullptr) continue;
 
-		//ディレクトリ名のコピー
+		//ディレクトリ名のコピー 安全なためおそらく必要ないif
 		/*if (strlen(pLoadText) < MAX_TEXTURE_FILE_PATH) {
 		strcpy_s(m_asFilePath[nIdxType], pLoadText);
 		}*/
