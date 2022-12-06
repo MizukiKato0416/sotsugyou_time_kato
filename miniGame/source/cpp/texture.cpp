@@ -74,7 +74,7 @@ HRESULT CTexture::Load(const char* sLoadType) {
 
 
 		//文字列の分割（空白 タブ 改行 = ,）
-		pLoadText = strtok_s(sLoadText, " ,=\t\n", &pText);
+		pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 
 		//while (pLoadText != nullptr)
 		while (strcmp(pLoadText, "\0") != 0)
