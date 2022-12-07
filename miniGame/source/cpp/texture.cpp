@@ -190,7 +190,12 @@ HRESULT CTexture::Load(const char* sLoadType) {
 
 	//ƒXƒŒƒbƒh•ª‚¯‚·‚é
 	std::thread thread(LoadTex, sLoadType);
+
+#ifdef _DEBUG
+	thread.join();
+#else
 	thread.detach();
+#endif // !_DEBUG
 
 	return S_OK;
 }

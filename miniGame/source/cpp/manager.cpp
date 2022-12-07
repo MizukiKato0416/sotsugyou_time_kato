@@ -13,7 +13,7 @@
 #include "fade.h"
 #include "scene.h"
 #include "object.h"
-#include "object2D.h"
+#include "loading_ui.h"
 #include "object3D.h"
 #include "texture.h"
 #include "model.h"
@@ -24,6 +24,14 @@
 #include "LoadEffect.h"
 #include "plane.h"
 #include "Sphere.h"
+
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define MANAGER_LOADING_UI_SIZE_X		(1872.0f / 4.0f * 1.0f)								//サイズX
+#define MANAGER_LOADING_UI_SIZE_Y		(81.0f			* 1.0f)								//サイズY
+#define MANAGER_LOADING_UI_POS_X		(SCREEN_WIDTH - MANAGER_LOADING_UI_SIZE_X / 2.0f)	//位置X
+#define MANAGER_LOADING_UI_POS_Y		(SCREEN_HEIGHT - MANAGER_LOADING_UI_SIZE_Y / 2.0f)	//位置Y
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -44,8 +52,6 @@ CManager::CManager() {
 	m_pFade = nullptr;
 	m_pScene = nullptr;
 	m_pLoadingUi = nullptr;
-	m_nUiFrameCounter = 0;
-	m_nUiAnimCounter = 0;
 }
 
 //=============================================================================
@@ -60,38 +66,24 @@ CManager::~CManager() {
 //=============================================================================
 void CManager::LoadingPolygon()
 {
-	//ロード終わったら
+	//ロードでないなら
 	if (CTexture::GetLoadFinish())
 	{
-		//消す
 		if (m_pLoadingUi != nullptr)
 		{
+			//消す
 			m_pLoadingUi->Uninit();
 			m_pLoadingUi = nullptr;
 		}
 		return;
 	}
 
-	//生成
+	//ロード中なら
 	if (m_pLoadingUi == nullptr)
 	{
-		m_pLoadingUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
-			                             CTexture::TEXTURE_TYPE::NOW_LOADING, 500.0f, 100.0f);
-		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
-		m_pLoadingUi->SetDrawPriority(CObject::DRAW_PRIORITY::LOADING);
-	}
-
-	//フレームをカウント
-	m_nUiFrameCounter++;
-	if (m_nUiFrameCounter > 30)
-	{
-		m_nUiFrameCounter = 0;
-		//アニメーションを進める
-		m_nUiAnimCounter++;
-		//最後まで行ったら最初に戻す
-		if (m_nUiAnimCounter >= 4) m_nUiAnimCounter = 0;
-
-		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
+		//ロードを生成
+		m_pLoadingUi = CLoadingUi::Create(D3DXVECTOR3(MANAGER_LOADING_UI_POS_X, MANAGER_LOADING_UI_POS_Y, 0.0f), 
+			                              D3DXVECTOR3(MANAGER_LOADING_UI_SIZE_X, MANAGER_LOADING_UI_SIZE_Y, 0.0f));
 	}
 }
 
@@ -124,14 +116,11 @@ CManager* CManager::GetManager(void) {
 // 初期化処理
 //=============================================================================
 HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
-
-	//変数初期化
-	/*m_nUiFrameCounter = 0;
-	m_nUiAnimCounter = 0;	
-	m_bLoading = false;*/
-
 	//乱数の種の初期化
 	srand((unsigned)time(nullptr));
+
+	//変数初期化
+	m_pLoadingUi = nullptr;
 
 	//------------------------------
 	//インスタンス生成

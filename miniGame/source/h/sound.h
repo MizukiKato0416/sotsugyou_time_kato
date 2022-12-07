@@ -34,6 +34,7 @@ public:
 		SE_TIME_UP,				//タイムアップSE
 		SE_PLAYER_SPIN,			//スピンSE
 		SE_BANANA_THROW,		//バナナを投げるSE
+		SE_USE_POINT_STEAL,		//ポイント奪取使用SE
 		SE_COUNT_DOWN,			//カウントダウンSE
 		SE_START,				//スタートSE
 		SE_PLAYER_OK,			//プレイヤーOKSE
@@ -53,6 +54,7 @@ public:
 		SE_TITLE_CAR,			//タイトルの車通過SE
 		SE_ENGINE,				//車のエンジンSE
 		SE_RESULT_UI,			//結果発表UISE
+		SE_CROWN,				//王冠SE
 
 		ENUM_MAX
 	};

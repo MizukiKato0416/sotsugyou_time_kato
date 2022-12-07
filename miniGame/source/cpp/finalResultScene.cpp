@@ -718,6 +718,14 @@ void CFinalResultScene::Winner() {
 		CNextButton::Create(FINAL_RESULT_SCENE_NEXT_BUTTON_POS, FINAL_RESULT_SCENE_NEXT_BUTTON_SIZE,
 		                    CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FINAL_RESULT_SCENE_NEXT_BUTTON_COUNTER,
 		                    FINAL_RESULT_SCENE_NEXT_BUTTON_DEC_ALPHA);
+
+		//マネージャーの取得
+		CManager* pManager = CManager::GetManager();
+		//サウンドの取得
+		CSound* pSound = nullptr;
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CROWN);
 	}
 }
 

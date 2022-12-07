@@ -159,6 +159,11 @@ void CCheck::Check()
 	if (!m_bCheckAll)
 	{
 		int nCheck = 0;
+		int nNumPlayer = m_nNumPlayer;
+#ifdef _DEBUG
+		nNumPlayer = 1;
+#endif // !_DEBUG
+
 		for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
 		{
 			//アイコンが生成されていなかったら
@@ -175,7 +180,7 @@ void CCheck::Check()
 		}
 
 		//チェック数がプレイヤーの数と一致していたら
-		if (nCheck == 1)
+		if (nCheck == nNumPlayer)
 		{
 			//全員がチェック出来た状態にする
 			m_bCheckAll = true;

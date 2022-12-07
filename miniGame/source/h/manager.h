@@ -27,7 +27,7 @@ class CSound;
 class CFade;
 class CScene;
 class CGameScene;
-class CObject2D;
+class CLoadingUi;
 
 //*****************************************************************************
 // マネージャークラス
@@ -76,9 +76,7 @@ private:
 	CFade* m_pFade;			//フェードのポインタ
 	CScene* m_pScene;		//シーンへのポインタ
 
-	CObject2D *m_pLoadingUi;	//ローディングUI
-	int m_nUiFrameCounter;		//UIのフレームカウンタ
-	int m_nUiAnimCounter;		//UIのアニメーションカウンタ
+	CLoadingUi *m_pLoadingUi;	//ローディングUI
 };
 
 #endif // !_MANAGER_H_
