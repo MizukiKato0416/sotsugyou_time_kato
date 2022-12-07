@@ -55,7 +55,7 @@ void CScene::Uninit(void) {
 	//オブジェクトの破棄
 	CObject::ReleaseAll();
 	//テクスチャのアンロード
-	CTexture::Unload();
+	CTexture::Unload(false);
 }
 
 //=============================================================================

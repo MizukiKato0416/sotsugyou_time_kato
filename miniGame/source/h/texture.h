@@ -209,7 +209,8 @@ public:
 	~CTexture();	//デストラクタ
 
 	static HRESULT Load(const char* sLoadType);	//テクスチャデータの読み込み
-	static void Unload(void);	//テクスチャデータの解放
+	static HRESULT AllSceneTextureLoad();	//全シーンで使うテクスチャデータの読み込み
+	static void Unload(bool bAllUnload);	//テクスチャデータの解放(引数trueなら全てのテクスチャ破棄falseならALLテクスチャ以外破棄)
 	static LPDIRECT3DTEXTURE9 GetTexture(TEXTURE_TYPE type);	//テクスチャの取得
 	static LPDIRECT3DTEXTURE9 GetTexture(char* texPath);		//テクスチャの取得
 	static char* GetPathName(TEXTURE_TYPE type);				//テクスチャのパスの文字列の取得
@@ -222,6 +223,7 @@ private:
 
 	static LPDIRECT3DTEXTURE9 m_apTexture[(int)TEXTURE_TYPE::ENUM_MAX];	//テクスチャへのポインタ
 	static char m_asFilePath[(int)TEXTURE_TYPE::ENUM_MAX][MAX_TEXTURE_FILE_PATH];	// ファイルのパス
+	static bool m_bAllSceneTex[(int)TEXTURE_TYPE::ENUM_MAX];	//前部のシーンで使うテクスチャかどうか
 
 	static void CreateTexture(int nIdx);	//テクスチャの生成
 

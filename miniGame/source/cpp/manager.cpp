@@ -179,8 +179,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	if (m_pFade == nullptr) m_pFade = new CFade;
 	if (m_pFade != nullptr) m_pFade->Init();
 
-	//ロード状態にする
-	//SetLoad(true);
+	//テクスチャのロード
+	CTexture::AllSceneTextureLoad();
 
 	//------------------------------
 	//ロード
@@ -195,9 +195,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 
 	//シーンの生成
 	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::SELECT_GAME);
-
-	//ロード状態でなくする
-	//SetLoad(false);
 
 	return S_OK;
 }
@@ -240,7 +237,7 @@ void CManager::Uninit(void) {
 	//モデルのアンロード
 	CModel::Unload();
 	//テクスチャのアンロード
-	CTexture::Unload();
+	CTexture::Unload(true);
 	//レンダラーの破棄
 	if (m_pRenderer != nullptr) {
 		m_pRenderer->Uninit();
@@ -303,17 +300,15 @@ void CManager::Update(void) {
 	//シーンの更新処理
 	if (m_pScene != nullptr) m_pScene->Update();
 
-	//フェードの更新処理
-	if (m_pFade != nullptr) m_pFade->Update();
-
-	//カメラの更新
-	if (m_pCamera != nullptr) m_pCamera->Update();
-
 	//ロードが終了したら
 	if (CTexture::GetLoadFinish())
 	{
-		
+		//フェードの更新処理
+		if (m_pFade != nullptr) m_pFade->Update();
 	}
+
+	//カメラの更新
+	if (m_pCamera != nullptr) m_pCamera->Update();
 }
 
 //=============================================================================
