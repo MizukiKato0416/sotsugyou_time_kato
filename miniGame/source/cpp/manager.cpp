@@ -78,6 +78,7 @@ void CManager::LoadingPolygon()
 		m_pLoadingUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 			                             CTexture::TEXTURE_TYPE::NOW_LOADING, 500.0f, 100.0f);
 		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
+		m_pLoadingUi->SetDrawPriority(CObject::DRAW_PRIORITY::LOADING);
 	}
 
 	//フレームをカウント
@@ -90,22 +91,9 @@ void CManager::LoadingPolygon()
 		//最後まで行ったら最初に戻す
 		if (m_nUiAnimCounter >= 4) m_nUiAnimCounter = 0;
 
-		m_pLoadingUi->SetTexAnim(0, 4, 1);
+		m_pLoadingUi->SetTexAnim(m_nUiAnimCounter, 4, 1);
 	}
 }
-
-////=============================================================================
-////ロード設定処理
-////=============================================================================
-//void CManager::SetLoad(const bool bLoad)
-//{
-//	m_bLoading = bLoad;
-//	if (!m_bLoading) return;
-//
-//	//スレッド分けする
-//	std::thread thread(LoadingPolygon);
-//	thread.detach();
-//}
 
 //=============================================================================
 // マネージャーの生成
@@ -194,7 +182,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	CSphere::CreateTextureSphere();
 
 	//シーンの生成
-	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::SELECT_GAME);
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::TITLE);
 
 	return S_OK;
 }

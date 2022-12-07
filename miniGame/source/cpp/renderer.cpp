@@ -379,6 +379,9 @@ void CRenderer::Draw(void) {
 		//フェードの描画
 		if (pFade != nullptr) pFade->Draw();
 
+		//ローディングの描画処理
+		CObject::DrawLoading();
+
 #ifdef _DEBUG
 		// FPS表示
 		DrawFPS();
