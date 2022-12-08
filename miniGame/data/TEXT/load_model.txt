@@ -8,6 +8,9 @@
 // enumÇ∆ìØÇ∂èáÇ…
 
 data/MODEL/OBJECT/car.x	
+data/MODEL/OBJECT/car_01.x	
+data/MODEL/OBJECT/car_02.x	
+data/MODEL/OBJECT/car_03.x	
 data/MODEL/OBJECT/stage.x	
 data/MODEL/OBJECT/balloon_pink.x	
 data/MODEL/OBJECT/balloon_gold.x	
@@ -51,14 +54,4 @@ data/MODEL/OBJECT/cactus_00.x
 data/MODEL/OBJECT/cactus_01.x	
 data/MODEL/OBJECT/cactus_02.x	
 data/MODEL/OBJECT/tree_00.x	
-
-data/MODEL/PLAYER/00_body.x	
-data/MODEL/PLAYER/01_armR.x	
-data/MODEL/PLAYER/02_handR.x
-data/MODEL/PLAYER/03_armL.x	
-data/MODEL/PLAYER/04_handL.x
-data/MODEL/PLAYER/05_legR.x	
-data/MODEL/PLAYER/06_footR.x
-data/MODEL/PLAYER/07_legL.x	
-data/MODEL/PLAYER/08_footL.x
 
