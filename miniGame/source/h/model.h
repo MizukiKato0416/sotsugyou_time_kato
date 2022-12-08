@@ -26,6 +26,9 @@ public:
 	enum class MODELTYPE{
 		//オブジェクト
 		OBJ_CAR = 0,					//車
+		OBJ_CAR_01,						//車01
+		OBJ_CAR_02,						//車01
+		OBJ_CAR_03,						//車01
 		OBJ_STADIUM,					//スタジアム
 		OBJ_BALLOON_PINK,				//風船(ピンク)
 		OBJ_BALLOON_GOLD,				//風船(ゴールド)
@@ -69,9 +72,6 @@ public:
 		OBJ_TITLE_CACTUS_01,			//サボテン01
 		OBJ_TITLE_CACTUS_02,			//サボテン02
 		OBJ_TITLE_TREE_00,				//木00
-
-		//プレイヤー
-		pl_0, pl_1, pl_2, pl_3, pl_4, pl_5, pl_6, pl_7, pl_8, 
 
 		ENUM_MAX	//最大数
 	};

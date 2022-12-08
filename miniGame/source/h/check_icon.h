@@ -18,6 +18,7 @@
 //前方宣言
 //*****************************************************************************
 class CObject2D;
+class CObjectModelUI;
 
 //*****************************************************************************
 // クラスの定義
@@ -27,7 +28,7 @@ class CCheckIcon : public CObject
 public:
 	CCheckIcon();		//デフォルトコンストラクタ
 	~CCheckIcon();		//デストラクタ
-	static CCheckIcon* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 scale, const int nPlayerNum);	//生成処理
+	static CCheckIcon* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 posModel, const D3DXVECTOR3 scale, const int nPlayerNum);	//生成処理
 	HRESULT Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
@@ -45,13 +46,23 @@ public:
 	CObject2D *GetButton(void) { return m_pButton; }
 
 private:
+	//決定処理
+	void Decide();
 	//α値減算処理
 	void DecAlpha();
+	//マテリアル設定処理
+	void SetMaterial(CObjectModelUI *pPlayerModel);
+	//モデル回転処理
+	void RotateModel();
+	//モデル選択処理
+	void SelectModel();
 
-	D3DXVECTOR3 m_pos;			//位置
-	D3DXVECTOR3 m_scale;		//スケール
-	CObject2D *m_pFrame;		//フレーム
-	CObject2D *m_pButton;		//ボタン
+	D3DXVECTOR3 m_pos;						//位置
+	D3DXVECTOR3 m_posModel;					//モデルの初期位置
+	D3DXVECTOR3 m_scale;					//スケール
+	CObject2D *m_pFrame;					//フレーム
+	CObject2D *m_pButton;					//ボタン
+	CObjectModelUI *m_pPlayerModel;			//プレイヤーのモデル
 
 	int m_nPlayerNum;			//プレイヤー番号
 	int m_nCounter;				//フレームカウント用
