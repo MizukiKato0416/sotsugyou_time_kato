@@ -27,7 +27,7 @@ class CSound;
 class CFade;
 class CScene;
 class CGameScene;
-class CObject2D;
+class CLoadingUi;
 
 //*****************************************************************************
 // マネージャークラス
@@ -56,16 +56,13 @@ public:
 	CFade* GetFade(void) { return m_pFade; }	//フェードの取得
 	CScene* GetScene(void) { return m_pScene; }	//シーンの取得
 	CGameScene* GetGameScene(void);	//ゲームシーンの取得
-	////ロード取得処理
-	//static bool GetLoad() { return m_bLoading; }
-	////ロード設定処理
-	//static void SetLoad(const bool bLoad);
+
 
 private:
 	CManager();		//デフォルトコンストラクタ
 	~CManager();	//デストラクタ
 
-	//static void LoadingPolygon();	//ローディング画面の処理
+	void LoadingPolygon();	//ローディング画面の処理
 
 	static CManager* m_pManager;	//マネージャーのインスタンス
 
@@ -79,10 +76,7 @@ private:
 	CFade* m_pFade;			//フェードのポインタ
 	CScene* m_pScene;		//シーンへのポインタ
 
-	//static CObject2D *m_pLoadingUi;		//ローディングUI
-	//static int m_nUiFrameCounter;		//UIのフレームカウンタ
-	//static int m_nUiAnimCounter;		//UIのアニメーションカウンタ
-	//static bool m_bLoading;				//ロードしているかどうか
+	CLoadingUi *m_pLoadingUi;	//ローディングUI
 };
 
 #endif // !_MANAGER_H_

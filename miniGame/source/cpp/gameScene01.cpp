@@ -149,6 +149,33 @@ void CGameScene01::Init(void) {
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 
+	
+
+	////プレイヤーのステンシルに描画されるシルエット
+	//CObject2D* pSilhouettePlayer = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//if (pSilhouettePlayer != nullptr) {
+	//	pSilhouettePlayer->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+	//	pSilhouettePlayer->SetEnableStencil(true);
+	//	pSilhouettePlayer->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
+	//}
+
+	//BGMの再生
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
+	}
+	//ゲームシーンの初期化処理
+	CGameScene::Init();
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CGameScene01::CreateObject(void)
+{
+	//アイコン生成処理
+	CreateIcon();
+
 	//床の生成
 	CMeshwall::Create(D3DXVECTOR3(0.0f, 0.0f, -1500.0f), D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f), 4, 4, 1000.0f, 1000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
@@ -189,22 +216,6 @@ void CGameScene01::Init(void) {
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
-
-	////プレイヤーのステンシルに描画されるシルエット
-	//CObject2D* pSilhouettePlayer = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//if (pSilhouettePlayer != nullptr) {
-	//	pSilhouettePlayer->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
-	//	pSilhouettePlayer->SetEnableStencil(true);
-	//	pSilhouettePlayer->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
-	//}
-
-	//BGMの再生
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME);
-	}
-	//ゲームシーンの初期化処理
-	CGameScene::Init();
 }
 
 //=============================================================================
@@ -219,6 +230,12 @@ void CGameScene01::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene01::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
+
 #ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	if (pManager == nullptr) return;

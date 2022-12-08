@@ -30,6 +30,7 @@ CScene::SCENE_TYPE CScene::m_typeScene = CScene::SCENE_TYPE::TITLE;
 CScene::CScene()
 {
 	m_pPlayer = nullptr;
+	m_bCreateObject = false;
 }
 
 //=============================================================================
@@ -44,7 +45,7 @@ CScene::~CScene()
 // シーンの初期化処理
 //=============================================================================
 void CScene::Init(void) {
-
+	m_bCreateObject = false;
 }
 
 //=============================================================================
@@ -54,7 +55,7 @@ void CScene::Uninit(void) {
 	//オブジェクトの破棄
 	CObject::ReleaseAll();
 	//テクスチャのアンロード
-	CTexture::Unload();
+	CTexture::Unload(false);
 }
 
 //=============================================================================
@@ -62,6 +63,13 @@ void CScene::Uninit(void) {
 //=============================================================================
 void CScene::Update(void) {
 
+	//ロードが終了したら
+	if (!m_bCreateObject && CTexture::GetLoadFinish())
+	{
+		//オブジェクトの生成をする
+		CreateObject();
+		m_bCreateObject = true;
+	}
 }
 
 //=============================================================================

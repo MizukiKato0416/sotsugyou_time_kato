@@ -180,6 +180,31 @@ void CFindWolfScene::Init(void) {
 		pRenderer->SetBackBuffColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 	}
 
+	
+	//------------------------------
+	//BGMの再生
+	//------------------------------
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FIND_WOLF);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FIND_WOLF);
+	}
+
+#ifdef _DEBUG
+	//Zバッファテクスチャの表示
+	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 120.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
+	if (pZBuff != nullptr) {
+		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
+		pZBuff->SetUseZBuffTexture(true);
+	}
+
+#endif
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CFindWolfScene::CreateObject(void)
+{
 	//------------------------------
 	//オブジェクトの初期設定
 	//------------------------------
@@ -271,23 +296,6 @@ void CFindWolfScene::Init(void) {
 		                               CTexture::TEXTURE_TYPE::CHECK_ICON_BUTTON_3, FIND_WOLF_SCENE_NEXT_BUTTON_COUNTER,
 		                               FIND_WOLF_SCENE_NEXT_BUTTON_DEC_ALPHA);
 
-	//------------------------------
-	//BGMの再生
-	//------------------------------
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_FIND_WOLF);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_FIND_WOLF);
-	}
-
-#ifdef _DEBUG
-	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 120.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
-	if (pZBuff != nullptr) {
-		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
-		pZBuff->SetUseZBuffTexture(true);
-	}
-
-#endif
 }
 
 //=============================================================================
@@ -314,7 +322,12 @@ void CFindWolfScene::Uninit(void) {
 // 更新処理
 //=============================================================================
 void CFindWolfScene::Update(void) {		
-	
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
+
 	//処理分け
 	switch (m_phase)
 	{

@@ -40,6 +40,7 @@ public:
 	CScene();	//デフォルトコンストラクタ
 	virtual ~CScene();	//デストラクタ
 	virtual void Init(void) = 0;	//初期化処理
+	virtual void CreateObject(void) = 0;	//オブジェクト生成処理
 	virtual void Uninit(void) = 0;	//終了処理
 	virtual void Update(void) = 0;	//更新処理
 	static void ChangeScene(CScene*& pScene, SCENE_TYPE typeScene);	//シーンの変更
@@ -51,6 +52,7 @@ public:
 private:
 	static SCENE_TYPE m_typeScene;
 	CObjectPlayer* m_pPlayer;	//プレイヤーへのポインタ
+	bool m_bCreateObject;		//オブジェクトを生成したかどうか
 
 };
 

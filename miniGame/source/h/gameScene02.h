@@ -30,12 +30,13 @@ class CMeshwall;
 class CGameScene02 : public CGameScene
 {
 public:
-	CGameScene02();	//デフォルトコンストラクタ
+	CGameScene02();				//デフォルトコンストラクタ
 	virtual ~CGameScene02();	//デストラクタ
-	void Init(void);	//初期化処理
-	void Uninit(void);	//終了処理
-	void Update(void);	//更新処理
-	void GameOver(void);	//ゲームオーバー
+	void Init(void);			//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
+	void Uninit(void);			//終了処理
+	void Update(void);			//更新処理
+	void GameOver(void);		//ゲームオーバー
 
 	//生きているプレイヤーの数設定処理
 	void SetSavePlayerNum(const int nSavePlayerNum) { m_nSavePlayerNum = nSavePlayerNum; }

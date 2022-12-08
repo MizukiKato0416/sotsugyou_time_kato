@@ -31,6 +31,7 @@ public:
 	CTitleScene();	//デフォルトコンストラクタ
 	virtual ~CTitleScene();	//デストラクタ
 	void Init(void);	//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 	bool ChangeColTime(bool bCol);	// タイトルシーンの色が変わる時間の処理

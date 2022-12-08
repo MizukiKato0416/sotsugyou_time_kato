@@ -23,6 +23,9 @@
 #define ITEM_BANANA_MOVE_SPEED			(25.0f)		//バナナの移動の速さ
 #define ITEM_BANANA_COLL_HEIGHT			(1000.0f)	//バナナの当たり判定をし始める高さ
 
+#define ITEM_BANANA_VIBRATION			(40)		//振動する時間
+
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -181,7 +184,7 @@ void CItemBanana::HitPlayer(CObjectPlayer * pPlayer)
 		if (pPadX != nullptr)
 		{
 			//振動させる
-			pPadX->SetVibration(65535, 65535, 40, pBalloonCar->GetPlayer()->GetIndex() - 1);
+			pPadX->SetVibration(65535, 65535, ITEM_BANANA_VIBRATION, pBalloonCar->GetPlayer()->GetIndex() - 1);
 		}
 
 		//ーーーーーーーーーーーーーーーーーーー

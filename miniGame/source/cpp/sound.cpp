@@ -34,6 +34,7 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/timeup.wav", 0 },
 	{ "data/SOUND/SE/slip.wav", 0 },
 	{ "data/SOUND/SE/bananathrow.wav", 0 },
+	{ "data/SOUND/SE/use_steal_point.wav", 0 },
 	{ "data/SOUND/SE/countdown.wav", 0 },
 	{ "data/SOUND/SE/start.wav", 0 },
 	{ "data/SOUND/SE/player_ok.wav", 0 },
@@ -52,7 +53,8 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/title_logo.wav", 0 },
 	{ "data/SOUND/SE/title_car.wav", 0 },
 	{ "data/SOUND/SE/game_start.wav", 0 },
-	{ "data/SOUND/SE/result_ui.wav", 0 }
+	{ "data/SOUND/SE/result_ui.wav", 0 },
+	{ "data/SOUND/SE/crown.wav", 0 }
 };
 
 //=============================================================================
@@ -198,13 +200,14 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f * SOUND_VOLUM);		//1ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f * SOUND_VOLUM);		//3ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_MINUS		, 2.4f * SOUND_VOLUM);		//ポイント失点SE
-	ControllVoice(SOUND_LABEL::SE_POINT_STEAL		, 2.4f * SOUND_VOLUM);		//ポイント奪取
+	ControllVoice(SOUND_LABEL::SE_POINT_STEAL		, 3.9f * SOUND_VOLUM);		//ポイント奪取
 	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f * SOUND_VOLUM);		//風船が割れるSE
 	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f * SOUND_VOLUM);		//アイテム取得SE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f * SOUND_VOLUM);		//タイムアップSE
 	ControllVoice(SOUND_LABEL::SE_PLAYER_SPIN		, 0.7f * SOUND_VOLUM);		//スピンSE
 	ControllVoice(SOUND_LABEL::SE_BANANA_THROW		, 1.6f * SOUND_VOLUM);		//バナナを投げるSE
-	ControllVoice(SOUND_LABEL::SE_COUNT_DOWN		, 1.2f * SOUND_VOLUM);		//バナナを投げるカウントダウンSE
+	ControllVoice(SOUND_LABEL::SE_USE_POINT_STEAL	, 1.0f * SOUND_VOLUM);		//ポイント奪取使用SE
+	ControllVoice(SOUND_LABEL::SE_COUNT_DOWN		, 1.2f * SOUND_VOLUM);		//カウントダウンSE
 	ControllVoice(SOUND_LABEL::SE_START				, 0.5f * SOUND_VOLUM);		//スタートSE
 	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 0.8f * SOUND_VOLUM);		//タイムアップSE
 	ControllVoice(SOUND_LABEL::SE_PLAYER_OK			, 1.0f * SOUND_VOLUM);		//プレイヤーOKSE
@@ -224,6 +227,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.0f * SOUND_VOLUM);		//タイトルの車SE
 	ControllVoice(SOUND_LABEL::SE_ENGINE			, 2.0f * SOUND_VOLUM);		//車のエンジンSE
 	ControllVoice(SOUND_LABEL::SE_RESULT_UI			, 5.0f * SOUND_VOLUM);		//結果発表SE
+	ControllVoice(SOUND_LABEL::SE_CROWN				, 2.0f * SOUND_VOLUM);		//王冠SE
 
 	return S_OK;
 }

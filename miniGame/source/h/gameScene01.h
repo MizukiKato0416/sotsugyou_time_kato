@@ -31,10 +31,11 @@ class CGameScene01 : public CGameScene
 public:
 	CGameScene01();	//デフォルトコンストラクタ
 	virtual ~CGameScene01();	//デストラクタ
-	void Init(void);	//初期化処理
-	void Uninit(void);	//終了処理
-	void Update(void);	//更新処理
-	void GameOver(void);	//ゲームオーバー
+	void Init(void);			//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
+	void Uninit(void);			//終了処理
+	void Update(void);			//更新処理
+	void GameOver(void);		//ゲームオーバー
 
 private:
 	void UpdateGame(void);					//ゲーム中の更新
