@@ -156,12 +156,11 @@ void CSelectGameScene::CreateObject(void)
 	if (pModel != nullptr)
 	{
 		pModel->SetViewCamera(D3DXVECTOR3(0.0f, 200.0f, 1000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 	}
 
 	//îwåi
 	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
-		SCREEN_WIDTH, SCREEN_HEIGHT);
+		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//ëIëÉÅÉjÉÖÅ[ÇÃê∂ê¨
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
