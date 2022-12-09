@@ -165,7 +165,7 @@ void CCheckIcon::Decide()
 		}
 
 		//ボタンを押したら
-		if (pInput->GetTrigger(CInput::CODE((int)CInput::CODE::CHECK_X + m_nPlayerNum - 1), m_nPlayerNum - 1))
+		if (pInput->GetTrigger(CInput::CODE::SELECT, m_nPlayerNum - 1))
 		{
 			//チェック状態にする
 			m_bCheck = true;
@@ -285,6 +285,9 @@ void CCheckIcon::RotateModel()
 //=============================================================================
 void CCheckIcon::SelectModel()
 {
+	//決定されていたら
+	if (m_bCheck) return;
+
 	if (m_pPlayerModel == nullptr) return;
 
 	//マネージャーの取得
