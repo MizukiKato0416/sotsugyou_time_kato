@@ -253,3 +253,11 @@ void CObjectPlayerIcon::StateDecAlpha(){
 		}
 	}
 }
+
+//ˆÊ’u‚ÌÝ’è
+void CObjectPlayerIcon::SetPos(D3DXVECTOR3 pos) {
+	if (m_pFrame == nullptr || m_pPlayerNum == nullptr) return;
+
+	m_pFrame->SetPos(pos);
+	m_pPlayerNum->SetPos(pos);
+}

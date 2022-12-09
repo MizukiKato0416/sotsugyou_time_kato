@@ -69,9 +69,9 @@ CCamera::~CCamera()
 //=============================================================================
 HRESULT CCamera::Init(void) {
 	//マネージャーの取得
-	CManager* pManager = CManager::GetManager();	
+	CManager* pManager = CManager::GetManager();
 	//レンダラーの取得
-	CRenderer* pRenderer = nullptr;			
+	CRenderer* pRenderer = nullptr;
 	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = nullptr;
@@ -86,6 +86,14 @@ HRESULT CCamera::Init(void) {
 	m_viewport.MaxZ = 1.0f;
 	//ビューポートの設定
 	if (pDevice != nullptr) pDevice->SetViewport(&m_viewport);
+	D3DXMATRIX mtxVP =
+	{
+		m_viewport.Width / 2.0f,					0,											0,									0,
+		0,											-(long)(m_viewport.Height) / 2.0f,			0,									0,
+		0,											0,											m_viewport.MaxZ - m_viewport.MinZ,	0,
+		m_viewport.X + m_viewport.Width / 2.0f,		m_viewport.Y + m_viewport.Height / 2.0f,	m_viewport.MinZ,					1
+	};
+	pRenderer->SetEffectMatrixViewPort(mtxVP);
 
 	//プロジェクションマトリックスを作成
 	D3DXMatrixPerspectiveFovLH(&m_mtxProjection,
@@ -122,7 +130,7 @@ void CCamera::Update(void) {
 	//Move();
 
 	//回転処理
-	if(!m_bLockControll) Rotate();
+	if (!m_bLockControll) Rotate();
 }
 
 //=============================================================================
@@ -168,7 +176,7 @@ void CCamera::Move(void) {
 	//入力処理
 	//--------------------
 	float fMoveSpeed = 5.0f;
-	
+
 
 	if (pInput->GetPress(CInput::CODE::MOVE_UP, 0)) {
 		//前移動

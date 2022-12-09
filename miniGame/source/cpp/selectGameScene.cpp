@@ -171,6 +171,7 @@ void CSelectGameScene::CreateObject(void)
 		{
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
+			CModel::MODELTYPE::OBJ_BOM,
 			CModel::MODELTYPE::OBJ_HATENA,
 		};
 

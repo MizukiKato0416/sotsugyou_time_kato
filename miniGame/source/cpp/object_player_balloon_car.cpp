@@ -304,7 +304,7 @@ float CObjectPlayerBalloonCar::GetRadius(void) {
 void CObjectPlayerBalloonCar::CreateScore()
 {
 	//スコアUIの生成 
-	m_pSocreUi = CScoreUi::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_BALLOON_CAR_NUM + 1) * GetPlayer()->GetIndex(), SCORE_UI_POS_Y, 0.0f),
+	m_pSocreUi = CScoreUi::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * GetPlayer()->GetIndex(), SCORE_UI_POS_Y, 0.0f),
 		                          D3DXVECTOR3(0.5f, 0.5f, 0.5f), GetPlayer()->GetIndex());
 }
 
@@ -313,7 +313,7 @@ void CObjectPlayerBalloonCar::CreateScore()
 //=============================================================================
 void CObjectPlayerBalloonCar::CreateItemUiFrame()
 {
-	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_BALLOON_CAR_NUM + 1) * GetPlayer()->GetIndex() - OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_X, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_Y, 0.0f),
+	CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * GetPlayer()->GetIndex() - OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_X, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_Y, 0.0f),
 		              CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + GetPlayer()->GetIndex() - 1), OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_SIZE, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_SIZE);
 }
 
@@ -855,7 +855,7 @@ void CObjectPlayerBalloonCar::ItemUi(void)
 	}
 	
 	//アイテムのUI生成
-	m_pItemUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_BALLOON_CAR_NUM + 1) * GetPlayer()->GetIndex() - OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_X, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_Y, 0.0f),
+	m_pItemUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / (MAX_OBJECT_PLAYER_NUM + 1) * GetPlayer()->GetIndex() - OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_X, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_POS_Y, 0.0f),
 		                          CTexture::TEXTURE_TYPE::NONE, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_SIZE, OBJECT_PLAYER_BALLOON_CAR_ITEM_UI_SIZE);
 
 	//テクスチャを変更
