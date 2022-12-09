@@ -30,6 +30,7 @@ public:
 		SELECT_GAME,
 		GAME_01,
 		GAME_02,
+		GAME_03,
 		GAME_MAX,	//ランダム選択のためゲームシーンの最大を設定
 		RESULT,
 		FIND_WOLF,

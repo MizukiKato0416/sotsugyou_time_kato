@@ -10,6 +10,7 @@
 #include "gameScene.h"
 #include "gameScene01.h"
 #include "gameScene02.h"
+#include "gameScene03.h"
 #include "resultScene.h"
 #include "find_wolf_scene.h"
 #include "finalResultScene.h"
@@ -93,6 +94,10 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	case CScene::SCENE_TYPE::GAME_02:
 		pScene = new CGameScene02;
+		break;
+
+	case CScene::SCENE_TYPE::GAME_03:
+		pScene = new CGameScene03;
 		break;
 
 	case CScene::SCENE_TYPE::RESULT:

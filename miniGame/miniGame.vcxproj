@@ -188,7 +188,9 @@
     <ClCompile Include="source\cpp\float_object.cpp" />
     <ClCompile Include="source\cpp\font.cpp" />
     <ClCompile Include="source\cpp\gameCamera.cpp" />
+    <ClCompile Include="source\cpp\gameCamera03.cpp" />
     <ClCompile Include="source\cpp\gameScene.cpp" />
+    <ClCompile Include="source\cpp\gameScene03.cpp" />
     <ClCompile Include="source\cpp\gameScene01.cpp" />
     <ClCompile Include="source\cpp\gameScene02.cpp" />
     <ClCompile Include="source\cpp\gauge.cpp" />
@@ -215,6 +217,7 @@
     <ClCompile Include="source\cpp\objectMotion.cpp" />
     <ClCompile Include="source\cpp\object_player_attack_car.cpp" />
     <ClCompile Include="source\cpp\object_player_balloon_car.cpp" />
+    <ClCompile Include="source\cpp\objplayer_stop.cpp" />
     <ClCompile Include="source\cpp\pauseMenu.cpp" />
     <ClCompile Include="source\cpp\object_player.cpp" />
     <ClCompile Include="source\cpp\player.cpp" />
@@ -266,9 +269,11 @@
     <ClInclude Include="source\h\font.h" />
     <ClInclude Include="source\h\Fountain.h" />
     <ClInclude Include="source\h\gameCamera.h" />
+    <ClInclude Include="source\h\gameCamera03.h" />
     <ClInclude Include="source\h\gameScene.h" />
     <ClInclude Include="source\h\gameScene01.h" />
     <ClInclude Include="source\h\gameScene02.h" />
+    <ClInclude Include="source\h\gameScene03.h" />
     <ClInclude Include="source\h\gauge.h" />
     <ClInclude Include="source\h\gauge2D.h" />
     <ClInclude Include="source\h\gauge3D.h" />
@@ -294,6 +299,7 @@
     <ClInclude Include="source\h\objectMotion.h" />
     <ClInclude Include="source\h\object_player_attack_car.h" />
     <ClInclude Include="source\h\object_player_balloon_car.h" />
+    <ClInclude Include="source\h\objplayer_stop.h" />
     <ClInclude Include="source\h\pauseMenu.h" />
     <ClInclude Include="source\h\plane.h" />
     <ClInclude Include="source\h\object_player.h" />
