@@ -20,6 +20,7 @@
 //*****************************************************************************
 class CTimer;
 class CObject2D;
+class CObjectPlayer;
 class CPauseMenu;
 class CCheck;
 class CWolfDecide;
@@ -57,6 +58,9 @@ public:
 	//ランキング取得処理(0は1P1は2P)
 	static int GetRanking(const int nIndex) { return m_aRanking[nIndex]; }
 
+	//プレイヤー取得処理
+	CObjectPlayer* GetPlayer(const int nCntPlayer) { return m_apPlayer[nCntPlayer]; }
+
 private:
 	virtual void UpdateGame(void) = 0;		//ゲーム中の更新
 	virtual void UpdateGameOver(void) = 0;	//ゲームオーバー時の更新
@@ -80,6 +84,7 @@ protected:
 	CPauseMenu* m_pMenuPause;	//ポーズメニュー
 	CCheck *m_pCheck;			//チェッククラスのポインタ
 	CWolfDecide *m_pWolfDecide;	//人狼決定クラスのポインタ
+	CObjectPlayer* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 };
 
 #endif // !_GAME_SCENE_H_

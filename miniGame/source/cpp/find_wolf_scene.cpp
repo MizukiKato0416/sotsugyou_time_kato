@@ -529,7 +529,7 @@ void CFindWolfScene::WolfDecide()
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CURSOR);
 		}
 		//¶‚ð‰Ÿ‚µ‚½‚ç
-		else if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT_LFET), nIdxPlayer))
+		else if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT_LEFT), nIdxPlayer))
 		{
 			if (static_cast<int>(m_select[nIdxPlayer]) <= static_cast<int>(SELECT::PLAYER_1)) continue;
 

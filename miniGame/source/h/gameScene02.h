@@ -66,7 +66,7 @@ private:
 	void CreateItem();						//アイテム生成処理
 	void SetRanking();						//ランキング設定処理
 
-	CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
+	//CObjectPlayerAttackCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
 	CCreateBomManager *m_pCreateBomManager;								//ボム生成のポインタ
 	std::vector<CMeshwall*> m_pCloud;									//雲のポインタ

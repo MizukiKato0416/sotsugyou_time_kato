@@ -754,14 +754,18 @@ void CGameScene01::CountDownUi(void)
 				m_apPlayerIcon[nCntPlayer]->SetState(CObjectPlayerIcon::STATE::DEC_ALPHA);
 			}
 
+			//キャスト
+			CObjectPlayerBalloonCar *pPlayer = dynamic_cast<CObjectPlayerBalloonCar*>(m_apPlayer[nCntPlayer]);
+			if (pPlayer == nullptr) continue;
+
 			//スコアUIが生成されていなかったら
-			if (m_apPlayer[nCntPlayer]->GetScoreUi() == nullptr)
+			if (pPlayer->GetScoreUi() == nullptr)
 			{
 				//生成する
-				m_apPlayer[nCntPlayer]->CreateScore();
+				pPlayer->CreateScore();
 
 				//アイテムのUIのフレームを生成
-				m_apPlayer[nCntPlayer]->CreateItemUiFrame();
+				pPlayer->CreateItemUiFrame();
 			}
 		}
 
@@ -783,7 +787,11 @@ void CGameScene01::SetRanking()
 	std::vector<int> nSocre(MAX_OBJECT_PLAYER_NUM);
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		nSocre[nCntPlayer] = m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore();
+		//キャスト
+		CObjectPlayerBalloonCar *pPlayer = dynamic_cast<CObjectPlayerBalloonCar*>(m_apPlayer[nCntPlayer]);
+		if (pPlayer == nullptr) continue;
+
+		nSocre[nCntPlayer] = pPlayer->GetScoreUi()->GetScore()->GetScore();
 	}
 	//降順でソート
 	std::sort(nSocre.begin(), nSocre.end(), std::greater<int>());
@@ -795,13 +803,15 @@ void CGameScene01::SetRanking()
 	{
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
+			//キャスト
+			CObjectPlayerBalloonCar *pPlayer = dynamic_cast<CObjectPlayerBalloonCar*>(m_apPlayer[nCntPlayer]);
+			if (pPlayer == nullptr) continue;
+
 			//取得したプレイヤーのスコアと一致していなかったら
-			if (nSocre[nCntScore] != m_apPlayer[nCntPlayer]->GetScoreUi()->GetScore()->GetScore())
+			if (nSocre[nCntScore] != pPlayer->GetScoreUi()->GetScore()->GetScore())
 			{
 				continue;
 			}
-
-			
 
 			//一番最初なら
 			if (nCntScore == 0)

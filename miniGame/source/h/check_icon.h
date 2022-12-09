@@ -51,11 +51,15 @@ private:
 	//α値減算処理
 	void DecAlpha();
 	//マテリアル設定処理
-	void SetMaterial(CObjectModelUI *pPlayerModel);
+	void SetMaterial(CObjectModel *pPlayerModel);
 	//モデル回転処理
 	void RotateModel();
 	//モデル選択処理
 	void SelectModel();
+	//選択アイコン処理
+	void SelectIconUi();
+	//プレイヤーのモデルタイプ設定処理
+	void SetPlayerType();
 
 	D3DXVECTOR3 m_pos;						//位置
 	D3DXVECTOR3 m_posModel;					//モデルの初期位置
@@ -70,6 +74,7 @@ private:
 
 	bool m_bCheck;				//確認できたかどうか
 	bool m_bUninit;				//消すかどうか
+	std::vector<CObject2D*> m_pSelectUi;	//選択肢UI
 };
 
 #endif // !_CHECK_ICON_H_
