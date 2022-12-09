@@ -30,8 +30,14 @@ public:
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 
-private:
+	void OverLook(float fMinPos, float fMaxPos);	//見渡す
 
+private:
+	bool m_bOverLook;
+	D3DXVECTOR3 m_destPos;	//カメラの目標位置
+	float m_fSpeedMovePos;	//カメラの目標位置への移動速度
+	float m_fDestDist;		//カメラの目標距離
+	float m_fSpeedDist;		//カメラの目標距離への移動速度
 };
 
 #endif // !_GAMECAMERA03_H_

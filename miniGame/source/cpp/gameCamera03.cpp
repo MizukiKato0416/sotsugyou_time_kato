@@ -23,7 +23,7 @@
 //=============================================================================
 CGameCamera03::CGameCamera03() : CCamera(MAX_DRAW_DISTANCE)
 {
-
+	m_bOverLook = false;	
 }
 
 //=============================================================================
@@ -52,6 +52,8 @@ CGameCamera03* CGameCamera03::Create(void) {
 //=============================================================================
 HRESULT CGameCamera03::Init(void) {
 	SetPos(DEFAULT_CAMERA_POS);
+	m_destPos = DEFAULT_CAMERA_POS;
+	m_fDestDist = DEFAULT_CAMERA_DISTANCE;
 	SetRot(D3DXVECTOR3(DEFAULT_CAMERA_ROT_X * (D3DX_PI / 180.0f), D3DX_PI * -0.0f, 0.0f));
 	SetLockControll(true);
 
@@ -88,18 +90,56 @@ void CGameCamera03::Uninit(void) {
 void CGameCamera03::Update(void) {
 	CCamera::Update();
 
-	D3DXVECTOR3 posCamera = GetPos();
-	//位置の設定
-	SetPos(posCamera);
+	D3DXVECTOR3 posCamera = GetPos();	//位置の取得
+	float fDist = GetDistance();		//距離の取得
+
+	if (m_bOverLook) {
+		//目標位置まで移動
+		posCamera.x += m_fSpeedMovePos;
+		if (m_fSpeedMovePos > 0.0f) {
+			if (posCamera.x > m_destPos.x) posCamera.x = m_destPos.x;
+		}
+		else if (m_fSpeedMovePos < 0.0f) {
+			if (posCamera.x < m_destPos.x) posCamera.x = m_destPos.x;
+		}
+		//位置の設定
+		SetPos(posCamera);
+
+
+		//目標距離まで移動
+		if (fDist < m_fDestDist) {
+			fDist += m_fSpeedDist;
+			if (fDist > m_fDestDist) fDist = m_fDestDist;
+		}
+
+		//距離の更新
+		SetDistance(fDist);
+	}
 
 	//------------------------------------
 	//視点と注視点の設定
 	//------------------------------------
 	D3DXVECTOR3 rot = GetRot();
-	float fDist = GetDistance();
 
 	SetPosR(posCamera);
 	SetPosV(posCamera + D3DXVECTOR3(sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
 		sinf(rot.x + D3DX_PI) * fDist,
 		cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));
+}
+
+//=============================================================================
+// 見渡す
+//=============================================================================
+void CGameCamera03::OverLook(float fMinPos, float fMaxPos) {
+	m_bOverLook = true;
+
+	float fDistMinToMax = fMaxPos - fMinPos;	//最低位置から最大位置への距離
+
+	int nFrameMove = 100;	//移動完了までのフレーム
+	//目標のX位置を中心にする
+	m_destPos.x = fMinPos + fDistMinToMax / 2.0f;
+	m_fSpeedMovePos = (m_destPos.x - GetPos().x) / nFrameMove;
+
+	m_fDestDist = fDistMinToMax * 1.2f;	//だいたいこのくらい
+	m_fSpeedDist = (m_fDestDist - GetDistance()) / nFrameMove;
 }

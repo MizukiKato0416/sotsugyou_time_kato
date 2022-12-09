@@ -37,9 +37,9 @@
 #define FOG_COLOR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))		//フォグの色
 #define BACK_BUFF_COLOR			(D3DXCOLOR(0.1f, 0.3f, 0.5f, 1.0f))		//バックバッファーの色
 
-#define PLAYER_ICON_SCALE		(0.35f)		//プレイヤーアイコンのスケール
-#define STOP_POS_MIN			(5000.0f)	//ストップできる最低の距離
-#define STOP_POS_MAX			(30000.0f)	//矯正ストップされる距離
+#define PLAYER_ICON_SCALE		(0.18f)		//プレイヤーアイコンのスケール
+#define STOP_POS_MIN			(4000.0f)	//ストップできる最低の距離
+#define STOP_POS_MAX			(10000.0f)	//強制ストップされる距離	10.0fで1m
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
 #define NEXT_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
@@ -52,10 +52,13 @@
 //=============================================================================
 CGameScene03::CGameScene03()
 {
-	m_nCntGameClear = 0;
+	m_nCntGameOver = 0;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 	memset(m_apPlayerIcon, NULL, sizeof(m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM]));
 	m_bReady = false;
+
+	m_fPosPlayerMin = STOP_POS_MAX;
+	m_fPosPlayerMax = 0.0f;
 }
 
 //=============================================================================
@@ -75,7 +78,7 @@ void CGameScene03::Init(void) {
 
 	//変数初期化
 	m_bReady = true;
-	m_fDestDist = 100.0f;
+	m_fDestPos = 100.0f;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -101,7 +104,7 @@ void CGameScene03::Init(void) {
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);		//ライトのベクトル
 	//ベクトルを正規化
-	D3DXVec3Normalize(&vecLight, &vecLight);						
+	D3DXVec3Normalize(&vecLight, &vecLight);
 	//ライトのビューマトリックスを生成
 	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
 	//シェーダのライトを設定
@@ -124,7 +127,7 @@ void CGameScene03::Init(void) {
 		//バックバッファをフォグの色に合わせる
 		pRenderer->SetBackBuffColor(backBuffColor);
 		pRenderer->SetEffectFogColor(fogColor);
-		pRenderer->SetEffectFogRange(20.0f, 10000.0f);
+		pRenderer->SetEffectFogRange(3000.0f, 50000.0f);
 
 	}
 
@@ -134,27 +137,35 @@ void CGameScene03::Init(void) {
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
 	}
 
-	//ゲームシーンの初期化処理
-	CGameScene::Init();
-
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
+
+	//ゲームシーンの初期化処理
+	CGameScene::Init();
 }
 
 //=============================================================================
 // オブジェクト生成処理
 //=============================================================================
 void CGameScene03::CreateObject(void) {
+	//アイコン生成処理
+	CreateIcon();
+
 	//床の生成
 	CMeshwall::Create(D3DXVECTOR3(-2000.0f, 0.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
 
 	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
-		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, nCntPlayer * -150.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
+	}
+
+	for (int nCnt = 0; nCnt < 5; nCnt++)
+	{
+		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
 }
 
@@ -171,6 +182,11 @@ void CGameScene03::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene03::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
 
 #ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
@@ -254,9 +270,7 @@ void CGameScene03::UpdateGame(void) {
 	//フェードの取得
 	CFade* pFade = pManager->GetFade();
 	if (pFade == nullptr) return;
-	//カメラの取得
-	CCamera* pCamera = pManager->GetCamera();
-	if (pCamera == nullptr) return;
+
 
 	//ポーズ
 	if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !pFade->GetFade() && !m_bLockPauseMenu) {
@@ -266,11 +280,28 @@ void CGameScene03::UpdateGame(void) {
 		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}
 
+	//プレイヤーの位置の監視
+	LookPlayerPos();
+
+	//カメラの更新
+	UpdateCamera();
+}
+
+//=============================================================================
+// プレイヤーの位置の監視
+//=============================================================================
+void CGameScene03::LookPlayerPos(void) {
 	//カメラの移動
-	float fPosPlayerX = 0.0f;	//全プレイヤーの一番距離がある位置
+	bool bStopPlayerAll = true;	//全てのプレイヤーが停止済み
+	m_fPosPlayerMin = STOP_POS_MAX;
+	m_fPosPlayerMax = 0.0f;
+	//全てのプレイヤーの位置を取得
 	for (auto pPlayer : m_apPlayer)
 	{
 		if (pPlayer == nullptr) continue;
+
+		if (!pPlayer->GetStopMove()) bStopPlayerAll = false;
+
 		D3DXVECTOR3 posPlayer = pPlayer->GetPos();	//プレイヤーの位置を取得
 
 		//停止可能
@@ -278,36 +309,88 @@ void CGameScene03::UpdateGame(void) {
 		//強制停止
 		if (posPlayer.x >= STOP_POS_MAX) pPlayer->StopMove();
 
+		//最小の位置を取得
+		m_fPosPlayerMin = min(m_fPosPlayerMin, posPlayer.x);
 		//最大の位置を取得
-		fPosPlayerX = max(fPosPlayerX, posPlayer.x);
+		m_fPosPlayerMax = max(m_fPosPlayerMax, posPlayer.x);
 	}
+
+	//全てのプレイヤーが停止していた場合
+	if (bStopPlayerAll) {
+		//ゲーム終了
+		GameOver();
+		return;
+	}
+
+}
+
+//=============================================================================
+// カメラの位置の更新
+//=============================================================================
+void CGameScene03::UpdateCamera(void) {
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//カメラの取得
+	CCamera* pCamera = pManager->GetCamera();
+	if (pCamera == nullptr) return;
 
 	//カメラの位置更新
 	D3DXVECTOR3 posCamera = pCamera->GetPos();
-	posCamera.x = fPosPlayerX;
+	if (m_fPosPlayerMax > 300.0f) posCamera.x = m_fPosPlayerMax - 300.0f;
 	pCamera->SetPos(posCamera);
 
 	//TODO:ライトの位置も動かす
-
-	//徐々に近づける TODO:カメラを作っていい感じに動くようにする
-	pCamera->SetDistance(1000.0f);
 }
 
 //=============================================================================
 // ゲームオーバー時の更新
 //=============================================================================
 void CGameScene03::UpdateGameOver(void) {
-	m_nCntGameClear++;
+	m_nCntGameOver++;
 
-	if (m_nCntGameClear > NEXT_SCENE_COUNT)
+	//アイコンの位置調整
+	UpdatePlayerIcon();
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	if (pFade == nullptr) return;
+	//サウンドの取得
+	CSound* pSound = pManager->GetSound();
+	if (pSound == nullptr) return;
+
+	//フェード入れる
+	if (m_nCntGameOver == 10)
 	{
-		m_nCntGameClear = 0;
+		//pFade->SetFade((CScene::SCENE_TYPE)-1, 0.02f, 0);
+	}
 
-		CManager* pManager = CManager::GetManager();	//マネージャーの取得
-		if (pManager == nullptr) return;
-		//フェードの取得
-		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-		if (pFade == nullptr) return;
+	//スコアUIの表示
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		//生成タイミング
+		if (m_nCntGameOver == 120 + nCnt * 30 && m_apPlayer[nCnt] != nullptr) {
+			float fSpace = 200.0f;
+			float fPosX = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//プレイヤーのモデルの位置をスクリーン座標に変換してｘ座標を取得
+			//スコアの生成
+			CScore* pDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+			if (pDist != nullptr) pDist->SetScore(m_apPlayer[nCnt]->GetPos().x / 10.0f);
+
+			//スコアの背景の設定
+			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(fPosX, 600.0f + 30.0f / 2, 0.0f),
+				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
+			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
+
+			//音の再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
+		}
+	}
+
+	//次シーン
+	if (m_nCntGameOver > NEXT_SCENE_COUNT)
+	{
+		m_nCntGameOver = 0;
 
 		//リザルトへシーン遷移
 		if (GetWereWolfMode()) {
@@ -354,6 +437,16 @@ void CGameScene03::UpdateReady(void) {
 		//全員がチェック出来た状態にする
 		m_bAllCheck = true;
 	}
+	//目標位置決定していない場合
+	else if (!m_bDecideDestDist) {
+		//目標位置の決定
+		if (true) {
+			m_bDecideDestDist = true;
+			m_fDestPos = (rand() % 46 + 40) * 100.0f;	//4500.0f ~ 8500.0f
+			CScore* pDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f), 50.0f);
+			if (pDist != nullptr) pDist->SetScore((int)(m_fDestPos / 10.0f));
+		}
+	}
 	else
 	{
 		if (m_pCheck == nullptr)
@@ -385,9 +478,12 @@ void CGameScene03::GameOver(void) {
 	//サウンドの取得
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
+	//カメラの取得
+	CCamera* pCamera = nullptr;
+	if (pManager != nullptr) pCamera = pManager->GetCamera();
+
 	//ゲームオーバー音を再生
 	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_TIME_UP);
-
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
@@ -407,8 +503,18 @@ void CGameScene03::GameOver(void) {
 		m_pTimer->SetStop(true);
 	}
 
-	//ランキング設定処理
+	//TODO:ランキング設定処理
 	//SetRanking();
+
+	//カメラが全体を見渡せるような距離まで下がる関数を呼ぶ
+	CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
+	if (pCamera03 != nullptr) pCamera03->OverLook(m_fPosPlayerMin, m_fPosPlayerMax);
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		//プレイヤーアイコンの生成処理
+		CreatePlayerIcon(nCntPlayer);
+	}
 
 	//オブジェクトのポーズが無いように設定（念のため）
 	CObject::SetUpdatePauseLevel(0);
@@ -427,16 +533,8 @@ void CGameScene03::CreatePlayerIcon(int nCntPlayer) {
 
 	//プレイヤーの位置取得
 	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
-
-	if (nCntPlayer < 2)
-	{
-		playerPos.x += 150.0f;
-	}
-	else
-	{
-		playerPos.x -= 150.0f;
-	}
-	playerPos.z -= 100.0f;
+	playerPos.x -= 100.0f;
+	playerPos.y -= 10.0f;
 
 	//アイコンの位置
 	D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -445,17 +543,34 @@ void CGameScene03::CreatePlayerIcon(int nCntPlayer) {
 	iconPos = WorldToScreen(playerPos);
 	iconPos.z = 0.0f;
 
-	int nTexCount = nCntPlayer;
-
-	if (nCntPlayer >= 2)
-	{
-		nTexCount += 4;
-	}
-
 	//生成
 	m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(PLAYER_ICON_SCALE, PLAYER_ICON_SCALE, PLAYER_ICON_SCALE),
-		CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nTexCount),
+		CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer + 4),
 		CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
+}
+
+//=============================================================================
+// プレイヤーアイコン更新処理
+//=============================================================================
+void CGameScene03::UpdatePlayerIcon(void) {
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		if (m_apPlayerIcon[nCnt] == nullptr) continue;
+
+		//プレイヤーの位置取得
+		D3DXVECTOR3 playerPos = m_apPlayer[nCnt]->GetPos();
+		playerPos.x -= 300.0f;
+		playerPos.z -= 100.0f;
+
+		//アイコンの位置
+		D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		//ワールド座標からスクリーン座標に変換
+		iconPos = WorldToScreen(playerPos);
+		iconPos.z = 0.0f;
+
+		m_apPlayerIcon[nCnt]->SetPos(iconPos);
+	}
 }
 
 //=============================================================================

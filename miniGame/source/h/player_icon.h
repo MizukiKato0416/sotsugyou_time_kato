@@ -51,6 +51,8 @@ public:
 	//プレイヤー番号のポインタ取得処理
 	CObject2D *GetPlayerNum(void) { return m_pPlayerNum; }
 
+	void SetPos(D3DXVECTOR3 pos);	//位置の設定
+
 private:
 	void StateAddAlpha();		//α値加算処理
 	void StateNone();			//何もしない処理

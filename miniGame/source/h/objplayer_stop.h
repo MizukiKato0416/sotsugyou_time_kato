@@ -34,8 +34,9 @@ public:
 	void Draw(void);		//描画処理
 	void GameOver(void);	//ゲームオーバー時の処理
 
-	void SetCanStop(bool bCan) { m_bCanStop = bCan; }	//停止可能
-	void StopMove(void);	//移動停止
+	void SetCanStop(bool bCan) { m_bCanStop = bCan; }	//停止可能設定
+	void StopMove(void);								//移動停止
+	bool GetStopMove(void) { return m_bStopMove; }		//停止状態の取得
 
 private:
 	//メンバ関数
