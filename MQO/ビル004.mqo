@@ -2,13 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos 85.1786 -1235.6978 15258.7988
+	pos -80.2014 -446.6972 9536.7500
 	lookat 0.0000 0.0000 0.0000
-	head 63.6549
-	pich 0.1392
+	head 67.9248
+	pich 0.4392
 	bank 0.0000
 	ortho 0
-	zoom2 0.4916
+	zoom2 0.7866
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -18,11 +18,11 @@ Scene {
 	}
 }
 Material 6 {
-	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Downloads\background-with-windows-building-wall-with-windows-blue-windows-house-texture-house-facade-background.jpg") proj_type(1) proj_pos(-3.371 1641.985 0.000) proj_scale(561.639 593.313 561.639) proj_angle(0.000 0.000 0.000)
-	"mat6" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Downloads\background-with-windows-building-wall-with-windows-blue-windows-house-texture-house-facade-background.jpg") proj_type(1) proj_pos(-3.371 1641.985 0.000) proj_scale(561.639 593.313 561.639) proj_angle(90.000 -0.000 0.000)
+	"mat1" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_Tex00.jpg") proj_type(1) proj_pos(-3.371 1641.985 0.000) proj_scale(561.639 593.313 561.639) proj_angle(0.000 0.000 0.000)
+	"mat6" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_Tex00.jpg") proj_type(1) proj_pos(-3.371 1641.985 0.000) proj_scale(561.639 593.313 561.639) proj_angle(90.000 -0.000 0.000)
 	"mat2" col(0.396 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Downloads\concrete_wall_004_disp_4k.png")
-	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Downloads\concrete_wall_004_disp_4k.png") proj_type(1) proj_pos(0.000 2512.966 0.116) proj_scale(140.376 140.376 140.376) proj_angle(0.011 90.000 -0.000)
+	"mat3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_wall01.png")
+	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_wall01.png") proj_type(1) proj_pos(0.000 2512.966 0.116) proj_scale(140.376 140.376 140.376) proj_angle(0.011 90.000 -0.000)
 	"mat5" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 }
 Object "obj1" {
@@ -75,7 +75,7 @@ Object "obj1" {
 		4 V(2 4 5 3) M(1) UV(0.09043 -0.19471 0.90957 -0.19471 0.90929 1.42680 0.09116 1.42680)
 		4 V(4 6 7 5) M(0) UV(0.91257 -0.19471 0.09343 -0.19471 0.09413 1.42680 0.91188 1.42680)
 		4 V(6 0 1 7) M(1) UV(0.90957 -0.19471 0.09043 -0.19471 0.09116 1.42680 0.90929 1.42680)
-		4 V(6 4 2 0) M(4) UV(-1.13836 2.13940 2.13899 2.13878 2.13836 -1.13857 -1.13899 -1.13795)
+		4 V(6 4 2 0) M(4) UV(-1.13836 2.13940 2.13899 2.13877 2.13836 -1.13857 -1.13899 -1.13794)
 		4 V(1 3 5 7) M(0) UV(0.09328 1.42680 0.91272 1.42680 0.91188 1.42680 0.09413 1.42680)
 		4 V(8 3 10 9) M(3) UV(0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 1.00000)
 		4 V(3 11 12 10) M(3) UV(0.00000 0.00000 1.00000 0.00000 1.00000 1.00000 0.00000 1.00000)
