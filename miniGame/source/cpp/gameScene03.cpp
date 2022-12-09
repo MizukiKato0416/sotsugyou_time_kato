@@ -128,18 +128,6 @@ void CGameScene03::Init(void) {
 
 	}
 
-	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(-2000.0f, 0.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
-
-	//プレイヤーの生成
-	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-	{
-		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, nCntPlayer * -150.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
-		//更新しないようにする
-		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
-	}
-
 	//BGMの再生
 	if (pSound != nullptr) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_02);
@@ -151,6 +139,23 @@ void CGameScene03::Init(void) {
 
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
+}
+
+//=============================================================================
+// オブジェクト生成処理
+//=============================================================================
+void CGameScene03::CreateObject(void) {
+	//床の生成
+	CMeshwall::Create(D3DXVECTOR3(-2000.0f, 0.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+
+	//プレイヤーの生成
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, nCntPlayer * -150.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+
+		//更新しないようにする
+		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
+	}
 }
 
 //=============================================================================

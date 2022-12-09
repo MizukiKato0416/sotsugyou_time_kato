@@ -30,6 +30,7 @@ public:
 	CGameScene03();				//デフォルトコンストラクタ
 	virtual ~CGameScene03();	//デストラクタ
 	void Init(void);			//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
 	void Uninit(void);			//終了処理
 	void Update(void);			//更新処理
 	void GameOver(void);		//ゲームオーバー
