@@ -131,6 +131,7 @@ void CObjectModelUI::Draw(void) {
 	D3DXVECTOR4 posVDef;
 	if(pCamera != nullptr) posVDef = D3DXVECTOR4(pCamera->GetPosV(), 0.0f);	//通常のカメラ視点を取得
 
+	bool bFogDef = pRenderer->GetEffectFogEnable();
 	//フォグ無効
 	pRenderer->SetEffectFogEnable(false);
 	//ビューマトリックスの変更
@@ -142,7 +143,7 @@ void CObjectModelUI::Draw(void) {
 	CObjectModel::Draw();
 
 	//フォグ有効
-	pRenderer->SetEffectFogEnable(true);
+	pRenderer->SetEffectFogEnable(bFogDef);
 	//ビューマトリックスを戻す
 	pRenderer->SetEffectMatrixView(mtxViewDef);
 	//視点の設定を戻す

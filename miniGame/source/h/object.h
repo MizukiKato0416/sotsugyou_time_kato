@@ -60,6 +60,7 @@ public:
 		UI_BG,			//UIの背景
 		UI,				//UI
 		FRONT,			//最前
+		LOADING,		//ロード用
 		ENUM_MAX
 	};	//描画順
 
@@ -109,6 +110,7 @@ public:
 	static void ReleaseAll(void);	//全オブジェクトの解放処理
 	static void UpdateAll(void);	//全オブジェクトの更新処理
 	static void DrawAll(void);		//全オブジェクトの描画処理
+	static void DrawLoading(void);	//ローディング描画処理
 	static void DrawStencilAll(void);		//全オブジェクトのステンシル描画処理
 	static CObject* GetObjectTopAll(void);	//全オブジェクトのリストのTopを取得
 	static CObject* GetObjectNextAll(CObject* pObject);	//全オブジェクトのリストのNextを取得

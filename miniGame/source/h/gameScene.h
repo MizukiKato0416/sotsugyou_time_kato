@@ -67,6 +67,8 @@ private:
 	static int m_aRanking[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのランキング
 
 protected:
+	void CreateIcon(void);	//アイコン生成処理
+
 
 	bool m_bGameOver;	//ゲームオーバー
 	bool m_bAllCheck;	//全員がチェックできたかどうか

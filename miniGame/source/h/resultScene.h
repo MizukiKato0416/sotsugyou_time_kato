@@ -28,11 +28,12 @@ class CNextButton;
 class CResultScene : public CScene
 {
 public:
-	CResultScene();	//デフォルトコンストラクタ
+	CResultScene();				//デフォルトコンストラクタ
 	virtual ~CResultScene();	//デストラクタ
-	void Init(void);	//初期化処理
-	void Uninit(void);	//終了処理
-	void Update(void);	//更新処理
+	void Init(void);			//初期化処理
+	void CreateObject(void);	//オブジェクト生成処理
+	void Uninit(void);			//終了処理
+	void Update(void);			//更新処理
 
 private:
 	void PointUI();			//ポイントUIの処理

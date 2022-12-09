@@ -65,11 +65,16 @@ HRESULT CCheck::Init(void) {
 	//背景の暗いやつ
 	m_pFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::CHECK_BG, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	const float fDist = 320.0f;	//プレイヤー同士の距離
+
 	for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
 	{
+		//プレイヤーモデルの位置
+		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-m_nNumPlayer / 2.0f) + fDist / 2.0f + nCntPlayer * fDist, -50.0f, 0.0f);
+
 		//チェックアイコンの生成
-		m_apCheckIcon.push_back(CCheckIcon::Create(D3DXVECTOR3(SCREEN_WIDTH / (m_nNumPlayer + 1) * (nCntPlayer + 1), SCREEN_HEIGHT / 2.0f, 0.0f),
-			                                       D3DXVECTOR3(0.7f, 0.7f, 0.7f), nCntPlayer + 1));
+		m_apCheckIcon.push_back(CCheckIcon::Create(D3DXVECTOR3(SCREEN_WIDTH / (m_nNumPlayer * 2) * (1 + nCntPlayer * 2), SCREEN_HEIGHT / 2.0f, 0.0f),
+			                                       posModel, D3DXVECTOR3(0.85f, 0.85f, 0.85f), nCntPlayer + 1));
 	}
 
 	return S_OK;
@@ -159,6 +164,13 @@ void CCheck::Check()
 	if (!m_bCheckAll)
 	{
 		int nCheck = 0;
+		int nNumPlayer = m_nNumPlayer;
+#ifdef _DEBUG
+		nNumPlayer = 1;
+#else
+		nNumPlayer = 1;
+#endif // !_DEBUG
+
 		for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
 		{
 			//アイコンが生成されていなかったら
@@ -175,7 +187,7 @@ void CCheck::Check()
 		}
 
 		//チェック数がプレイヤーの数と一致していたら
-		if (nCheck == 1)
+		if (nCheck == nNumPlayer)
 		{
 			//全員がチェック出来た状態にする
 			m_bCheckAll = true;

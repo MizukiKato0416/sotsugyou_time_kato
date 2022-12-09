@@ -268,6 +268,9 @@
     <ClCompile Include="source\cpp\gameCamera03.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\loading_ui.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -535,6 +538,9 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\gameCamera03.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\loading_ui.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

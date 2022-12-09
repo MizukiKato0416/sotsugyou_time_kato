@@ -652,6 +652,14 @@ void CObjectPlayerBalloonCar::CollisionObjectPlayer(void)
 			}
 			m_pSocreUi->GetScore()->AddScore(nAddScore);
 
+			//マネージャーの取得
+			CManager* pManager = CManager::GetManager();
+			//サウンドの取得
+			CSound* pSound = nullptr;
+			if (pManager != nullptr) pSound = pManager->GetSound();
+			//音を再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_POINT_STEAL);
+
 			//スコアが最大値を超えたら
 			if (GetScoreUi()->GetScore()->GetScore() > BALLOON_SCORE_MAX)
 			{
@@ -792,6 +800,11 @@ void CObjectPlayerBalloonCar::StateInvincble(void)
 //=============================================================================
 void CObjectPlayerBalloonCar::UseItem(void)
 {
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+
 	//アイテムを持っている状態なら
 	if (m_itemType == CItem::ITEM_TYPE::NONE || m_state == OBJECT_PLAYER_BALLOON_CAR_STATE::SPIN)
 	{
@@ -812,6 +825,11 @@ void CObjectPlayerBalloonCar::UseItem(void)
 		//ポイントを奪う状態にする
 		m_bStealPoint = true;
 		m_itemType = CItem::ITEM_TYPE::NONE;
+		m_nStealPointCounter = 0;
+
+		if (pManager != nullptr) pSound = pManager->GetSound();
+		//音を再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_USE_POINT_STEAL);
 		break;
 	default:
 		break;

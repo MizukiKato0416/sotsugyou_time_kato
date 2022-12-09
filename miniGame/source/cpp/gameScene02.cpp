@@ -180,6 +180,26 @@ void CGameScene02::Init(void) {
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 
+	
+	
+	//BGMの再生
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_02);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
+	}
+
+	//ゲームシーンの初期化処理
+	CGameScene::Init();
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CGameScene02::CreateObject(void)
+{
+	//アイコン生成処理
+	CreateIcon();
+
 	//スタジアムの生成
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_ATTACK_CAR_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
@@ -267,15 +287,6 @@ void CGameScene02::Init(void) {
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
-	
-	//BGMの再生
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_02);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
-	}
-
-	//ゲームシーンの初期化処理
-	CGameScene::Init();
 }
 
 //=============================================================================
@@ -291,6 +302,11 @@ void CGameScene02::Uninit(void) {
 // ゲームシーンの更新処理
 //=============================================================================
 void CGameScene02::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
 
 #ifdef _DEBUG
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得

@@ -184,9 +184,37 @@ void CTitleScene::Init(void) {
 		pRenderer->SetBackBuffColor(TITLE_BACK_BUFF);
 	}	
 
+	
+	//BGMの再生
+	if (pSound != nullptr) {
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
+	}
+
+	//オブジェクトのポーズが無いように設定
+	CObject::SetUpdatePauseLevel(0);
+
+
+#ifdef _DEBUG
+	//Zバッファテクスチャの表示
+	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 120.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
+	if (pZBuff != nullptr) {
+		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
+		pZBuff->SetUseZBuffTexture(true);
+	}
+#endif
+
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CTitleScene::CreateObject(void)
+{
+	//太陽の生成
 	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
 
-	////雲の生成
+	//雲の生成
 	CSkyDome::Create(CLOUD_POS, CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, CLOUD_ROTATE_SPEED);
 
 	//床の生成
@@ -262,25 +290,6 @@ void CTitleScene::Init(void) {
 	// 次に行かせるロゴ
 	m_pNext = CObject2D::Create(NEXT_LOGO_POS, CTexture::TEXTURE_TYPE::TEXT_GAMESTART, NEXT_LOGO_WIDTH, NEXT_LOGO_HEIGHT);
 
-	//BGMの再生
-	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_TITLE);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_TITLE);
-	}
-
-	//オブジェクトのポーズが無いように設定
-	CObject::SetUpdatePauseLevel(0);
-
-
-#ifdef _DEBUG
-	//Zバッファテクスチャの表示
-	CObject2D* pZBuff = CObject2D::Create(D3DXVECTOR3(70.0f, 120.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, 100.0f, 100.0f);
-	if (pZBuff != nullptr) {
-		pZBuff->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
-		pZBuff->SetUseZBuffTexture(true);
-	}
-#endif
-
 }
 
 //=============================================================================
@@ -306,7 +315,13 @@ void CTitleScene::Uninit(void) {
 //=============================================================================
 // タイトルシーンの更新処理
 //=============================================================================
-void CTitleScene::Update(void) {		
+void CTitleScene::Update(void) {
+	//ロードが終了していなかったら
+	if (!CTexture::GetLoadFinish()) return;
+
+	//シーンの更新処理
+	CScene::Update();
+
 	CManager* pManager = CManager::GetManager();	//マネージャーの取得
 	CInput* pInput = nullptr;	//入力デバイスへのポインタ
 	CFade* pFade = nullptr;		//フェードへのポインタ

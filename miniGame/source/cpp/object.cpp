@@ -226,7 +226,7 @@ void CObject::DrawAll(void) {
 	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);	
 	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);
 
-	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::ENUM_MAX; nCnt++) {
+	for (int nCnt = 0; nCnt < (int)DRAW_PRIORITY::LOADING; nCnt++) {
 		//UIの描画に切り替わった場合、Zバッファを1.0fでクリアする
 		if(nCnt == (int)DRAW_PRIORITY::UI_BG && pDevice != nullptr) pDevice->Clear(0, nullptr, (D3DCLEAR_ZBUFFER), D3DXCOLOR(), 1.0f, 0);
 
@@ -260,6 +260,17 @@ void CObject::DrawAll(void) {
 				pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_KEEP);
 			}
 		}
+	}
+}
+
+//=============================================================================
+//ローディング描画処理
+//=============================================================================
+void CObject::DrawLoading(void){
+	//リストを順に取得
+	for (CObject* pObj = m_apTopDraw[static_cast<int>(DRAW_PRIORITY::LOADING)]; pObj != nullptr; pObj = pObj->m_pNextDraw) {
+		//描画可能時の場合描画
+		pObj->Draw();
 	}
 }
 
