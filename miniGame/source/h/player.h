@@ -8,6 +8,7 @@
 #define _PLAYER_H_
 
 #include "object.h"
+#include "object_player.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -16,6 +17,7 @@
 //*****************************************************************************
 //前方宣言
 //*****************************************************************************
+class CModel;
 
 //*****************************************************************************
 // クラス
@@ -44,8 +46,13 @@ public:
 	//更新するかどうか設定処理
 	void SetUpdate(const bool bUpdate) { m_bUpdate = bUpdate; }
 
+	//モデルタイプ設定処理
+	static void SetModelType(const int nCntPlayer, const CModel::MODELTYPE modelType) { m_aModelType[nCntPlayer] = modelType; }
+	//モデルタイプ取得処理
+	static CModel::MODELTYPE GetModelType(const int nCntPlayer) { return m_aModelType[nCntPlayer]; }
 
 private:
+	static CModel::MODELTYPE m_aModelType[MAX_OBJECT_PLAYER_NUM];	//プレイヤーのモデルタイプ
 	static int m_nObjectPlayerNum;	//プレイヤーの数
 	int m_nIndex;					//プレイヤー番号
 	bool m_bUpdate;					//更新処理をするかどうか

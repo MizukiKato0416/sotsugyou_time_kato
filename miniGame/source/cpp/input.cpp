@@ -331,7 +331,7 @@ bool CInputKeyboard::GetTrigger(CODE code, int nIdx) {
 			return true;
 		}
 		break;
-	case CODE::SELECT_LFET:
+	case CODE::SELECT_LEFT:
 		if (GetTrigger(DIK_LEFT)) {
 			return true;
 		}
@@ -736,7 +736,7 @@ bool CInputGamepadX::GetTrigger(CODE code, int nIdx) {
 			return true;
 		}
 		break;
-	case CODE::SELECT_LFET:
+	case CODE::SELECT_LEFT:
 		if (GetButtonTrigger(XINPUT_GAMEPAD_DPAD_LEFT, nIdx)) {
 			return true;
 		}

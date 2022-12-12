@@ -48,7 +48,7 @@ private:
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void SetRanking();						//ランキング設定処理
 
-	CObjectPlayerBalloonCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
+	//CObjectPlayerBalloonCar* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];			//プレイヤーアイコンのポインタ
 
 	int m_nCntGameClear;					//ゲームクリア後のカウント

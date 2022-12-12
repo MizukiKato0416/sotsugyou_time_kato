@@ -117,7 +117,7 @@ void CSelectMenu::ChangeSelect(void) {
 		//左右
 	case CSelectMenu::SELECT_TYPE::HORIZONTAL:
 		//選択の変更の入力
-		if (pInput->GetTrigger(CInput::CODE::SELECT_LFET, 0)) {
+		if (pInput->GetTrigger(CInput::CODE::SELECT_LEFT, 0)) {
 			m_nIdxCurSelect--;	//選択を１つ前に
 			if (m_nIdxCurSelect < 0) m_nIdxCurSelect = m_nNumSelect - 1;	//０を下回った場合最大の番号
 			bChangeSelect = true;

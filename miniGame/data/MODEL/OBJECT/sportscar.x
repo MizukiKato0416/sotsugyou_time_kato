@@ -6775,7 +6775,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "ÉzÉCÅ[Éã.png";
+    "data/TEXTURE/MESH/wheel.png";
    }
   }
   Material {

@@ -24,6 +24,7 @@
 #include "finalResultScene.h"
 #include "meshwall.h"
 #include "float_object.h"
+#include "player.h"
 
 
 //=============================================================================
@@ -228,9 +229,12 @@ void CFindWolfScene::CreateObject(void)
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 	{
+		//モデルタイプを取得
+		CModel::MODELTYPE modelType = CPlayer::GetModelType(nIdxPlayer);
+
 		const float fDist = FIND_WOLF_SCENE_PLAYER_DIFFER;	//プレイヤー同士の距離
 		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + nIdxPlayer * fDist, 0.0f, 0.0f);	//左端から並べる
-		CObjectModel* pPlayerModel = CObjectModel::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		CObjectModel* pPlayerModel = CObjectModel::Create(modelType, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (pPlayerModel == nullptr) continue;
 		CModel* pModel = pPlayerModel->GetPtrModel();
@@ -445,9 +449,12 @@ void CFindWolfScene::Tutorial2()
 		for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)
 		{
 			//選択用アイコンの生成
-			m_pSelectIcon[nIdxPlayer] = CObject2D::Create(m_aPosPlayer2D[0], 
+			m_pSelectIcon[nIdxPlayer] = CObject2D::Create(m_aPosPlayer2D[nIdxPlayer],
 				                                          static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::WOLF_SELECT_ICON_1) + nIdxPlayer),
 				                                          FIND_WOLF_SCENE_SELECT_ICON_SIZE_X, FIND_WOLF_SCENE_SELECT_ICON_SIZE_Y);
+			//最初は自分が選択されている状態にする
+			m_select[nIdxPlayer] = static_cast<SELECT>(nIdxPlayer);
+
 			//選択用アイコンUIの位置設定処理
 			SelectIconSetPos(nIdxPlayer, m_select[nIdxPlayer]);
 		}
@@ -529,7 +536,7 @@ void CFindWolfScene::WolfDecide()
 			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CURSOR);
 		}
 		//左を押したら
-		else if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT_LFET), nIdxPlayer))
+		else if (pInput->GetTrigger(CInput::CODE(CInput::CODE::SELECT_LEFT), nIdxPlayer))
 		{
 			if (static_cast<int>(m_select[nIdxPlayer]) <= static_cast<int>(SELECT::PLAYER_1)) continue;
 
