@@ -501,14 +501,22 @@ void CSelectGameScene::ChangeGameTitle()
 	//現在選ばれているゲームによってタイトルの名前を変える
 	switch (m_pMenuGame->GetIdxCurSelect() + (int)CScene::SCENE_TYPE::GAME_01)
 	{
+		//バルーン
 	case (int)CScene::SCENE_TYPE::GAME_01:
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON);
 		break;
+		//ぶっ飛び
 	case (int)CScene::SCENE_TYPE::GAME_02:
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
 		break;
+		//ストップ
+	case (int)CScene::SCENE_TYPE::GAME_03:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_GAMESTART && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_GAMESTART);
+		break;
+		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);

@@ -72,18 +72,20 @@ data/TEXTURE/UI/4th.png = result
 
 data/TEXTURE/UI/GameStart.png = game01, game02
 
-data/TEXTURE/UI/tex01.png		= game01, game02, find_w
-data/TEXTURE/UI/tex02.png		= game01, game02, find_w
-data/TEXTURE/UI/tex03.png		= game01, game02, find_w
-data/TEXTURE/UI/tex04.png		= game01, game02, find_w
-data/TEXTURE/UI/Button_X.png	= game01, game02
-data/TEXTURE/UI/Button_B.png	= game01, game02
-data/TEXTURE/UI/Button_A.png	= all
-data/TEXTURE/UI/Button_Y.png	= game01, game02
-data/TEXTURE/UI/OK01.png		= game01, game02
-data/TEXTURE/UI/OK02.png		= game01, game02
-data/TEXTURE/UI/OK03.png		= game01, game02
-data/TEXTURE/UI/OK04.png		= game01, game02
+data/TEXTURE/UI/tex01.png					= game01, game02, find_w
+data/TEXTURE/UI/tex02.png					= game01, game02, find_w
+data/TEXTURE/UI/tex03.png					= game01, game02, find_w
+data/TEXTURE/UI/tex04.png					= game01, game02, find_w
+data/TEXTURE/UI/Button_X.png				= game01, game02
+data/TEXTURE/UI/Button_B.png				= game01, game02
+data/TEXTURE/UI/Button_A.png				= all
+data/TEXTURE/UI/Button_Y.png				= game01, game02
+data/TEXTURE/UI/OK01.png					= game01, game02
+data/TEXTURE/UI/OK02.png					= game01, game02
+data/TEXTURE/UI/OK03.png					= game01, game02
+data/TEXTURE/UI/OK04.png					= game01, game02
+data/TEXTURE/UI/check_icon_select_01.png	= game01, game02
+data/TEXTURE/UI/check_icon_select_00.png	= game01, game02
 
 data/TEXTURE/UI/wolf_select_1.png	= find_w
 data/TEXTURE/UI/wolf_select_2.png	= find_w

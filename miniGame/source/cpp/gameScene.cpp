@@ -55,6 +55,7 @@ CGameScene::CGameScene()
 	m_pCheck = nullptr;
 	m_pWolfDecide = nullptr;
 	m_nWereWolfPlayerIndex = 0;
+	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
 
 	for (int nCntSavePlayer = 0; nCntSavePlayer < MAX_OBJECT_PLAYER_NUM; nCntSavePlayer++)
 	{

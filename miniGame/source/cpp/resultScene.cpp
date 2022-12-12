@@ -18,6 +18,7 @@
 #include "gameCamera.h"
 #include "gameScene.h"
 #include "next_button.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -191,10 +192,12 @@ void CResultScene::CreateObject(void)
 	{
 		//aOrderPlayer[nIdxPlayer] = nIdxPlayer;
 
+		//モデルタイプを取得
+		CModel::MODELTYPE modelType = CPlayer::GetModelType(nIdxPlayer);
 
 		const float fDist = 180.0f;	//プレイヤー同士の距離
 		D3DXVECTOR3 posModel = D3DXVECTOR3(fDist * (-MAX_OBJECT_PLAYER_NUM / 2.0f) + fDist / 2.0f + (aOrderPlayer[nIdxPlayer]) * fDist, 0.0f, RESULT_SCENE_PLAYER_INIT_POS_Z);	//左端から1位を並べる
-		m_pPlayerModel[nIdxPlayer] = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		m_pPlayerModel[nIdxPlayer] = CObjectModelUI::Create(modelType, posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 		if (m_pPlayerModel == nullptr) continue;
 		m_pPlayerModel[nIdxPlayer]->SetViewCamera(D3DXVECTOR3(0.0f, 400.0f, -500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
