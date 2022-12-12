@@ -57,8 +57,9 @@ public:
 	void SetEffectMatrixWorld(D3DXMATRIX mtxWorld);		//シェーダのワールドマトリックスを設定
 	void SetEffectMatrixView(D3DXMATRIX mtxView);		//シェーダのビューマトリックスを設定
 	void SetEffectMatrixProj(D3DXMATRIX mtxProj);		//シェーダのプロジェクトマトリックスを設定
+	void SetEffectMatrixViewPort(D3DXMATRIX mtx);	//シェーダのビューポートのマトリックスを設定
 
-	void SetEffectTexture(LPDIRECT3DTEXTURE9 tex);		//シェーダのテクスチャを設定
+	void SetEffectTexture(LPDIRECT3DTEXTURE9 tex);				//シェーダのテクスチャを設定
 	void SetEffectTextureShadowMap(LPDIRECT3DTEXTURE9 tex);		//シェーダのシャドウマップテクスチャを設定
 
 	void SetEffectLightVector(D3DXVECTOR4 vecLight);	//シェーダのライトのベクトルを設定
@@ -76,7 +77,7 @@ public:
 	void SetEffectMaterialSpecular(D3DXCOLOR matSpecular);	//シェーダのマテリアルのスペキュラー色を設定
 	void SetEffectMaterialPower(float matPower);			//シェーダのマテリアルの反射の強さを設定
 
-	void SetEffectGlow(D3DXCOLOR colGlow, float fPower);			//シェーダの輪郭の発光色を設定
+	void SetEffectGlow(D3DXCOLOR colGlow, float fPower);	//シェーダの輪郭の発光色を設定
 
 private:
 	void CreateVtxDecl2D(void);		//2Dポリゴンの頂点定義を生成

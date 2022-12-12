@@ -482,6 +482,11 @@ void CRenderer::SetEffectMatrixProj(D3DXMATRIX mtxProj) {
 	if (m_pEffect != nullptr) m_pEffect->SetMatrix("g_mProj", &mtxProj);
 }
 
+//シェーダのビューポートのマトリックスを設定
+void CRenderer::SetEffectMatrixViewPort(D3DXMATRIX mtx) {
+	if (m_pEffect != nullptr) m_pEffect->SetMatrix("g_mViewPort", &mtx);
+}
+
 //シェーダのテクスチャを設定
 void CRenderer::SetEffectTexture(LPDIRECT3DTEXTURE9 tex) {
 	if (m_pEffect != nullptr) m_pEffect->SetTexture("g_Texture", tex);

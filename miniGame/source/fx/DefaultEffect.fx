@@ -9,9 +9,10 @@
 // グローバル変数
 //=============================================================================
 //マトリックス
-float4x4 g_mWorld;	//ワールドマトリックス
-float4x4 g_mView;	//ビューマトリックス
-float4x4 g_mProj;	//プロジェクションマトリックス
+float4x4 g_mWorld;		//ワールドマトリックス
+float4x4 g_mView;		//ビューマトリックス
+float4x4 g_mProj;		//プロジェクションマトリックス
+float4x4 g_mViewPort;	//ビューポートマトリックス
 
 float4x4 g_mLightView;	//ライト目線のビューマトリックス
 float4x4 g_mLightProj;	//ライト目線のプロジェクションマトリックス
