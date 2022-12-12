@@ -298,16 +298,17 @@ void CGameScene03::LookPlayerPos(void) {
 	//全てのプレイヤーの位置を取得
 	for (auto pPlayer : m_apPlayer)
 	{
-		if (pPlayer == nullptr) continue;
+		CObjplayerStop* pStopPlayer = dynamic_cast<CObjplayerStop*>(pPlayer);	//このゲームシーンで使うプレイヤーのクラスにダイナミックキャスト
+		if (pStopPlayer == nullptr) continue;
 
-		if (!pPlayer->GetStopMove()) bStopPlayerAll = false;
+		if (!pStopPlayer->GetStopMove()) bStopPlayerAll = false;
 
-		D3DXVECTOR3 posPlayer = pPlayer->GetPos();	//プレイヤーの位置を取得
+		D3DXVECTOR3 posPlayer = pStopPlayer->GetPos();	//プレイヤーの位置を取得
 
 		//停止可能
-		if (posPlayer.x > STOP_POS_MIN) pPlayer->SetCanStop(true);
+		if (posPlayer.x > STOP_POS_MIN) pStopPlayer->SetCanStop(true);
 		//強制停止
-		if (posPlayer.x >= STOP_POS_MAX) pPlayer->StopMove();
+		if (posPlayer.x >= STOP_POS_MAX) pStopPlayer->StopMove();
 
 		//最小の位置を取得
 		m_fPosPlayerMin = min(m_fPosPlayerMin, posPlayer.x);
