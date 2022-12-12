@@ -11,6 +11,8 @@
 #include "main.h"
 #include "object_player.h"
 
+#include "change_color.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -45,7 +47,6 @@ private:
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
 
-	CObjplayerStop* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
 	bool m_bDecideDestDist;	//目標位置決定
 	float m_fDestPos;		//目標の距離

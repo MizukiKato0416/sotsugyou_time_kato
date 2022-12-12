@@ -33,6 +33,10 @@ public:
 	void SetSpeedColorwheel(float fSpeed)	{ m_fSpeedColorwheel = fSpeed; }	//カラーホイールが変化するスピードの設定
 
 private:
+	//RGBとHSLの変換 参考：「https://www.petitmonte.com/javascript/rgb_hsl_convert.html」	「http://design0.w4c.work/status/396」
+	D3DXVECTOR4 ConvertRGBtoHSL(D3DXCOLOR rgb);	//RGBからHSLへの変換
+	D3DXCOLOR ConvertHSLtoRGB(D3DXVECTOR4 hsl);	//HSLからRGBへの変換
+
 	D3DXCOLOR m_col;			//色
 	float m_fSpeedColorwheel;	//カラーホイールが変化するスピード
 };
