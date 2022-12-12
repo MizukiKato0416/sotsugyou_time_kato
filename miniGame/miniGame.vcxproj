@@ -157,6 +157,7 @@
     <ClCompile Include="source\cpp\billboard.cpp" />
     <ClCompile Include="source\cpp\bom.cpp" />
     <ClCompile Include="source\cpp\camera.cpp" />
+    <ClCompile Include="source\cpp\change_color.cpp" />
     <ClCompile Include="source\cpp\check.cpp" />
     <ClCompile Include="source\cpp\check_icon.cpp" />
     <ClCompile Include="source\cpp\count_down_ui.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="source\h\bom.h" />
     <ClInclude Include="source\h\BulletHoll.h" />
     <ClInclude Include="source\h\camera.h" />
+    <ClInclude Include="source\h\change_color.h" />
     <ClInclude Include="source\h\check.h" />
     <ClInclude Include="source\h\check_icon.h" />
     <ClInclude Include="source\h\count_down_ui.h" />
