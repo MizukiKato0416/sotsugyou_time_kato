@@ -78,7 +78,7 @@ void CGameScene03::Init(void) {
 
 	//変数初期化
 	m_bReady = true;
-	m_fDestPos = 100.0f;
+	m_fDestPos = 0.0f;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();

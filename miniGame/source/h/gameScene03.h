@@ -11,8 +11,6 @@
 #include "main.h"
 #include "object_player.h"
 
-#include "change_color.h"
-
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -42,7 +40,7 @@ private:
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
 	void UpdateReady(void);					//準備状態中の更新
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
-	void UpdatePlayerIcon(void);	//プレイヤーアイコン更新処理
+	void UpdatePlayerIcon(void);			//プレイヤーアイコン更新処理
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
