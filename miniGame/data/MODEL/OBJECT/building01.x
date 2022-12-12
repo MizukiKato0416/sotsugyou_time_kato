@@ -2504,7 +2504,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/bill_brick01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2525,7 +2525,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/bill_brick01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2534,7 +2534,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/bill_brick01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2543,7 +2543,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/bill_brick01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
  }

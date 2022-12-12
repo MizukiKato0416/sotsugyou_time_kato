@@ -49,6 +49,7 @@ public:
 		OBJ_SPHERE_COVER,				//球のカバー
 
 		OBJ_ROAD,						//道路
+		OBJ_BUILDING_01,				//ビル
 
 		OBJ_HATENA,						//はてなマーク
 		OBJ_MENU_STAGE,					//メニューのステージ

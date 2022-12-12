@@ -168,6 +168,12 @@ void CGameScene03::CreateObject(void) {
 	{
 		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
+
+	//ƒrƒ‹
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		CObjectModel::Create(CModel::MODELTYPE::OBJ_BUILDING_01, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	}
 }
 
 //=============================================================================

@@ -193,6 +193,9 @@ public:
 		MESH_CACTUS_01,				//サボテン01
 		MESH_CACTUS_02,				//サボテン02
 
+		MESH_ROAD,					//道路
+		MESH_BUILDING_01,			//ビル１
+
 		//エフェクト
 		EFFECT_SUN,	//太陽
 
