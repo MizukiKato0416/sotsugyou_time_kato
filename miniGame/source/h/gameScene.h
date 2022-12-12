@@ -74,9 +74,9 @@ protected:
 	void CreateIcon(void);	//アイコン生成処理
 
 
-	bool m_bGameOver;	//ゲームオーバー
-	bool m_bAllCheck;	//全員がチェックできたかどうか
-	bool m_bReady;		//準備状態かどうか
+	bool m_bGameOver;		//ゲームオーバー
+	bool m_bAllCheck;		//全員がチェックできたかどうか
+	bool m_bReady;			//準備状態かどうか
 	bool m_bLockPauseMenu;	//ポーズメニュー生成のロック
 
 	CTimer* m_pTimer;			//ゲームのタイマー
