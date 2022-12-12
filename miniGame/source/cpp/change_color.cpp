@@ -66,6 +66,7 @@ void CChangeColor::Update(void) {
 
 	//色相を加算
 	hsl.x += m_fSpeedColorwheel;
+	if (hsl.x >= 360.f) hsl.x = 0.f;
 
 	//RGBに変換
 	m_col = ConvertHSLtoRGB(hsl);
@@ -75,10 +76,10 @@ void CChangeColor::Update(void) {
 // RGBからHSLへの変換
 //=============================================================================
 D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
+	rgb *= 255;
 	float fMax = max(max(rgb.r, rgb.g), rgb.b);
 	float fMin = min(min(rgb.r, rgb.g), rgb.b);
-	D3DXVECTOR4 hsl = { 0, 0,
-		(fMax + fMin) / 2, 1 }; 
+	D3DXVECTOR4 hsl = { 0, 0, (fMax + fMin) / 2, 1 }; 
 
 	if (fMax != fMin) {
 		// H(色相)  
@@ -93,16 +94,17 @@ D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
 		else {
 			hsl.y = (fMax - fMin) / (510 - fMax - fMin);
 		}
+		hsl.y *= 100;
 	}
 
+	//マイナス時の調整
 	if (hsl.x < 0) {
 		hsl.x = hsl.x + 360;
 	}
 
-	//四捨五入
-	hsl.x = round(hsl.x);
-	hsl.y = round(hsl.y * 100);
-	hsl.z = round((hsl.z / 255) * 100);
+	//Lの計算
+	hsl.z = (fMax + fMin) / 2 / 255 * 100;
+
 	return hsl;
 }
 
@@ -113,7 +115,7 @@ D3DXCOLOR CChangeColor::ConvertHSLtoRGB(D3DXVECTOR4 hsl) {
 	float fMax, fMin;
 	D3DXCOLOR rgb = { 0, 0, 0, 1 };
 
-	if (hsl.x == 360) {
+	if (hsl.x >= 360) {
 		hsl.x = 0;
 	}
 
@@ -158,8 +160,8 @@ D3DXCOLOR CChangeColor::ConvertHSLtoRGB(D3DXVECTOR4 hsl) {
 	}
 
 	//四捨五入
-	rgb.r = round(rgb.r);
-	rgb.g = round(rgb.g);
-	rgb.b = round(rgb.b);
+	rgb.r /= 255;
+	rgb.g /= 255;
+	rgb.b /= 255;
 	return rgb;
 }

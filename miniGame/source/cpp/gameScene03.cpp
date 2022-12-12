@@ -39,7 +39,7 @@
 
 #define PLAYER_ICON_SCALE		(0.18f)		//プレイヤーアイコンのスケール
 #define STOP_POS_MIN			(4000.0f)	//ストップできる最低の距離
-#define STOP_POS_MAX			(10000.0f)	//強制ストップされる距離	10.0fで1m
+#define STOP_POS_MAX			(9990.0f)	//強制ストップされる距離	10.0fで1m
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
 #define NEXT_SCENE_COUNT		(240)		//次のシーンまでのカウント
 
@@ -152,17 +152,18 @@ void CGameScene03::CreateObject(void) {
 	CreateIcon();
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(-2000.0f, 0.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
 
-	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
+		//プレイヤーの生成
 		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
 
+	//看板
 	for (int nCnt = 0; nCnt < 5; nCnt++)
 	{
 		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -308,7 +309,13 @@ void CGameScene03::LookPlayerPos(void) {
 		//停止可能
 		if (posPlayer.x > STOP_POS_MIN) pStopPlayer->SetCanStop(true);
 		//強制停止
-		if (posPlayer.x >= STOP_POS_MAX) pStopPlayer->StopMove();
+		if (posPlayer.x >= STOP_POS_MAX) {
+			//停止
+			pStopPlayer->StopMove();
+			//位置調整
+			posPlayer.x = STOP_POS_MAX;
+			pStopPlayer->SetPos(posPlayer);
+		}
 
 		//最小の位置を取得
 		m_fPosPlayerMin = min(m_fPosPlayerMin, posPlayer.x);
