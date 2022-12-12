@@ -215,7 +215,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\ë≤ã∆êßçÏ\\sotsugyou_time_kato\\miniGame\\data\\TEXTURE\\MESH\\road.png";
+    "data/TEXTURE/MESH/road.png";
    }
   }
   Material {
