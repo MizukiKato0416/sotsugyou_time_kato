@@ -12,6 +12,7 @@
 #include "input.h"
 #include "manager.h"
 #include "sound.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -192,6 +193,9 @@ void CCheckIcon::Decide()
 			//チェック状態にする
 			m_bCheck = true;
 
+			//プレイヤーのモデルタイプを保存
+			CPlayer::SetModelType(m_nPlayerNum - 1, m_pPlayerModel->GetModelType());
+
 			//ボタンの生成
 			m_pButton = CObject2D::Create(D3DXVECTOR3(m_pos.x, m_pos.y + CHECK_ICON_BUTTON_POS_Y, 0.0f),
 				                          CTexture::TEXTURE_TYPE((int)CTexture::TEXTURE_TYPE::CHECK_ICON_OK_1 + m_nPlayerNum - 1),
@@ -253,6 +257,32 @@ void CCheckIcon::DecAlpha()
 			{
 				//カラー設定
 				m_pButton->SetColor(bttonCol);
+			}
+		}
+
+		//生成数取得
+		int nNumIconUi = m_pSelectUi.size();
+
+		for (int nCntSelectIconUi = 0; nCntSelectIconUi < nNumIconUi; nCntSelectIconUi++)
+		{
+			//生成チェック
+			if (m_pSelectUi[nCntSelectIconUi] == nullptr) return;
+
+			//色取得
+			D3DXCOLOR selectUiCol = m_pSelectUi[nCntSelectIconUi]->GetColor();
+			//薄くする
+			selectUiCol.a -= CHECK_ICON_DEC_ALPHA;
+			//見えなくなったら
+			if (selectUiCol.a <= CHECK_ICON_DEC_ALPHA)
+			{
+				//消す
+				m_pSelectUi[nCntSelectIconUi]->Uninit();
+				m_pSelectUi[nCntSelectIconUi] = nullptr;
+			}
+			else
+			{
+				//カラー設定
+				m_pSelectUi[nCntSelectIconUi]->SetColor(selectUiCol);
 			}
 		}
 	}

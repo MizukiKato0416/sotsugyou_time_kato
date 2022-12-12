@@ -22,6 +22,7 @@
 #include "float_object.h"
 #include "skydome.h"
 #include "PresetSetEffect.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -207,12 +208,17 @@ void CFinalResultScene::CreateObject(void)
 	}
 
 
+
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++) {
+
+		//モデルタイプを取得
+		CModel::MODELTYPE modelType = CPlayer::GetModelType(nIdxPlayer);
+
 		D3DXVECTOR3 posPlayer = D3DXVECTOR3(-fDistPlayer * (MAX_OBJECT_PLAYER_NUM / 2.0f) + fDistPlayer / 2.0f + fDistPlayer * nIdxPlayer, 0.0f, 0.0f);	//プレイヤーの位置
 		//プレイヤーのモデルの生成
-		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_CAR, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(modelType, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 		//プレイヤーの色を設定
 		if (m_apObjPlayer[nIdxPlayer] == nullptr) continue;	//ループ飛ばす
 		//タワーの生成

@@ -8,7 +8,7 @@
 // enumÇ∆ìØÇ∂èáÇ…
 
 data/MODEL/OBJECT/car.x	
-data/MODEL/OBJECT/car_01.x	
+data/MODEL/OBJECT/sportscar.x	
 data/MODEL/OBJECT/car_02.x	
 data/MODEL/OBJECT/car_03.x	
 data/MODEL/OBJECT/stage.x	
