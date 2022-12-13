@@ -31,7 +31,10 @@ data/MODEL/OBJECT/item_shield.x
 data/MODEL/OBJECT/sphere_cover.x	
 
 data/MODEL/OBJECT/road.x	
+data/MODEL/OBJECT/building00.x	
 data/MODEL/OBJECT/building01.x	
+data/MODEL/OBJECT/building02.x	
+data/MODEL/OBJECT/building03.x	
 
 data/MODEL/OBJECT/hatena.x	
 data/MODEL/OBJECT/menu_stage.x	
