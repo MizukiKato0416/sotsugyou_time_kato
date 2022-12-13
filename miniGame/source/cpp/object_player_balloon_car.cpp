@@ -523,6 +523,7 @@ void CObjectPlayerBalloonCar::Move(CInput* pInput, float fRotCameraY) {
 // ˆÚ“®—Ê‚ÌŒ¸­
 //=============================================================================
 void CObjectPlayerBalloonCar::DecMove(void) {
+	int n = GetPlayer()->GetIndex() - 1;
 	//Œ¸‘¬
 	m_fMoveSpeed *= DEC_MOVE_SPEED;
 
