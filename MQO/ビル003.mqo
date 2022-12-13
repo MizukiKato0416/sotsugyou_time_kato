@@ -2,10 +2,10 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos 65.8293 -1018.5537 39062.5000
+	pos 122.2882 -2825.2388 39062.5000
 	lookat 0.0000 0.0000 0.0000
-	head 81.7144
-	pich 0.2892
+	head 94.5345
+	pich 0.0392
 	bank 0.0000
 	ortho 0
 	zoom2 0.1920
@@ -20,10 +20,10 @@ Scene {
 Material 6 {
 	"mat1" col(0.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.550) power(5.00)
 	"mat2" col(0.141 0.137 0.145 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat3" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 809.494 0.000) proj_scale(293.676 293.676 293.676) proj_angle(0.000 0.000 0.000)
+	"mat3" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 3538.719 0.000) proj_scale(388.300 388.300 388.300) proj_angle(0.000 0.000 0.000)
 	"mat4" col(0.000 0.000 0.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat8" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 809.494 0.000) proj_scale(293.676 293.676 293.676) proj_angle(90.000 -0.000 0.000)
-	"mat5" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 809.494 0.000) proj_scale(293.676 293.676 293.676) proj_angle(179.989 -90.000 180.000)
+	"mat8" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 3012.571 0.000) proj_scale(418.464 418.464 418.464) proj_angle(90.000 -0.000 0.000)
+	"mat5" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_brick00.jpg") proj_type(1) proj_pos(0.000 809.494 0.000) proj_scale(466.995 466.995 466.995) proj_angle(179.989 -90.000 180.000)
 }
 Object "obj1" {
 	visible 15
@@ -43,12 +43,12 @@ Object "obj1" {
 		-1595.8468 0.0008 -3299.7529
 	}
 	face 6 {
-		4 V(0 2 3 1) M(2) UV(-2.21702 -9.75506 3.20666 -9.75506 3.20666 1.87821 -2.21702 1.87821)
-		4 V(2 4 5 3) M(4) UV(-5.00459 -9.75506 6.11801 -9.75506 6.11801 1.87821 -5.00459 1.87821)
-		4 V(4 6 7 5) M(2) UV(3.20666 -9.75506 -2.21702 -9.75506 -2.21702 1.87821 3.20666 1.87821)
-		4 V(6 0 1 7) M(4) UV(6.11801 -9.75506 -5.00459 -9.75506 -5.00459 1.87821 6.11801 1.87821)
-		4 V(6 4 2 0) M(5) UV(-2.21808 -5.11749 3.20560 -5.11853 3.20771 6.00408 -2.21597 6.00511)
-		4 V(1 3 5 7) M(5) UV(-2.21597 6.00511 3.20771 6.00408 3.20560 -5.11853 -2.21808 -5.11749)
+		4 V(0 2 3 1) M(2) UV(-1.55491 -3.74170 2.54708 -3.74170 2.54708 5.05668 -1.55491 5.05668)
+		4 V(2 4 5 3) M(4) UV(-3.36310 -4.06461 4.44269 -4.06461 4.44269 4.09955 -3.36310 4.09955)
+		4 V(4 6 7 5) M(2) UV(2.54708 -3.74170 -1.55491 -3.74170 -1.55491 5.05668 2.54708 5.05668)
+		4 V(6 0 1 7) M(4) UV(4.44269 -4.06461 -3.36310 -4.06461 -3.36310 4.09955 4.44269 4.09955)
+		4 V(6 4 2 0) M(5) UV(-1.20931 -3.03264 2.20145 -3.03329 2.20279 3.96131 -1.20797 3.96197)
+		4 V(1 3 5 7) M(5) UV(-1.20797 3.96197 2.20279 3.96131 2.20145 -3.03329 -1.20931 -3.03264)
 	}
 }
 Object "obj2" {
