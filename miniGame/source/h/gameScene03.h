@@ -14,6 +14,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+#define GAME03_ONE_METER (20.0f)		//game03の１ｍ分の距離
 
 //*****************************************************************************
 // 前方宣言
@@ -44,6 +45,7 @@ private:
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
+	void DecideRanking(void);				//プレイヤーの位置からランキングを決定してシーンのランキングに設定する
 
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
 	bool m_bDecideDestDist;	//目標位置決定
