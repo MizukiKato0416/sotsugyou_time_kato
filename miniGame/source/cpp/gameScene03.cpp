@@ -38,8 +38,8 @@
 #define BACK_BUFF_COLOR			(D3DXCOLOR(0.1f, 0.3f, 0.5f, 1.0f))		//バックバッファーの色
 
 #define PLAYER_ICON_SCALE		(0.18f)		//プレイヤーアイコンのスケール
-#define STOP_POS_MIN			(4000.0f)	//ストップできる最低の距離
-#define STOP_POS_MAX			(9990.0f)	//強制ストップされる距離	10.0fで1m
+#define STOP_POS_MIN			(400)		//ストップできる最低の距離
+#define STOP_POS_MAX			(999)		//強制ストップされる距離
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
 #define NEXT_SCENE_COUNT		(360)		//次のシーンまでのカウント
 
@@ -152,8 +152,8 @@ void CGameScene03::CreateObject(void) {
 	CreateIcon();
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(0.0f, 0.0f, 200.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
+	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 6, 6, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(3000.0f, 0.0f, 200.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
@@ -166,7 +166,7 @@ void CGameScene03::CreateObject(void) {
 	//看板
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
-		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(GAME03_ONE_METER * 100 * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
 
 	//ビル
@@ -300,7 +300,7 @@ void CGameScene03::UpdateGame(void) {
 void CGameScene03::LookPlayerPos(void) {
 	//カメラの移動
 	bool bStopPlayerAll = true;	//全てのプレイヤーが停止済み
-	m_fPosPlayerMin = STOP_POS_MAX;
+	m_fPosPlayerMin = STOP_POS_MAX * GAME03_ONE_METER;
 	m_fPosPlayerMax = 0.0f;
 	//全てのプレイヤーの位置を取得
 	for (auto pPlayer : m_apPlayer)
@@ -313,13 +313,13 @@ void CGameScene03::LookPlayerPos(void) {
 		D3DXVECTOR3 posPlayer = pStopPlayer->GetPos();	//プレイヤーの位置を取得
 
 		//停止可能
-		if (posPlayer.x > STOP_POS_MIN) pStopPlayer->SetCanStop(true);
+		if (posPlayer.x > STOP_POS_MIN * GAME03_ONE_METER) pStopPlayer->SetCanStop(true);
 		//強制停止
-		if (posPlayer.x >= STOP_POS_MAX) {
+		if (posPlayer.x >= STOP_POS_MAX * GAME03_ONE_METER) {
 			//停止
 			pStopPlayer->StopMove();
 			//位置調整
-			posPlayer.x = STOP_POS_MAX;
+			posPlayer.x = STOP_POS_MAX * GAME03_ONE_METER;
 			pStopPlayer->SetPos(posPlayer);
 		}
 
@@ -389,7 +389,7 @@ void CGameScene03::UpdateGameOver(void) {
 			float fPosX = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//プレイヤーのモデルの位置をスクリーン座標に変換してｘ座標を取得
 			//スコアの生成
 			CScore* pDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
-			if (pDist != nullptr) pDist->SetScore(m_apPlayer[nCnt]->GetPos().x / 10.0f);
+			if (pDist != nullptr) pDist->SetScore(m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER);
 
 			//スコアの背景の設定
 			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(fPosX, 600.0f + 30.0f / 2, 0.0f),
@@ -456,9 +456,9 @@ void CGameScene03::UpdateReady(void) {
 		//目標位置の決定
 		if (true) {
 			m_bDecideDestDist = true;
-			m_fDestPos = (rand() % 46 + 40) * 100.0f;	//4500.0f ~ 8500.0f
+			m_fDestPos = (rand() % 50 + 45) * 10.0f * GAME03_ONE_METER ;
 			CScore* pDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f), 50.0f);
-			if (pDist != nullptr) pDist->SetScore((int)(m_fDestPos / 10.0f));
+			if (pDist != nullptr) pDist->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
 		}
 	}
 	else
@@ -517,12 +517,15 @@ void CGameScene03::GameOver(void) {
 		m_pTimer->SetStop(true);
 	}
 
-	//TODO:ランキング設定処理
-	//SetRanking();
+	//ランキングの決定
+	DecideRanking();
+
+	//目標位置に目印を置く	透明な壁？
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_BOM, D3DXVECTOR3(m_fDestPos, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//カメラが全体を見渡せるような距離まで下がる関数を呼ぶ
 	CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
-	if (pCamera03 != nullptr) pCamera03->OverLook(m_fPosPlayerMin, m_fPosPlayerMax);
+	if (pCamera03 != nullptr) pCamera03->OverLook(min(m_fPosPlayerMin, m_fDestPos), max(m_fPosPlayerMax, m_fDestPos));
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
@@ -547,14 +550,15 @@ void CGameScene03::CreatePlayerIcon(int nCntPlayer) {
 
 	//プレイヤーの位置取得
 	D3DXVECTOR3 playerPos = m_apPlayer[nCntPlayer]->GetPos();
-	playerPos.x -= 100.0f;
-	playerPos.y -= 10.0f;
+	//playerPos.x -= 100.0f;
+	//playerPos.y -= 10.0f;
 
 	//アイコンの位置
 	D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//ワールド座標からスクリーン座標に変換
 	iconPos = WorldToScreen(playerPos);
+	iconPos.x -= 70.0f;
 	iconPos.z = 0.0f;
 
 	//生成
@@ -573,14 +577,14 @@ void CGameScene03::UpdatePlayerIcon(void) {
 
 		//プレイヤーの位置取得
 		D3DXVECTOR3 playerPos = m_apPlayer[nCnt]->GetPos();
-		playerPos.x -= 200.0f;
-		playerPos.z -= 100.0f;
+		//playerPos.y += 300.0f;
 
 		//アイコンの位置
 		D3DXVECTOR3 iconPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		//ワールド座標からスクリーン座標に変換
 		iconPos = WorldToScreen(playerPos);
+		iconPos.y -= 30.0f;
 		iconPos.z = 0.0f;
 
 		m_apPlayerIcon[nCnt]->SetPos(iconPos);
@@ -588,7 +592,7 @@ void CGameScene03::UpdatePlayerIcon(void) {
 }
 
 //=============================================================================
-//カウントダウンUIの処理
+// カウントダウンUIの処理
 //=============================================================================
 void CGameScene03::CountDownUi(void)
 {
@@ -624,6 +628,41 @@ void CGameScene03::CountDownUi(void)
 		{
 			//消えるように設定する
 			m_apPlayerIcon[nCntPlayer]->SetState(CObjectPlayerIcon::STATE::DEC_ALPHA);
+		}
+	}
+}
+
+//=============================================================================
+// プレイヤーの位置からランキングを決定してシーンのランキングに設定する
+//=============================================================================
+void CGameScene03::DecideRanking(void) {
+	std::vector<float> distPlayer(MAX_OBJECT_PLAYER_NUM);	//プレイヤーの進んだ距離
+	std::vector<float> sortPlayer(MAX_OBJECT_PLAYER_NUM);	//プレイヤーの進んだ距離のソート
+
+	//全てのプレイヤーの位置を取得
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		CObjplayerStop* pStopPlayer = dynamic_cast<CObjplayerStop*>(m_apPlayer[nCnt]);	//このゲームシーンで使うプレイヤーのクラスにダイナミックキャスト
+		if (pStopPlayer == nullptr) continue;
+
+		D3DXVECTOR3 posPlayer = pStopPlayer->GetPos();	//プレイヤーの位置を取得
+		sortPlayer[nCnt] = distPlayer[nCnt] = fabs(posPlayer.x - m_fDestPos);	//プレイヤーと目標の位置の差分を取得
+	}
+
+	//昇順にソート
+	std::sort(sortPlayer.begin(), sortPlayer.end());
+
+	//ランキングを設定
+	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+	{
+		for (int nCntSort = 0; nCntSort < MAX_OBJECT_PLAYER_NUM; nCntSort++)
+		{
+			if (distPlayer[nCntPlayer] == sortPlayer[nCntSort]) {
+				int nRank = nCntSort + 1;
+				//ランキング設定
+				SetRanking(nRank, nCntPlayer);
+				break;
+			}
 		}
 	}
 }

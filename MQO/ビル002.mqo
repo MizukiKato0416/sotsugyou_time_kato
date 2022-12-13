@@ -2,13 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos -43.9437 -524.0190 100000.0000
+	pos -742.6927 -10061.9443 39062.5000
 	lookat 0.0000 0.0000 0.0000
-	head 39.9117
-	pich 0.8692
+	head 53.8013
+	pich -0.0008
 	bank -0.0100
 	ortho 0
-	zoom2 0.0303
+	zoom2 0.0776
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -22,10 +22,10 @@ Material 8 {
 	"mat2" col(0.000 0.000 0.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat3" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat5" col(0.000 0.537 0.827 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat6" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_tex01.jpg") proj_type(1) proj_pos(0.000 1614.159 0.000) proj_scale(675.461 593.311 675.461) proj_angle(0.000 0.000 0.000)
-	"mat7" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_tex01.jpg") proj_type(1) proj_pos(0.000 1614.159 -0.238) proj_scale(675.461 593.311 675.461) proj_angle(90.000 -0.000 0.000)
-	"mat8" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\bill_wall01.png") proj_type(1) proj_pos(0.000 2777.186 0.000) proj_scale(65.446 52.813 65.446) proj_angle(-0.014 90.000 -0.000)
+	"mat6" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_tex01.jpg") proj_type(1) proj_pos(0.000 1614.159 0.000) proj_scale(675.461 593.311 675.461) proj_angle(0.000 0.000 0.000)
+	"mat7" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_tex01.jpg") proj_type(1) proj_pos(0.000 9738.814 -0.238) proj_scale(4405.941 3987.656 4405.941) proj_angle(90.000 -0.000 0.000)
+	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_wall01.png") proj_type(1) proj_pos(1744.948 10000.000 0.000) proj_scale(1192.742 952.991 5682.103) proj_angle(0.000 90.000 0.000)
+	"mat8" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\sotsugyou_time_kato\miniGame\data\TEXTURE\MESH\building_tex01.jpg") proj_type(1) proj_pos(0.000 9738.800 -0.200) proj_scale(4405.900 3987.700 4405.900) proj_angle(-0.000 0.000 0.000)
 }
 Object "obj1" {
 	visible 15
@@ -45,11 +45,11 @@ Object "obj1" {
 		-3573.2688 5479.9932 -3574.2148
 	}
 	face 5 {
-		4 V(0 2 3 1) M(4) UV(-2.14506 -13.43226 3.14506 -13.43226 3.14506 -2.75785 -2.14506 -2.75785)
-		4 V(2 4 5 3) M(5) UV(-2.14453 -13.43226 3.14558 -13.43226 3.14558 -2.75785 -2.14453 -2.75785)
-		4 V(4 6 7 5) M(4) UV(3.14506 -13.43226 -2.14506 -13.43226 -2.14506 -2.75785 3.14506 -2.75785)
-		4 V(6 0 1 7) M(5) UV(3.14558 -13.43226 -2.14453 -13.43226 -2.14453 -2.75785 3.14558 -2.75785)
-		4 V(6 4 2 0) M(7) UV(-26.80604 34.33014 27.79270 34.34667 27.80604 -33.31216 -26.79270 -33.32869)
+		4 V(0 2 3 1) M(7) UV(0.09449 -0.55420 0.90551 -0.55420 0.90551 1.03399 0.09449 1.03399)
+		4 V(2 4 5 3) M(5) UV(0.09458 -0.55421 0.90559 -0.55421 0.90559 1.03400 0.09458 1.03400)
+		4 V(4 6 7 5) M(7) UV(0.90551 -0.55420 0.09449 -0.55420 0.09449 1.03399 0.90551 1.03399)
+		4 V(6 0 1 7) M(5) UV(0.90559 -0.55421 0.09458 -0.55421 0.09458 1.03400 0.90559 1.03400)
+		4 V(6 4 2 0) M(6) UV(-1.72941 2.37526 1.26644 2.37526 1.26644 -1.37426 -1.72941 -1.37426)
 	}
 }
 Object "obj2" {
