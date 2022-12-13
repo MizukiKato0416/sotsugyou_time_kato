@@ -33,7 +33,7 @@
 //移動
 //--------------------------------
 #define ADD_MOVE_SPEED								(0.2f)			//加速
-#define MAX_MOVE_SPEED								(20.0f)			//最大速度
+#define MAX_MOVE_SPEED								(30.0f)			//最大速度
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -150,6 +150,20 @@ void CObjplayerStop::Move(void) {
 	posObjectPlayer += m_move;
 	//位置設定
 	SetPos(posObjectPlayer);
+
+	bool bWolf = CGameScene::GetWereWolfPlayerIndex() == GetPlayer()->GetIndex();	//人狼のプレイヤー
+	bool bVibArea = int(posObjectPlayer.x - 50) % int(GAME03_ONE_METER * 100) < 50;		//バイブ有効エリア
+
+	//人狼時の処理
+	if (CGameScene::GetWereWolfMode() && bWolf && bVibArea) {
+		CInputGamepadX* pPadX = dynamic_cast<CInputGamepadX*>(pInput);	//Xパッドの取得
+
+		if (pPadX != nullptr)
+		{
+			//振動させる
+			pPadX->SetVibration(2000, 2000, 20, GetPlayer()->GetIndex() - 1);
+		}
+	}
 
 	//加速
 	if (m_move.x < MAX_MOVE_SPEED) {
