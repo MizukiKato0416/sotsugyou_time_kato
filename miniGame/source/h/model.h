@@ -34,6 +34,7 @@ public:
 		OBJ_BALLOON_GOLD,				//風船(ゴールド)
 		OBJ_ITEM_BOX,					//アイテムボックス
 		OBJ_BANANA,						//バナナ
+
 		OBJ_ATTACK_CAR_STAGE,			//衝突ゲーム用ステージ
 		OBJ_BOM,						//爆弾
 		OBJ_BROKEN_TOWER,				//壊れた塔
@@ -46,6 +47,10 @@ public:
 		OBJ_BROKEN_TOWER_FRAGMENT_06,	//壊れた塔の破片
 		OBJ_ITEM_SHIELD,				//アイテム盾
 		OBJ_SPHERE_COVER,				//球のカバー
+
+		OBJ_ROAD,						//道路
+		OBJ_BUILDING_01,				//ビル
+
 		OBJ_HATENA,						//はてなマーク
 		OBJ_MENU_STAGE,					//メニューのステージ
 		OBJ_SHADOW,						//影

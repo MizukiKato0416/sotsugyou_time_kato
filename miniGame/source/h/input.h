@@ -40,7 +40,7 @@ public:
 		//選択
 		SELECT_UP,
 		SELECT_DOWN,
-		SELECT_LFET,
+		SELECT_LEFT,
 		SELECT_RIGHT,
 		//アクション
 		ACCELE,			//アクセル

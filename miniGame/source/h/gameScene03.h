@@ -40,12 +40,11 @@ private:
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
 	void UpdateReady(void);					//準備状態中の更新
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
-	void UpdatePlayerIcon(void);	//プレイヤーアイコン更新処理
+	void UpdatePlayerIcon(void);			//プレイヤーアイコン更新処理
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
 
-	CObjplayerStop* m_apPlayer[MAX_OBJECT_PLAYER_NUM];			//プレイヤーのポインタ
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
 	bool m_bDecideDestDist;	//目標位置決定
 	float m_fDestPos;		//目標の距離

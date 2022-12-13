@@ -39,9 +39,9 @@
 
 #define PLAYER_ICON_SCALE		(0.18f)		//プレイヤーアイコンのスケール
 #define STOP_POS_MIN			(4000.0f)	//ストップできる最低の距離
-#define STOP_POS_MAX			(10000.0f)	//強制ストップされる距離	10.0fで1m
+#define STOP_POS_MAX			(9990.0f)	//強制ストップされる距離	10.0fで1m
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
-#define NEXT_SCENE_COUNT		(240)		//次のシーンまでのカウント
+#define NEXT_SCENE_COUNT		(360)		//次のシーンまでのカウント
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -74,11 +74,11 @@ CGameScene03::~CGameScene03()
 //=============================================================================
 void CGameScene03::Init(void) {
 	//テクスチャのロード
-	CTexture::Load("game01");
+	CTexture::Load("game03");
 
 	//変数初期化
 	m_bReady = true;
-	m_fDestPos = 100.0f;
+	m_fDestPos = 0.0f;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -152,20 +152,27 @@ void CGameScene03::CreateObject(void) {
 	CreateIcon();
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(-2000.0f, 0.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 4, 4, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(0.0f, 0.0f, 200.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
 
-	//プレイヤーの生成
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
+		//プレイヤーの生成
 		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
-
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
 
-	for (int nCnt = 0; nCnt < 5; nCnt++)
+	//看板
+	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	}
+
+	//ビル
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		CObjectModel::Create(CModel::MODELTYPE::OBJ_BUILDING_01, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
 }
 
@@ -298,16 +305,23 @@ void CGameScene03::LookPlayerPos(void) {
 	//全てのプレイヤーの位置を取得
 	for (auto pPlayer : m_apPlayer)
 	{
-		if (pPlayer == nullptr) continue;
+		CObjplayerStop* pStopPlayer = dynamic_cast<CObjplayerStop*>(pPlayer);	//このゲームシーンで使うプレイヤーのクラスにダイナミックキャスト
+		if (pStopPlayer == nullptr) continue;
 
-		if (!pPlayer->GetStopMove()) bStopPlayerAll = false;
+		if (!pStopPlayer->GetStopMove()) bStopPlayerAll = false;
 
-		D3DXVECTOR3 posPlayer = pPlayer->GetPos();	//プレイヤーの位置を取得
+		D3DXVECTOR3 posPlayer = pStopPlayer->GetPos();	//プレイヤーの位置を取得
 
 		//停止可能
-		if (posPlayer.x > STOP_POS_MIN) pPlayer->SetCanStop(true);
+		if (posPlayer.x > STOP_POS_MIN) pStopPlayer->SetCanStop(true);
 		//強制停止
-		if (posPlayer.x >= STOP_POS_MAX) pPlayer->StopMove();
+		if (posPlayer.x >= STOP_POS_MAX) {
+			//停止
+			pStopPlayer->StopMove();
+			//位置調整
+			posPlayer.x = STOP_POS_MAX;
+			pStopPlayer->SetPos(posPlayer);
+		}
 
 		//最小の位置を取得
 		m_fPosPlayerMin = min(m_fPosPlayerMin, posPlayer.x);
@@ -559,7 +573,7 @@ void CGameScene03::UpdatePlayerIcon(void) {
 
 		//プレイヤーの位置取得
 		D3DXVECTOR3 playerPos = m_apPlayer[nCnt]->GetPos();
-		playerPos.x -= 300.0f;
+		playerPos.x -= 200.0f;
 		playerPos.z -= 100.0f;
 
 		//アイコンの位置

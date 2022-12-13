@@ -82,6 +82,9 @@
 #define TITLE_SCENE_FLOOR_POS_Z		(-1000.0f)			//床の位置Z
 #define TITLE_SCENE_FLOOR_NUM		(8)					//床の分割数
 #define TITLE_SCENE_FLOOR_SIZE		(1000.0f)			//床のサイズ
+
+#define TITLE_SCENE_RESET_COUNT		(600)				//リセットするまでの時間
+
 	
 //=============================================================================
 // 静的メンバ変数宣言
@@ -101,6 +104,7 @@ CTitleScene::CTitleScene() :m_fMaxCol(1.0f), m_nDivideNum(2), m_nMaxColTime(3)
 	m_pTheFinalLogo = nullptr;
 	m_pTitleLogo = nullptr;
 	m_nFrameCounter = 0;
+	m_nFrameCounterReset = 0;
 	m_phase = PHASE::NONE;
 	m_fBoundMove = 0.0f;
 	m_pExplosionLogo = nullptr;
@@ -131,6 +135,7 @@ void CTitleScene::Init(void) {
 	memset(m_pTitleLogoChara, NULL, sizeof(m_pTitleLogoChara[TITLE_LOGO_CHARA_NUM]));
 	m_pTheFinalLogo = nullptr;
 	m_nFrameCounter = 0;
+	m_nFrameCounterReset = 0;
 	m_phase = PHASE::CHARACTOR_LOGO;
 	m_pTitleLogo = nullptr;
 	m_fBoundMove = 1.02f;
@@ -322,12 +327,6 @@ void CTitleScene::Update(void) {
 	//シーンの更新処理
 	CScene::Update();
 
-	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-	CInput* pInput = nullptr;	//入力デバイスへのポインタ
-	CFade* pFade = nullptr;		//フェードへのポインタ
-	CSound* pSound = nullptr;	//サウンドへのポインタ
-	D3DXCOLOR col = m_pNext->GetColor(); // 次に行かせるロゴの色の取得
-
 	//フェーズによって処理分け
 	switch (m_phase)
 	{
@@ -363,71 +362,11 @@ void CTitleScene::Update(void) {
 	//全てのロゴを生成する処理
 	if (CreateAllLogo()) return;
 
-	if (pManager != nullptr) {
-		//現在の入力デバイスの取得
-		pInput = pManager->GetInputCur();
-		//フェードの取得
-		pFade = pManager->GetFade();
-		//サウンドの取得
-		pSound = pManager->GetSound();
-	}
+	//リセット処理
+	if (Reset()) return;
 
-	if (pInput == nullptr || pFade == nullptr || !m_bCreateAllLogo) return;
-
-	//決定キーを押したとき
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey) 
-	{		
-		//フェード中だった場合
-		if (pFade->GetFade()) 
-		{
-			//フェードをスキップ
-			pFade->SkipFade();
-		}		
-		else
-		{
-			// 押されたとき
-			m_bPushKey = true;
-
-			//決定音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ENGINE);
-
-			m_nFrameCounter = 0;
-		}
-	}
-
-	//決定キーが押されたとき
-	if (m_bPushKey)
-	{		
-		// 色の状態を取得
-		m_bCol = ChangeColTime(m_bCol);
-		// 点滅処理(状態遷移)
-		if (m_bCol)
-		{
-			// α値の変更
-			col.a = m_fMaxCol;		
-		}
-		else
-		{
-			// α値の変更
-			col.a = m_fMaxCol / m_nDivideNum;			
-		}		
-		// 次に行かせるロゴの色の設定
-		m_pNext->SetColor(col);
-
-		// 遷移する時間が0より小さくなっていたら
-		if (m_nFadeTime < 0)
-		{
-			// 0を代入してマイナス値にならないようにする
-			m_nFadeTime = 0;	
-			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 0);
-		}
-		else
-		{
-			//遷移する時間が0より小さくなっていたら
-			m_nFadeTime--;
-		}
-	}
+	//決定処理
+	Decide();
 }
 
 //=============================================================================
@@ -988,4 +927,103 @@ void CTitleScene::DeleteLogo()
 			m_pTheFinalLogo = nullptr;
 		}
 	}
+}
+
+//=============================================================================
+//決定処理
+//=============================================================================
+void CTitleScene::Decide()
+{
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	CInput* pInput = nullptr;	//入力デバイスへのポインタ
+	CFade* pFade = nullptr;		//フェードへのポインタ
+	CSound* pSound = nullptr;	//サウンドへのポインタ
+	D3DXCOLOR col = m_pNext->GetColor(); // 次に行かせるロゴの色の取得
+
+	if (pManager != nullptr) {
+		//現在の入力デバイスの取得
+		pInput = pManager->GetInputCur();
+		//フェードの取得
+		pFade = pManager->GetFade();
+		//サウンドの取得
+		pSound = pManager->GetSound();
+	}
+
+	if (pInput == nullptr || pFade == nullptr || !m_bCreateAllLogo) return;
+
+	//決定キーを押したとき
+	if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !m_bPushKey)
+	{
+		//フェード中だった場合
+		if (pFade->GetFade())
+		{
+			//フェードをスキップ
+			pFade->SkipFade();
+		}
+		else
+		{
+			// 押されたとき
+			m_bPushKey = true;
+
+			//決定音の再生
+			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ENGINE);
+
+			m_nFrameCounter = 0;
+		}
+	}
+
+	//決定キーが押されたとき
+	if (m_bPushKey)
+	{
+		// 色の状態を取得
+		m_bCol = ChangeColTime(m_bCol);
+		// 点滅処理(状態遷移)
+		if (m_bCol)
+		{
+			// α値の変更
+			col.a = m_fMaxCol;
+		}
+		else
+		{
+			// α値の変更
+			col.a = m_fMaxCol / m_nDivideNum;
+		}
+		// 次に行かせるロゴの色の設定
+		m_pNext->SetColor(col);
+
+		// 遷移する時間が0より小さくなっていたら
+		if (m_nFadeTime < 0)
+		{
+			// 0を代入してマイナス値にならないようにする
+			m_nFadeTime = 0;
+			//シーン遷移開始			
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 0);
+		}
+		else
+		{
+			//遷移する時間が0より小さくなっていたら
+			m_nFadeTime--;
+		}
+	}
+}
+
+//=============================================================================
+//リセット処理
+//=============================================================================
+bool CTitleScene::Reset()
+{
+	if (m_bPushKey || m_phase != PHASE::STOP_TITLE_LOGO) return false;
+
+	m_nFrameCounterReset++;
+	if (m_nFrameCounterReset <= TITLE_SCENE_RESET_COUNT) return false;
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return false;
+
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	//タイトルシーンに遷移
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 0);
+
+	return true;
 }

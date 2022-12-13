@@ -58,6 +58,8 @@ private:
 	void CarLogo();				//車ロゴの処理
 	bool CreateAllLogo();		//全てのロゴを生成する処理
 	void DeleteLogo();			//ロゴ消す処理
+	void Decide();				//決定処理
+	bool Reset();				//リセット処理
 
 
 	static CObject2D * m_pNext;	// オブジェクト2Dの静的ポインター生成
@@ -77,6 +79,7 @@ private:
 	CObject2D *m_pTitleLogoCar;									//車ロゴ
 
 	int m_nFrameCounter;					//フレームカウンター
+	int m_nFrameCounterReset;				//フレームカウンター(リセット用)
 	PHASE m_phase;							//フェーズ
 	float m_fBoundMove;						//バウンド移動量
 	bool m_bExplosionAddSize;				//サイズを大きくするかどうか

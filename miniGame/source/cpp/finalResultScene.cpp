@@ -22,6 +22,7 @@
 #include "float_object.h"
 #include "skydome.h"
 #include "PresetSetEffect.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -63,7 +64,7 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 10, 10, 10, 10 };
+int CFinalResultScene::m_aPlayerScore[MAX_OBJECT_PLAYER_NUM] = { 70, 50, 30, 10 };
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -207,12 +208,17 @@ void CFinalResultScene::CreateObject(void)
 	}
 
 
+
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++) {
+
+		//モデルタイプを取得
+		CModel::MODELTYPE modelType = CPlayer::GetModelType(nIdxPlayer);
+
 		D3DXVECTOR3 posPlayer = D3DXVECTOR3(-fDistPlayer * (MAX_OBJECT_PLAYER_NUM / 2.0f) + fDistPlayer / 2.0f + fDistPlayer * nIdxPlayer, 0.0f, 0.0f);	//プレイヤーの位置
 		//プレイヤーのモデルの生成
-		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_CAR, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(modelType, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 		//プレイヤーの色を設定
 		if (m_apObjPlayer[nIdxPlayer] == nullptr) continue;	//ループ飛ばす
 		//タワーの生成
@@ -368,7 +374,7 @@ void CFinalResultScene::RiseCamera() {
 	D3DXVECTOR3 rotCamera = pCamera->GetRot();	//カメラの角度取得
 	float fRotCameraLastY = rotCamera.y;	//回転させる前の角度
 
-	float fRotSpeed = 0.013f;	//回転速度
+	float fRotSpeed = 0.018f;	//回転速度
 	float fSlowRot = -0.2f;		//減速する角度
 
 	//減速している時点で、正面ギリギリで減速
@@ -403,7 +409,7 @@ void CFinalResultScene::RiseCamera() {
 void CFinalResultScene::ResultText() {
 	m_nCntPhase++;
 
-	if (m_nCntPhase == 120) {
+	if (m_nCntPhase == 30) {
 		//結果発表テキストの表示
 		m_pTextResult = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 			                              CTexture::TEXTURE_TYPE::FINAL_RESULT_UI,
@@ -435,7 +441,7 @@ void CFinalResultScene::ResultText() {
 	m_pTextResult->SetSize(size);
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 300) {
+	if (m_nCntPhase > 180) {
 
 		//カラー取得
 		D3DXCOLOR col = m_pTextResult->GetColor();
@@ -487,7 +493,7 @@ void CFinalResultScene::ShowScoreUI() {
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
 		//生成タイミング
-		if (m_nCntPhase == 120 + nCnt * 30 || (!bWolfMode && m_nCntPhase == 1)) {
+		if (m_nCntPhase == 60 + nCnt * 30 || (!bWolfMode && m_nCntPhase == 1)) {
 			float fPosX = WorldToScreen(m_apObjPlayer[nCnt]->GetPos()).x;	//プレイヤーのモデルの位置をスクリーン座標に変換してｘ座標を取得
 			//スコアの生成
 			m_apScoreResult[nCnt] = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(fPosX + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
@@ -509,7 +515,7 @@ void CFinalResultScene::ShowScoreUI() {
 	}
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 270 || (!bWolfMode && m_nCntPhase == 120)) {
+	if (m_nCntPhase > 200 || (!bWolfMode && m_nCntPhase == 60)) {
 		//フェーズの変更
 		m_phase = PHASE::RISE_TOWER;
 		//カウントリセット
@@ -531,7 +537,7 @@ void CFinalResultScene::RiseTower() {
 
 	m_nCntPhase++;
 
-	const float fSpeedRise = 2.0f;	//上昇速度
+	const float fSpeedRise = 3.0f;	//上昇速度
 
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
@@ -564,7 +570,7 @@ void CFinalResultScene::RiseTower() {
 		}
 
 		//スコアUIの値の上昇
-		const int nSpanAddScore = 6;
+		const int nSpanAddScore = 4;
 		if(m_nCntPhase % nSpanAddScore == 0) m_apScoreResult[nCnt]->AddScore(1);	//数フレーム毎に一度増える
 		//最大スコアの更新
 		m_nTopScore = max(m_nTopScore, m_apScoreResult[nCnt]->GetScore());
@@ -649,7 +655,7 @@ void CFinalResultScene::Winner() {
 	m_nCntPhase++;
 	m_nCrownEffectCounter++;
 
-	const int nTimeCreateCrown = 180;
+	const int nTimeCreateCrown = 60;
 	const float fposCrownFirst = 500.0f;	//王冠の初期位置（プレイヤーの位置からの差分）
 
 	if (m_nCntPhase == nTimeCreateCrown) {
@@ -707,7 +713,7 @@ void CFinalResultScene::Winner() {
 	}
 
 	//フェーズ終了
-	if (m_nCntPhase == 180 + nTimeFallCrown) {
+	if (m_nCntPhase == 60 + nTimeFallCrown) {
 		//フェーズの変更
 		m_phase = PHASE::PHASE_FINISH;
 		//カウントリセット

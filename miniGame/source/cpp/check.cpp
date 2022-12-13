@@ -65,7 +65,7 @@ HRESULT CCheck::Init(void) {
 	//背景の暗いやつ
 	m_pFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::CHECK_BG, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	const float fDist = 320.0f;	//プレイヤー同士の距離
+	const float fDist = 380.0f;	//プレイヤー同士の距離
 
 	for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
 	{

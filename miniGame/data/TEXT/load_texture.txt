@@ -13,8 +13,9 @@
 //
 // TitleScene  : title
 // SelectGame  : select
-// game01     : game01
-// game02     : game02
+// game01      : game01
+// game02      : game02
+// game03      : game03
 // ResultScene : result
 // FindWolf    : find_w
 // FinalResult : f_result
@@ -41,49 +42,51 @@ data/TEXTURE/UI/tutorial_balloon_wolf.png	= select
 data/TEXTURE/UI/tutorial_attack.png			= select
 data/TEXTURE/UI/tutorial_attack_wolf.png	= select
 data/TEXTURE/UI/tutorial_random.png			= select
-data/TEXTURE/UI/select_icon.png				= select, game01, game02
+data/TEXTURE/UI/select_icon.png				= select, game01, game02, game03
 
-data/TEXTURE/UI/count_down_ui_3.png			= game01, game02
-data/TEXTURE/UI/count_down_ui_2.png			= game01, game02
-data/TEXTURE/UI/count_down_ui_1.png			= game01, game02
-data/TEXTURE/UI/count_down_ui_start.png		= game01, game02
-data/TEXTURE/UI/text_finish.png				= game01, game02
-data/TEXTURE/UI/icon_1p.png					= game01, game02, find_w
-data/TEXTURE/UI/icon_2p.png					= game01, game02, find_w
-data/TEXTURE/UI/icon_3p.png					= game01, game02, find_w
-data/TEXTURE/UI/icon_4p.png					= game01, game02, find_w
-data/TEXTURE/UI/icon_1p_new.png				= game01, game02
-data/TEXTURE/UI/icon_2p_new.png				= game01, game02
-data/TEXTURE/UI/icon_3p_new.png				= game01, game02
-data/TEXTURE/UI/icon_4p_new.png				= game01, game02
-data/TEXTURE/UI/fukidashi_1p.png			= game01, game02
-data/TEXTURE/UI/fukidashi_2p.png			= game01, game02
-data/TEXTURE/UI/fukidashi_3p.png			= game01, game02
-data/TEXTURE/UI/fukidashi_4p.png			= game01, game02
-data/TEXTURE/UI/fukidashi_1p_new.png		= game01, game02
-data/TEXTURE/UI/fukidashi_2p_new.png		= game01, game02
-data/TEXTURE/UI/fukidashi_3p_new.png		= game01, game02
-data/TEXTURE/UI/fukidashi_4p_new.png		= game01, game02
+data/TEXTURE/UI/count_down_ui_3.png			= game01, game02, game03
+data/TEXTURE/UI/count_down_ui_2.png			= game01, game02, game03
+data/TEXTURE/UI/count_down_ui_1.png			= game01, game02, game03
+data/TEXTURE/UI/count_down_ui_start.png		= game01, game02, game03
+data/TEXTURE/UI/text_finish.png				= game01, game02, game03
+data/TEXTURE/UI/icon_1p.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/icon_2p.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/icon_3p.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/icon_4p.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/icon_1p_new.png				= game01, game02, game03
+data/TEXTURE/UI/icon_2p_new.png				= game01, game02, game03
+data/TEXTURE/UI/icon_3p_new.png				= game01, game02, game03
+data/TEXTURE/UI/icon_4p_new.png				= game01, game02, game03
+data/TEXTURE/UI/fukidashi_1p.png			= game01, game02, game03
+data/TEXTURE/UI/fukidashi_2p.png			= game01, game02, game03
+data/TEXTURE/UI/fukidashi_3p.png			= game01, game02, game03
+data/TEXTURE/UI/fukidashi_4p.png			= game01, game02, game03
+data/TEXTURE/UI/fukidashi_1p_new.png		= game01, game02, game03
+data/TEXTURE/UI/fukidashi_2p_new.png		= game01, game02, game03
+data/TEXTURE/UI/fukidashi_3p_new.png		= game01, game02, game03
+data/TEXTURE/UI/fukidashi_4p_new.png		= game01, game02, game03
 
 data/TEXTURE/UI/1st.png = result
 data/TEXTURE/UI/2nd.png = result
 data/TEXTURE/UI/3rd.png = result
 data/TEXTURE/UI/4th.png = result
 
-data/TEXTURE/UI/GameStart.png = game01, game02
+data/TEXTURE/UI/GameStart.png = game01, game02, game03
 
-data/TEXTURE/UI/tex01.png		= game01, game02, find_w
-data/TEXTURE/UI/tex02.png		= game01, game02, find_w
-data/TEXTURE/UI/tex03.png		= game01, game02, find_w
-data/TEXTURE/UI/tex04.png		= game01, game02, find_w
-data/TEXTURE/UI/Button_X.png	= game01, game02
-data/TEXTURE/UI/Button_B.png	= game01, game02
-data/TEXTURE/UI/Button_A.png	= all
-data/TEXTURE/UI/Button_Y.png	= game01, game02
-data/TEXTURE/UI/OK01.png		= game01, game02
-data/TEXTURE/UI/OK02.png		= game01, game02
-data/TEXTURE/UI/OK03.png		= game01, game02
-data/TEXTURE/UI/OK04.png		= game01, game02
+data/TEXTURE/UI/tex01.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/tex02.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/tex03.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/tex04.png					= game01, game02, game03, find_w
+data/TEXTURE/UI/Button_X.png				= game01, game02, game03
+data/TEXTURE/UI/Button_B.png				= game01, game02, game03
+data/TEXTURE/UI/Button_A.png				= all
+data/TEXTURE/UI/Button_Y.png				= game01, game02, game03
+data/TEXTURE/UI/OK01.png					= game01, game02, game03
+data/TEXTURE/UI/OK02.png					= game01, game02, game03
+data/TEXTURE/UI/OK03.png					= game01, game02, game03
+data/TEXTURE/UI/OK04.png					= game01, game02, game03
+data/TEXTURE/UI/check_icon_select_01.png	= game01, game02, game03
+data/TEXTURE/UI/check_icon_select_00.png	= game01, game02, game03
 
 data/TEXTURE/UI/wolf_select_1.png	= find_w
 data/TEXTURE/UI/wolf_select_2.png	= find_w
@@ -100,29 +103,29 @@ data/TEXTURE/UI/30point.png = result
 data/TEXTURE/UI/20point.png = result
 data/TEXTURE/UI/10point.png = result
 
-data/TEXTURE/UI/1P_frame_score.png = game01, find_w, f_result
-data/TEXTURE/UI/2P_frame_score.png = game01, find_w, f_result
-data/TEXTURE/UI/3P_frame_score.png = game01, find_w, f_result
-data/TEXTURE/UI/4P_frame_score.png = game01, find_w, f_result
+data/TEXTURE/UI/1P_frame_score.png = game01, game03, find_w, f_result
+data/TEXTURE/UI/2P_frame_score.png = game01, game03, find_w, f_result
+data/TEXTURE/UI/3P_frame_score.png = game01, game03, find_w, f_result
+data/TEXTURE/UI/4P_frame_score.png = game01, game03, find_w, f_result
 
 data/TEXTURE/UI/banana_bark.png		= game01
 data/TEXTURE/UI/gasoline_frame.png	= game01
-data/TEXTURE/UI/1P_frame_item.png	= game01, f_result
-data/TEXTURE/UI/2P_frame_item.png	= game01, f_result
-data/TEXTURE/UI/3P_frame_item.png	= game01, f_result
-data/TEXTURE/UI/4P_frame_item.png	= game01, f_result
+data/TEXTURE/UI/1P_frame_item.png	= game01, game03, f_result
+data/TEXTURE/UI/2P_frame_item.png	= game01, game03, f_result
+data/TEXTURE/UI/3P_frame_item.png	= game01, game03, f_result
+data/TEXTURE/UI/4P_frame_item.png	= game01, game03, f_result
 
-data/TEXTURE/UI/timer_frame.png = game01, game02, find_w
+data/TEXTURE/UI/timer_frame.png = game01, game02, game03, find_w
 
-data/TEXTURE/UI/pause_bg.png		= game01, game02
-data/TEXTURE/UI/pause_frame.png		= game01, game02
-data/TEXTURE/UI/pause_continue.png	= game01, game02
-data/TEXTURE/UI/pause_restart.png	= game01, game02
-data/TEXTURE/UI/pause_menu.png		= game01, game02
+data/TEXTURE/UI/pause_bg.png		= game01, game02, game03
+data/TEXTURE/UI/pause_frame.png		= game01, game02, game03
+data/TEXTURE/UI/pause_continue.png	= game01, game02, game03
+data/TEXTURE/UI/pause_restart.png	= game01, game02, game03
+data/TEXTURE/UI/pause_menu.png		= game01, game02, game03
 
-data/TEXTURE/UI/shake_tutorial.png			= game01, game02
-data/TEXTURE/UI/shake.png					= game01, game02
-data/TEXTURE/UI/shake_start.png				= game01, game02
+data/TEXTURE/UI/shake_tutorial.png			= game01, game02, game03
+data/TEXTURE/UI/shake.png					= game01, game02, game03
+data/TEXTURE/UI/shake_start.png				= game01, game02, game03
 data/TEXTURE/UI/wolf_answer_1.png			= find_w
 data/TEXTURE/UI/wolf_answer_2.png			= find_w
 data/TEXTURE/UI/wolf_answer_3.png			= find_w
@@ -134,8 +137,8 @@ data/TEXTURE/UI/wolf_find_tutorial_4.png	= find_w
 
 data/TEXTURE/UI/circle.png = find_w
 
-data/TEXTURE/UI/result_ui.png = result
-data/TEXTURE/UI/result_ui2.png = f_result
+data/TEXTURE/UI/result_ui.png	= result
+data/TEXTURE/UI/result_ui2.png	= f_result
 
 data/TEXTURE/UI/menu_game_title_frame_ui.png	= select
 data/TEXTURE/UI/select_decision.png				= select
@@ -146,13 +149,13 @@ data/TEXTURE/UI/menu_none_move_ui.png			= select
 data/TEXTURE/UI/menu_none_move_ui_wolf.png		= select
 
 data/TEXTURE/UI/title_logo.png				= title
-data/TEXTURE/UI/title_logo_charactor_00.png = title
-data/TEXTURE/UI/title_logo_charactor_01.png = title
-data/TEXTURE/UI/title_logo_charactor_02.png = title
-data/TEXTURE/UI/title_logo_charactor_03.png = title
-data/TEXTURE/UI/title_logo_the_final.png = title
-data/TEXTURE/UI/title_logo_explosion.png = title
-data/TEXTURE/UI/title_logo_car.png = title
+data/TEXTURE/UI/title_logo_charactor_00.png	= title
+data/TEXTURE/UI/title_logo_charactor_01.png	= title
+data/TEXTURE/UI/title_logo_charactor_02.png	= title
+data/TEXTURE/UI/title_logo_charactor_03.png	= title
+data/TEXTURE/UI/title_logo_the_final.png	= title
+data/TEXTURE/UI/title_logo_explosion.png	= title
+data/TEXTURE/UI/title_logo_car.png			= title
 
 data/TEXTURE/UI/now_loading.png = all
 
@@ -187,6 +190,9 @@ data/TEXTURE/MESH/wood.png				= select
 data/TEXTURE/MESH/cactus.png			= title
 data/TEXTURE/MESH/rubble2.jpg			= title
 data/TEXTURE/MESH/cactus01.png			= title
+
+data/TEXTURE/MESH/road.png				= game03
+data/TEXTURE/MESH/building01.jpg		= game03
 
 data/TEXTURE/EFFECT/sun.png = title
 

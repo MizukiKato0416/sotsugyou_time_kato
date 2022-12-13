@@ -85,6 +85,8 @@ public:
 		CHECK_ICON_OK_2,
 		CHECK_ICON_OK_3,
 		CHECK_ICON_OK_4,
+		CHECK_ICON_SELECT,
+		CHECK_ICON_SELECT_NOT,
 		
 		WOLF_SELECT_ICON_1,
 		WOLF_SELECT_ICON_2,
@@ -190,6 +192,9 @@ public:
 		MESH_CACTUS_00,				//サボテン00
 		MESH_CACTUS_01,				//サボテン01
 		MESH_CACTUS_02,				//サボテン02
+
+		MESH_ROAD,					//道路
+		MESH_BUILDING_01,			//ビル１
 
 		//エフェクト
 		EFFECT_SUN,	//太陽
