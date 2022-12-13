@@ -192,6 +192,9 @@ data/TEXTURE/MESH/rubble2.jpg			= title
 data/TEXTURE/MESH/cactus01.png			= title
 
 data/TEXTURE/MESH/road.png				= game03
+data/TEXTURE/MESH/100m.png				= game03
+data/TEXTURE/MESH/200m.png				= game03
+data/TEXTURE/MESH/300m.png				= game03
 data/TEXTURE/MESH/building01.jpg		= game03
 
 data/TEXTURE/EFFECT/sun.png = title

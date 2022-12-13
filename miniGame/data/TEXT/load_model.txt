@@ -31,6 +31,9 @@ data/MODEL/OBJECT/item_shield.x
 data/MODEL/OBJECT/sphere_cover.x	
 
 data/MODEL/OBJECT/road.x	
+data/MODEL/OBJECT/100mMark.x	
+data/MODEL/OBJECT/200mMark.x	
+data/MODEL/OBJECT/300mMark.x	
 data/MODEL/OBJECT/building00.x	
 data/MODEL/OBJECT/building01.x	
 data/MODEL/OBJECT/building02.x	

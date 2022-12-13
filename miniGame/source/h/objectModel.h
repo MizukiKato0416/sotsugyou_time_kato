@@ -37,12 +37,12 @@ public:
 	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }		//角度の設定
 	D3DXVECTOR3 GetRot(void) { return m_rot; }			//角度の取得
 	void SetRotSpeed(D3DXVECTOR3 rotSpeed) { m_rotSpeed = rotSpeed; }	//移動速度の設定
-	D3DXMATRIX GetMtxWorld(void) { return m_mtxWorld; }		//ワールドマトリックスの取得
+	D3DXMATRIX GetMtxWorld(void) { return m_mtxWorld; }	//ワールドマトリックスの取得
 
-	CModel::MODELTYPE GetModelType(void);	//モデルの種類の取得
+	CModel::MODELTYPE GetModelType(void);				//モデルの種類の取得
 	CModel* GetPtrModel(void) { return m_pModel; }		//モデルのポインタの取得
 	void SetModelColor(D3DXCOLOR col, int nIdx);		//モデルの色の設定
-	void SetModelGlowColor(D3DXCOLOR col);	//モデルの発光色の設定
+	void SetModelGlowColor(D3DXCOLOR col);				//モデルの発光色の設定
 
 	void SetDrawZTex(bool bDraw) { m_bDrawZTex = bDraw; }
 
