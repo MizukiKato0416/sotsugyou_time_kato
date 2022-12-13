@@ -76,6 +76,8 @@ CObjectPlayerAttackCar::CObjectPlayerAttackCar()
 	m_nDefenceCounter = 0;
 	m_bDefence = false;
 	m_nFallEffectCounter = 0;
+
+	m_pChangeColor = nullptr;
 }
 
 //=============================================================================
@@ -126,6 +128,12 @@ HRESULT CObjectPlayerAttackCar::Init(void) {
 // プレイヤーの終了処理
 //=============================================================================
 void CObjectPlayerAttackCar::Uninit(void) {
+	//変更する色のクラスの破棄
+	if (m_pChangeColor != nullptr) {
+		m_pChangeColor->Uninit();
+		delete m_pChangeColor;
+		m_pChangeColor = nullptr;
+	}
 
 	CObjectPlayer::Uninit();
 }
@@ -196,7 +204,16 @@ void CObjectPlayerAttackCar::Update(void) {
 		return;
 	}
 
-	
+	//ディフェンス時
+	if (m_bDefence) {
+		CModel* pModel = GetPtrModel();	//モデルの取得
+		//色の変更
+		if (m_pChangeColor != nullptr && pModel != nullptr) {
+			m_pChangeColor->Update();
+			D3DXCOLOR col = m_pChangeColor->GetColor();
+			pModel->SetMaterialDiffuse(col, 0);
+		}
+	}
 
 	if (pManager != nullptr) {
 		//現在の入力デバイスの取得
@@ -589,6 +606,39 @@ void CObjectPlayerAttackCar::Defence(void)
 		//ディフェンス状態をやめる
 		m_nDefenceCounter = 0;
 		m_bDefence = false;
+		//変更する色のクラスの破棄
+		if (m_pChangeColor != nullptr) {
+			m_pChangeColor->Uninit();
+			delete m_pChangeColor;
+			m_pChangeColor = nullptr;
+		}
+		//デフォルトの色に戻す
+		D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+		//プレイヤー番号によって色を変える
+		switch (GetPlayer()->GetIndex())
+		{
+		case 1:
+			col = OBJECT_PLAYER_COLOR_1P;
+			break;
+		case 2:
+			col = OBJECT_PLAYER_COLOR_2P;
+			break;
+		case 3:
+			col = OBJECT_PLAYER_COLOR_3P;
+			break;
+		case 4:
+			col = OBJECT_PLAYER_COLOR_4P;
+			break;
+		}
+
+		//モデル取得
+		CModel *pModel = GetPtrModel();
+		if (pModel != nullptr)
+		{
+			//指定したマテリアルの色を設定
+			pModel->SetMaterialDiffuse(col, 0);
+		}
 	}
 
 }
@@ -861,4 +911,12 @@ void CObjectPlayerAttackCar::SetRanking()
 	if (pManager != nullptr) pSound = pManager->GetSound();
 	//サウンドを再生
 	pSound->PlaySound(CSound::SOUND_LABEL::SE_FALL);
+}
+
+//ディフェンス状態設定処理
+void CObjectPlayerAttackCar::SetDefence(const bool bDefence) {
+	m_bDefence = bDefence;
+	if (m_pChangeColor == nullptr) {
+		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.3f, 1.0f), 2.0f);
+	}
 }

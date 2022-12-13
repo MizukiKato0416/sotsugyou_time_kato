@@ -34,6 +34,7 @@ CItemShield::CItemShield()
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
 	m_pSphereCover = nullptr;
+	m_pChangeColor = nullptr;
 }
 
 //=============================================================================
@@ -74,7 +75,6 @@ CItemShield* CItemShield::Create(D3DXVECTOR3 pos) {
 // 初期化処理
 //=============================================================================
 HRESULT CItemShield::Init(void) {
-
 	//球体の生成
 	m_pSphereCover = CObjectModel::Create(CModel::MODELTYPE::OBJ_SPHERE_COVER, GetPos() , D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	if (m_pSphereCover != nullptr) {
@@ -87,6 +87,9 @@ HRESULT CItemShield::Init(void) {
 		}
 	}
 
+	if (m_pChangeColor == nullptr) {
+		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.3f, 1.0f), 2.0f);
+	}
 
 	//変数初期化
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -101,12 +104,18 @@ HRESULT CItemShield::Init(void) {
 // 終了処理
 //=============================================================================
 void CItemShield::Uninit(void) {
-
-	//消す
+	//周りの球を消す
 	if (m_pSphereCover != nullptr)
 	{
 		m_pSphereCover->Uninit();
 		m_pSphereCover = nullptr;
+	}
+
+	//変更する色のクラスの破棄
+	if (m_pChangeColor != nullptr) {
+		m_pChangeColor->Uninit();
+		delete m_pChangeColor;
+		m_pChangeColor = nullptr;
 	}
 
 	CItem::Uninit();
@@ -124,6 +133,17 @@ void CItemShield::Update(void) {
 		//消す
 		//Uninit();
 		return;
+	}
+
+	//周りの球の色を変化
+	if (m_pSphereCover != nullptr) {
+		CModel* pModel = m_pSphereCover->GetPtrModel();	//モデルの取得
+		//色の変更
+		if (m_pChangeColor != nullptr && pModel != nullptr) {
+			m_pChangeColor->Update();
+			D3DXCOLOR col = m_pChangeColor->GetColor();
+			pModel->SetColorGlow(col);
+		}
 	}
 
 	//移動処理
