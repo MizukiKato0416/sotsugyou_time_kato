@@ -207,16 +207,16 @@ void CSelectGameScene::CreateObject(void)
 
 	//ÉQÅ[ÉÄñºÇÃê∂ê¨
 	m_pGameName = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, MENU_ALOW_UI_INIT_POS_Y, 0.0f), CTexture::TEXTURE_TYPE::TEXT_TITLENAME_BALLOON,
-		MENU_GAME_TITLE_UI_SIZE_X, MENU_GAME_TITLE_UI_SIZE_Y);
+		                            MENU_GAME_TITLE_UI_SIZE_X, MENU_GAME_TITLE_UI_SIZE_Y);
 	//ñÓàÛUIÇÃê∂ê¨
 	m_pAlowUi[0] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f - MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
-		CTexture::TEXTURE_TYPE::ARROW_LEFT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
+		                             CTexture::TEXTURE_TYPE::ARROW_LEFT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
 	m_pAlowUi[1] = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f + MENU_ALOW_UI_INIT_POS_X, MENU_ALOW_UI_INIT_POS_Y, 0.0f),
-		CTexture::TEXTURE_TYPE::ARROW_RIGHT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
+		                             CTexture::TEXTURE_TYPE::ARROW_RIGHT, MENU_ALOW_UI_SIZE, MENU_ALOW_UI_SIZE);
 
 	//ÉÇÅ[ÉhUIÇÃê∂ê¨
 	m_pModeUi = CObject2D::Create(D3DXVECTOR3(MENU_GAME_MODE_UI_SIZE_X / 2.0f, MENU_GAME_MODE_UI_SIZE_Y / 2.0f, 0.0f),
-		CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
+		                          CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
 }
 
 //=============================================================================
