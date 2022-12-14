@@ -141,7 +141,7 @@ void CItemShield::Update(void) {
 		//F‚Ì•ÏX
 		if (m_pChangeColor != nullptr && pModel != nullptr) {
 			m_pChangeColor->Update();
-			D3DXCOLOR col = m_pChangeColor->GetColor();
+			D3DXCOLOR col = m_pChangeColor->GetColor() + D3DXCOLOR(0.3f, 0.3f, 0.3f, 0.0f);
 			pModel->SetColorGlow(col);
 		}
 	}

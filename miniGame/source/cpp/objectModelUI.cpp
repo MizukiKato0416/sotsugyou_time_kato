@@ -126,6 +126,10 @@ void CObjectModelUI::Draw(void) {
 	//Zテクスチャに書き込まない
 	if (pRenderer->GetDrawZTex()) return;
 
+	bool bEnableShadowDef = pRenderer->GetEnableShadow();	//現在の陰の有効状態取得
+	//陰無効
+	pRenderer->SetEnableShadow(false);
+
 	D3DXMATRIX mtxViewDef;	//通常のビューマトリックス
 	pDevice->GetTransform(D3DTS_VIEW, &mtxViewDef);	//通常のビューマトリックスを取得
 	D3DXVECTOR4 posVDef;
@@ -148,6 +152,8 @@ void CObjectModelUI::Draw(void) {
 	pRenderer->SetEffectMatrixView(mtxViewDef);
 	//視点の設定を戻す
 	if (pCamera != nullptr) pRenderer->SetEffectPosView(posVDef);
+	//陰の設定を戻す
+	pRenderer->SetEnableShadow(bEnableShadowDef);
 }
 
 //=============================================================================

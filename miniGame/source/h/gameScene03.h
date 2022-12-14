@@ -45,6 +45,7 @@ private:
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
+	//void UpdateLight(void);					//ライトの位置の更新
 	void DecideRanking(void);				//プレイヤーの位置からランキングを決定してシーンのランキングに設定する
 
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ

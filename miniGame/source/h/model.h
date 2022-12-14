@@ -49,6 +49,7 @@ public:
 		OBJ_SPHERE_COVER,				//球のカバー
 
 		OBJ_ROAD,						//道路
+		OBJ_STARTGATE,					//開始ゲート
 		OBJ_MARK_100m,					//100mの標識
 		OBJ_MARK_200m,					//200mの標識
 		OBJ_MARK_300m,					//300mの標識
