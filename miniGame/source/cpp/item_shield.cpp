@@ -83,12 +83,12 @@ HRESULT CItemShield::Init(void) {
 		CModel* pModel = m_pSphereCover->GetPtrModel();
 		if (pModel != nullptr) {
 			pModel->SetColorGlow(D3DXCOLOR(0.0f, 1.0f, 0.8f, 1.0f));
-			pModel->SetPowerGlow(1.5f);
+			pModel->SetPowerGlow(1.3f);
 		}
 	}
 
 	if (m_pChangeColor == nullptr) {
-		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.3f, 1.0f), 2.0f);
+		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.2f, 1.0f), 2.0f);
 	}
 
 	//•Ï”‰Šú‰»
