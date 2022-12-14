@@ -43,6 +43,9 @@
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
 #define NEXT_SCENE_COUNT		(360)		//次のシーンまでのカウント
 
+#define MIN_SPEED_PLAYER		(25)		//プレイヤーの最低速度
+#define MAX_SPEED_PLAYER		(35)		//プレイヤーの最大速度
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -59,6 +62,8 @@ CGameScene03::CGameScene03()
 
 	m_fPosPlayerMin = STOP_POS_MAX;
 	m_fPosPlayerMax = 0.0f;
+
+	m_fPlayerSpeedMax = MAX_SPEED_PLAYER;
 }
 
 //=============================================================================
@@ -137,6 +142,9 @@ void CGameScene03::Init(void) {
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
 	}
 
+	//プレイヤーの最大速度を設定
+	m_fPlayerSpeedMax = rand() % (MAX_SPEED_PLAYER - MIN_SPEED_PLAYER + 1) + MIN_SPEED_PLAYER;
+
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 
@@ -158,7 +166,7 @@ void CGameScene03::CreateObject(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//プレイヤーの生成
-		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), m_fPlayerSpeedMax);
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
