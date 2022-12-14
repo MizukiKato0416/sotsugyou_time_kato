@@ -172,6 +172,7 @@ public:
 		MESH_GOLD,					//金
 		MESH_CAR_TIRE,				//タイヤ
 		MESH_CAR_WHEEL,				//ホイール
+		MESH_NOMO,					//nomo消しゴム
 		MESH_RUBBLE,				//がれき
 		MESH_STAGE_02_GROUND,		//ステージの地面
 		MESH_STAGE_02_WALL,			//ステージの壁
@@ -194,6 +195,9 @@ public:
 		MESH_CACTUS_02,				//サボテン02
 
 		MESH_ROAD,					//道路
+		MESH_MARK_100m,				//100m標識
+		MESH_MARK_200m,				//200m標識
+		MESH_MARK_300m,				//300m標識
 		MESH_BUILDING_01,			//ビル１
 
 		//エフェクト

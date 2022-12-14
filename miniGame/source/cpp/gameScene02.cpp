@@ -62,7 +62,7 @@
 #define GAME_02_CLOUD_MOVE_SPEED_INTERVAL	(0.00025f)									//次の雲のテクスチャを動かす速さの間隔
 #define GAME_02_CLOUD_COLOR					(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))			//雲の色
 
-#define GAME_02_ITEM_SPAWN_COUNT			(60 * 12)						//アイテムの生成間隔
+#define GAME_02_ITEM_SPAWN_COUNT			(60 * 6)						//アイテムの生成間隔
 #define GAME_02_ITEM_SPAWN_DIFFER_MAX		(GAME_02_STAGE_SIZE - 100.0f)	//ステージ中央からどれだけ離れた位置にアイテムを生成するか最大値
 #define GAME_02_ITEM_SPAWN_POS_Y			(1000.0f)						//アイテムの生成位置Y
 

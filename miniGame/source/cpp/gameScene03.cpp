@@ -164,9 +164,9 @@ void CGameScene03::CreateObject(void) {
 	}
 
 	//ŠÅ”Â
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	for (int nCnt = 0; nCnt < 3; nCnt++)
 	{
-		CObjectModel::Create(CModel::MODELTYPE::OBJ_BALLOON_PINK, D3DXVECTOR3(GAME03_ONE_METER * 100 * nCnt, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		CObjectModel::Create((CModel::MODELTYPE)(int(CModel::MODELTYPE::OBJ_MARK_100m) + nCnt), D3DXVECTOR3(GAME03_ONE_METER * 100 * (nCnt + 1), 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
 
 	//ƒrƒ‹
@@ -174,6 +174,9 @@ void CGameScene03::CreateObject(void) {
 	{
 		CObjectModel::Create(CModel::MODELTYPE::OBJ_BUILDING_01, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
+
+	//ƒR[ƒ“
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_CORN, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), false);
 }
 
 //=============================================================================

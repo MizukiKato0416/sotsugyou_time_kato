@@ -32,7 +32,7 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED								(0.2f)			//加速
+#define ADD_MOVE_SPEED								(0.3f)			//加速
 #define MAX_MOVE_SPEED								(30.0f)			//最大速度
 
 //=============================================================================
@@ -151,8 +151,8 @@ void CObjplayerStop::Move(void) {
 	//位置設定
 	SetPos(posObjectPlayer);
 
-	bool bWolf = CGameScene::GetWereWolfPlayerIndex() == GetPlayer()->GetIndex();	//人狼のプレイヤー
-	bool bVibArea = int(posObjectPlayer.x - 50) % int(GAME03_ONE_METER * 100) < 50;		//バイブ有効エリア
+	bool bWolf = CGameScene::GetWereWolfPlayerIndex() == GetPlayer()->GetIndex();		//人狼のプレイヤー
+	bool bVibArea = int(posObjectPlayer.x + 20) % int(GAME03_ONE_METER * 100) < 50;		//バイブ有効エリア 100mごとの位置の-20から+30のエリア
 
 	//人狼時の処理
 	if (CGameScene::GetWereWolfMode() && bWolf && bVibArea) {
