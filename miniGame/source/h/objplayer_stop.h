@@ -24,9 +24,10 @@ class CObjplayerStop : public CObjectPlayer
 {
 public:
 	CObjplayerStop();	//デフォルトコンストラクタ
+	CObjplayerStop(float fSpeedMax);	//オーバーロードされたコンストラクタ
 	~CObjplayerStop();	//デストラクタ
 
-	static CObjplayerStop* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	//生成処理
+	static CObjplayerStop* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeedMax);	//生成処理
 
 	HRESULT Init(void);		//初期化処理
 	void Uninit(void);		//終了処理
@@ -43,6 +44,7 @@ private:
 	void Move(void);		//移動
 
 	//メンバ変数
+	const float m_fSpeedMax;		//最大速度
 	D3DXVECTOR3 m_move;		//移動量
 	bool m_bCanStop;		//停止可能
 	bool m_bStopMove;		//停止済みかどうか

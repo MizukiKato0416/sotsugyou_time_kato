@@ -48,6 +48,7 @@ private:
 	void DecideRanking(void);				//プレイヤーの位置からランキングを決定してシーンのランキングに設定する
 
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
+	float m_fPlayerSpeedMax;//プレイヤーの最大速度
 	bool m_bDecideDestDist;	//目標位置決定
 	float m_fDestPos;		//目標の距離
 	float m_fPosPlayerMin;	//プレイヤーの最小の位置
