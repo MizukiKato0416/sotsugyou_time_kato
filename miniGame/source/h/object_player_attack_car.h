@@ -9,7 +9,7 @@
 
 #include "object_player.h"
 #include "item.h"
-
+#include "change_color.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -49,7 +49,7 @@ public:
 	//ディフェンス状態取得処理
 	bool GetDefence() { return m_bDefence; }
 	//ディフェンス状態設定処理
-	void SetDefence(const bool bDefence) { m_bDefence = bDefence; }
+	void SetDefence(const bool bDefence);
 
 	//ディフェンスカウンター取得処理
 	int GetDefenceCounter() { return m_nDefenceCounter; }
@@ -79,6 +79,8 @@ private:
 	bool m_bAttack;									//アタックしているかどうか
 	bool m_bCollOld[MAX_OBJECT_PLAYER_NUM];			//前のフレーム当たったかどうか
 	bool m_bDefence;								//ディフェンス状態かどうか
+
+	CChangeColor* m_pChangeColor;	//変化する色
 };
 
 #endif // !_OBJECT_PLAYER_ATTACK_CAR_H_

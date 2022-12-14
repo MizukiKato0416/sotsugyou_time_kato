@@ -170,6 +170,7 @@ data/TEXTURE/MESH/ItemBOX.jpg			= game01
 data/TEXTURE/MESH/gold.jpg				= game01
 data/TEXTURE/MESH/tire.png				= all
 data/TEXTURE/MESH/wheel.png				= all
+data/TEXTURE/MESH/nomo.png				= all
 data/TEXTURE/MESH/rubble.jpeg			= game02
 data/TEXTURE/MESH/circle.png			= game02
 data/TEXTURE/MESH/brick.jpg				= game02
@@ -192,6 +193,9 @@ data/TEXTURE/MESH/rubble2.jpg			= title
 data/TEXTURE/MESH/cactus01.png			= title
 
 data/TEXTURE/MESH/road.png				= game03
+data/TEXTURE/MESH/100m.png				= game03
+data/TEXTURE/MESH/200m.png				= game03
+data/TEXTURE/MESH/300m.png				= game03
 data/TEXTURE/MESH/building01.jpg		= game03
 
 data/TEXTURE/EFFECT/sun.png = title

@@ -9,6 +9,7 @@
 
 #include "item.h"
 #include "objectModel.h"
+#include "change_color.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -45,6 +46,7 @@ private:
 	int m_nCounter;			//カウンター
 
 	CObjectModel *m_pSphereCover;		//球体
+	CChangeColor* m_pChangeColor;	//変化する色
 };
 
 #endif // !_ITEM_SHIELD_H_
