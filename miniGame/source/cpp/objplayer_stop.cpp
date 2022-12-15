@@ -195,8 +195,10 @@ void CObjplayerStop::Move(void) {
 // à⁄ìÆó ÇÃå∏è≠
 //=============================================================================
 void CObjplayerStop::StopMove(void) {
-	//å∏ë¨
+	//í‚é~
 	m_move = D3DXVECTOR3(0.f, 0.f, 0.f);
+
+	//TODO:âπçƒê∂
 
 	m_bStopMove = true;
 }

@@ -167,6 +167,8 @@ void CGameScene03::Init(void) {
 void CGameScene03::CreateObject(void) {
 	//アイコン生成処理
 	CreateIcon();
+	//カウントダウン生成ストップ
+	if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(false);
 
 	//床の生成
 	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 6, 6, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
@@ -706,6 +708,8 @@ void CGameScene03::ShowDestDist(void) {
 		//画面上部に目標位置のUIを生成
 		CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f), 50.0f);
 		if (pDistScore != nullptr) pDistScore->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
+		//カウントダウン生成可能
+		if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(true);
 	}
 }
 
