@@ -36,8 +36,11 @@ bool g_bEnableFog;	//フォグが有効かどうか	//if文は良くないらしいので後に方法を調
 float3 g_fogColor;	//フォグの色
 float2 g_fogRange;	//フォグの計算用のベクトル
 
+//影
+bool g_bEnableShadow;	//影の有効
+
 //テクスチャ
-texture g_Texture;	//テクスチャ
+texture g_Texture;		//テクスチャ
 texture g_texShadowMap;	//シャドウマップテクスチャ
 
 //=============================================================================
@@ -187,6 +190,48 @@ VS_OUTPUT RenderSceneVSLight(
 	return Out;
 }
 
+
+//=============================================================================
+// ピクセルシェーダー用関数
+//=============================================================================
+//------------------------------
+//陰の濃度計算関数
+//------------------------------
+float DeclShadowVisibility(VS_OUTPUT In) {
+	float visibility = 0.0;	//影の濃度
+
+	// ライト目線によるZ値の再算出
+	float ZValue = In.ZCalcTex.z / In.ZCalcTex.w;
+
+	// テクスチャ座標に変換
+	float2 TransTexCoord;
+	TransTexCoord.x = (1.0f + In.ZCalcTex.x / In.ZCalcTex.w) * 0.5f;
+	TransTexCoord.y = (1.0f - In.ZCalcTex.y / In.ZCalcTex.w) * 0.5f;
+
+
+	float2 poissonDisk[4] = {
+		float2(-0.94201624, -0.39906216),
+		float2(0.94558609, -0.76890725),
+		float2(-0.094184101, -0.92938870),
+		float2(0.34495938, 0.29387760)
+	};
+
+	//ポアソンサンプリング
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		// 同じ座標のZ値を抽出　少しずらす
+		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1000.0);
+
+		// 算出点がシャドウマップのZ値よりも大きければ影と判断
+		// シャドウマップのZ値が1.0だったら影ができないようにする
+		if (ZValue > SM_Z + 0.02f && SM_Z < 1.0) {
+			visibility -= 0.1;
+		}
+	}
+
+	return visibility;
+}
+
 //=============================================================================
 // ピクセルシェーダ
 //=============================================================================
@@ -252,34 +297,11 @@ PS_OUTPUT RenderScenePSLight3D(VS_OUTPUT In)
 	//-----------------------------
 	//影の描画
 	//-----------------------------
-	// ライト目線によるZ値の再算出
-	float ZValue = In.ZCalcTex.z / In.ZCalcTex.w;
-
-	// テクスチャ座標に変換
-	float2 TransTexCoord;
-	TransTexCoord.x = (1.0f + In.ZCalcTex.x / In.ZCalcTex.w) * 0.5f;
-	TransTexCoord.y = (1.0f - In.ZCalcTex.y / In.ZCalcTex.w) * 0.5f;
-
 	float visibility = 0.0;	//影の濃度
 
-	float2 poissonDisk[4] = {
-		float2(-0.94201624, -0.39906216),
-		float2(0.94558609, -0.76890725),
-		float2(-0.094184101, -0.92938870),
-		float2(0.34495938, 0.29387760)
-	};
-
-	//ポアソンサンプリング
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		// 同じ座標のZ値を抽出　少しずらす
-		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1000.0);
-
-		// 算出点がシャドウマップのZ値よりも大きければ影と判断
-		// シャドウマップのZ値が1.0だったら影ができないようにする
-		if (ZValue > SM_Z + 0.01f && SM_Z < 1.0) {	
-			visibility -= 0.1;
-		}
+	if (g_bEnableShadow) {
+		//陰の濃度計算
+		visibility = DeclShadowVisibility(In);
 	}
 
 	if (visibility == 0.0) {
@@ -290,6 +312,7 @@ PS_OUTPUT RenderScenePSLight3D(VS_OUTPUT In)
 		//影の色を描画
 		Out.RGB.xyz += Out.RGB.xyz * visibility * In.ColShadow.xyz;
 	}
+
 
 	//-----------------------------
 	//エミッシブを加算
@@ -334,35 +357,11 @@ PS_OUTPUT RenderScenePSLightTex3D(VS_OUTPUT In)
 	//-----------------------------
 	//影の描画
 	//-----------------------------
-	// ライト目線によるZ値の再算出
-	float ZValue = In.ZCalcTex.z / In.ZCalcTex.w;
-
-	// テクスチャ座標に変換
-	float2 TransTexCoord;
-	TransTexCoord.x = (1.0f + In.ZCalcTex.x / In.ZCalcTex.w) * 0.5f;
-	TransTexCoord.y = (1.0f - In.ZCalcTex.y / In.ZCalcTex.w) * 0.5f;
-
 	float visibility = 0.0;	//影の濃度
 
-	float2 poissonDisk[4] = {
-		float2(-0.94201624, -0.39906216),
-		float2(0.94558609, -0.76890725),
-		float2(-0.094184101, -0.92938870),
-		float2(0.34495938, 0.29387760)
-	};
-
-
-	//ポアソンサンプリング
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		// 同じ座標のZ値を抽出　少しずらす
-		float SM_Z = tex2D(texSamplerShadow, TransTexCoord + poissonDisk[nCnt] / 1000.0);
-
-		// 算出点がシャドウマップのZ値よりも大きければ影と判断
-		// シャドウマップのZ値が1.0だったら影ができないようにする
-		if (ZValue > SM_Z + 0.01f && SM_Z < 1.0) {
-			visibility -= 0.1;
-		}
+	if (g_bEnableShadow) {
+		//陰の濃度計算
+		visibility = DeclShadowVisibility(In);
 	}
 
 	if (visibility == 0.0) {

@@ -24,6 +24,7 @@ CCheck::CCheck()
 	m_nNumPlayer = 0;
 	m_bCheckAll = false;
 	m_bAllUninit = false;
+	m_bCreateCountDownUi = false;
 	m_pFrame = nullptr;
 	m_state = STATE::NONE;
 	m_pCountDownUi = nullptr;
@@ -61,6 +62,7 @@ HRESULT CCheck::Init(void) {
 	m_bAllUninit = false;
 	m_state = STATE::CHECK;
 	m_pCountDownUi = nullptr;
+	m_bCreateCountDownUi = true;
 
 	//背景の暗いやつ
 	m_pFrame = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::CHECK_BG, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -227,18 +229,20 @@ void CCheck::Check()
 		}
 
 		//全部消えていたら
-		if (nCntUninit == m_nNumPlayer)
-		{
-			//カウントダウンUIの生成
-			if (m_pCountDownUi == nullptr)
-			{
-				m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
-			}
+		if (nCntUninit != m_nNumPlayer) return;
+		//全部消えている状態にする
+		m_bAllUninit = true;
 
-			m_bAllUninit = true;
-			//カウントダウン状態にする
-			m_state = STATE::COUNTDOWN;
+		//且つ生成する状態なら
+		if (!m_bCreateCountDownUi) return;
+
+		//カウントダウンUIの生成
+		if (m_pCountDownUi == nullptr)
+		{
+			m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 		}
+		//カウントダウン状態にする
+		m_state = STATE::COUNTDOWN;
 	}
 }
 

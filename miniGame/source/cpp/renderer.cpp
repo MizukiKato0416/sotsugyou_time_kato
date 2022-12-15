@@ -236,6 +236,9 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow) {
 	CreateVtxDecl2D();
 	CreateVtxDecl3D();
 
+	//影有効
+	SetEnableShadow(true);
+
 #ifdef _DEBUG
 	// デバッグ情報表示用フォントの生成
 	D3DXCreateFont(m_pD3DDevice, 18, 0, FW_REGULAR, 0, FALSE, SHIFTJIS_CHARSET,
@@ -553,6 +556,18 @@ void CRenderer::SetEffectMaterialSpecular(D3DXCOLOR matSpecular) {
 //シェーダのマテリアルの反射の強さを設定
 void CRenderer::SetEffectMaterialPower(float matPower) {
 	if (m_pEffect != nullptr) m_pEffect->SetFloat("g_matPower", matPower);
+}
+
+//シェーダの影の有効を設定
+void CRenderer::SetEnableShadow(bool bEnable) {
+	if (m_pEffect != nullptr) m_pEffect->SetBool("g_bEnableShadow", bEnable);
+}
+
+//シェーダの影の有効を設定
+bool CRenderer::GetEnableShadow(void) {
+	BOOL bEnable = false;
+	if (m_pEffect != nullptr) m_pEffect->GetBool("g_bEnableShadow", &bEnable);
+	return bEnable;
 }
 
 //シェーダの輪郭の発光色を設定

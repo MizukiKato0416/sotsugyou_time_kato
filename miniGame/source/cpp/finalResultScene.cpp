@@ -247,8 +247,7 @@ void CFinalResultScene::CreateObject(void)
 
 		//マテリアルの色の設定
 		pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
-		//スペキュラーの設定
-		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);
+		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
 		pModelPlayer->SetMaterialPower(2.0f, 0);
 	}
 
@@ -346,7 +345,7 @@ void CFinalResultScene::RiseCamera() {
 
 	//上昇
 	D3DXVECTOR3 posCamera = pCamera->GetPos();	//カメラの位置取得
-	const float fMoveMaxY = 1.6f;	//上昇の速度（最大）
+	const float fMoveMaxY = 1.8f;	//上昇の速度（最大）
 	float fMoveY = powf((float)m_nCntPhase, 2.f) * 0.001f;	//上昇量
 	//最大値で調整
 	if (fMoveY > fMoveMaxY) fMoveY = fMoveMaxY;
@@ -374,7 +373,7 @@ void CFinalResultScene::RiseCamera() {
 	D3DXVECTOR3 rotCamera = pCamera->GetRot();	//カメラの角度取得
 	float fRotCameraLastY = rotCamera.y;	//回転させる前の角度
 
-	float fRotSpeed = 0.018f;	//回転速度
+	float fRotSpeed = 0.02f;	//回転速度
 	float fSlowRot = -0.2f;		//減速する角度
 
 	//減速している時点で、正面ギリギリで減速
@@ -441,7 +440,7 @@ void CFinalResultScene::ResultText() {
 	m_pTextResult->SetSize(size);
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 180) {
+	if (m_nCntPhase > 120) {
 
 		//カラー取得
 		D3DXCOLOR col = m_pTextResult->GetColor();
@@ -515,7 +514,7 @@ void CFinalResultScene::ShowScoreUI() {
 	}
 
 	//フェーズ切り替え
-	if (m_nCntPhase > 200 || (!bWolfMode && m_nCntPhase == 60)) {
+	if (m_nCntPhase > 200 || (!bWolfMode && m_nCntPhase == 30)) {
 		//フェーズの変更
 		m_phase = PHASE::RISE_TOWER;
 		//カウントリセット
@@ -688,7 +687,7 @@ void CFinalResultScene::Winner() {
 
 	//王冠の移動
 	const float fposCrownDest = 100.0f;	//王冠の目標の位置（プレイヤーの位置からの差分）
-	const int nTimeFallCrown = 60;	//王冠が落ちている時間
+	const int nTimeFallCrown = 50;	//王冠が落ちている時間
 
 	//王冠生成後から数秒王冠が落下
 	if (m_nCntPhase > nTimeCreateCrown && m_nCntPhase < nTimeCreateCrown + nTimeFallCrown) {

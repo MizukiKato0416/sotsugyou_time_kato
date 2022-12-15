@@ -152,6 +152,19 @@ void CObjectPlayerAttackCar::Update(void) {
 	CGameScene* pGame = nullptr;
 
 	//----------------------------
+	//ディフェンス時
+	//----------------------------
+	if (m_bDefence) {
+		CModel* pModel = GetPtrModel();	//モデルの取得
+		//色の変更
+		if (m_pChangeColor != nullptr && pModel != nullptr) {
+			m_pChangeColor->Update();
+			D3DXCOLOR col = m_pChangeColor->GetColor();
+			pModel->SetMaterialDiffuse(col, 0);
+		}
+	}
+
+	//----------------------------
 	//カメラの設定
 	//----------------------------
 	float fRotCameraY = 0.0f;	//カメラの角度
@@ -202,17 +215,6 @@ void CObjectPlayerAttackCar::Update(void) {
 		CObjectPlayer::Update();
 
 		return;
-	}
-
-	//ディフェンス時
-	if (m_bDefence) {
-		CModel* pModel = GetPtrModel();	//モデルの取得
-		//色の変更
-		if (m_pChangeColor != nullptr && pModel != nullptr) {
-			m_pChangeColor->Update();
-			D3DXCOLOR col = m_pChangeColor->GetColor();
-			pModel->SetMaterialDiffuse(col, 0);
-		}
 	}
 
 	if (pManager != nullptr) {

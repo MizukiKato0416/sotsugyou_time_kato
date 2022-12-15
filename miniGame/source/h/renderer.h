@@ -57,7 +57,7 @@ public:
 	void SetEffectMatrixWorld(D3DXMATRIX mtxWorld);		//シェーダのワールドマトリックスを設定
 	void SetEffectMatrixView(D3DXMATRIX mtxView);		//シェーダのビューマトリックスを設定
 	void SetEffectMatrixProj(D3DXMATRIX mtxProj);		//シェーダのプロジェクトマトリックスを設定
-	void SetEffectMatrixViewPort(D3DXMATRIX mtx);	//シェーダのビューポートのマトリックスを設定
+	void SetEffectMatrixViewPort(D3DXMATRIX mtx);		//シェーダのビューポートのマトリックスを設定
 
 	void SetEffectTexture(LPDIRECT3DTEXTURE9 tex);				//シェーダのテクスチャを設定
 	void SetEffectTextureShadowMap(LPDIRECT3DTEXTURE9 tex);		//シェーダのシャドウマップテクスチャを設定
@@ -76,6 +76,9 @@ public:
 	void SetEffectMaterialEmissive(D3DXCOLOR matEmissive);	//シェーダのマテリアルのエミッシブ色を設定
 	void SetEffectMaterialSpecular(D3DXCOLOR matSpecular);	//シェーダのマテリアルのスペキュラー色を設定
 	void SetEffectMaterialPower(float matPower);			//シェーダのマテリアルの反射の強さを設定
+
+	void SetEnableShadow(bool bEnable);		//シェーダの影の有効を設定
+	bool GetEnableShadow(void);				//シェーダの影の有効を設定
 
 	void SetEffectGlow(D3DXCOLOR colGlow, float fPower);	//シェーダの輪郭の発光色を設定
 

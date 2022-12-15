@@ -32,13 +32,25 @@
 //--------------------------------
 //移動
 //--------------------------------
-#define ADD_MOVE_SPEED								(0.3f)			//加速
-#define MAX_MOVE_SPEED								(30.0f)			//最大速度
+#define ADD_MOVE_SPEED	(0.5f)			//加速
 
 //=============================================================================
 // デフォルトコンストラクタ
 //=============================================================================
-CObjplayerStop::CObjplayerStop()
+CObjplayerStop::CObjplayerStop() : m_fSpeedMax(30.0f)
+{
+	SetObjType(OBJTYPE_PLAYER);						//オブジェクトタイプの設定
+	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
+	SetDrawPriority(DRAW_PRIORITY::CHARA);			//描画順の設定
+
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_itemType = CItem::ITEM_TYPE::NONE;
+}
+
+//=============================================================================
+// オーバーロードされたコンストラクタ
+//=============================================================================
+CObjplayerStop::CObjplayerStop(float fSpeedMax) : m_fSpeedMax(fSpeedMax)
 {
 	SetObjType(OBJTYPE_PLAYER);						//オブジェクトタイプの設定
 	SetUpdatePriority(UPDATE_PRIORITY::PLAYER);		//更新順の設定
@@ -59,10 +71,10 @@ CObjplayerStop::~CObjplayerStop()
 //=============================================================================
 // プレイヤーの生成処理
 //=============================================================================
-CObjplayerStop* CObjplayerStop::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot) {
+CObjplayerStop* CObjplayerStop::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeedMax) {
 
 	CObjplayerStop* pObjectPlayer;
-	pObjectPlayer = new CObjplayerStop();
+	pObjectPlayer = new CObjplayerStop(fSpeedMax);
 	if (pObjectPlayer == nullptr) return nullptr;
 
 	pObjectPlayer->Init();
@@ -166,9 +178,9 @@ void CObjplayerStop::Move(void) {
 	}
 
 	//加速
-	if (m_move.x < MAX_MOVE_SPEED) {
+	if (m_move.x < m_fSpeedMax) {
 		m_move.x += ADD_MOVE_SPEED;
-		if (m_move.x > MAX_MOVE_SPEED) m_move.x = MAX_MOVE_SPEED;
+		if (m_move.x > m_fSpeedMax) m_move.x = m_fSpeedMax;
 	}
 	//Aボタンを押したら
 	else if (pInput->GetTrigger(CInput::CODE::SELECT, GetPlayer()->GetIndex() - 1) && m_bCanStop) {
@@ -183,8 +195,10 @@ void CObjplayerStop::Move(void) {
 // 移動量の減少
 //=============================================================================
 void CObjplayerStop::StopMove(void) {
-	//減速
+	//停止
 	m_move = D3DXVECTOR3(0.f, 0.f, 0.f);
+
+	//TODO:音再生
 
 	m_bStopMove = true;
 }

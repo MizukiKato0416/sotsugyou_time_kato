@@ -217,7 +217,7 @@ void CTitleScene::Init(void) {
 void CTitleScene::CreateObject(void)
 {
 	//ëæózÇÃê∂ê¨
-	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 600.0f, 600.0f, true);
+	CEffect::Create(D3DXVECTOR3(0.0f, 1000.0f, 0.0f), CEffect::EFFECT_TYPE::SUN, 800.0f, 800.0f, true);
 
 	//â_ÇÃê∂ê¨
 	CSkyDome::Create(CLOUD_POS, CLOUD_MESH_NUM, CLOUD_MESH_NUM, CLOUD_RADIUS, CLOUD_ROTATE_SPEED);
