@@ -228,19 +228,21 @@ void CCheck::Check()
 			}
 		}
 
-		//全部消えていたら且つ生成する状態なら
-		if (nCntUninit == m_nNumPlayer && m_bCreateCountDownUi)
-		{
-			//カウントダウンUIの生成
-			if (m_pCountDownUi == nullptr)
-			{
-				m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
-			}
+		//全部消えていたら
+		if (nCntUninit != m_nNumPlayer) return;
+		//全部消えている状態にする
+		m_bAllUninit = true;
 
-			m_bAllUninit = true;
-			//カウントダウン状態にする
-			m_state = STATE::COUNTDOWN;
+		//且つ生成する状態なら
+		if (!m_bCreateCountDownUi) return;
+
+		//カウントダウンUIの生成
+		if (m_pCountDownUi == nullptr)
+		{
+			m_pCountDownUi = CCountDownUi::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 		}
+		//カウントダウン状態にする
+		m_state = STATE::COUNTDOWN;
 	}
 }
 
