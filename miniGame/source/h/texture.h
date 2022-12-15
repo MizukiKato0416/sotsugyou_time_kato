@@ -115,6 +115,8 @@ public:
 		ITEM_UI_FRAME_3,
 		ITEM_UI_FRAME_4,
 
+		TOMARE,
+
 		TIMER_FRAME,
 
 		PAUSE_BG,
