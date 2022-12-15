@@ -47,6 +47,11 @@ public:
 	//全部消されたか取得処理
 	bool GetUninitAll() { return m_bAllUninit; }
 
+	//カウントダウンUIを生成するかどうか取得処理
+	bool GetCreateCountDownUi() { return m_bCreateCountDownUi; }
+	//カウントダウンUIを生成するかどうか設定処理
+	void GetCreateCountDownUi(const bool bCreateCountDownUi) { m_bCreateCountDownUi = bCreateCountDownUi; }
+
 	//カウントダウンUI取得処理
 	CCountDownUi *GetCountDownUi() { return m_pCountDownUi; }
 
@@ -66,6 +71,7 @@ private:
 	int m_nNumPlayer;									//プレイヤーの数
 	bool m_bCheckAll;									//全員がチェックしたかどうか
 	bool m_bAllUninit;									//全部消されたかどうか
+	bool m_bCreateCountDownUi;							//カウントダウンUIを生成するかどうか
 	STATE m_state;										//状態
 };
 

@@ -27,8 +27,10 @@ public:
 		//オブジェクト
 		OBJ_CAR = 0,					//車
 		OBJ_CAR_01,						//車01
-		OBJ_CAR_02,						//車01
-		OBJ_CAR_03,						//車01
+		OBJ_CAR_02,						//車02
+		OBJ_CAR_03,						//車03
+		OBJ_CAR_04,						//車04
+		OBJ_CAR_05,						//車05
 		OBJ_STADIUM,					//スタジアム
 		OBJ_BALLOON_PINK,				//風船(ピンク)
 		OBJ_BALLOON_GOLD,				//風船(ゴールド)

@@ -100,7 +100,7 @@ HRESULT CCheckIcon::Init(void) {
 	SetMaterial(m_pPlayerModel);
 
 	//モデルの種類の数を取得
-	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_03) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
+	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_05) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
 	for (int nCntModel = 0; nCntModel < nModelType; nCntModel++)
 	{
 		//サイズ
@@ -364,7 +364,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最後なら最初に戻す
-		if (modelType == CModel::MODELTYPE::OBJ_CAR_03) modelType = CModel::MODELTYPE::OBJ_CAR;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR_05) modelType = CModel::MODELTYPE::OBJ_CAR;
 		else
 		{
 			//タイプを数値に
@@ -400,7 +400,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最初なら最後にする
-		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_03;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_05;
 		else
 		{
 			//タイプを数値に
