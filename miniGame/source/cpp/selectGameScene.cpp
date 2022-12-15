@@ -166,6 +166,8 @@ void CSelectGameScene::CreateObject(void)
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
 
 	if (m_pMenuGame != nullptr) {
+		m_pMenuGame->SetSpanRotate(15);	//‰ñ“]ŠÔ
+
 		//ƒQ[ƒ€‚²‚Æ‚Ìƒ‚ƒfƒ‹‚Ì”z—ñ
 		const CModel::MODELTYPE typeModelGame[MENU_SELECT_NUM] =
 		{

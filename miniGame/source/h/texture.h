@@ -116,6 +116,7 @@ public:
 		ITEM_UI_FRAME_4,
 
 		TOMARE,
+		FRAME_DEST,
 
 		TIMER_FRAME,
 

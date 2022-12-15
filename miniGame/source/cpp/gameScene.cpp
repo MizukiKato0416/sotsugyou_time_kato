@@ -53,6 +53,7 @@ CGameScene::CGameScene()
 	m_bReady = false;
 	m_bLockPauseMenu = false;
 	m_pCheck = nullptr;
+	m_bStopCountdown = nullptr;
 	m_pWolfDecide = nullptr;
 	m_nWereWolfPlayerIndex = 0;
 	memset(m_apPlayer, NULL, sizeof(m_apPlayer[MAX_OBJECT_PLAYER_NUM]));
@@ -136,6 +137,7 @@ void CGameScene::Update(void) {
 
 			//チェックアイコンの生成
 			m_pCheck = CCheck::Create(MAX_OBJECT_PLAYER_NUM);
+			if (m_bStopCountdown && m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(false);
 		}
 	}
 
