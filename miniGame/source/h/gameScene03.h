@@ -20,7 +20,8 @@
 // 前方宣言
 //*****************************************************************************
 class CObjectPlayerIcon;
-class CObjplayerStop;
+class CObject2D;
+class CScore;
 
 //*****************************************************************************
 // ゲームシーンクラス
@@ -42,6 +43,7 @@ private:
 	void UpdateReady(void);					//準備状態中の更新
 	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
 	void UpdatePlayerIcon(void);			//プレイヤーアイコン更新処理
+	void ShowDestDist(void);				//目標位置表示
 	void CountDownUi(void);					//カウントダウンUIの処理
 	void LookPlayerPos(void);				//プレイヤーの位置の監視
 	void UpdateCamera(void);				//カメラの位置の更新
@@ -50,8 +52,11 @@ private:
 
 	CObjectPlayerIcon *m_apPlayerIcon[MAX_OBJECT_PLAYER_NUM];	//プレイヤーアイコンのポインタ
 	float m_fPlayerSpeedMax;//プレイヤーの最大速度
-	bool m_bDecideDestDist;	//目標位置決定
 	float m_fDestPos;		//目標の距離
+	bool m_bEndShowDest;	//目標位置表示済みかどうか
+	int m_nCntShowDist;		//目標位置表示カウンター
+	CObject2D* m_pMezase;	//００ｍを目指せUI
+	CScore* m_pMezaseDist;	//目指せUIの距離部分の数字
 	float m_fPosPlayerMin;	//プレイヤーの最小の位置
 	float m_fPosPlayerMax;	//プレイヤーの最大の位置
 	int m_nCntGameOver;		//ゲーム終了後のカウント

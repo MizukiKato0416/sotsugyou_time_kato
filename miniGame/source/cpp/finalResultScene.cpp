@@ -247,8 +247,7 @@ void CFinalResultScene::CreateObject(void)
 
 		//マテリアルの色の設定
 		pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
-		//スペキュラーの設定
-		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);
+		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
 		pModelPlayer->SetMaterialPower(2.0f, 0);
 	}
 
