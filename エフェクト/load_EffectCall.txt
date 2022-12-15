@@ -109,4 +109,17 @@ PRESETCALL
 	END_CALLSET
 END_PRESETCALL
 
+#========================================================================
+# 5バリア
+#========================================================================
+PRESETCALL
+	NAME = BARRIER	// プリセットの名前
+
+	CALLSET
+		DELEY = 0 			//何フレーム後に呼び出すか(親)
+		PRESETNUM = 1		//呼び出すエフェクト総数
+		TYPE = 0		//エフェクトパターン
+	END_CALLSET
+END_PRESETCALL
+
 END_SCRIPT	#ここ消すと無限ループする

@@ -93,13 +93,14 @@ HRESULT CCheckIcon::Init(void) {
 		                         CHECK_ICON_FRAME_DEFAULT_SIZE.x * m_scale.x, CHECK_ICON_FRAME_DEFAULT_SIZE.y * m_scale.y);
 
 	//プレイヤーのモデル生成
-	m_pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, m_posModel, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
-	m_pPlayerModel->SetViewCamera(CHECK_ICON_MODEL_CAMERA_POS_V, CHECK_ICON_MODEL_CAMERA_POS_R);
+	D3DXVECTOR3 posAdd = D3DXVECTOR3(0.0f, 5000.0f, 0.0f);	//影の影響をなくすための高さ
+	m_pPlayerModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_CAR, m_posModel + posAdd, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	m_pPlayerModel->SetViewCamera(CHECK_ICON_MODEL_CAMERA_POS_V + posAdd, CHECK_ICON_MODEL_CAMERA_POS_R + posAdd);
 	//マテリアルの設定
 	SetMaterial(m_pPlayerModel);
 
 	//モデルの種類の数を取得
-	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_03) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
+	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_05) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
 	for (int nCntModel = 0; nCntModel < nModelType; nCntModel++)
 	{
 		//サイズ
@@ -319,7 +320,10 @@ void CCheckIcon::SetMaterial(CObjectModel *pPlayerModel)
 		colModel = OBJECT_PLAYER_COLOR_1P;
 		break;
 	}
-	pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
+	//マテリアルの設定
+	pModel->SetMaterialDiffuse(colModel, 0);	
+	pModel->SetMaterialSpecular(colModel / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
+	pModel->SetMaterialPower(3.0f, 0);
 }
 
 //=============================================================================
@@ -360,7 +364,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最後なら最初に戻す
-		if (modelType == CModel::MODELTYPE::OBJ_CAR_03) modelType = CModel::MODELTYPE::OBJ_CAR;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR_05) modelType = CModel::MODELTYPE::OBJ_CAR;
 		else
 		{
 			//タイプを数値に
@@ -396,7 +400,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最初なら最後にする
-		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_03;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_05;
 		else
 		{
 			//タイプを数値に
