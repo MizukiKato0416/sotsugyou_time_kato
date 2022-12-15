@@ -451,6 +451,15 @@ void CSelectGameScene::ChangeTutorial(void) {
 				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
 			}
 			break;
+			//TODO:停止
+		case (int)CScene::SCENE_TYPE::GAME_03:
+			if (m_bWolfMode) {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK_WOLF;
+			}
+			else {
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+			}
+			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
 			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_RANDOM;
@@ -515,8 +524,8 @@ void CSelectGameScene::ChangeGameTitle()
 		break;
 		//ストップ
 	case (int)CScene::SCENE_TYPE::GAME_03:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_GAMESTART && !m_pMenuGame->GetRoulette()) return;
-		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_GAMESTART);
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::BG_MENU_WOLF && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU_WOLF);
 		break;
 		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:

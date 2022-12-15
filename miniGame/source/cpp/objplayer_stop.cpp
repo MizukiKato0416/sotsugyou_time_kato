@@ -195,10 +195,16 @@ void CObjplayerStop::Move(void) {
 // 移動量の減少
 //=============================================================================
 void CObjplayerStop::StopMove(void) {
+	m_bStopMove = true;
+
 	//停止
 	m_move = D3DXVECTOR3(0.f, 0.f, 0.f);
 
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
 	//TODO:音再生
-
-	m_bStopMove = true;
+	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
 }

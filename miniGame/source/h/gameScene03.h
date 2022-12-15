@@ -60,6 +60,7 @@ private:
 	float m_fPosPlayerMin;	//プレイヤーの最小の位置
 	float m_fPosPlayerMax;	//プレイヤーの最大の位置
 	int m_nCntGameOver;		//ゲーム終了後のカウント
+	bool m_bPerfectScore;	//スコアが完全に一致する
 };
 
 #endif // !_GAME_SCENE03_H_

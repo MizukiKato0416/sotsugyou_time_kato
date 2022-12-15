@@ -88,6 +88,7 @@ void CGameScene03::Init(void) {
 	m_bReady = true;
 	m_fDestPos = 0.0f;
 	m_bEndShowDest = false;
+	m_bPerfectScore = false;
 
 	//カウントダウンを停止する
 	m_bStopCountdown = true;
@@ -436,20 +437,30 @@ void CGameScene03::UpdateGameOver(void) {
 		if (m_nCntGameOver == 120 + nCnt * 30) {
 			//スコアの生成
 			CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
-			if (pDistScore != nullptr) pDistScore->SetScore(m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER);
+			if (pDistScore != nullptr) {
+				int nShowScore = m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER;	//表示スコア
+				pDistScore->SetScore(nShowScore);	//スコアの設定
+				m_bPerfectScore = nShowScore == m_fDestPos / GAME03_ONE_METER;	//スコア一致
+			}
 
 			//スコアの背景の設定
 			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(afPosUI[nCnt], 600.0f + 30.0f / 2, 0.0f),
 				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
 			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
 
-			//音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
+			//スコア表示音の再生
+			if (m_bPerfectScore) {
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);	//TODO:完璧なスコアのときの音
+			}
+			else {
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);	//通常時の音
+			}
 		}
 	}
 
 	//TODO:スコアの上にWinテキストを乗せる　ランキング一位の場合
 	if (m_nCntGameOver == 300) {
+		
 		for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
 		{
 			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
@@ -720,7 +731,7 @@ void CGameScene03::ShowDestDist(void) {
 		CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f),
 			CTexture::TEXTURE_TYPE::FRAME_DEST, 280.0f, 80.0f);
 		//画面上部に目標位置のUIを生成
-		CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 50.0f * 3 / 2.0f, 30.0f, 0.0f), 50.0f);
+		CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 150.0f / 2.0f + 15.0f, 30.0f, 0.0f), 50.0f);
 		if (pDistScore != nullptr) pDistScore->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
 		//カウントダウン生成可能
 		if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(true);

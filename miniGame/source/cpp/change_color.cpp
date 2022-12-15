@@ -79,7 +79,7 @@ D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
 	rgb *= 255;
 	float fMax = max(max(rgb.r, rgb.g), rgb.b);
 	float fMin = min(min(rgb.r, rgb.g), rgb.b);
-	D3DXVECTOR4 hsl = { 0, 0, (fMax + fMin) / 2, 1 }; 
+	D3DXVECTOR4 hsl = { 0, 0, (fMax + fMin) / 2, rgb.a }; 
 
 	if (fMax != fMin) {
 		// H(F‘Š)  
@@ -113,7 +113,7 @@ D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
 //=============================================================================
 D3DXCOLOR CChangeColor::ConvertHSLtoRGB(D3DXVECTOR4 hsl) {
 	float fMax, fMin;
-	D3DXCOLOR rgb = { 0, 0, 0, 1 };
+	D3DXCOLOR rgb = { 0, 0, 0, hsl.w / 255 };
 
 	if (hsl.x >= 360) {
 		hsl.x = 0;
