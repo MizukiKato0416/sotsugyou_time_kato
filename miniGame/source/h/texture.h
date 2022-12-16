@@ -163,6 +163,8 @@ public:
 
 		NOW_LOADING,
 
+		CREDIT_CREDIT,
+		CREDIT_PICTURE_FRAME,
 
 		//メッシュのテクスチャ
 		MESH_FLOOR_DESERT,			//砂漠

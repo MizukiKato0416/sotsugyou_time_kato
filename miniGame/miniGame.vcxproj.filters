@@ -274,6 +274,12 @@
     <ClCompile Include="source\cpp\change_color.cpp">
       <Filter>cpp</Filter>
     </ClCompile>
+    <ClCompile Include="source\cpp\creditScene.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cpp\credit_picture.cpp">
+      <Filter>cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\h\balloon.h">
@@ -547,6 +553,12 @@
       <Filter>h</Filter>
     </ClInclude>
     <ClInclude Include="source\h\change_color.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\creditScene.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="source\h\credit_picture.h">
       <Filter>h</Filter>
     </ClInclude>
   </ItemGroup>

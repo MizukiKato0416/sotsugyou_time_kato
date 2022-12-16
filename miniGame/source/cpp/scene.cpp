@@ -14,6 +14,7 @@
 #include "resultScene.h"
 #include "find_wolf_scene.h"
 #include "finalResultScene.h"
+#include "creditScene.h"
 #include "object.h"	
 
 //=============================================================================
@@ -118,6 +119,9 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	case CScene::SCENE_TYPE::FINAL_RESULT:
 		pScene = new CFinalResultScene;
+		break;
+	case CScene::SCENE_TYPE::CREDIT:
+		pScene = new CCreditScene;
 		break;
 	}
 
