@@ -88,6 +88,10 @@ void CGameScene03::Init(void) {
 	m_bReady = true;
 	m_fDestPos = 0.0f;
 	m_bEndShowDest = false;
+	m_bPerfectScore = false;
+
+	//カウントダウンを停止する
+	m_bStopCountdown = true;
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -167,7 +171,7 @@ void CGameScene03::Init(void) {
 void CGameScene03::CreateObject(void) {
 	//アイコン生成処理
 	CreateIcon();
-	//カウントダウン生成ストップ
+	//カウントダウン生成不可能
 	if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(false);
 
 	//床の生成
@@ -218,13 +222,13 @@ void CGameScene03::Uninit(void) {
 	}
 
 	//目標位置表示UIの破棄
-	if (m_pMezase != nullptr) {
-		m_pMezase->Uninit();
-		m_pMezase = nullptr;
+	if (m_pTomare != nullptr) {
+		m_pTomare->Uninit();
+		m_pTomare = nullptr;
 	}
-	if (m_pMezaseDist != nullptr) {
-		m_pMezaseDist->Uninit();
-		m_pMezaseDist = nullptr;
+	if (m_pTomareDist != nullptr) {
+		m_pTomareDist->Uninit();
+		m_pTomareDist = nullptr;
 	}
 
 	//ゲームシーンの終了処理
@@ -271,6 +275,60 @@ void CGameScene03::Update(void) {
 
 	//ゲームシーンの更新処理
 	CGameScene::Update();
+}
+
+//=============================================================================
+//準備状態中の更新
+//=============================================================================
+void CGameScene03::UpdateReady(void) {
+	//チェック出来ていなかったら
+	if (!m_bAllCheck)
+	{
+		if (m_pCheck == nullptr)
+		{
+			return;
+		}
+
+		if (!m_pCheck->GetUninitAll())
+		{
+			return;
+		}
+
+		//全員がチェック出来たら
+		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
+		{
+			//プレイヤーアイコンの生成処理
+			CreatePlayerIcon(nCntPlayer);
+		}
+		//全員がチェック出来た状態にする
+		m_bAllCheck = true;
+
+		//目標位置の決定
+		m_fDestPos = (rand() % 50 + 45) * 10.0f * GAME03_ONE_METER;	//450~940m
+		m_nCntShowDist = 0;
+		//目指せUIの生成
+		m_pTomare = CObject2D::Create(D3DXVECTOR3(900.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TOMARE, 500.0f, 150.0f);	//目指せUI
+		if (m_pTomare != nullptr) {
+			m_pTomare->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		}
+		//目指せUIの数字の生成
+		m_pTomareDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(900.0f - 250.0f, SCREEN_HEIGHT / 2.0f - 75.0f, 0.0f), 150.0f);
+		if (m_pTomareDist != nullptr) {
+			m_pTomareDist->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
+			m_pTomareDist->SetNumberColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		}
+	}
+	else
+	{
+		if (!m_bEndShowDest) {
+			//目標距離の表示
+			ShowDestDist();
+		}
+		else {
+			//カウントダウンUIの処理
+			CountDownUi();
+		}
+	}
 }
 
 //=============================================================================
@@ -338,6 +396,104 @@ void CGameScene03::UpdateGame(void) {
 
 	//カメラの更新
 	UpdateCamera();
+}
+
+//=============================================================================
+// ゲームオーバー時の更新
+//=============================================================================
+void CGameScene03::UpdateGameOver(void) {
+	m_nCntGameOver++;
+
+	//アイコンの位置調整
+	UpdatePlayerIcon();
+
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//フェードの取得
+	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+	if (pFade == nullptr) return;
+	//サウンドの取得
+	CSound* pSound = pManager->GetSound();
+	if (pSound == nullptr) return;
+	//カメラの取得
+	CCamera* pCamera = pManager->GetCamera();
+	if (pCamera == nullptr) return;
+
+	//カメラが全体を見渡せるような距離まで下がる関数を呼ぶ
+	if (m_nCntGameOver == 90)
+	{
+		CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
+		if (pCamera03 != nullptr) pCamera03->OverLook(min(m_fPosPlayerMin, m_fDestPos), max(m_fPosPlayerMax, m_fDestPos));
+	}
+
+	float afPosUI[MAX_OBJECT_PLAYER_NUM];	//UIの位置
+	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
+	{
+		if (m_apPlayer[nCnt] == nullptr) continue;
+		float fSpace = 200.0f;	//UIの間隔
+		afPosUI[nCnt] = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//画面真ん中を中心で配置
+
+		//スコアUIの表示
+		if (m_nCntGameOver == 120 + nCnt * 30) {
+			//スコアの生成
+			CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+			if (pDistScore != nullptr) {
+				int nShowScore = m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER;	//表示スコア
+				pDistScore->SetScore(nShowScore);	//スコアの設定
+				m_bPerfectScore = nShowScore == m_fDestPos / GAME03_ONE_METER;	//スコア一致
+			}
+
+			//スコアの背景の設定
+			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(afPosUI[nCnt], 600.0f + 30.0f / 2, 0.0f),
+				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
+			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
+
+			//スコア表示音の再生
+			if (m_bPerfectScore) {
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);	//TODO:完璧なスコアのときの音
+			}
+			else {
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);	//通常時の音
+			}
+		}
+	}
+
+	//TODO:スコアの上にWinテキストを乗せる　ランキング一位の場合
+	if (m_nCntGameOver == 300) {
+		
+		for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
+		{
+			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
+			//Winテキストの生成
+			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 20.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
+				CTexture::TEXTURE_TYPE::NUMBER_004, 60.0f, 40.0f);
+		}
+		//サウンド再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
+	}
+
+	//次シーン
+	if (m_nCntGameOver > NEXT_SCENE_COUNT)
+	{
+		m_nCntGameOver = 0;
+
+		//リザルトへシーン遷移
+		if (GetWereWolfMode()) {
+			//人狼モードの場合簡素なリザルト
+			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 0);
+		}
+		//通常モードの場合
+		else {
+			for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
+			{
+				int nScore = 40 - (GetRanking(nIdx) - 1) * 10;	//ランキングを取得してスコアを決定
+				//リザルトのスコアを設定
+				CFinalResultScene::SetPlayerScore(nScore, nIdx);
+			}
+			//最終リザルトに遷移
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 0);
+		}
+	}
 }
 
 //=============================================================================
@@ -422,148 +578,6 @@ void CGameScene03::UpdateCamera(void) {
 //	//シェーダのライトを設定
 //	pRenderer->SetEffectLightMatrixView(mtxLightView);
 //}
-
-//=============================================================================
-// ゲームオーバー時の更新
-//=============================================================================
-void CGameScene03::UpdateGameOver(void) {
-	m_nCntGameOver++;
-
-	//アイコンの位置調整
-	UpdatePlayerIcon();
-
-	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-	if (pManager == nullptr) return;
-	//フェードの取得
-	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-	if (pFade == nullptr) return;
-	//サウンドの取得
-	CSound* pSound = pManager->GetSound();
-	if (pSound == nullptr) return;
-	//カメラの取得
-	CCamera* pCamera = pManager->GetCamera();
-	if (pCamera == nullptr) return;
-
-	//カメラが全体を見渡せるような距離まで下がる関数を呼ぶ
-	if (m_nCntGameOver == 90)
-	{
-		CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
-		if (pCamera03 != nullptr) pCamera03->OverLook(min(m_fPosPlayerMin, m_fDestPos), max(m_fPosPlayerMax, m_fDestPos));
-	}
-
-	float afPosUI[MAX_OBJECT_PLAYER_NUM];	//UIの位置
-	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
-	{
-		if (m_apPlayer[nCnt] == nullptr) continue;
-		float fSpace = 200.0f;	//UIの間隔
-		afPosUI[nCnt] = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//画面真ん中を中心で配置
-
-		//スコアUIの表示
-		if (m_nCntGameOver == 120 + nCnt * 30) {
-			//スコアの生成
-			CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
-			if (pDistScore != nullptr) pDistScore->SetScore(m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER);
-
-			//スコアの背景の設定
-			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(afPosUI[nCnt], 600.0f + 30.0f / 2, 0.0f),
-				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
-			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
-
-			//音の再生
-			if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
-		}
-	}
-
-	//TODO:スコアの上にWinテキストを乗せる　ランキング一位の場合
-	if (m_nCntGameOver == 270) {
-		for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
-		{
-			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
-			//Winテキストの生成
-			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 20.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
-				CTexture::TEXTURE_TYPE::NUMBER_004, 60.0f, 40.0f);
-		}
-		//サウンド再生
-		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
-	}
-
-	//次シーン
-	if (m_nCntGameOver > NEXT_SCENE_COUNT)
-	{
-		m_nCntGameOver = 0;
-
-		//リザルトへシーン遷移
-		if (GetWereWolfMode()) {
-			//人狼モードの場合簡素なリザルト
-			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 0);
-		}
-		//通常モードの場合
-		else {
-			for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
-			{
-				int nScore = 40 - (GetRanking(nIdx) - 1) * 10;	//ランキングを取得してスコアを決定
-				//リザルトのスコアを設定
-				CFinalResultScene::SetPlayerScore(nScore, nIdx);
-			}
-			//最終リザルトに遷移
-			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 0);
-		}
-	}
-}
-
-//=============================================================================
-//準備状態中の更新
-//=============================================================================
-void CGameScene03::UpdateReady(void) {
-	//チェック出来ていなかったら
-	if (!m_bAllCheck)
-	{
-		if (m_pCheck == nullptr)
-		{
-			return;
-		}
-
-		if (!m_pCheck->GetUninitAll())
-		{
-			return;
-		}
-
-		//全員がチェック出来たら
-		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
-		{
-			//プレイヤーアイコンの生成処理
-			CreatePlayerIcon(nCntPlayer);
-		}
-		//全員がチェック出来た状態にする
-		m_bAllCheck = true;
-
-		//目標位置の決定
-		m_fDestPos = (rand() % 50 + 45) * 10.0f * GAME03_ONE_METER;	//450~940m
-		m_nCntShowDist = 0;
-		//目指せUIの生成
-		m_pMezase = CObject2D::Create(D3DXVECTOR3(900.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TOMARE, 500.0f, 150.0f);	//目指せUI
-		if (m_pMezase != nullptr) {
-			m_pMezase->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-		}
-		//目指せUIの数字の生成
-		m_pMezaseDist = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(900.0f - 250.0f, SCREEN_HEIGHT / 2.0f - 75.0f, 0.0f), 150.0f);
-		if (m_pMezaseDist != nullptr) {
-			m_pMezaseDist->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
-			m_pMezaseDist->SetNumberColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-		}
-	}
-	else
-	{
-		if (!m_bEndShowDest) {
-			//目標距離の表示
-			ShowDestDist();
-		}
-		else {
-			//カウントダウンUIの処理
-			CountDownUi();
-		}
-	}
-}
 
 //=============================================================================
 // ゲームオーバー
@@ -674,39 +688,50 @@ void CGameScene03::UpdatePlayerIcon(void) {
 // 目標位置表示
 //=============================================================================
 void CGameScene03::ShowDestDist(void) {
-	if (m_pMezase == nullptr || m_pMezaseDist == nullptr) return;
+	if (m_pTomare == nullptr || m_pTomareDist == nullptr) return;
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	m_nCntShowDist++;
 
 	//UI表示
-	if (m_nCntShowDist == 30) {
-		m_pMezase->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		m_pMezaseDist->SetNumberColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		//TODO:サウンド再生
+	if (m_nCntShowDist == 60) {
+		m_pTomare->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pTomareDist->SetNumberColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
+		//サウンドを再生
+		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
 	}
 
 	D3DXCOLOR colUI;	//UIの色
 	//色が消えていく
-	if (m_nCntShowDist > 120) {
+	if (m_nCntShowDist > 180) {
 		//透明度を下げる
-		colUI = m_pMezase->GetColor();
+		colUI = m_pTomare->GetColor();
 		colUI.a -= 0.05f;
 		//色の変更
-		m_pMezase->SetColor(colUI);
-		m_pMezaseDist->SetNumberColor(colUI);
+		m_pTomare->SetColor(colUI);
+		m_pTomareDist->SetNumberColor(colUI);
 	}
 
 	//目標位置表示の終了
-	if (colUI.a <= 0.0f && m_nCntShowDist > 120) {
+	if (colUI.a <= 0.0f && m_nCntShowDist > 180) {
 		m_bEndShowDest = true;
 		//目標位置表示UIの破棄
-		m_pMezase->Uninit();
-		m_pMezase = nullptr;
-		m_pMezaseDist->Uninit();
-		m_pMezaseDist = nullptr;
+		m_pTomare->Uninit();
+		m_pTomare = nullptr;
+		m_pTomareDist->Uninit();
+		m_pTomareDist = nullptr;
+
+		//目標位置の背景の生成
+		CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f),
+			CTexture::TEXTURE_TYPE::FRAME_DEST, 280.0f, 80.0f);
 		//画面上部に目標位置のUIを生成
-		CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_003, D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 50.0f, 0.0f), 50.0f);
+		CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(SCREEN_WIDTH / 2.0f + 150.0f / 2.0f + 15.0f, 30.0f, 0.0f), 50.0f);
 		if (pDistScore != nullptr) pDistScore->SetScore((int)(m_fDestPos / GAME03_ONE_METER));
 		//カウントダウン生成可能
 		if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(true);

@@ -76,6 +76,7 @@ protected:
 
 	bool m_bGameOver;		//ゲームオーバー
 	bool m_bAllCheck;		//全員がチェックできたかどうか
+	bool m_bStopCountdown;	//カウントダウンを止めるかどうか
 	bool m_bReady;			//準備状態かどうか
 	bool m_bLockPauseMenu;	//ポーズメニュー生成のロック
 

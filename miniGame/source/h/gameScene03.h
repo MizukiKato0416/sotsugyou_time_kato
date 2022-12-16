@@ -55,11 +55,12 @@ private:
 	float m_fDestPos;		//目標の距離
 	bool m_bEndShowDest;	//目標位置表示済みかどうか
 	int m_nCntShowDist;		//目標位置表示カウンター
-	CObject2D* m_pMezase;	//００ｍを目指せUI
-	CScore* m_pMezaseDist;	//目指せUIの距離部分の数字
+	CObject2D* m_pTomare;	//００ｍを止まれUI
+	CScore* m_pTomareDist;	//止まれUIの距離部分の数字
 	float m_fPosPlayerMin;	//プレイヤーの最小の位置
 	float m_fPosPlayerMax;	//プレイヤーの最大の位置
 	int m_nCntGameOver;		//ゲーム終了後のカウント
+	bool m_bPerfectScore;	//スコアが完全に一致する
 };
 
 #endif // !_GAME_SCENE03_H_
