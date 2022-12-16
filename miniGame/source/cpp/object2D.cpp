@@ -308,7 +308,6 @@ void CObject2D::SetRatioHeight(float fRatio) {
 //=============================================================================
 void CObject2D::SetAngle(float fAngle) {
 	m_fAngle = fAngle;
-	//頂点バッファの更新
 	SetVtxPos();
 }
 
@@ -322,17 +321,21 @@ float CObject2D::GetAngle(void) { return m_fAngle; }
 //=============================================================================
 void CObject2D::SetVtxPos(void) {
 	if (m_pVtxBuff != nullptr) {
-		float fRadius = sqrtf(powf(m_fWidth / 2.0f, 2.0f) + powf(m_fHeight / 2.0f, 2.0f));	//ポリゴンの対角線の半分
-		float fAngleDelta = atan2f(m_fWidth, m_fHeight);	//基準の角度からの差分（ラジアン）
+		//角度を求める
+		float fTanR = atan2f(m_fHeight / 2.0f, m_fWidth / 2.0f);
+		//直径を求める
+		float fCircleR = sqrtf((float)pow(m_fWidth / 2.0f, 2.0f) + (float)pow(m_fHeight / 2.0f, 2.0f));
 
-		VERTEX_2D *pVtx;
-		//頂点バッファのロック
+		VERTEX_2D *pVtx;	// 頂点情報
+							//頂点バッファをロックし、頂点データへのポインタを取得
 		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-		// 頂点情報を設定
-		pVtx[0].pos = D3DXVECTOR3(m_pos.x + sinf(m_fAngle * D3DX_PI - fAngleDelta) * fRadius, m_pos.y + cosf((m_fAngle + 1.0f) * D3DX_PI - fAngleDelta) * fRadius, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3(m_pos.x + sinf(m_fAngle * D3DX_PI + fAngleDelta) * fRadius, m_pos.y + cosf((m_fAngle + 1.0f) * D3DX_PI + fAngleDelta) * fRadius, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf((m_fAngle + 1.0f) * D3DX_PI + fAngleDelta) * fRadius, m_pos.y + cosf(m_fAngle * D3DX_PI + fAngleDelta) * fRadius, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3(m_pos.x + sinf((m_fAngle + 1.0f) * D3DX_PI - fAngleDelta) * fRadius, m_pos.y + cosf(m_fAngle * D3DX_PI - fAngleDelta) * fRadius, 0.0f);
+
+		//頂点座標
+		pVtx[0].pos = D3DXVECTOR3(m_pos.x - fCircleR * cosf(fTanR - m_fAngle), m_pos.y - fCircleR * sinf(fTanR - m_fAngle), 0.0f);
+		pVtx[1].pos = D3DXVECTOR3(m_pos.x + fCircleR * cosf(fTanR + m_fAngle), m_pos.y - fCircleR * sinf(fTanR + m_fAngle), 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(m_pos.x - fCircleR * cosf(fTanR + m_fAngle), m_pos.y + fCircleR * sinf(fTanR + m_fAngle), 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(m_pos.x + fCircleR * cosf(fTanR - m_fAngle), m_pos.y + fCircleR * sinf(fTanR - m_fAngle), 0.0f);
+
 		//頂点バッファをアンロックする
 		m_pVtxBuff->Unlock();
 	}
