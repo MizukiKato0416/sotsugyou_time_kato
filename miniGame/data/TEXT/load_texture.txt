@@ -33,6 +33,7 @@ data/TEXTURE/UI/arrow_left.png		= select
 
 data/TEXTURE/UI/text_titlename.png			= select
 data/TEXTURE/UI/text_titlename2.png			= select
+data/TEXTURE/UI/text_titlename3.png			= select
 data/TEXTURE/UI/text_titlename_random.png	= select
 data/TEXTURE/UI/press_start.png 			= title
 data/TEXTURE/UI/quit_game.png 				= title
@@ -88,10 +89,10 @@ data/TEXTURE/UI/OK04.png					= game01, game02, game03
 data/TEXTURE/UI/check_icon_select_01.png	= game01, game02, game03
 data/TEXTURE/UI/check_icon_select_00.png	= game01, game02, game03
 
-data/TEXTURE/UI/wolf_select_1.png	= find_w
-data/TEXTURE/UI/wolf_select_2.png	= find_w
-data/TEXTURE/UI/wolf_select_3.png	= find_w
-data/TEXTURE/UI/wolf_select_4.png	= find_w
+data/TEXTURE/UI/wolf_select_1.png	= game03, find_w
+data/TEXTURE/UI/wolf_select_2.png	= game03, find_w
+data/TEXTURE/UI/wolf_select_3.png	= game03, find_w
+data/TEXTURE/UI/wolf_select_4.png	= game03, find_w
 data/TEXTURE/UI/point_1p.png		= find_w
 data/TEXTURE/UI/point_2p.png		= find_w
 data/TEXTURE/UI/point_3p.png		= find_w

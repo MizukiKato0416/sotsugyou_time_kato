@@ -184,9 +184,6 @@ void CSelectGameScene::CreateObject(void)
 			CObjectModelUI* pObjModelUI = m_pMenuGame->GetModelUI(nIdxModel);
 			if (pObjModelUI == nullptr) continue;
 
-			//ステンシル有効
-			//pObjModelUI->SetEnableStencil(true);
-
 			//回転速度の設定
 			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.03f, 0.0f));
 
@@ -198,7 +195,7 @@ void CSelectGameScene::CreateObject(void)
 			pModel->SetModelType(typeModelGame[nIdxModel]);
 
 			const D3DXCOLOR colSpecular = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);	//スペキュラーの色
-																				//マテリアルの設定
+			//マテリアルの設定
 			for (int nCnt = 0; nCnt < MAX_MATERIAL; nCnt++)
 			{
 				pModel->SetMaterialSpecular(colSpecular, nCnt);
@@ -522,10 +519,10 @@ void CSelectGameScene::ChangeGameTitle()
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
 		break;
-		//TODO:ストップ
+		//ストップ
 	case (int)CScene::SCENE_TYPE::GAME_03:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::BG_MENU_WOLF && !m_pMenuGame->GetRoulette()) return;
-		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU_WOLF);
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP);
 		break;
 		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:

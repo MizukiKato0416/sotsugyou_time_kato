@@ -183,7 +183,7 @@ void CObjplayerStop::Move(void) {
 		if (m_move.x > m_fSpeedMax) m_move.x = m_fSpeedMax;
 	}
 	//Aƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚ç
-	else if (pInput->GetTrigger(CInput::CODE::SELECT, GetPlayer()->GetIndex() - 1) && m_bCanStop) {
+	else if (pInput->GetTrigger(CInput::CODE::CHECK_A, GetPlayer()->GetIndex() - 1) && m_bCanStop) {
 		//’â~ˆ—
 		StopMove();
 	}
