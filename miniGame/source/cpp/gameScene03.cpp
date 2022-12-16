@@ -294,7 +294,7 @@ void CGameScene03::UpdateReady(void) {
 		for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 		{
 			//プレイヤーアイコンの生成処理
-			CreatePlayerIcon(nCntPlayer);
+			CreatePlayerIcon(nCntPlayer, false);
 		}
 		//全員がチェック出来た状態にする
 		m_bAllCheck = true;
@@ -641,7 +641,7 @@ void CGameScene03::GameOver(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//プレイヤーアイコンの生成処理
-		CreatePlayerIcon(nCntPlayer);
+		CreatePlayerIcon(nCntPlayer, true);
 	}
 
 	//オブジェクトのポーズが無いように設定（念のため）
@@ -651,7 +651,7 @@ void CGameScene03::GameOver(void) {
 //=============================================================================
 //プレイヤーアイコン生成処理
 //=============================================================================
-void CGameScene03::CreatePlayerIcon(int nCntPlayer) {
+void CGameScene03::CreatePlayerIcon(int nCntPlayer, bool bGameover) {
 
 	//生成されていたら
 	if (m_apPlayerIcon[nCntPlayer] != nullptr)
@@ -670,12 +670,20 @@ void CGameScene03::CreatePlayerIcon(int nCntPlayer) {
 	//ワールド座標からスクリーン座標に変換
 	iconPos = WorldToScreen(playerPos);
 	iconPos.x -= 70.0f;
-	iconPos.z = 0.0f;
+	iconPos.y += 5.0f;
 
-	//生成
-	m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(PLAYER_ICON_SCALE, PLAYER_ICON_SCALE, PLAYER_ICON_SCALE),
-		CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer + 4),
-		CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
+	if (bGameover) {
+		//生成
+		m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(PLAYER_ICON_SCALE, PLAYER_ICON_SCALE, PLAYER_ICON_SCALE),
+			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::WOLF_SELECT_ICON_1) + nCntPlayer),
+			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::WOLF_SELECT_ICON_1) + nCntPlayer));
+	}
+	else {
+		//生成
+		m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(PLAYER_ICON_SCALE, PLAYER_ICON_SCALE, PLAYER_ICON_SCALE),
+			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_ICON_FRAME_1) + nCntPlayer + 4),
+			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::PLAYER_NUM_WHITE_1) + nCntPlayer));
+	}
 }
 
 //=============================================================================
