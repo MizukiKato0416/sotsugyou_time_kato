@@ -1793,7 +1793,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/building_brick00.jpg";
+    "data/TEXTURE/MESH/building02.jpg";
    }
   }
   Material {
@@ -1808,7 +1808,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/building_brick00.jpg";
+    "data/TEXTURE/MESH/building02.jpg";
    }
   }
   Material {
@@ -1817,7 +1817,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/building_brick00.jpg";
+    "data/TEXTURE/MESH/building02.jpg";
    }
   }
   Material {

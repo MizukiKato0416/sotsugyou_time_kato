@@ -194,7 +194,8 @@ void CGameScene03::CreateObject(void) {
 	//ƒrƒ‹
 	for (int nCnt = 0; nCnt < 200; nCnt++)
 	{
-		CObjectModel::Create(CModel::MODELTYPE::OBJ_BUILDING_01, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		CModel::MODELTYPE type = CModel::MODELTYPE(rand() % 4 + int(CModel::MODELTYPE::OBJ_BUILDING_00));
+		CObjectModel::Create(type, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
 
 	//ƒR[ƒ“
