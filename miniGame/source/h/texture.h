@@ -204,7 +204,12 @@ public:
 		MESH_MARK_100m,				//100m標識
 		MESH_MARK_200m,				//200m標識
 		MESH_MARK_300m,				//300m標識
-		MESH_BUILDING_01,			//ビル１
+		MESH_BUILDING_00,			//ビル0
+		MESH_BUILDING_01a,			//ビル1
+		MESH_BUILDING_01b,			//ビル1
+		MESH_BUILDING_02,			//ビル2
+		MESH_BUILDING_03a,			//ビル3
+		MESH_BUILDING_03b,			//ビル3
 		MESH_STOP_SIGN,				//停止標識
 
 		//エフェクト
