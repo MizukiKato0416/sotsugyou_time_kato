@@ -117,6 +117,7 @@ data/TEXTURE/UI/4P_frame_item.png	= game01, game03, f_result
 
 data/TEXTURE/UI/tomare.png		= game03
 data/TEXTURE/UI/frame_dest.png	= game03
+data/TEXTURE/UI/winner_text.png	= game03
 
 data/TEXTURE/UI/timer_frame.png = game01, game02, game03, find_w
 
