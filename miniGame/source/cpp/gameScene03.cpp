@@ -203,7 +203,7 @@ void CGameScene03::CreateObject(void) {
 	}
 
 	//コーン
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_CORN, D3DXVECTOR3(STOP_POS_MAX * GAME03_ONE_METER, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_CORN, D3DXVECTOR3(STOP_POS_MAX * GAME03_ONE_METER + 80.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), false);
 }
 
 //=============================================================================
@@ -304,7 +304,7 @@ void CGameScene03::UpdateReady(void) {
 		m_bAllCheck = true;
 
 		//目標位置の決定
-		m_fDestPos = (rand() % 50 + 45) * 10.0f * GAME03_ONE_METER;	//450~940m
+		m_fDestPos = (rand() % 45 + 45) * 10.0f * GAME03_ONE_METER;	//450~890m
 		m_nCntShowDist = 0;
 		//目指せUIの生成
 		m_pTomare = CObject2D::Create(D3DXVECTOR3(900.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::TOMARE, 500.0f, 150.0f);	//目指せUI
