@@ -34,17 +34,17 @@
 //=============================================================================
 #define GAME_TIME				(60)		//ゲームの時間
 
-#define LIGHT_POS_VIEW_V		(D3DXVECTOR3(800.0f, 4000.0f, -800.0f))	//ライトの視点位置
-#define LIGHT_POS_VIEW_R		(D3DXVECTOR3(0.0f, 0.0f, 0.0f))			//ライトの注視点位置
+#define LIGHT_POS_VIEW_V		(D3DXVECTOR3(2000.0f, 4000.0f, -600.0f))	//ライトの視点位置
+#define LIGHT_POS_VIEW_R		(D3DXVECTOR3(0.0f, 0.0f, -600.0f))			//ライトの注視点位置
 
-#define FOG_COLOR				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))		//フォグの色
-#define BACK_BUFF_COLOR			(D3DXCOLOR(0.1f, 0.3f, 0.5f, 1.0f))		//バックバッファーの色
+#define FOG_COLOR				(D3DXCOLOR(0.0f, 0.7f, 1.0f, 1.0f))			//フォグの色
+#define BACK_BUFF_COLOR			(FOG_COLOR)			//バックバッファーの色
 
 #define PLAYER_ICON_SCALE		(0.18f)		//プレイヤーアイコンのスケール
 #define STOP_POS_MIN			(400)		//ストップできる最低の距離
 #define STOP_POS_MAX			(999)		//強制ストップされる距離
 #define FINISH_UI_NUM			(5)			//フィニッシュUIの数
-#define NEXT_SCENE_COUNT		(420)		//次のシーンまでのカウント
+#define NEXT_SCENE_COUNT		(600)		//次のシーンまでのカウント
 
 #define MIN_SPEED_PLAYER		(25)		//プレイヤーの最低速度
 #define MAX_SPEED_PLAYER		(35)		//プレイヤーの最大速度
@@ -107,7 +107,7 @@ void CGameScene03::Init(void) {
 
 	if (pRenderer != nullptr) {
 		//陰描画無効
-		pRenderer->SetEnableShadow(false);
+		//pRenderer->SetEnableShadow(false);
 	}
 
 	//------------------------------
@@ -115,7 +115,7 @@ void CGameScene03::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 3000.0f, 5000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 3500.0f, 7000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
 	D3DXVECTOR3 posLightV = LIGHT_POS_VIEW_V;	//ライトの視点の位置
@@ -137,15 +137,10 @@ void CGameScene03::Init(void) {
 	//------------------------------
 	if (pRenderer != nullptr) {
 		pRenderer->SetEffectFogEnable(true);
-
-		//フォグの色
-		D3DXCOLOR fogColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-		//バックバッファーの色
-		D3DXCOLOR backBuffColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 		//バックバッファをフォグの色に合わせる
-		pRenderer->SetBackBuffColor(backBuffColor);
-		pRenderer->SetEffectFogColor(fogColor);
-		pRenderer->SetEffectFogRange(3000.0f, 50000.0f);
+		pRenderer->SetBackBuffColor(BACK_BUFF_COLOR);
+		pRenderer->SetEffectFogColor(FOG_COLOR);
+		pRenderer->SetEffectFogRange(2000.0f, 40000.0f);
 
 	}
 
@@ -197,7 +192,7 @@ void CGameScene03::CreateObject(void) {
 	}
 
 	//ビル
-	for (int nCnt = 0; nCnt < 4; nCnt++)
+	for (int nCnt = 0; nCnt < 200; nCnt++)
 	{
 		CObjectModel::Create(CModel::MODELTYPE::OBJ_BUILDING_01, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	}
@@ -218,7 +213,7 @@ void CGameScene03::Uninit(void) {
 
 	if (pRenderer != nullptr) {
 		//陰描画有効
-		pRenderer->SetEnableShadow(true);
+		//pRenderer->SetEnableShadow(true);
 	}
 
 	//目標位置表示UIの破棄
@@ -396,6 +391,8 @@ void CGameScene03::UpdateGame(void) {
 
 	//カメラの更新
 	UpdateCamera();
+	//ライトの更新
+	UpdateLight();
 }
 
 //=============================================================================
@@ -419,28 +416,46 @@ void CGameScene03::UpdateGameOver(void) {
 	CCamera* pCamera = pManager->GetCamera();
 	if (pCamera == nullptr) return;
 
+	CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
+	//カメラを目標位置まで動かす関数を呼ぶ
+	if (m_nCntGameOver == 90) {
+		if (pCamera03 != nullptr) pCamera03->SetDestPos(m_fDestPos, 120);
+	}
+
 	//カメラが全体を見渡せるような距離まで下がる関数を呼ぶ
-	if (m_nCntGameOver == 90)
+	if (m_nCntGameOver == 290)
 	{
-		CGameCamera03* pCamera03 = dynamic_cast<CGameCamera03*>(pCamera);
-		if (pCamera03 != nullptr) pCamera03->OverLook(min(m_fPosPlayerMin, m_fDestPos), max(m_fPosPlayerMax, m_fDestPos));
+		if (pCamera03 != nullptr) pCamera03->OverLook(min(m_fPosPlayerMin, m_fDestPos), max(m_fPosPlayerMax, m_fDestPos), 100);
 	}
 
 	float afPosUI[MAX_OBJECT_PLAYER_NUM];	//UIの位置
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
 		if (m_apPlayer[nCnt] == nullptr) continue;
-		float fSpace = 200.0f;	//UIの間隔
+		const float fSpace = 200.0f;	//UIの間隔
 		afPosUI[nCnt] = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//画面真ん中を中心で配置
 
 		//スコアUIの表示
-		if (m_nCntGameOver == 120 + nCnt * 30) {
-			//スコアの生成
-			CScore* pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+		if (m_nCntGameOver == 300 + nCnt * 30) {
+			int nShowScore = m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER;	//表示スコア
+			m_bPerfectScore = nShowScore == int(m_fDestPos / GAME03_ONE_METER);	//スコア一致
+
+			//スコア表示
+			CScore* pDistScore = nullptr;	//スコアのポインタ
+			//一致時かどうかで演出変更
+			if (m_bPerfectScore) {
+				//スコアの生成
+				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_006, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);	//TODO:完璧なスコアのときの音
+			}
+			else {
+				//スコアの生成
+				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);	//TODO:通常時の音
+			}
+
 			if (pDistScore != nullptr) {
-				int nShowScore = m_apPlayer[nCnt]->GetPos().x / GAME03_ONE_METER;	//表示スコア
 				pDistScore->SetScore(nShowScore);	//スコアの設定
-				m_bPerfectScore = nShowScore == m_fDestPos / GAME03_ONE_METER;	//スコア一致
 			}
 
 			//スコアの背景の設定
@@ -448,18 +463,12 @@ void CGameScene03::UpdateGameOver(void) {
 				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
 			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
 
-			//スコア表示音の再生
-			if (m_bPerfectScore) {
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);	//TODO:完璧なスコアのときの音
-			}
-			else {
-				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);	//通常時の音
-			}
+
 		}
 	}
 
 	//TODO:スコアの上にWinテキストを乗せる　ランキング一位の場合
-	if (m_nCntGameOver == 300) {
+	if (m_nCntGameOver == 450) {
 		
 		for (int nIdx = 0; nIdx < MAX_OBJECT_PLAYER_NUM; nIdx++)
 		{
@@ -494,6 +503,8 @@ void CGameScene03::UpdateGameOver(void) {
 			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 0);
 		}
 	}
+	//ライトの更新
+	UpdateLight();
 }
 
 //=============================================================================
@@ -559,25 +570,31 @@ void CGameScene03::UpdateCamera(void) {
 //=============================================================================
 // ライトの位置の更新
 //=============================================================================
-//void CGameScene03::UpdateLight(void) {
-//	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-//	if (pManager == nullptr) return;
-//	//レンダラーの取得
-//	CRenderer* pRenderer = pManager->GetRenderer();
-//	if (pRenderer == nullptr) return;
-//	//カメラの取得
-//	CCamera* pCamera = pManager->GetCamera();
-//	if (pCamera == nullptr) return;
-//
-//	D3DXVECTOR3 posCamera = pCamera->GetPos();
-//	D3DXMATRIX mtxLightView;   // ライトビュー変換
-//	D3DXVECTOR3 posLightV = LIGHT_POS_VIEW_V + posCamera;	//ライトの視点の位置
-//	D3DXVECTOR3 posLightR = LIGHT_POS_VIEW_R + posCamera;	//ライトの注視点の位置
-//	//ライトのビューマトリックスを生成
-//	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
-//	//シェーダのライトを設定
-//	pRenderer->SetEffectLightMatrixView(mtxLightView);
-//}
+void CGameScene03::UpdateLight(void) {
+	CManager* pManager = CManager::GetManager();	//マネージャーの取得
+	if (pManager == nullptr) return;
+	//レンダラーの取得
+	CRenderer* pRenderer = pManager->GetRenderer();
+	if (pRenderer == nullptr) return;
+	//カメラの取得
+	CCamera* pCamera = pManager->GetCamera();
+	if (pCamera == nullptr) return;
+
+	D3DXMATRIX mtxLightProj;   // ライトの射影変換
+	//ライトのプロジェクションマトリックスを生成
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 3500.0f, 7000.0f);
+
+	D3DXVECTOR3 posCamera = pCamera->GetPos();
+	D3DXMATRIX mtxLightView;   // ライトビュー変換
+	D3DXVECTOR3 posLightV = posCamera + LIGHT_POS_VIEW_V;	//ライトの視点の位置
+	D3DXVECTOR3 posLightR = posCamera + LIGHT_POS_VIEW_R;	//ライトの注視点の位置
+	//ライトのビューマトリックスを生成
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
+
+	//シェーダのライトを設定
+	pRenderer->SetEffectLightMatrixView(mtxLightView);
+	pRenderer->SetEffectLightMatrixProj(mtxLightProj);
+}
 
 //=============================================================================
 // ゲームオーバー
@@ -617,8 +634,8 @@ void CGameScene03::GameOver(void) {
 	//ランキングの決定
 	DecideRanking();
 
-	//目標位置に目印を置く	透明な壁？
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_BOM, D3DXVECTOR3(m_fDestPos, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	//目標位置に目印を置く
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_STOP_SIGN, D3DXVECTOR3(m_fDestPos, 0.0f, 700.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{

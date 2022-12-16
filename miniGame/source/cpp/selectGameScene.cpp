@@ -114,7 +114,7 @@ void CSelectGameScene::Init(void) {
 	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//ライトの注視点の位置
 	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);		//ライトのベクトル
 	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
-												//ライトのビューマトリックスを生成
+	//ライトのビューマトリックスを生成
 	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &D3DXVECTOR3(posLightV + vecLight), &D3DXVECTOR3(0, 1, 0));
 	//シェーダのライトを設定
 	if (pRenderer != nullptr) {
@@ -166,14 +166,14 @@ void CSelectGameScene::CreateObject(void)
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
 
 	if (m_pMenuGame != nullptr) {
-		m_pMenuGame->SetSpanRotate(15);	//回転時間
+		m_pMenuGame->SetSpanRotate(15);	//回転にかかる時間
 
 		//ゲームごとのモデルの配列
 		const CModel::MODELTYPE typeModelGame[MENU_SELECT_NUM] =
 		{
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
-			CModel::MODELTYPE::OBJ_BOM,
+			CModel::MODELTYPE::OBJ_STOP_SIGN,
 			CModel::MODELTYPE::OBJ_HATENA,
 		};
 
@@ -188,7 +188,7 @@ void CSelectGameScene::CreateObject(void)
 			//pObjModelUI->SetEnableStencil(true);
 
 			//回転速度の設定
-			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.02f, 0.0f));
+			pObjModelUI->SetRotSpeed(D3DXVECTOR3(0.0f, 0.03f, 0.0f));
 
 			//UIオブジェクトのモデルの取得
 			CModel* pModel = pObjModelUI->GetPtrModel();
@@ -522,7 +522,7 @@ void CSelectGameScene::ChangeGameTitle()
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_ATTACK);
 		break;
-		//ストップ
+		//TODO:ストップ
 	case (int)CScene::SCENE_TYPE::GAME_03:
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::BG_MENU_WOLF && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::BG_MENU_WOLF);
