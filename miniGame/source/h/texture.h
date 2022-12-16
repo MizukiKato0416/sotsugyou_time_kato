@@ -117,6 +117,7 @@ public:
 
 		TOMARE,
 		FRAME_DEST,
+		WINNER,
 
 		TIMER_FRAME,
 

@@ -180,7 +180,7 @@ void CGameScene03::CreateObject(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//プレイヤーの生成
-		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(0.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), m_fPlayerSpeedMax);
+		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(-300.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), m_fPlayerSpeedMax);
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
@@ -474,8 +474,8 @@ void CGameScene03::UpdateGameOver(void) {
 		{
 			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
 			//Winテキストの生成
-			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 20.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
-				CTexture::TEXTURE_TYPE::NUMBER_004, 60.0f, 40.0f);
+			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 40.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
+				CTexture::TEXTURE_TYPE::WINNER, 100.0f, 40.0f);
 		}
 		//サウンド再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
