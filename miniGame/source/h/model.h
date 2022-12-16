@@ -59,7 +59,8 @@ public:
 		OBJ_BUILDING_01,				//ビル
 		OBJ_BUILDING_02,				//ビル
 		OBJ_BUILDING_03,				//ビル
-		OBJ_CORN,						//
+		OBJ_CORN,						//コーン
+		OBJ_STOP_SIGN,					//停止標識
 
 		OBJ_HATENA,						//はてなマーク
 		OBJ_MENU_STAGE,					//メニューのステージ
