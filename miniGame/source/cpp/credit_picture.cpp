@@ -11,7 +11,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define CREDIT_PICTURE_FRAME_SIZE		(1.05f)		//フレームのサイズ
+#define CREDIT_PICTURE_FRAME_SIZE		(1.8f)		//フレームのサイズ
 #define CREDIT_PICTURE_OBJECT_NUM		(2)			//生成するオブジェクトの数
 
 //=============================================================================
@@ -64,11 +64,11 @@ HRESULT CCreditPicture::Init(void) {
 	//フレームの生成
 	m_pFrame = CObject2D::Create(m_pos, CTexture::TEXTURE_TYPE::CREDIT_PICTURE_FRAME,
 		                         SCREEN_WIDTH * CREDIT_PICTURE_FRAME_SIZE * m_scale.x, SCREEN_HEIGHT * CREDIT_PICTURE_FRAME_SIZE * m_scale.y);
-	m_pFrame->SetAngle(m_fRot);
+	m_pFrame->SetAngle(3.14f);
 
 	//絵の生成
 	m_pPicture = CObject2D::Create(m_pos, m_texType, SCREEN_WIDTH * m_scale.x, SCREEN_HEIGHT * m_scale.y);
-	m_pPicture->SetAngle(m_fRot);
+	m_pPicture->SetAngle(3.14f);
 
 	return S_OK;
 }
@@ -126,7 +126,7 @@ bool CCreditPicture::Move(CObject2D * &pObject2D)
 	pObject2D->SetPos(pos);
 
 	//完全に見えなくなったら
-	if (pos.y - size.x / 2.0f <= 0.0f)
+	if (pos.y <= 0.0f - size.x / 2.0f)
 	{
 		//消す
 		pObject2D->Uninit();

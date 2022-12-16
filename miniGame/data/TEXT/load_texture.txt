@@ -163,8 +163,8 @@ data/TEXTURE/UI/title_logo_car.png			= title
 
 data/TEXTURE/UI/now_loading.png = all
 
-data/TEXTURE/UI/credit_credit.png 			= credit
-data/TEXTURE/UI/credit_picture_frame.png 	= credit
+data/TEXTURE/UI/credit_credit.png 			= all
+data/TEXTURE/UI/credit_picture_frame.png 	= all
 
 data/TEXTURE/MESH/floor_01.jpg			= title, game01
 data/TEXTURE/MESH/audience.png			= game01
