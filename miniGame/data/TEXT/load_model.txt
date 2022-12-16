@@ -42,6 +42,7 @@ data/MODEL/OBJECT/building01.x
 data/MODEL/OBJECT/building02.x	
 data/MODEL/OBJECT/building03.x	
 data/MODEL/OBJECT/corn.x	
+data/MODEL/OBJECT/stop_sign.x	
 
 data/MODEL/OBJECT/hatena.x	
 data/MODEL/OBJECT/menu_stage.x	

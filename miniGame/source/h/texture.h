@@ -117,6 +117,7 @@ public:
 
 		TOMARE,
 		FRAME_DEST,
+		WINNER,
 
 		TIMER_FRAME,
 
@@ -204,6 +205,7 @@ public:
 		MESH_MARK_200m,				//200m標識
 		MESH_MARK_300m,				//300m標識
 		MESH_BUILDING_01,			//ビル１
+		MESH_STOP_SIGN,				//停止標識
 
 		//エフェクト
 		EFFECT_SUN,	//太陽

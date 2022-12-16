@@ -23,7 +23,7 @@
 //=============================================================================
 CGameCamera03::CGameCamera03() : CCamera(MAX_DRAW_DISTANCE)
 {
-	m_bOverLook = false;	
+	m_bMove = false;
 }
 
 //=============================================================================
@@ -93,13 +93,13 @@ void CGameCamera03::Update(void) {
 	D3DXVECTOR3 posCamera = GetPos();	//位置の取得
 	float fDist = GetDistance();		//距離の取得
 
-	if (m_bOverLook) {
+	if (m_bMove) {
 		//目標位置まで移動
-		posCamera.x += m_fSpeedMovePos;
-		if (m_fSpeedMovePos > 0.0f) {
+		posCamera.x += m_fSpeedMoveDest;
+		if (m_fSpeedMoveDest > 0.0f) {
 			if (posCamera.x > m_destPos.x) posCamera.x = m_destPos.x;
 		}
-		else if (m_fSpeedMovePos < 0.0f) {
+		else if (m_fSpeedMoveDest < 0.0f) {
 			if (posCamera.x < m_destPos.x) posCamera.x = m_destPos.x;
 		}
 		//位置の設定
@@ -128,17 +128,25 @@ void CGameCamera03::Update(void) {
 }
 
 //=============================================================================
+// 目標位置を決める
+//=============================================================================
+void CGameCamera03::SetDestPos(float fDestPos, int nFrameMove) {
+	m_bMove = true;
+	m_destPos.x = fDestPos;
+	m_fSpeedMoveDest = (m_destPos.x - GetPos().x) / nFrameMove;
+}
+
+//=============================================================================
 // 見渡す
 //=============================================================================
-void CGameCamera03::OverLook(float fMinPos, float fMaxPos) {
-	m_bOverLook = true;
+void CGameCamera03::OverLook(float fMinPos, float fMaxPos, int nFrameMove) {
+	m_bMove = true;
 
 	float fDistMinToMax = fMaxPos - fMinPos;	//最低位置から最大位置への距離
 
-	int nFrameMove = 100;	//移動完了までのフレーム
 	//目標のX位置を中心にする
 	m_destPos.x = fMinPos + fDistMinToMax / 2.0f;
-	m_fSpeedMovePos = (m_destPos.x - GetPos().x) / nFrameMove;
+	m_fSpeedMoveDest = (m_destPos.x - GetPos().x) / nFrameMove;
 
 	m_fDestDist = fDistMinToMax * 1.2f;	//だいたいこのくらい
 	m_fSpeedDist = (m_fDestDist - GetDistance()) / nFrameMove;
