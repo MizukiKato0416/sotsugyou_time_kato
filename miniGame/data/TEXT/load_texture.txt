@@ -200,7 +200,12 @@ data/TEXTURE/MESH/road.png				= game03
 data/TEXTURE/MESH/100m.png				= game03
 data/TEXTURE/MESH/200m.png				= game03
 data/TEXTURE/MESH/300m.png				= game03
-data/TEXTURE/MESH/building01.jpg		= game03
+data/TEXTURE/MESH/building00.jpg		= game03
+data/TEXTURE/MESH/building01a.jpg		= game03
+data/TEXTURE/MESH/building01b.jpg		= game03
+data/TEXTURE/MESH/building02.jpg		= game03
+data/TEXTURE/MESH/building03a.jpg		= game03
+data/TEXTURE/MESH/building03b.jpg		= game03
 data/TEXTURE/MESH/stop_sign.jpg			= select, game03
 
 data/TEXTURE/EFFECT/sun.png = title
