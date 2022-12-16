@@ -35,6 +35,7 @@ public:
 		RESULT,
 		FIND_WOLF,
 		FINAL_RESULT,
+		CREDIT,
 		ENUM_MAX
 	};
 
