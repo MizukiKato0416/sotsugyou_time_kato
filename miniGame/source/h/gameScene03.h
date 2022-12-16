@@ -41,7 +41,7 @@ private:
 	void UpdateGame(void);					//ゲーム中の更新
 	void UpdateGameOver(void);				//ゲームオーバー時の更新
 	void UpdateReady(void);					//準備状態中の更新
-	void CreatePlayerIcon(int nCntPlayer);	//プレイヤーアイコン生成処理
+	void CreatePlayerIcon(int nCntPlayer, bool bGameover);	//プレイヤーアイコン生成処理
 	void UpdatePlayerIcon(void);			//プレイヤーアイコン更新処理
 	void ShowDestDist(void);				//目標位置表示
 	void CountDownUi(void);					//カウントダウンUIの処理

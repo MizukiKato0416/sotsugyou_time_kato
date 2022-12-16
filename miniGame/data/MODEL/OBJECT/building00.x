@@ -2492,7 +2492,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    ""data/TEXTURE/MESH/building01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2513,7 +2513,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    ""data/TEXTURE/MESH/building01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2522,7 +2522,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    ""data/TEXTURE/MESH/building01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
   Material {
@@ -2531,7 +2531,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\sotsugyou_time_kato\\miniGame\\data\\TEXTURE\\MESH\\building01.jpg";
+    "data/TEXTURE/MESH/building01.jpg";
    }
   }
  }

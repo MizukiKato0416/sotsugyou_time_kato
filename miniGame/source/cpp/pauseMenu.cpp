@@ -115,7 +115,7 @@ void CPauseMenu::Update(void) {
 
 	if (pInput != nullptr) {
 		//‘I‘ğ‚ğ“ü—Í
-		if (pInput->GetTrigger(CInput::CODE::SELECT, 0) && !GetLockChangeSelect()) {
+		if (pInput->GetTrigger(CInput::CODE::PAUSE, 0) && !GetLockChangeSelect()) {
 			switch (GetIdxCurSelect())
 			{
 				//ƒQ[ƒ€ÄŠJ
