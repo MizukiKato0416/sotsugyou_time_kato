@@ -19,17 +19,17 @@
 #define CREDIT_SCENE_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
 
 #define CREDIT_SCENE_CREDIT_SIZE_Y		(7809.0f)		//クレジットサイズY
-#define CREDIT_SCENE_CREDIT_MOVE		(2.0f)			//クレジットの移動速度
+#define CREDIT_SCENE_CREDIT_MOVE		(1.7f)			//クレジットの移動速度
 
-#define CREDIT_SCENE_FADE_SPEED		(0.003f)		//フェードの速度
+#define CREDIT_SCENE_FADE_SPEED		(0.005f)		//フェードの速度
 #define CREDIT_SCENE_FADE_DELAY		(180)			//フェードするまでの遅延
 
 #define CREDIT_SCENE_PICTURE_CREATE_POS		(D3DXVECTOR3(400.0f, 1000.0f, 0.0f))		//絵の生成位置
-#define CREDIT_SCENE_PICTURE_CREATE_SCALE	(D3DXVECTOR3(0.3f, 0.3f, 0.3f))				//絵の大きさ
-#define CREDIT_SCENE_PICTURE_SPEED			(1.8f)										//絵の移動速度
+#define CREDIT_SCENE_PICTURE_CREATE_SCALE	(D3DXVECTOR3(0.35f, 0.35f, 0.35f))			//絵の大きさ
+#define CREDIT_SCENE_PICTURE_SPEED			(1.5f)										//絵の移動速度
 #define CREDIT_SCENE_PICTURE_ROT			(float((rand() % 61 + -30) / 100.0f))		//絵の向きの範囲
 #define CREDIT_SCENE_CREATE_INTERVAL		(480)										//絵の生成間隔
-#define CREDIT_SCENE_INIT_CREATE_INTERVAL	(60)										//絵の最初の生成間隔
+#define CREDIT_SCENE_INIT_CREATE_INTERVAL	(360)										//絵の最初の生成間隔
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -75,8 +75,8 @@ void CCreditScene::Init(void) {
 	//BGMの再生
 	//------------------------------
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_RESULT);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_RESULT);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_CREDIT);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_CREDIT);
 	}
 }
 
@@ -85,6 +85,9 @@ void CCreditScene::Init(void) {
 //=============================================================================
 void CCreditScene::CreateObject(void)
 {
+	//背景
+	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_pBg->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 	//クレジット生成
 	m_pCredit = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, CREDIT_SCENE_CREDIT_SIZE_Y / 2.0f + SCREEN_HEIGHT, 0.0f),
 		                          CTexture::TEXTURE_TYPE::CREDIT_CREDIT, SCREEN_WIDTH, CREDIT_SCENE_CREDIT_SIZE_Y);
@@ -186,6 +189,8 @@ void CCreditScene::Credit()
 		pos.y = -CREDIT_SCENE_CREDIT_SIZE_Y / 2.0f + SCREEN_HEIGHT;
 		//フェードできる状態にする
 		m_bCanFade = true;
+		//リセット
+		m_nFrameCounter = 0;
 	}
 
 	//位置反映
@@ -199,11 +204,8 @@ void CCreditScene::CreatePicture()
 {
 	m_nFrameCounter++;
 
-	if (m_nFrameCounter > CREDIT_SCENE_CREATE_INTERVAL)
+	if (m_nFrameCounter % CREDIT_SCENE_CREATE_INTERVAL == 0 && m_nFrameCounter < 3500)
 	{
-		//リセット
-		m_nFrameCounter = 0;
-
 		//絵の生成
 		CCreditPicture::Create(CREDIT_SCENE_PICTURE_CREATE_POS, CREDIT_SCENE_PICTURE_CREATE_SCALE, CREDIT_SCENE_PICTURE_ROT,
 			                   CTexture::TEXTURE_TYPE::MESH_CAR_TIRE, -CREDIT_SCENE_PICTURE_SPEED);

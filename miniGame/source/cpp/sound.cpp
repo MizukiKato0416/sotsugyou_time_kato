@@ -24,6 +24,7 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/BGM/result.wav", -1 },
 	{ "data/SOUND/BGM/find_wolf.wav", -1 },
 	{ "data/SOUND/BGM/final_result.wav", -1 },
+	{ "data/SOUND/BGM/endroll.wav", -1 },
 
 	{ "data/SOUND/SE/1point.wav", 0 },
 	{ "data/SOUND/SE/3point.wav", 0 },

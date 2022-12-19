@@ -24,6 +24,7 @@ public:
 		BGM_RESULT,				//リザルトBGM
 		BGM_FIND_WOLF,			//人狼発見BGM
 		BGM_FINAL_RESULT,		//最終リザルトBGM
+		BGM_CREDIT,				//クレジットBGM
 
 		SE_POINT_1,				//1ポイント獲得SE
 		SE_POINT_3,				//3ポイント獲得SE

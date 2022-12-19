@@ -64,11 +64,11 @@ HRESULT CCreditPicture::Init(void) {
 	//ƒtƒŒ[ƒ€‚Ì¶¬
 	m_pFrame = CObject2D::Create(m_pos, CTexture::TEXTURE_TYPE::CREDIT_PICTURE_FRAME,
 		                         SCREEN_WIDTH * CREDIT_PICTURE_FRAME_SIZE * m_scale.x, SCREEN_HEIGHT * CREDIT_PICTURE_FRAME_SIZE * m_scale.y);
-	m_pFrame->SetAngle(3.14f);
+	m_pFrame->SetAngle(m_fRot);
 
 	//ŠG‚Ì¶¬
 	m_pPicture = CObject2D::Create(m_pos, m_texType, SCREEN_WIDTH * m_scale.x, SCREEN_HEIGHT * m_scale.y);
-	m_pPicture->SetAngle(3.14f);
+	m_pPicture->SetAngle(m_fRot);
 
 	return S_OK;
 }
