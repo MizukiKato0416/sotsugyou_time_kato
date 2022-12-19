@@ -182,6 +182,7 @@ public:
 		MESH_CAR_TIRE,				//タイヤ
 		MESH_CAR_WHEEL,				//ホイール
 		MESH_NOMO,					//nomo消しゴム
+		MESH_SHOPPINGKART,			//ショッピングカート
 		MESH_RUBBLE,				//がれき
 		MESH_STAGE_02_GROUND,		//ステージの地面
 		MESH_STAGE_02_WALL,			//ステージの壁
@@ -203,6 +204,7 @@ public:
 		MESH_CACTUS_01,				//サボテン01
 		MESH_CACTUS_02,				//サボテン02
 
+		MESH_STARTGATE,				//開始ゲート
 		MESH_ROAD,					//道路
 		MESH_ROCK,					//岩
 		MESH_MARK_100m,				//100m標識

@@ -462,7 +462,7 @@ void CGameScene03::UpdateGameOver(void) {
 	for (int nCnt = 0; nCnt < MAX_OBJECT_PLAYER_NUM; nCnt++)
 	{
 		if (m_apPlayer[nCnt] == nullptr) continue;
-		const float fSpace = 200.0f;	//UIの間隔
+		const float fSpace = 250.0f;	//UIの間隔
 		afPosUI[nCnt] = SCREEN_WIDTH / 2.0f - fSpace * 2 + fSpace / 2 + nCnt * fSpace;	//画面真ん中を中心で配置
 
 		//スコアUIの表示
@@ -472,15 +472,16 @@ void CGameScene03::UpdateGameOver(void) {
 
 			//スコア表示
 			CScore* pDistScore = nullptr;	//スコアのポインタ
+			const float fSizeScore = 60.0f;
 			//一致時かどうかで演出変更
 			if (m_bPerfectScore) {
 				//スコアの生成
-				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_006, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_006, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * fSizeScore, 600.0f, 0.0f), fSizeScore);
 				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_DRUM_ROLL_END);	//TODO:完璧なスコアのときの音
 			}
 			else {
 				//スコアの生成
-				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * 30.0f, 600.0f, 0.0f), 30.0f);
+				pDistScore = CScore::Create(3, CTexture::TEXTURE_TYPE::NUMBER_004, D3DXVECTOR3(afPosUI[nCnt] + 3 / 2.0f * fSizeScore, 600.0f, 0.0f), fSizeScore);
 				if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);	//TODO:通常時の音
 			}
 
@@ -489,8 +490,8 @@ void CGameScene03::UpdateGameOver(void) {
 			}
 
 			//スコアの背景の設定
-			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(afPosUI[nCnt], 600.0f + 30.0f / 2, 0.0f),
-				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 100.0f, 40.0f);
+			CObject2D* pScoreBG = CObject2D::Create(D3DXVECTOR3(afPosUI[nCnt], 600.0f + fSizeScore / 2, 0.0f),
+				(CTexture::TEXTURE_TYPE)((int)CTexture::TEXTURE_TYPE::ITEM_UI_FRAME_1 + nCnt), 200.0f, 80.0f);
 			if (pScoreBG != nullptr) pScoreBG->SetDrawPriority(CObject::DRAW_PRIORITY::UI_BG);
 
 
@@ -504,7 +505,7 @@ void CGameScene03::UpdateGameOver(void) {
 		{
 			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
 			//Winテキストの生成
-			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 40.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
+			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 90.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
 				CTexture::TEXTURE_TYPE::WINNER, 100.0f, 40.0f);
 		}
 		//サウンド再生

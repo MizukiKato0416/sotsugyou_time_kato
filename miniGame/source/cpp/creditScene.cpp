@@ -169,7 +169,7 @@ void CCreditScene::Fade()
 
 	if (pFade->GetChangeFade()) return;
 	//ƒ^ƒCƒgƒ‹‚É‘JˆÚ
-	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, CREDIT_SCENE_FADE_SPEED, 30, 0);
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, CREDIT_SCENE_FADE_SPEED, 30, 0);
 }
 
 //=============================================================================
