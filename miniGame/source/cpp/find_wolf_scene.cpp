@@ -261,7 +261,10 @@ void CFindWolfScene::CreateObject(void)
 			colModel = OBJECT_PLAYER_COLOR_1P;
 			break;
 		}
-		pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
+		//マテリアルの設定
+		pModel->SetMaterialDiffuse(colModel, 0);
+		pModel->SetMaterialSpecular(colModel / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
+		pModel->SetMaterialPower(3.0f, 0);
 
 		//プレイヤーのインデックスのUIを生成
 		CObject2D *pPlayerIndexUi = CObject2D::Create(m_aPosPlayer2D[nIdxPlayer] + D3DXVECTOR3(0.0f, FIND_WOLF_SCENE_PLAYER_INDEX_UI_POS_Y, 0.0f),
@@ -999,7 +1002,7 @@ void CFindWolfScene::Finish()
 	
 	//フェードの取得
 	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.02f, 0);
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 40, 0);
 }
 
 //=============================================================================

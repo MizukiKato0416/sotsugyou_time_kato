@@ -19,7 +19,8 @@
 CFade::CFade()
 {
 	m_pVtxBuff = nullptr;
-	m_fFadeSpeed = 0.0f;
+	m_nCntFadeIn = 60;
+	m_nCntFadeOut = 60;
 	m_bFadein = false;
 	m_nextScene = CScene::SCENE_TYPE::TITLE;
 }
@@ -109,7 +110,7 @@ void CFade::Update(void) {
 	//フェードアウト
 	if (!m_bFadein && m_colA > 0.0f) {
 		//フェードアウト
-		m_colA -= m_fFadeSpeed;
+		m_colA -= 1.0f / m_nCntFadeOut;
 		if (m_colA < 0.0f) {
 			m_colA = 0.0f;
 		}
@@ -117,7 +118,7 @@ void CFade::Update(void) {
 
 	//フェードイン
 	if (m_bFadein && m_colA <= 1.0f) {
-		m_colA += m_fFadeSpeed;
+		m_colA += 1.0f / m_nCntFadeIn;
 		//フェード完了時
 		if (m_colA >= 1.0f) {
 			m_colA = 1.0f;
@@ -194,13 +195,29 @@ void CFade::Draw(void) {
 //=============================================================================
 //フェードの設定
 //=============================================================================
-void CFade::SetFade(CScene::SCENE_TYPE typeScene, float fFadeSpeed, int nStopTime) {
+void CFade::SetFade(CScene::SCENE_TYPE typeScene, int nCntFade, int nStopTime) {
 	//フェード中の場合終了
 	if (m_bFadein || m_colA > 0.0f) return;
 
 	m_bFadein = true;
 	m_nextScene = typeScene;
-	m_fFadeSpeed = fFadeSpeed;
+	m_nCntFadeIn = nCntFade;
+	m_nCntFadeOut = nCntFade;
+	m_nStopTime = nStopTime;
+	m_nCntStop = 0;
+}
+
+//=============================================================================
+//フェードの設定
+//=============================================================================
+void CFade::SetFade(CScene::SCENE_TYPE typeScene, int nCntFadeIn, int nCntFadeOut, int nStopTime) {
+	//フェード中の場合終了
+	if (m_bFadein || m_colA > 0.0f) return;
+
+	m_bFadein = true;
+	m_nextScene = typeScene;
+	m_nCntFadeIn = nCntFadeIn;
+	m_nCntFadeOut = nCntFadeOut;
 	m_nStopTime = nStopTime;
 	m_nCntStop = 0;
 }

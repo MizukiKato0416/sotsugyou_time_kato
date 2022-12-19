@@ -21,7 +21,7 @@
 #define CREDIT_SCENE_CREDIT_SIZE_Y		(7809.0f)		//クレジットサイズY
 #define CREDIT_SCENE_CREDIT_MOVE		(1.7f)			//クレジットの移動速度
 
-#define CREDIT_SCENE_FADE_SPEED		(0.005f)		//フェードの速度
+#define CREDIT_SCENE_FADE_SPEED		(60)			//フェードの速度
 #define CREDIT_SCENE_FADE_DELAY		(180)			//フェードするまでの遅延
 
 #define CREDIT_SCENE_PICTURE_CREATE_POS		(D3DXVECTOR3(400.0f, 1000.0f, 0.0f))		//絵の生成位置
@@ -167,7 +167,7 @@ void CCreditScene::Fade()
 
 	if (pFade->GetChangeFade()) return;
 	//タイトルに遷移
-	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, CREDIT_SCENE_FADE_SPEED, 0);
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, CREDIT_SCENE_FADE_SPEED, 30, 0);
 }
 
 //=============================================================================

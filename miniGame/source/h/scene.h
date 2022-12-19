@@ -31,11 +31,11 @@ public:
 		GAME_01,
 		GAME_02,
 		GAME_03,
+		CREDIT,		//メニューに追加するためゲームに挟む
 		GAME_MAX,	//ランダム選択のためゲームシーンの最大を設定
 		RESULT,
 		FIND_WOLF,
 		FINAL_RESULT,
-		CREDIT,
 		ENUM_MAX
 	};
 

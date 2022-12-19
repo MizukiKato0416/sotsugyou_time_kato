@@ -997,7 +997,7 @@ void CTitleScene::Decide()
 			// 0を代入してマイナス値にならないようにする
 			m_nFadeTime = 0;
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 0.02f, 0);
+			if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, 60, 0);
 		}
 		else
 		{
@@ -1023,7 +1023,7 @@ bool CTitleScene::Reset()
 	//フェードの取得
 	CFade* pFade = pManager->GetFade();		//フェードへのポインタ
 	//タイトルシーンに遷移
-	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 0.02f, 0);
+	if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::TITLE, 60, 0);
 
 	return true;
 }

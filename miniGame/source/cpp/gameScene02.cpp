@@ -456,7 +456,7 @@ void CGameScene02::UpdateGameOver(void) {
 		//リザルトへシーン遷移
 		if (GetWereWolfMode()) {
 			//人狼モードの場合簡素なリザルト
-			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 0.02f, 0);
+			pFade->SetFade(CScene::SCENE_TYPE::RESULT, 40, 0);
 		}
 		//通常モードの場合
 		else {
@@ -467,7 +467,7 @@ void CGameScene02::UpdateGameOver(void) {
 				CFinalResultScene::SetPlayerScore(nScore, nIdx);
 			}
 			//最終リザルトに遷移
-			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 0.04f, 0);
+			pFade->SetFade(CScene::SCENE_TYPE::FINAL_RESULT, 40, 0);
 		}
 	}
 }
