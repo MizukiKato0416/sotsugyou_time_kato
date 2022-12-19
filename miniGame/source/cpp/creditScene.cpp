@@ -16,7 +16,8 @@
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
 //=============================================================================
-#define CREDIT_SCENE_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//”wŒi‚ÌˆÚ“®‘¬“x
+#define CREDIT_SCENE_BG_MOVE_SPEED		(D3DXVECTOR2(0.0f, 0.0001f))		//”wŒi‚ÌˆÚ“®‘¬“x
+#define CREDIT_SCENE_BG_SIZE			(3.0f)								//”wŒi‚ÌƒTƒCƒY
 
 #define CREDIT_SCENE_CREDIT_SIZE_Y		(7809.0f)		//ƒNƒŒƒWƒbƒgƒTƒCƒYY
 #define CREDIT_SCENE_CREDIT_MOVE		(1.7f)			//ƒNƒŒƒWƒbƒg‚ÌˆÚ“®‘¬“x
@@ -24,8 +25,8 @@
 #define CREDIT_SCENE_FADE_SPEED		(60)			//ƒtƒF[ƒh‚Ì‘¬“x
 #define CREDIT_SCENE_FADE_DELAY		(180)			//ƒtƒF[ƒh‚·‚é‚Ü‚Å‚Ì’x‰„
 
-#define CREDIT_SCENE_PICTURE_CREATE_POS		(D3DXVECTOR3(400.0f, 1000.0f, 0.0f))		//ŠG‚Ì¶¬ˆÊ’u
-#define CREDIT_SCENE_PICTURE_CREATE_SCALE	(D3DXVECTOR3(0.35f, 0.35f, 0.35f))			//ŠG‚Ì‘å‚«‚³
+#define CREDIT_SCENE_PICTURE_CREATE_POS		(D3DXVECTOR3(350.0f, 1000.0f, 0.0f))		//ŠG‚Ì¶¬ˆÊ’u
+#define CREDIT_SCENE_PICTURE_CREATE_SCALE	(D3DXVECTOR3(0.3f, 0.3f, 0.3f))				//ŠG‚Ì‘å‚«‚³
 #define CREDIT_SCENE_PICTURE_SPEED			(1.5f)										//ŠG‚ÌˆÚ“®‘¬“x
 #define CREDIT_SCENE_PICTURE_ROT			(float((rand() % 61 + -30) / 100.0f))		//ŠG‚ÌŒü‚«‚Ì”ÍˆÍ
 #define CREDIT_SCENE_CREATE_INTERVAL		(480)										//ŠG‚Ì¶¬ŠÔŠu
@@ -86,8 +87,9 @@ void CCreditScene::Init(void) {
 void CCreditScene::CreateObject(void)
 {
 	//”wŒi
-	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::NONE, SCREEN_WIDTH, SCREEN_HEIGHT);
-	m_pBg->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, (SCREEN_HEIGHT * CREDIT_SCENE_BG_SIZE / 2.0f), 0.0f), CTexture::TEXTURE_TYPE::BG_TITLE,
+		                      SCREEN_WIDTH * CREDIT_SCENE_BG_SIZE, SCREEN_HEIGHT * CREDIT_SCENE_BG_SIZE);
+
 	//ƒNƒŒƒWƒbƒg¶¬
 	m_pCredit = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, CREDIT_SCENE_CREDIT_SIZE_Y / 2.0f + SCREEN_HEIGHT, 0.0f),
 		                          CTexture::TEXTURE_TYPE::CREDIT_CREDIT, SCREEN_WIDTH, CREDIT_SCENE_CREDIT_SIZE_Y);
@@ -143,7 +145,7 @@ void CCreditScene::Bg()
 	if (m_pBg == nullptr) return;
 
 	//”wŒi‚ð“®‚©‚·
-	//m_pBg->SetMoveTex(CREDIT_SCENE_BG_MOVE_SPEED.x, CREDIT_SCENE_BG_MOVE_SPEED.y);
+	m_pBg->SetMoveTex(CREDIT_SCENE_BG_MOVE_SPEED.x, CREDIT_SCENE_BG_MOVE_SPEED.y);
 }
 
 //=============================================================================
