@@ -451,10 +451,10 @@ void CSelectGameScene::ChangeTutorial(void) {
 			//TODO:’âŽ~
 		case (int)CScene::SCENE_TYPE::GAME_03:
 			if (m_bWolfMode) {
-				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK_WOLF;
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_STOP_WOLF;
 			}
 			else {
-				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
+				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_STOP;
 			}
 			break;
 			//ƒ‰ƒ“ƒ_ƒ€(‰¼)

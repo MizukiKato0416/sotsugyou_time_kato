@@ -42,6 +42,8 @@ data/TEXTURE/UI/tutorial_balloon.png 		= select
 data/TEXTURE/UI/tutorial_balloon_wolf.png	= select
 data/TEXTURE/UI/tutorial_attack.png			= select
 data/TEXTURE/UI/tutorial_attack_wolf.png	= select
+data/TEXTURE/UI/tutorial_stop.png			= select
+data/TEXTURE/UI/tutorial_stop_wolf.png		= select
 data/TEXTURE/UI/tutorial_random.png			= select
 data/TEXTURE/UI/select_icon.png				= select, game01, game02, game03
 
