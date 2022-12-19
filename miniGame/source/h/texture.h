@@ -202,6 +202,7 @@ public:
 		MESH_CACTUS_02,				//サボテン02
 
 		MESH_ROAD,					//道路
+		MESH_ROCK,					//岩
 		MESH_MARK_100m,				//100m標識
 		MESH_MARK_200m,				//200m標識
 		MESH_MARK_300m,				//300m標識

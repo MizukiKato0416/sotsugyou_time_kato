@@ -170,9 +170,9 @@ void CGameScene03::CreateObject(void) {
 	if (m_pCheck != nullptr) m_pCheck->SetCreateCountDownUi(false);
 
 	//床の生成
-	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 6, 6, 10000.0f, 10000.0f, CTexture::TEXTURE_TYPE::MESH_FLOOR_DESERT);
+	CMeshwall::Create(D3DXVECTOR3(-10000.0f, -5.0f, -0.0f), D3DXVECTOR3(D3DX_PI*0.5f, D3DX_PI*0.5f, 0.0f), 10, 10, 5000.0f, 5000.0f, CTexture::TEXTURE_TYPE::MESH_STAGE_02_WALL_03);
 	//道路
-	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(3000.0f, 0.0f, 200.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_ROAD, D3DXVECTOR3(3000.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f), false);
 
 	//開始ゲート
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_STARTGATE, D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -180,7 +180,7 @@ void CGameScene03::CreateObject(void) {
 	for (int nCntPlayer = 0; nCntPlayer < MAX_OBJECT_PLAYER_NUM; nCntPlayer++)
 	{
 		//プレイヤーの生成
-		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(-300.0f, 0.0f, 500.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), m_fPlayerSpeedMax);
+		m_apPlayer[nCntPlayer] = CObjplayerStop::Create(D3DXVECTOR3(-300.0f, 0.0f, 450.0f + nCntPlayer * -300.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), m_fPlayerSpeedMax);
 		//更新しないようにする
 		m_apPlayer[nCntPlayer]->GetPlayer()->SetUpdate(false);
 	}
@@ -192,14 +192,43 @@ void CGameScene03::CreateObject(void) {
 	}
 
 	//ビル
-	for (int nCnt = 0; nCnt < 200; nCnt++)
+	float fPosBuild = -5000.0f;	//ビル配置位置
+	for (int nCnt = 0; nCnt < 50; nCnt++)
 	{
-		CModel::MODELTYPE type = CModel::MODELTYPE(rand() % 4 + int(CModel::MODELTYPE::OBJ_BUILDING_00));
-		CObjectModel::Create(type, D3DXVECTOR3(1000.0f * nCnt, 0.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+		CModel::MODELTYPE type = CModel::MODELTYPE(rand() % 4 + int(CModel::MODELTYPE::OBJ_BUILDING_00));	//rand() % 4
+		//ビルの半径加算
+		fPosBuild += GetBuildingRadius(type);
+
+		//生成
+		CObjectModel::Create(type, D3DXVECTOR3(fPosBuild, 0.0f, 2500.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+
+		//ビルの半径加算
+		fPosBuild += GetBuildingRadius(type);
 	}
 
 	//コーン
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_CORN, D3DXVECTOR3(STOP_POS_MAX * GAME03_ONE_METER + 80.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), false);
+}
+
+//ビルの半径の取得
+float CGameScene03::GetBuildingRadius(CModel::MODELTYPE type) {
+	switch (type)
+	{
+	case CModel::MODELTYPE::OBJ_BUILDING_00:
+		return 500.0f;
+		break;
+	case CModel::MODELTYPE::OBJ_BUILDING_01:
+		return 400.0f;
+		break;
+	case CModel::MODELTYPE::OBJ_BUILDING_02:
+		return 500.0f;
+		break;
+	case CModel::MODELTYPE::OBJ_BUILDING_03:
+		return 900.0f;
+		break;
+	}
+
+	return 0.0f;
 }
 
 //=============================================================================
@@ -675,7 +704,7 @@ void CGameScene03::CreatePlayerIcon(int nCntPlayer, bool bGameover) {
 	if (bGameover) {
 		//生成
 		m_apPlayerIcon[nCntPlayer] = CObjectPlayerIcon::Create(iconPos, D3DXVECTOR3(PLAYER_ICON_SCALE, PLAYER_ICON_SCALE, PLAYER_ICON_SCALE),
-			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::WOLF_SELECT_ICON_1) + nCntPlayer),
+			CTexture::TEXTURE_TYPE::MESH_SHADOW,
 			CTexture::TEXTURE_TYPE(int(CTexture::TEXTURE_TYPE::WOLF_SELECT_ICON_1) + nCntPlayer));
 	}
 	else {

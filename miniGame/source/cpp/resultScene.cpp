@@ -228,8 +228,10 @@ void CResultScene::CreateObject(void)
 			colModel = OBJECT_PLAYER_COLOR_1P;
 			break;
 		}
-		pModel->SetMaterialDiffuse(colModel, 0);	//マテリアルの設定
-
+		//マテリアルの設定
+		pModel->SetMaterialDiffuse(colModel, 0);
+		pModel->SetMaterialSpecular(colModel / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
+		pModel->SetMaterialPower(3.0f, 0);
 
 		//順位UIのテクスチャ設定
 		if (pRankUI == nullptr) continue;
