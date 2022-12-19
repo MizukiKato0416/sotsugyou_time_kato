@@ -389,7 +389,7 @@ void CSelectGameScene::UpdateInput(void) {
 
 			//ランダム選択時
 			if (nIdxCurSelect == MAX_GAME_NUM) {
-				nIdxCurSelect = rand() % MAX_GAME_NUM;	//ランダムな選択
+				nIdxCurSelect = rand() % (MAX_GAME_NUM - 1);	//ランダムな選択	クレジット挟んだので-1
 				//メニューの設定
 				m_pMenuGame->SetIdxCurSelect(nIdxCurSelect);	//選択番号の設定
 				m_pMenuGame->BeginRoulette(FPS * 3, 0.2f * D3DX_PI, 0.985f);	//ルーレット開始

@@ -329,7 +329,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/building03b.png";
+    "data/TEXTURE/MESH/building03b.jpg";
    }
   }
   Material {
@@ -338,7 +338,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data/TEXTURE/MESH/building03b.png";
+    "data/TEXTURE/MESH/building03b.jpg";
    }
   }
  }
