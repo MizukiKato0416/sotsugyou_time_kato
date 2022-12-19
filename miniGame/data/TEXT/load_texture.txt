@@ -22,7 +22,7 @@
 //
 //--------------------------
 
-data/TEXTURE/BG/bg_title.jpg		= title
+data/TEXTURE/BG/bg_title.jpg		= credit
 data/TEXTURE/BG/bg_result.jpg		= result
 data/TEXTURE/BG/menu_bg.jpg			= select
 data/TEXTURE/BG/menu_bg_wolf.jpg	= select
