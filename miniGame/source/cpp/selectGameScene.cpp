@@ -173,7 +173,8 @@ void CSelectGameScene::CreateObject(void)
 		{
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
-			CModel::MODELTYPE::OBJ_STOP_SIGN,
+			CModel::MODELTYPE::OBJ_STOP_SIGN,	
+			CModel::MODELTYPE::OBJ_BANANA,	//TODO:スタッフロールモデル
 			CModel::MODELTYPE::OBJ_HATENA,
 		};
 
@@ -287,16 +288,14 @@ void CSelectGameScene::Update(void) {
 			m_nFadeTime = 0;
 
 			//遷移の時間設定
-			float fDecAlpha = 0.04f;
-			int nStopCount = 30;
+			int nCntFade = 30;
 			if (m_nextScene == SCENE_TYPE::TITLE)
 			{
-				fDecAlpha = 0.1f;
-				nStopCount = 10;
+				nCntFade = 50;
 			}
 
 			//シーン遷移開始			
-			if (pFade != nullptr) pFade->SetFade(m_nextScene, fDecAlpha, nStopCount);
+			if (pFade != nullptr) pFade->SetFade(m_nextScene, nCntFade, 0);
 			//選択のロック
 			m_pMenuGame->SetLockChangeSelect(true);
 		}
@@ -448,7 +447,7 @@ void CSelectGameScene::ChangeTutorial(void) {
 				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_ATTACK;
 			}
 			break;
-			//TODO:停止
+			//停止
 		case (int)CScene::SCENE_TYPE::GAME_03:
 			if (m_bWolfMode) {
 				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_STOP_WOLF;
@@ -456,6 +455,10 @@ void CSelectGameScene::ChangeTutorial(void) {
 			else {
 				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_STOP;
 			}
+			break;
+			//TODO:スタッフロール
+		case (int)CScene::SCENE_TYPE::CREDIT:
+			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_RANDOM;
 			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
@@ -523,6 +526,11 @@ void CSelectGameScene::ChangeGameTitle()
 	case (int)CScene::SCENE_TYPE::GAME_03:
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP);
+		break;
+		//TODO:スタッフロール
+	case (int)CScene::SCENE_TYPE::CREDIT:
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);
 		break;
 		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:

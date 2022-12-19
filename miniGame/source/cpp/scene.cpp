@@ -109,6 +109,10 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 		pScene = new CGameScene03;
 		break;
 
+	case CScene::SCENE_TYPE::CREDIT:
+		pScene = new CCreditScene;
+		break;
+
 	case CScene::SCENE_TYPE::RESULT:
 		pScene = new CResultScene;
 		break;
@@ -119,9 +123,6 @@ void CScene::ChangeScene(CScene*& pScene, SCENE_TYPE typeScene) {
 
 	case CScene::SCENE_TYPE::FINAL_RESULT:
 		pScene = new CFinalResultScene;
-		break;
-	case CScene::SCENE_TYPE::CREDIT:
-		pScene = new CCreditScene;
 		break;
 	}
 

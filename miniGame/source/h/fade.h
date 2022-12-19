@@ -26,14 +26,16 @@ public:
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 	void Draw(void);	//描画処理
-	void SetFade(CScene::SCENE_TYPE typeScene, float fFadeSpeed, int nStopTime);	//フェードの設定
+	void SetFade(CScene::SCENE_TYPE typeScene, int nCntFade, int nStopTime);					//フェードの設定
+	void SetFade(CScene::SCENE_TYPE typeScene, int nCntFadeIn, int nCntFadeOut, int nStopTime);	//フェードの設定
 	void SkipFade(void);	//フェードアウトをスキップさせる
 	bool GetFade(void);		//フェード中かどうかを取得
 	bool GetChangeFade(void);	//フェードインからフェードアウトに切り替わったタイミングかどうか
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
-	float m_fFadeSpeed;	//フェードする速度
+	int m_nCntFadeIn;	//フェードインする速度
+	int m_nCntFadeOut;	//フェードアウトする速度
 	bool m_bFadein;		//フェード中かどうか
 	float m_colA;		//カラーのアルファ値
 	int m_nStopTime;	//フェード切り替わり時の停止時間

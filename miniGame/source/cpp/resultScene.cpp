@@ -485,7 +485,7 @@ void CResultScene::Fade()
 		}
 
 		if (m_nFrameCounter < fChangeSceneCount) return;
-		if (pFade != nullptr) pFade->SetFade(sceneType, 0.04f, 0);
+		if (pFade != nullptr) pFade->SetFade(sceneType, 30, 0);
 
 		//ƒTƒEƒ“ƒh‚ÌŽæ“¾
 		CSound* pSound = nullptr;
