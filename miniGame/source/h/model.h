@@ -79,6 +79,7 @@ public:
 		OBJ_RESULT_BALLOON_01,			//結果画面の風船01
 		OBJ_RESULT_BALLOON_02,			//結果画面の風船02
 		OBJ_RESULT_BALLOON_03,			//結果画面の風船03
+		OBJ_RESULT_AIRBALLOON,			//結果画面の気球
 
 		OBJ_TITLE_BIRD,					//タイトルの鳥
 		OBJ_TITLE_DUNE_00,				//砂丘00

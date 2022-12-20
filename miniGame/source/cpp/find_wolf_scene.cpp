@@ -218,13 +218,13 @@ void CFindWolfScene::CreateObject(void)
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_FIND_WOLF_TOWER, D3DXVECTOR3(0.0f, 0.0f, -FIND_WOLF_SCENE_STAGE_POS_Z), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//浮いてるオブジェクト
-	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.005f, 0.002f, 0.005f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_01);
 
 	CFloatObject::Create(D3DXVECTOR3(300.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.006f, 0.01f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_02);
 
-	CFloatObject::Create(D3DXVECTOR3(-300.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	CFloatObject::Create(D3DXVECTOR3(-300.0f, 100.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(-0.003, -0.008f, 0.0f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_03);
 
 	for (int nIdxPlayer = 0; nIdxPlayer < MAX_OBJECT_PLAYER_NUM; nIdxPlayer++)

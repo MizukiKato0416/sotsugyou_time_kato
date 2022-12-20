@@ -61,6 +61,7 @@ data/MODEL/OBJECT/result_balloon_00.x
 data/MODEL/OBJECT/result_balloon_01.x	
 data/MODEL/OBJECT/result_balloon_02.x	
 data/MODEL/OBJECT/result_balloon_03.x	
+data/MODEL/OBJECT/hot_air_balloon.x	
 
 data/MODEL/OBJECT/title_bird.x	
 data/MODEL/OBJECT/dune_00.x	
