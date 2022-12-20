@@ -319,7 +319,7 @@ void CSelectMenu3D::BeginChangeSelect(bool bChangePlus) {
 	m_nCntRotate = m_nSpanRotate;
 
 	//回転速度を設定
-	SetSpeedRotModel(fRotDelta / m_nCntRotate);
+	m_fSpeedRotModel = fRotDelta / m_nCntRotate;
 }
 
 //=============================================================================
@@ -328,4 +328,17 @@ void CSelectMenu3D::BeginChangeSelect(bool bChangePlus) {
 CObjectModelUI* CSelectMenu3D::GetModelUI(unsigned int nIdx) {
 	if (nIdx >= m_vpObjModelUI.size()) return nullptr;	//配列から取得できない場合null
 	return m_vpObjModelUI[nIdx];
+}
+
+//=============================================================================
+// 現在の選択の番号を設定し、その角度にモデルを合わせる
+//=============================================================================
+void CSelectMenu3D::SetIdxCurSelect(int nIdx) {
+	//現在の選択番号を設定
+	CSelectMenu::SetIdxCurSelect(nIdx);
+
+	//角度を合わせる
+	SetRotDest(nIdx);				//目標角度を選択に合わせて設定
+	m_fRotModel = m_fRotModelDest;	//角度を目標角度で設定
+	MoveModel();					//モデルを移動
 }

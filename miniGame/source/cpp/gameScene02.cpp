@@ -126,7 +126,7 @@ void CGameScene02::Init(void) {
 	//------------------------------
 	D3DXMATRIX mtxLightProj;   // ライトの射影変換
 	//ライトのプロジェクションマトリックスを生成
-	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 1000.0f, 3000.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 1500.0f, 3000.0f);
 
 	D3DXMATRIX mtxLightView;   // ライトビュー変換
 	D3DXVECTOR3 posLightV = D3DXVECTOR3(800.0f, 2000.0f, -800.0f);	//ライトの視点の位置	D3DXVECTOR3(600.0f, 1500.0f, -2000.0f);

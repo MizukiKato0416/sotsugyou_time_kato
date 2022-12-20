@@ -207,7 +207,10 @@ void CFinalResultScene::CreateObject(void)
 		}
 	}
 
-
+	//気球の配置
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_AIRBALLOON, D3DXVECTOR3(900.0f, -200.0f, -1200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_AIRBALLOON, D3DXVECTOR3(-800.0f, 200.0f, 800.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_AIRBALLOON, D3DXVECTOR3(1200.0f, 700.0f, 2000.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//プレイヤーのモデルの生成
 	const float fDistPlayer = 400.0f;	//プレイヤーのモデル間の距離

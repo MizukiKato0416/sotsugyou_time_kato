@@ -7,18 +7,21 @@
 //
 //=============================================================================
 #include "titleScene.h"
-#include "manager.h"
-#include "renderer.h"
-#include "titleCamera.h"
-#include "sound.h"
-#include "input.h"
-#include "fade.h"
-#include "object2D.h"
-#include "PresetSetEffect.h"
-#include "meshwall.h"
-#include "skydome.h"
 
 #include "effect.h"
+#include "fade.h"
+#include "input.h"
+#include "manager.h"
+#include "meshwall.h"
+#include "renderer.h"
+#include "object2D.h"
+#include "PresetSetEffect.h"
+#include "renderer.h"
+#include "selectGameScene.h"
+#include "skydome.h"
+#include "sound.h"
+#include "titleCamera.h"
+
 
 //=============================================================================
 // マクロ定義
@@ -199,6 +202,10 @@ void CTitleScene::Init(void) {
 	//オブジェクトのポーズが無いように設定
 	CObject::SetUpdatePauseLevel(0);
 
+	//ゲーム選択シーンの選択をリセット
+	CSelectGameScene::SetLastGameScene(CScene::SCENE_TYPE::GAME_01);
+	//ゲーム選択シーンの人狼選択をリセット
+	CSelectGameScene::SetWolfMode(false);
 
 #ifdef _DEBUG
 	//Zバッファテクスチャの表示
