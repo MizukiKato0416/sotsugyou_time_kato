@@ -34,6 +34,9 @@ public:
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 
+	static void SetLastGameScene(CScene::SCENE_TYPE type) { m_lastGameScene = type; }	//最後のゲームシーンのタイプ設定
+	static void SetWolfMode(bool bMode) { m_bWolfMode = bMode; }	//最後のゲームシーンのタイプ設定
+
 private:
 	void UpdateInput(void);				//入力処理
 	void ChangeTutorial(void);			//チュートリアル表示の切り替え
@@ -42,10 +45,13 @@ private:
 	void BgMove();						//背景の動きの処理
 	void AlowUi();						//矢印UIの動き処理
 
+	static CScene::SCENE_TYPE m_lastGameScene;			//最後のゲームシーンのタイプ
+	static bool m_bWolfMode;							//嘘つきモード
+	CScene::SCENE_TYPE m_nextScene;						//開始するゲームシーンのタイプ
+
 	int m_nFadeTime;	//フェード開始までのカウント
 	bool m_bSelectGame;	//選択キー押下時
 
-	bool m_bWolfMode;									//嘘つきモード
 	CObject2D* m_pMenuBG;								//背景
 	CObject2D* m_pMenuNoneMoveUi;						//動かないUI
 	CObject2D* m_pAlowUi[SELECT_GAME_SCENE_ALOW_UI_NUM];//矢印UI
@@ -56,7 +62,6 @@ private:
 	CObject2D* m_pTutorial;								//チュートリアル画面
 	CObject2D *m_pModeUi;								//モードUIのポインタ
 	CNextButton* m_pNextButton;							//次へのボタン
-	CScene::SCENE_TYPE m_nextScene;						//開始するゲームシーンのタイプ
 };
 
 #endif // !_SELECT_GAME_SCENE_H_

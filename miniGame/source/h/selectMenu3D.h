@@ -38,6 +38,7 @@ public:
 	virtual void EndChangeSelect(void) {}	//選択の変更が終了したときの処理
 
 	CObjectModelUI* GetModelUI(unsigned int nIdx);	//UIモデルオブジェクトのポインタを取得
+	virtual void SetIdxCurSelect(int nIdx);			//現在の選択の番号を設定し、その角度にモデルを合わせる
 	void SetSpeedRotModel(float fSpeed) { m_fSpeedRotModel = fSpeed; }	//モデル移動時の回転速度の設定
 	float GetSpeedRotModel(void) { return m_fSpeedRotModel; }			//モデル移動時の回転速度の取得
 	void SetCountRotate(int nCnt) { m_nCntRotate = nCnt; }		//回転するカウントの設定

@@ -23,7 +23,8 @@
 #define MAX_GAME_NUM ((int)CScene::SCENE_TYPE::GAME_MAX - (int)CScene::SCENE_TYPE::GAME_01)	//ゲームの最大数
 #define MENU_SELECT_NUM (MAX_GAME_NUM + 1)	//ランダム分追加
 
-#define MENU_BG_MOVE_SPEED		(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+#define MENU_BG_MOVE_SPEED				(D3DXVECTOR2(0.001f, 0.001f))		//背景の移動速度
+#define MENU_ROTATE_SPEED				(15)								//メニュー回転速度
 
 #define MENU_NEXT_BUTTON_POS			(D3DXVECTOR3(1240.0f, 680.0f, 0.0f))	//次に進むボタンの位置
 #define MENU_NEXT_BUTTON_SIZE			(D3DXVECTOR3(70.0f, 70.0f, 0.0f))		//次に進むボタンのサイズ
@@ -51,6 +52,8 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
+CScene::SCENE_TYPE CSelectGameScene::m_lastGameScene = CScene::SCENE_TYPE::GAME_01;
+bool CSelectGameScene::m_bWolfMode = false;
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -60,7 +63,6 @@ CSelectGameScene::CSelectGameScene()
 	m_pMenuBG = nullptr;
 	m_pMenuGame = nullptr;
 	m_nFadeTime = 0;
-	m_bWolfMode = false;
 	m_pTutorial = nullptr;
 	m_pModeUi = nullptr;
 	m_pMenuNoneMoveUi = nullptr;
@@ -148,8 +150,17 @@ void CSelectGameScene::CreateObject(void)
 	//------------------------------
 	//UIの生成
 	//------------------------------
+	CTexture::TEXTURE_TYPE typeTexBG = CTexture::TEXTURE_TYPE::BG_MENU;
+	CTexture::TEXTURE_TYPE typeTexUI = CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI;
+	CTexture::TEXTURE_TYPE typeTexMode = CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL;
+	if (m_bWolfMode) {
+		typeTexBG = CTexture::TEXTURE_TYPE::BG_MENU_WOLF;
+		typeTexUI = CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI_WOLF;
+		typeTexMode = CTexture::TEXTURE_TYPE::MENU_MODE_WOLF;
+	}
+
 	// 背景
-	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::BG_MENU, SCREEN_WIDTH, SCREEN_HEIGHT);
+	m_pMenuBG = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTexBG, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//ステージの生成
 	CObjectModelUI *pModel = CObjectModelUI::Create(CModel::MODELTYPE::OBJ_MENU_STAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
@@ -159,14 +170,14 @@ void CSelectGameScene::CreateObject(void)
 	}
 
 	//背景
-	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), CTexture::TEXTURE_TYPE::MENU_NONE_MOVE_UI,
+	m_pMenuNoneMoveUi = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f), typeTexUI,
 		                                  SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//選択メニューの生成
 	m_pMenuGame = CSelectMenu3D::Create(MENU_SELECT_NUM, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 250.0f, CModel::MODELTYPE::OBJ_BALLOON_PINK, 800.0f, 200.0f, false, true);
 
 	if (m_pMenuGame != nullptr) {
-		m_pMenuGame->SetSpanRotate(15);	//回転にかかる時間
+		m_pMenuGame->SetSpanRotate(MENU_ROTATE_SPEED);	//回転にかかる時間
 
 		//ゲームごとのモデルの配列
 		const CModel::MODELTYPE typeModelGame[MENU_SELECT_NUM] =
@@ -203,6 +214,9 @@ void CSelectGameScene::CreateObject(void)
 				pModel->SetMaterialPower(6.0f, nCnt);
 			}
 		}
+		
+		//前回の選択のままにする
+		m_pMenuGame->SetIdxCurSelect(int(m_lastGameScene) - int(CScene::SCENE_TYPE::GAME_01));
 	}
 
 	//ゲーム名の生成
@@ -216,7 +230,7 @@ void CSelectGameScene::CreateObject(void)
 
 	//モードUIの生成
 	m_pModeUi = CObject2D::Create(D3DXVECTOR3(MENU_GAME_MODE_UI_SIZE_X / 2.0f, MENU_GAME_MODE_UI_SIZE_Y / 2.0f, 0.0f),
-		                          CTexture::TEXTURE_TYPE::MENU_MODE_NORMAL, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
+		typeTexMode, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
 }
 
 //=============================================================================
@@ -396,7 +410,7 @@ void CSelectGameScene::UpdateInput(void) {
 			}
 
 			//次のシーンの決定
-			m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);	
+			m_lastGameScene = m_nextScene = (CScene::SCENE_TYPE)(nIdxCurSelect + (int)CScene::SCENE_TYPE::GAME_01);
 
 			//ゲームモード設定
 			CGameScene::SetWereWolfMode(m_bWolfMode);
