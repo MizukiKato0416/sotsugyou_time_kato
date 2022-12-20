@@ -42,6 +42,7 @@ private:
 	CObject2D *m_pBg;				//背景
 	CObject2D *m_pCredit;			//クレジット
 	bool m_bCanFade;				//フェードできるかどうか
+	bool m_bPictureRot;				//傾きを切り替える用
 	int m_nFrameCounter;			//Frameカウント用
 };
 

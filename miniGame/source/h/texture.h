@@ -29,6 +29,7 @@ public:
 		BG_MENU,
 		BG_MENU_WOLF,
 		BG_FIND_WOLF,
+		BG_CREDIT_01,
 
 		ARROW_RIGHT,
 		ARROW_LEFT,
