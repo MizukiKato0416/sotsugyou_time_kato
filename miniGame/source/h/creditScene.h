@@ -55,17 +55,21 @@ private:
 	void CreatePicture();								//絵生成処理
 	void SetFade(const int nCnt, const D3DXCOLOR col);	//フェード設定処理
 	void Fade();										//フェード処理
+	void SkipIcon();									//スキップアイコン処理
 
 	CObject2D *m_pBg;				//背景
 	CObject2D *m_pBgStage;			//背景ステージ
 	CObject2D *m_pCredit;			//クレジット
 	CObject2D *m_pFade;				//フェード用
+	CObject2D *m_pSkipIcon;			//スキップアイコン
 	bool m_bCanFade;				//フェードできるかどうか
 	bool m_bPictureRot;				//傾きを切り替える用
 	bool m_bFade;					//フェードしているかどうか
 	bool m_bFadeIn;					//フェードアウトフェードイン切り替え
+	bool m_bUninitSkipIcon;			//スキップアイコンを消すかどうか
 	int m_nFrameCounter;			//Frameカウント用
 	int m_nFadeTime;				//フェードの時間
+	int m_nSkipIconCounter;			//スキップアイコンの表示時間カウント用
 	D3DXCOLOR m_fadeCol;			//フェードの色
 	PHASE m_phase;					//フェーズ
 };

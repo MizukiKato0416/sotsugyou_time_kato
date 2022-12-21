@@ -470,9 +470,9 @@ void CSelectGameScene::ChangeTutorial(void) {
 				typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_STOP;
 			}
 			break;
-			//TODO:スタッフロール
+			//スタッフロール
 		case (int)CScene::SCENE_TYPE::CREDIT:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_RANDOM;
+			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_CREDIT;
 			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
@@ -541,10 +541,10 @@ void CSelectGameScene::ChangeGameTitle()
 		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP && !m_pMenuGame->GetRoulette()) return;
 		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_STOP);
 		break;
-		//TODO:スタッフロール
+		//スタッフロール
 	case (int)CScene::SCENE_TYPE::CREDIT:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM && !m_pMenuGame->GetRoulette()) return;
-		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_CREDIT && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_CREDIT);
 		break;
 		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:
