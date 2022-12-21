@@ -86,7 +86,7 @@
 #define TITLE_SCENE_FLOOR_NUM		(8)					//床の分割数
 #define TITLE_SCENE_FLOOR_SIZE		(1000.0f)			//床のサイズ
 
-#define TITLE_SCENE_RESET_COUNT		(600)				//リセットするまでの時間
+#define TITLE_SCENE_RESET_COUNT		(1800)				//リセットするまでの時間
 
 	
 //=============================================================================

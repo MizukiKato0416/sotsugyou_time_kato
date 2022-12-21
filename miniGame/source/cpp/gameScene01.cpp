@@ -59,6 +59,7 @@
 #define GAME_BALLOON_INIT_CREATE_SPACE			 (400.0f)								//風船の初期生成間隔
 #define GAME_BALLOON_INIT_CREATE_POS_Z			 (200.0f)								//風船の初期生成位置Z
 
+#define GAME_ITEM_BOX_CREATE_DELAY				 (200)									//アイテムボックスの一番最初の生成の遅れ
 #define GAME_ITEM_BOX_CREATE_INTERVAL			 (140)									//アイテムボックスの生成間隔
 #define GAME_ITEM_BOX_CREATE_POS_X				 (900.0f)								//アイテムボックスの生成位置X
 #define GAME_ITEM_BOX_CREATE_POS_Z				 (float (rand() % 1001 + -500))			//アイテムボックスの生成位置Z
@@ -99,7 +100,7 @@ void CGameScene01::Init(void) {
 	CTexture::Load("game01");
 
 	//変数初期化
-	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL;
+	m_nCreateItemBoxCounter = GAME_ITEM_BOX_CREATE_INTERVAL - GAME_ITEM_BOX_CREATE_DELAY;
 	m_bReady = true;
 
 	//マネージャーの取得

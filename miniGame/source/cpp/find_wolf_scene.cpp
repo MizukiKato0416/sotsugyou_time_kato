@@ -72,7 +72,7 @@
 
 #define FIND_WOLF_SCENE_CHANGE_SCENE_COUNT	(60)			//‘JˆÚ‚·‚é‚Ü‚Å‚ÌŽžŠÔ
 
-#define FIND_WOLF_SCENE_BG_POS		(D3DXVECTOR3(0.0f, -250.0f, 300.0f))	//”wŒi‚ÌˆÊ’u
+#define FIND_WOLF_SCENE_BG_POS		(D3DXVECTOR3(0.0f, -300.0f, 500.0f))	//”wŒi‚ÌˆÊ’u
 #define FIND_WOLF_SCENE_BG_SIZE_X	(2000.0f)								//”wŒi‚ÌƒTƒCƒYX
 #define FIND_WOLF_SCENE_BG_SIZE_Y	(500.0f)								//”wŒi‚ÌƒTƒCƒYY
 
@@ -218,10 +218,10 @@ void CFindWolfScene::CreateObject(void)
 	CObjectModel::Create(CModel::MODELTYPE::OBJ_FIND_WOLF_TOWER, D3DXVECTOR3(0.0f, 0.0f, -FIND_WOLF_SCENE_STAGE_POS_Z), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 
 	//•‚‚¢‚Ä‚éƒIƒuƒWƒFƒNƒg
-	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	CFloatObject::Create(D3DXVECTOR3(0.0f, 100.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.005f, 0.002f, 0.005f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_01);
 
-	CFloatObject::Create(D3DXVECTOR3(300.0f, 100.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+	CFloatObject::Create(D3DXVECTOR3(300.0f, 100.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 		                 D3DXVECTOR3(0.0f, 0.006f, 0.01f), CModel::MODELTYPE::OBJ_FIND_WOLF_FACE_02);
 
 	CFloatObject::Create(D3DXVECTOR3(-300.0f, 100.0f, 200.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),

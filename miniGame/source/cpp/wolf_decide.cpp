@@ -19,7 +19,7 @@
 #define WOLF_DECIDE_SHAKE_MAX_TIME	(180)				//振動する時間
 #define WOLF_DECIDE_SHAKE_INTERVAL	(60)				//振動する間隔
 #define WOLF_DECIDE_BRINK_INTERVAL	(30)				//点滅する間隔
-#define WOLF_DECIDE_SHAKE_NUM		(15000)				//振動する量
+#define WOLF_DECIDE_SHAKE_NUM		(7000)				//振動する量
 #define WOLF_DECIDE_SHAKE_TIME		(45)				//一回の振動で振動する時間
 #define WOLF_DECIDE_SHAKE_UI_SIZE_X	(1282.0f * 0.7f)	//振動UIのサイズX
 #define WOLF_DECIDE_SHAKE_UI_SIZE_Y	(167.0f * 0.7f)		//振動UIのサイズY

@@ -506,7 +506,7 @@ void CGameScene03::UpdateGameOver(void) {
 			if (GetRanking(nIdx) != 1) continue;	//ランキング１位以外除外
 			//Winテキストの生成
 			CObject2D::Create(D3DXVECTOR3(afPosUI[nIdx] + 90.0f, 600.0f + 30.0f / 2 - 20.0f, 0.0f),
-				CTexture::TEXTURE_TYPE::WINNER, 100.0f, 40.0f);
+				CTexture::TEXTURE_TYPE::WINNER, 150.0f, 70.0f);
 		}
 		//サウンド再生
 		if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_ITEM_SHIELD_GET);
