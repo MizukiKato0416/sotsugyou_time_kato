@@ -16,27 +16,34 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define CREDIT_SCENE_BG_MOVE_SPEED		(0.28f)			//背景の移動速度
-#define CREDIT_SCENE_BG_SIZE_Y			(1516.0f)		//背景のサイズY
-
-#define CREDIT_SCENE_BG_STAGE_MOVE_SPEED	(0.1f)		//背景ステージの移動量
-
-#define CREDIT_SCENE_BG_CAR_CHANGE_COUNTER	(140)		//背景を変えるまでの時間
-
+#define CREDIT_SCENE_BG_MOVE_SPEED			(0.28f)			//背景の移動速度
+#define CREDIT_SCENE_BG_SIZE_Y				(1516.0f)		//背景のサイズY
+#define CREDIT_SCENE_BG_STAGE_MOVE_SPEED	(0.13f)			//背景ステージの移動量
+#define CREDIT_SCENE_BG_CAR_CHANGE_COUNTER	(155)			//背景車を変えるまでの時間
+#define CREDIT_SCENE_BG_CAR_SPEED			(1.0f)			//背景車の移動速度
+#define CREDIT_SCENE_BG_TITLE_DEC_SIZE		(0.0002f)		//背景タイトルのサイズ縮小値
+#define CREDIT_SCENE_BG_TITLE_SIZE			(1.05f)			//背景タイトルのサイズ
+#define CREDIT_SCENE_BG_FADE_SPEED			(40)			//背景のフェードの時間
 
 #define CREDIT_SCENE_CREDIT_SIZE_Y		(7809.0f)		//クレジットサイズY
-#define CREDIT_SCENE_CREDIT_MOVE		(1.7f)			//クレジットの移動速度
+#define CREDIT_SCENE_CREDIT_MOVE		(1.5f)			//クレジットの移動速度
 
-#define CREDIT_SCENE_FADE_SPEED		(90)			//フェードの速度
-#define CREDIT_SCENE_FADE_DELAY		(180)			//フェードするまでの遅延
+#define CREDIT_SCENE_FADE_SPEED		(140)			//フェードの速度
+#define CREDIT_SCENE_FADE_DELAY		(300)			//フェードするまでの遅延
 
 #define CREDIT_SCENE_PICTURE_CREATE_POS				(D3DXVECTOR3(350.0f, 1000.0f, 0.0f))		//絵の生成位置
 #define CREDIT_SCENE_PICTURE_CREATE_SCALE			(D3DXVECTOR3(0.35f, 0.35f, 0.35f))			//絵の大きさ
-#define CREDIT_SCENE_PICTURE_SPEED					(1.5f)										//絵の移動速度
+#define CREDIT_SCENE_PICTURE_SPEED					(1.4f)										//絵の移動速度
 #define CREDIT_SCENE_PICTURE_ROT					(0.1f)										//絵の向き
 #define CREDIT_SCENE_PICTURE_CREATE_INTERVAL		(480)										//絵の生成間隔
 #define CREDIT_SCENE_PICTURE_INIT_CREATE_INTERVAL	(360)										//絵の最初の生成間隔
-#define CREDIT_SCENE_PICTURE_LAST_CREATE			(3500)										//絵の生成を止めるまでの時間
+#define CREDIT_SCENE_PICTURE_LAST_CREATE			(3800)										//絵の生成を止めるまでの時間
+
+#define CREDIT_SCENE_SKIP_ICON_SIZE_X				(408.0f * 0.4f)				//スキップアイコンのサイズX
+#define CREDIT_SCENE_SKIP_ICON_SIZE_Y				(94.0f * 0.4f)				//スキップアイコンのサイズY
+#define CREDIT_SCENE_SKIP_UNINIT_COUNT				(180)						//スキップアイコンが消えるまでの時間
+#define CREDIT_SCENE_SKIP_DEC_ALPH					(0.07f)						//スキップアイコンのα値減少値
+
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -51,11 +58,14 @@ CCreditScene::CCreditScene()
 	m_pBgStage = nullptr;
 	m_pCredit = nullptr;
 	m_pFade = nullptr;
+	m_pSkipIcon = nullptr;
 	m_bCanFade = false;
 	m_bPictureRot = false;
 	m_bFade = false;
 	m_bFadeIn = false;
+	m_bUninitSkipIcon = false;
 	m_nFrameCounter = 0;
+	m_nSkipIconCounter = 0;
 	m_phase = PHASE::NONE;
 }
 
@@ -77,12 +87,26 @@ void CCreditScene::Init(void) {
 	//変数初期化
 	m_bCanFade = false;
 	m_nFrameCounter = 0;
+	m_nSkipIconCounter = 0;
 	m_bPictureRot = false;
 	m_phase = PHASE::BG_CAR_00;
 	m_pFade = nullptr;
 	m_bFade = false;
 	m_bFadeIn = true;
 	m_pBgStage = nullptr;
+	m_pSkipIcon = nullptr;
+	m_bUninitSkipIcon = false;
+}
+
+//=============================================================================
+//オブジェクト生成処理
+//=============================================================================
+void CCreditScene::CreateObject(void)
+{
+	//背景
+	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+		                      CTexture::TEXTURE_TYPE::BG_CREDIT_CAR_00, SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 1.3f);
+	m_pBg->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -97,19 +121,6 @@ void CCreditScene::Init(void) {
 		pSound->PlaySound(CSound::SOUND_LABEL::BGM_CREDIT);
 		pSound->SetBGM(CSound::SOUND_LABEL::BGM_CREDIT);
 	}
-}
-
-//=============================================================================
-//オブジェクト生成処理
-//=============================================================================
-void CCreditScene::CreateObject(void)
-{
-	//背景
-	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
-		                      CTexture::TEXTURE_TYPE::BG_CREDIT_CAR_00, SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 1.3f);
-	m_pBg->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
-
-	
 }
 
 //=============================================================================
@@ -176,29 +187,14 @@ void CCreditScene::Update(void) {
 		break;
 	}
 
-	
+	//スキップアイコン処理
+	SkipIcon();
+
 	//フェード処理
 	Fade();
 
 	//遷移処理
 	SceneFade();
-
-
-	CManager* pManager = CManager::GetManager();	//マネージャーの取得
-	if (pManager == nullptr) return;
-	//現在の入力デバイスの取得
-	CInput* pInput = pManager->GetInputCur();
-	if (pInput == nullptr) return;
-
-	if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
-		//フェードの取得
-		CFade* pFade = pManager->GetFade();		//フェードへのポインタ
-		if (pFade == nullptr) return;
-
-		if (pFade->GetChangeFade()) return;
-		//タイトルに遷移
-		if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, CREDIT_SCENE_FADE_SPEED, 30, 0);
-	}
 }
 
 //=============================================================================
@@ -225,7 +221,7 @@ void CCreditScene::BgCar00()
 	//位置取得
 	D3DXVECTOR3 pos = m_pBg->GetPos();
 	//移動させる
-	pos.x += 1.0f;
+	pos.x += CREDIT_SCENE_BG_CAR_SPEED;
 	//位置反映
 	m_pBg->SetPos(pos);
 }
@@ -247,7 +243,7 @@ void CCreditScene::BgCar01()
 		//位置変える
 		m_pBg->SetPos(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f));
 		//サイズを変える
-		m_pBg->SetSize(D3DXVECTOR3(SCREEN_WIDTH * 1.1f, SCREEN_HEIGHT * 1.1f, 0.0f));
+		m_pBg->SetSize(D3DXVECTOR3(SCREEN_WIDTH * CREDIT_SCENE_BG_TITLE_SIZE, SCREEN_HEIGHT * CREDIT_SCENE_BG_TITLE_SIZE, 0.0f));
 
 		//フェーズを変える
 		m_phase = PHASE::BG_TITLE;
@@ -257,7 +253,7 @@ void CCreditScene::BgCar01()
 	//位置取得
 	D3DXVECTOR3 pos = m_pBg->GetPos();
 	//移動させる
-	pos.x -= 1.0f;
+	pos.x -= CREDIT_SCENE_BG_CAR_SPEED;
 	//位置反映
 	m_pBg->SetPos(pos);
 }
@@ -273,7 +269,7 @@ void CCreditScene::BgTitle()
 	if (m_nFrameCounter > CREDIT_SCENE_BG_CAR_CHANGE_COUNTER)
 	{
 		//フェードする状態にする
-		SetFade(30, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		SetFade(CREDIT_SCENE_BG_FADE_SPEED, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
 		//フェードアウトになったら
 		if (!m_bFadeIn)
@@ -302,7 +298,8 @@ void CCreditScene::BgTitle()
 	//サイズ取得
 	D3DXVECTOR3 size = m_pBg->GetSize();
 	//小さくする
-	size *= 0.9995f;
+	size.x -= SCREEN_WIDTH * CREDIT_SCENE_BG_TITLE_DEC_SIZE;
+	size.y -= SCREEN_HEIGHT * CREDIT_SCENE_BG_TITLE_DEC_SIZE;
 	//位置反映
 	m_pBg->SetSize(size);
 }
@@ -323,7 +320,7 @@ void CCreditScene::Bg00()
 	{
 		pos.y = 0.0f - ((CREDIT_SCENE_BG_SIZE_Y / 2.0f) - SCREEN_HEIGHT);
 		//フェードする状態にする
-		SetFade(30, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		SetFade(CREDIT_SCENE_BG_FADE_SPEED, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
 		//フェードアウトになったら
 		if (!m_bFadeIn)
@@ -437,6 +434,83 @@ void CCreditScene::Fade()
 	}
 	//カラー設定
 	m_pFade->SetColor(fadeCol);
+}
+
+//=============================================================================
+//スキップアイコン処理
+//=============================================================================
+void CCreditScene::SkipIcon()
+{
+	//フェードできる状態なら
+	if (m_bCanFade) return;
+
+	//消す状態だったら
+	if (m_bUninitSkipIcon)
+	{
+		if (m_pSkipIcon == nullptr) return;
+
+		//カラー取得
+		D3DXCOLOR col = m_pSkipIcon->GetColor();
+		//薄くする
+		col.a -= CREDIT_SCENE_SKIP_DEC_ALPH;
+		//見えなくなったら
+		if (col.a <= 0.0f)
+		{
+			//消す
+			m_pSkipIcon->Uninit();
+			m_pSkipIcon = nullptr;
+
+			//消さない状態にする
+			m_bUninitSkipIcon = false;
+			return;
+		}
+		//カラー設定
+		m_pSkipIcon->SetColor(col);
+	}
+	else
+	{//消す状態じゃなかったら
+		CManager* pManager = CManager::GetManager();	//マネージャーの取得
+		if (pManager == nullptr) return;
+		//現在の入力デバイスの取得
+		CInput* pInput = pManager->GetInputCur();
+		if (pInput == nullptr) return;
+
+		if (pInput->GetTrigger(CInput::CODE::SELECT, 0)) {
+			
+			//スキップアイコンが生成されていなかったら
+			if (m_pSkipIcon == nullptr)
+			{
+				//スキップアイコンの生成
+				m_pSkipIcon = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH - CREDIT_SCENE_SKIP_ICON_SIZE_X / 2.0f,
+					                                        SCREEN_HEIGHT - CREDIT_SCENE_SKIP_ICON_SIZE_Y / 2.0f, 0.0f),
+					                            CTexture::TEXTURE_TYPE::CREDIT_SKIP_ICON, CREDIT_SCENE_SKIP_ICON_SIZE_X, CREDIT_SCENE_SKIP_ICON_SIZE_Y);
+				m_pSkipIcon->SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
+			}
+			else
+			{
+				//フェードの取得
+				CFade* pFade = pManager->GetFade();		//フェードへのポインタ
+				if (pFade == nullptr) return;
+
+				if (pFade->GetChangeFade()) return;
+				//タイトルに遷移
+				if (pFade != nullptr) pFade->SetFade(CScene::SCENE_TYPE::SELECT_GAME, CREDIT_SCENE_FADE_SPEED, 30, 0);
+				return;
+			}
+		}
+
+		//スキップアイコンが生成されていなかったら
+		if (m_pSkipIcon == nullptr) return;
+
+		m_nSkipIconCounter++;
+		if (m_nSkipIconCounter > CREDIT_SCENE_SKIP_UNINIT_COUNT)
+		{
+			m_nSkipIconCounter = 0;
+			//消す状態にする
+			m_bUninitSkipIcon = true;
+			return;
+		}
+	}
 }
 
 //=============================================================================

@@ -197,6 +197,7 @@ HRESULT CSound::Init(HWND hWnd)
 	ControllVoice(SOUND_LABEL::BGM_RESULT			, 1.5f * SOUND_VOLUM);		//リザルトBGM
 	ControllVoice(SOUND_LABEL::BGM_FIND_WOLF		, 1.6f * SOUND_VOLUM);		//人狼発見BGM
 	ControllVoice(SOUND_LABEL::BGM_FINAL_RESULT		, 0.8f * SOUND_VOLUM);		//最終リザルトBGM
+	ControllVoice(SOUND_LABEL::BGM_CREDIT			, 1.7f * SOUND_VOLUM);		//えんどろーる
 
 	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f * SOUND_VOLUM);		//1ポイント獲得SE
 	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f * SOUND_VOLUM);		//3ポイント獲得SE
