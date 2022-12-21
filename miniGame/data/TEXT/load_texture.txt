@@ -22,12 +22,17 @@
 //
 //--------------------------
 
-data/TEXTURE/BG/bg_title.jpg		= credit
-data/TEXTURE/BG/bg_result.jpg		= result
-data/TEXTURE/BG/menu_bg.jpg			= select
-data/TEXTURE/BG/menu_bg_wolf.jpg	= select
-data/TEXTURE/BG/bg_wolf.jpg			= find_w
-data/TEXTURE/BG/bg_credit_01.jpg	= credit
+data/TEXTURE/BG/bg_title.jpg			= credit
+data/TEXTURE/BG/bg_result.jpg			= result
+data/TEXTURE/BG/menu_bg.jpg				= select
+data/TEXTURE/BG/menu_bg_wolf.jpg		= select
+data/TEXTURE/BG/bg_wolf.jpg				= find_w
+data/TEXTURE/BG/bg_credit_01.jpg		= credit
+data/TEXTURE/BG/bg_credit_02.jpg		= credit
+data/TEXTURE/BG/bg_credit_03.png		= credit
+data/TEXTURE/BG/bg_credit_car_00.jpg	= credit
+data/TEXTURE/BG/bg_credit_car_01.jpg	= credit
+data/TEXTURE/BG/bg_credit_title.jpg	= credit
 
 data/TEXTURE/UI/arrow_right.png		= select
 data/TEXTURE/UI/arrow_left.png		= select
