@@ -185,7 +185,7 @@ void CSelectGameScene::CreateObject(void)
 			CModel::MODELTYPE::OBJ_BALLOON_PINK,
 			CModel::MODELTYPE::OBJ_CAR,
 			CModel::MODELTYPE::OBJ_STOP_SIGN,	
-			CModel::MODELTYPE::OBJ_BANANA,	//TODO:スタッフロールモデル
+			CModel::MODELTYPE::OBJ_PROJECTOR,
 			CModel::MODELTYPE::OBJ_HATENA,
 		};
 
@@ -230,7 +230,7 @@ void CSelectGameScene::CreateObject(void)
 
 	//モードUIの生成
 	m_pModeUi = CObject2D::Create(D3DXVECTOR3(MENU_GAME_MODE_UI_SIZE_X / 2.0f, MENU_GAME_MODE_UI_SIZE_Y / 2.0f, 0.0f),
-		typeTexMode, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
+		                             typeTexMode, MENU_GAME_MODE_UI_SIZE_X, MENU_GAME_MODE_UI_SIZE_Y);
 }
 
 //=============================================================================
@@ -472,7 +472,7 @@ void CSelectGameScene::ChangeTutorial(void) {
 			break;
 			//TODO:スタッフロール
 		case (int)CScene::SCENE_TYPE::CREDIT:
-			typeTex = CTexture::TEXTURE_TYPE::TUTORIAL_RANDOM;
+			typeTex = CTexture::TEXTURE_TYPE::BG_RESULT;
 			break;
 			//ランダム(仮)
 		case (int)CScene::SCENE_TYPE::GAME_MAX:
@@ -543,8 +543,8 @@ void CSelectGameScene::ChangeGameTitle()
 		break;
 		//TODO:スタッフロール
 	case (int)CScene::SCENE_TYPE::CREDIT:
-		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM && !m_pMenuGame->GetRoulette()) return;
-		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::TEXT_TITLENAME_RANDOM);
+		if (m_pGameName->GetTexType() == CTexture::TEXTURE_TYPE::BG_RESULT && !m_pMenuGame->GetRoulette()) return;
+		m_pGameName->SetTexType(CTexture::TEXTURE_TYPE::BG_RESULT);
 		break;
 		//ランダム
 	case (int)CScene::SCENE_TYPE::GAME_MAX:

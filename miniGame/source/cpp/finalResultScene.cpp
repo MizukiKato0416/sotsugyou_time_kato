@@ -224,7 +224,7 @@ void CFinalResultScene::CreateObject(void)
 		m_apObjPlayer[nIdxPlayer] = CObjectModel::Create(modelType, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 		//プレイヤーの色を設定
 		if (m_apObjPlayer[nIdxPlayer] == nullptr) continue;	//ループ飛ばす
-		//タワーの生成
+		//タワーの生成 TODO:モデル変更
 		m_apResultTower[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_TOWER, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	
 		//モデルの設定
