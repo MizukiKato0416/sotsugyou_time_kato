@@ -63,6 +63,7 @@ public:
 		OBJ_STOP_SIGN,					//停止標識
 
 		OBJ_HATENA,						//はてなマーク
+		OBJ_PROJECTOR,					//射映機
 		OBJ_MENU_STAGE,					//メニューのステージ
 		OBJ_SHADOW,						//影
 
