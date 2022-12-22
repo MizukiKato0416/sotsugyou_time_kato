@@ -555,7 +555,7 @@ void CCreditScene::CreatePicture()
 
 		//äGÇÃê∂ê¨
 		CCreditPicture::Create(CREDIT_SCENE_PICTURE_CREATE_POS, CREDIT_SCENE_PICTURE_CREATE_SCALE, fRot,
-			                   CTexture::TEXTURE_TYPE::MESH_CAR_TIRE, -CREDIT_SCENE_PICTURE_SPEED);
+			                   CTexture::TEXTURE_TYPE::CREDIT_PICTURE_00, -CREDIT_SCENE_PICTURE_SPEED);
 
 		//å¸Ç´ÇÃêÿÇËë÷Ç¶
 		if (m_bPictureRot) m_bPictureRot = false;
