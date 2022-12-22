@@ -37,6 +37,7 @@ private:
 	enum class PHASE
 	{
 		NONE = 0,
+		MODEL_CAR,	//車モデル
 		BG_CAR_00,	//背景車00
 		BG_CAR_01,	//背景車01	
 		BG_TITLE,	//背景タイトル	
@@ -70,6 +71,7 @@ private:
 	int m_nFrameCounter;			//Frameカウント用
 	int m_nFadeTime;				//フェードの時間
 	int m_nSkipIconCounter;			//スキップアイコンの表示時間カウント用
+	int m_nPictureTex;				//絵のテクスチャ変更する用
 	D3DXCOLOR m_fadeCol;			//フェードの色
 	PHASE m_phase;					//フェーズ
 };

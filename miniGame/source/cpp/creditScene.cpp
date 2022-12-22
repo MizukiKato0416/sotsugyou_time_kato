@@ -12,6 +12,7 @@
 #include "sound.h"
 #include "object2D.h"
 #include "credit_picture.h"
+#include "gameCamera.h"
 
 //=============================================================================
 // マクロ定義
@@ -66,6 +67,7 @@ CCreditScene::CCreditScene()
 	m_bUninitSkipIcon = false;
 	m_nFrameCounter = 0;
 	m_nSkipIconCounter = 0;
+	m_nPictureTex = 0;
 	m_phase = PHASE::NONE;
 }
 
@@ -96,6 +98,48 @@ void CCreditScene::Init(void) {
 	m_pBgStage = nullptr;
 	m_pSkipIcon = nullptr;
 	m_bUninitSkipIcon = false;
+	m_nPictureTex = 0;
+
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//レンダラーの取得
+	CRenderer* pRenderer = nullptr;
+	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
+	//カメラの設定
+	if (pManager != nullptr) pManager->SetCamera(CGameCamera::Create());	//なにか一つカメラが無いと描画されないのでとりあえずゲームカメラ
+
+	//------------------------------
+	//ライトの初期設定
+	//------------------------------
+	D3DXMATRIX mtxLightProj;   // ライトの射影変換
+	//ライトのプロジェクションマトリックスを生成
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 100.0f, 3000.0f);
+
+	D3DXMATRIX mtxLightView;   // ライトビュー変換
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 2000.0f, -200.0f);	//ライトの視点の位置
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);	//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
+	//ライトのビューマトリックスを生成
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &posLightR, &D3DXVECTOR3(0, 0, 1));
+	//シェーダのライトを設定
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectLightMatrixView(mtxLightView);
+		pRenderer->SetEffectLightVector(D3DXVECTOR4(vecLight, 1.0f));
+		pRenderer->SetEffectLightMatrixProj(mtxLightProj);
+	}
+
+	//------------------------------
+	//フォグの初期設定
+	//------------------------------
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectFogEnable(false);
+	}
 }
 
 //=============================================================================
@@ -103,6 +147,9 @@ void CCreditScene::Init(void) {
 //=============================================================================
 void CCreditScene::CreateObject(void)
 {
+
+
+
 	//背景
 	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
 		                      CTexture::TEXTURE_TYPE::BG_CREDIT_CAR_00, SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 1.3f);
@@ -555,7 +602,10 @@ void CCreditScene::CreatePicture()
 
 		//絵の生成
 		CCreditPicture::Create(CREDIT_SCENE_PICTURE_CREATE_POS, CREDIT_SCENE_PICTURE_CREATE_SCALE, fRot,
-			                   CTexture::TEXTURE_TYPE::CREDIT_PICTURE_00, -CREDIT_SCENE_PICTURE_SPEED);
+			                   static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::CREDIT_PICTURE_00) + m_nPictureTex),
+			                   -CREDIT_SCENE_PICTURE_SPEED);
+		//テクスチャを次に変える
+		m_nPictureTex++;
 
 		//向きの切り替え
 		if (m_bPictureRot) m_bPictureRot = false;
