@@ -25,13 +25,12 @@ class CDefaultCamera : public CCamera
 public:
 	CDefaultCamera();		//デフォルトコンストラクタ
 	~CDefaultCamera();	//デストラクタ
-	static CDefaultCamera* Create(void);	//生成処理
+	static CDefaultCamera* Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fDist);	//生成処理
 	HRESULT Init(void);	//初期化処理
 	void Uninit(void);	//終了処理
 	void Update(void);	//更新処理
 
 private:
-
 };
 
 #endif // !_DEFAULT_CAMERA_H_

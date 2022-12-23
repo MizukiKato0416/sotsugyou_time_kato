@@ -190,46 +190,51 @@ HRESULT CSound::Init(HWND hWnd)
 	}
 
 	//音量調整
-	ControllVoice(SOUND_LABEL::BGM_TITLE			, 1.0f * SOUND_VOLUM);		//タイトルBGM
-	ControllVoice(SOUND_LABEL::BGM_MENU				, 1.0f * SOUND_VOLUM);		//メニューBGM
-	ControllVoice(SOUND_LABEL::BGM_GAME				, 1.0f * SOUND_VOLUM);		//ゲームBGM
-	ControllVoice(SOUND_LABEL::BGM_GAME_02			, 0.8f * SOUND_VOLUM);		//ゲーム02BGM
-	ControllVoice(SOUND_LABEL::BGM_RESULT			, 1.5f * SOUND_VOLUM);		//リザルトBGM
-	ControllVoice(SOUND_LABEL::BGM_FIND_WOLF		, 1.6f * SOUND_VOLUM);		//人狼発見BGM
-	ControllVoice(SOUND_LABEL::BGM_FINAL_RESULT		, 0.8f * SOUND_VOLUM);		//最終リザルトBGM
-	ControllVoice(SOUND_LABEL::BGM_CREDIT			, 1.7f * SOUND_VOLUM);		//えんどろーる
+	SetDefaultVolum(SOUND_LABEL::BGM_TITLE				, 1.0f * SOUND_VOLUM);		//タイトルBGM
+	SetDefaultVolum(SOUND_LABEL::BGM_MENU				, 1.0f * SOUND_VOLUM);		//メニューBGM
+	SetDefaultVolum(SOUND_LABEL::BGM_GAME				, 1.0f * SOUND_VOLUM);		//ゲームBGM
+	SetDefaultVolum(SOUND_LABEL::BGM_GAME_02			, 0.8f * SOUND_VOLUM);		//ゲーム02BGM
+	SetDefaultVolum(SOUND_LABEL::BGM_RESULT				, 1.5f * SOUND_VOLUM);		//リザルトBGM
+	SetDefaultVolum(SOUND_LABEL::BGM_FIND_WOLF			, 1.6f * SOUND_VOLUM);		//人狼発見BGM
+	SetDefaultVolum(SOUND_LABEL::BGM_FINAL_RESULT		, 0.8f * SOUND_VOLUM);		//最終リザルトBGM
+	SetDefaultVolum(SOUND_LABEL::BGM_CREDIT				, 2.3f * SOUND_VOLUM);		//えんどろーる
 
-	ControllVoice(SOUND_LABEL::SE_POINT_1			, 1.8f * SOUND_VOLUM);		//1ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_3			, 1.4f * SOUND_VOLUM);		//3ポイント獲得SE
-	ControllVoice(SOUND_LABEL::SE_POINT_MINUS		, 2.4f * SOUND_VOLUM);		//ポイント失点SE
-	ControllVoice(SOUND_LABEL::SE_POINT_STEAL		, 3.9f * SOUND_VOLUM);		//ポイント奪取
-	ControllVoice(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f * SOUND_VOLUM);		//風船が割れるSE
-	ControllVoice(SOUND_LABEL::SE_ITEM_GET			, 1.3f * SOUND_VOLUM);		//アイテム取得SE
-	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 1.0f * SOUND_VOLUM);		//タイムアップSE
-	ControllVoice(SOUND_LABEL::SE_PLAYER_SPIN		, 0.7f * SOUND_VOLUM);		//スピンSE
-	ControllVoice(SOUND_LABEL::SE_BANANA_THROW		, 1.6f * SOUND_VOLUM);		//バナナを投げるSE
-	ControllVoice(SOUND_LABEL::SE_USE_POINT_STEAL	, 1.0f * SOUND_VOLUM);		//ポイント奪取使用SE
-	ControllVoice(SOUND_LABEL::SE_COUNT_DOWN		, 1.2f * SOUND_VOLUM);		//カウントダウンSE
-	ControllVoice(SOUND_LABEL::SE_START				, 0.5f * SOUND_VOLUM);		//スタートSE
-	ControllVoice(SOUND_LABEL::SE_TIME_UP			, 0.8f * SOUND_VOLUM);		//タイムアップSE
-	ControllVoice(SOUND_LABEL::SE_PLAYER_OK			, 1.0f * SOUND_VOLUM);		//プレイヤーOKSE
-	ControllVoice(SOUND_LABEL::SE_DECIDE			, 1.7f * SOUND_VOLUM);		//決定SE
-	ControllVoice(SOUND_LABEL::SE_CANCEL			, 1.7f * SOUND_VOLUM);		//キャンセルSE
-	ControllVoice(SOUND_LABEL::SE_PAUSE_OPEN		, 1.6f * SOUND_VOLUM);		//ポーズ開くSE
-	ControllVoice(SOUND_LABEL::SE_CURSOR			, 8.0f * SOUND_VOLUM);		//カーソルSE
-	ControllVoice(SOUND_LABEL::SE_CRASH				, 4.0f * SOUND_VOLUM);		//衝突SE
-	ControllVoice(SOUND_LABEL::SE_FALL				, 1.5f * SOUND_VOLUM);		//落下SE
-	ControllVoice(SOUND_LABEL::SE_EXPLOSION			, 1.4f * SOUND_VOLUM);		//爆発SE
-	ControllVoice(SOUND_LABEL::SE_ITEM_SHIELD_GET	, 1.2f * SOUND_VOLUM);		//盾アイテム獲得SE
-	ControllVoice(SOUND_LABEL::SE_BALLOON_SPAWN     , 1.0f * SOUND_VOLUM);		//風船スポーンSE
-	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL         , 2.9f * SOUND_VOLUM);		//ドラムロールSE
-	ControllVoice(SOUND_LABEL::SE_DRUM_ROLL_END		, 2.7f * SOUND_VOLUM);		//ドラムロール最後SE
-	ControllVoice(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.5f * SOUND_VOLUM);		//タイトルの文字生成SE
-	ControllVoice(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.2f * SOUND_VOLUM);		//タイトルロゴの生成SE
-	ControllVoice(SOUND_LABEL::SE_TITLE_CAR			, 3.0f * SOUND_VOLUM);		//タイトルの車SE
-	ControllVoice(SOUND_LABEL::SE_ENGINE			, 2.0f * SOUND_VOLUM);		//車のエンジンSE
-	ControllVoice(SOUND_LABEL::SE_RESULT_UI			, 5.0f * SOUND_VOLUM);		//結果発表SE
-	ControllVoice(SOUND_LABEL::SE_CROWN				, 2.0f * SOUND_VOLUM);		//王冠SE
+	SetDefaultVolum(SOUND_LABEL::SE_POINT_1				, 1.8f * SOUND_VOLUM);		//1ポイント獲得SE
+	SetDefaultVolum(SOUND_LABEL::SE_POINT_3				, 1.4f * SOUND_VOLUM);		//3ポイント獲得SE
+	SetDefaultVolum(SOUND_LABEL::SE_POINT_MINUS			, 2.4f * SOUND_VOLUM);		//ポイント失点SE
+	SetDefaultVolum(SOUND_LABEL::SE_POINT_STEAL			, 3.9f * SOUND_VOLUM);		//ポイント奪取
+	SetDefaultVolum(SOUND_LABEL::SE_BALLOON_BREAK		, 0.4f * SOUND_VOLUM);		//風船が割れるSE
+	SetDefaultVolum(SOUND_LABEL::SE_ITEM_GET			, 1.3f * SOUND_VOLUM);		//アイテム取得SE
+	SetDefaultVolum(SOUND_LABEL::SE_TIME_UP				, 1.0f * SOUND_VOLUM);		//タイムアップSE
+	SetDefaultVolum(SOUND_LABEL::SE_PLAYER_SPIN			, 0.7f * SOUND_VOLUM);		//スピンSE
+	SetDefaultVolum(SOUND_LABEL::SE_BANANA_THROW		, 1.6f * SOUND_VOLUM);		//バナナを投げるSE
+	SetDefaultVolum(SOUND_LABEL::SE_USE_POINT_STEAL		, 1.0f * SOUND_VOLUM);		//ポイント奪取使用SE
+	SetDefaultVolum(SOUND_LABEL::SE_COUNT_DOWN			, 1.2f * SOUND_VOLUM);		//カウントダウンSE
+	SetDefaultVolum(SOUND_LABEL::SE_START				, 0.5f * SOUND_VOLUM);		//スタートSE
+	SetDefaultVolum(SOUND_LABEL::SE_TIME_UP				, 0.8f * SOUND_VOLUM);		//タイムアップSE
+	SetDefaultVolum(SOUND_LABEL::SE_PLAYER_OK			, 1.0f * SOUND_VOLUM);		//プレイヤーOKSE
+	SetDefaultVolum(SOUND_LABEL::SE_DECIDE				, 1.7f * SOUND_VOLUM);		//決定SE
+	SetDefaultVolum(SOUND_LABEL::SE_CANCEL				, 1.7f * SOUND_VOLUM);		//キャンセルSE
+	SetDefaultVolum(SOUND_LABEL::SE_PAUSE_OPEN			, 1.6f * SOUND_VOLUM);		//ポーズ開くSE
+	SetDefaultVolum(SOUND_LABEL::SE_CURSOR				, 8.0f * SOUND_VOLUM);		//カーソルSE
+	SetDefaultVolum(SOUND_LABEL::SE_CRASH				, 4.0f * SOUND_VOLUM);		//衝突SE
+	SetDefaultVolum(SOUND_LABEL::SE_FALL				, 1.5f * SOUND_VOLUM);		//落下SE
+	SetDefaultVolum(SOUND_LABEL::SE_EXPLOSION			, 1.4f * SOUND_VOLUM);		//爆発SE
+	SetDefaultVolum(SOUND_LABEL::SE_ITEM_SHIELD_GET		, 1.2f * SOUND_VOLUM);		//盾アイテム獲得SE
+	SetDefaultVolum(SOUND_LABEL::SE_BALLOON_SPAWN		, 1.0f * SOUND_VOLUM);		//風船スポーンSE
+	SetDefaultVolum(SOUND_LABEL::SE_DRUM_ROLL			, 2.9f * SOUND_VOLUM);		//ドラムロールSE
+	SetDefaultVolum(SOUND_LABEL::SE_DRUM_ROLL_END		, 2.7f * SOUND_VOLUM);		//ドラムロール最後SE
+	SetDefaultVolum(SOUND_LABEL::SE_TITLE_CHAR_CREATE	, 1.5f * SOUND_VOLUM);		//タイトルの文字生成SE
+	SetDefaultVolum(SOUND_LABEL::SE_TITLE_LOGO_CREATE	, 2.2f * SOUND_VOLUM);		//タイトルロゴの生成SE
+	SetDefaultVolum(SOUND_LABEL::SE_TITLE_CAR			, 3.0f * SOUND_VOLUM);		//タイトルの車SE
+	SetDefaultVolum(SOUND_LABEL::SE_ENGINE				, 2.0f * SOUND_VOLUM);		//車のエンジンSE
+	SetDefaultVolum(SOUND_LABEL::SE_RESULT_UI			, 5.0f * SOUND_VOLUM);		//結果発表SE
+	SetDefaultVolum(SOUND_LABEL::SE_CROWN				, 2.0f * SOUND_VOLUM);		//王冠SE
+
+	for (int nCntSound = 0; nCntSound < static_cast<int>(SOUND_LABEL::ENUM_MAX); nCntSound++)
+	{
+		ControllVoice(static_cast<SOUND_LABEL>(nCntSound), m_fDefaultVolum[nCntSound]);
+	}
 
 	return S_OK;
 }

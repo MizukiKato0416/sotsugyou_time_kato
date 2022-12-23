@@ -102,7 +102,7 @@ void CSelectGameScene::Init(void) {
 	if (pManager != nullptr) pSound = pManager->GetSound();
 
 	//カメラの設定
-	if (pManager != nullptr) pManager->SetCamera(CDefaultCamera::Create());	//仮でデフォルトカメラ
+	if (pManager != nullptr) pManager->SetCamera(CDefaultCamera::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f));	//仮でデフォルトカメラ
 
 	//------------------------------
 	//ライトの初期設定

@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // デフォルトカメラ処理 [default_camera.cpp]
-// Author : 鶴間俊樹
+// Author : 
 //
 //=============================================================================
 #include "default_camera.h"
@@ -12,7 +12,6 @@
 // マクロ定義
 //=============================================================================
 #define MAX_DRAW_DISTANCE (2000.0f)		//描画可能な最大の距離
-#define DEFAULT_CAMERA_DISTANCE (1000.0f)	//視点と注視点の距離
 
 //=============================================================================
 // デフォルトコンストラクタ
@@ -31,60 +30,63 @@ CDefaultCamera::~CDefaultCamera()
 }
 
 //=============================================================================
-// タイトルカメラの生成処理
+// デフォルトカメラの生成処理
 //=============================================================================
-CDefaultCamera* CDefaultCamera::Create(void) {
+CDefaultCamera* CDefaultCamera::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const float fDist) {
 	CDefaultCamera* pDefaultCamera;
 	pDefaultCamera = new CDefaultCamera();
 	if (pDefaultCamera == nullptr) return nullptr;
 
+	//注視点と向きの設定
+	pDefaultCamera->SetPos(pos);
+	pDefaultCamera->SetRot(rot);
+	//距離の設定
+	pDefaultCamera->SetDistance(fDist);
+	//初期化処理
 	pDefaultCamera->Init();
 
 	return pDefaultCamera;
 }
 
 //=============================================================================
-// タイトルカメラの初期化処理
+// デフォルトカメラの初期化処理
 //=============================================================================
 HRESULT CDefaultCamera::Init(void) {
-	SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	SetRot(D3DXVECTOR3(D3DX_PI * -0.1f, D3DX_PI * 0.0f, 0.0f));
-	//距離の設定
-	SetDistance(DEFAULT_CAMERA_DISTANCE);
+	//------------------------------------
+	//視点と注視点の設定
+	//------------------------------------
+	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
+	float fDist = GetDistance();
+
+	SetPosR(pos);
+	SetPosV(pos + D3DXVECTOR3(sinf(rot.y) * fDist * cosf(rot.x + D3DX_PI),
+		sinf(rot.x + D3DX_PI) * fDist,
+		cosf(rot.y) * fDist * cosf(rot.x + D3DX_PI)));
 
 	CCamera::Init();
-
-	//カメラのコントロール不可
-	SetLockControll(true);
 
 	return S_OK;
 }
 
 //=============================================================================
-// タイトルカメラの終了処理
+// デフォルトカメラの終了処理
 //=============================================================================
 void CDefaultCamera::Uninit(void) {
 	CCamera::Uninit();
 }
 
 //=============================================================================
-// タイトルカメラの更新処理
+// デフォルトカメラの更新処理
 //=============================================================================
 void CDefaultCamera::Update(void) {
 	CCamera::Update();
-
-	D3DXVECTOR3 rot = GetRot();
-	//回転させる
-	rot.y += 0.005f;
-	if (rot.y > D3DX_PI) {
-		rot.y -= D3DX_PI * 2;
-	}
-	SetRot(rot);
 
 	//------------------------------------
 	//視点と注視点の設定
 	//------------------------------------
 	D3DXVECTOR3 pos = GetPos();
+	D3DXVECTOR3 rot = GetRot();
 	float fDist = GetDistance();
 
 	SetPosR(pos);

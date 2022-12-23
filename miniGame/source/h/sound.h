@@ -73,7 +73,12 @@ public:
 	void SetBGM(SOUND_LABEL label);			//再生中BGMの設定
 	SOUND_LABEL GetBGM(void);				//再生中BGMの取得
 	void ResetBeginPlay(void);	//再生開始時のフラグをすべてリセット
-	void ControllVoice(const SOUND_LABEL &label, const float &fVolume) { m_apSourceVoice[(int)label]->SetVolume(fVolume); }	//音量調整
+	void ControllVoice(const SOUND_LABEL &label, const float fVolume) { m_apSourceVoice[(int)label]->SetVolume(fVolume); }	//音量調整
+
+	//デフォルトのボリューム設定処理
+	void SetDefaultVolum(const SOUND_LABEL &label, const float fDefaultVolum) { m_fDefaultVolum[(int)label] = fDefaultVolum; }
+	//デフォルトのボリューム取得処理
+	float GetDefaultVolum(const SOUND_LABEL &label) { return m_fDefaultVolum[(int)label]; }
 
 private:
 	// パラメータ構造体定義
@@ -96,7 +101,8 @@ private:
 	static PARAM m_aParam[(int)SOUND_LABEL::ENUM_MAX];						//ファイル名とループ
 
 	SOUND_LABEL m_playBGM;	//再生中のBGM
-	bool m_abBeginPlay[(int)SOUND_LABEL::ENUM_MAX];	//１フレームごとの再生開始時かどうかの判定
+	bool m_abBeginPlay[(int)SOUND_LABEL::ENUM_MAX];			//１フレームごとの再生開始時かどうかの判定
+	float m_fDefaultVolum[(int)SOUND_LABEL::ENUM_MAX];		//デフォルトのボリューム
 };
 
 #endif // !_SOUND_H_

@@ -252,5 +252,4 @@ void CCamera::Rotate(void) {
 			m_rot.y = m_rot.y - D3DX_PI * 2;
 		}
 	}
-
 }

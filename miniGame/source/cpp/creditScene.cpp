@@ -12,38 +12,46 @@
 #include "sound.h"
 #include "object2D.h"
 #include "credit_picture.h"
+#include "default_camera.h"
+#include "objectModel.h"
 
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define CREDIT_SCENE_BG_MOVE_SPEED			(0.28f)			//背景の移動速度
 #define CREDIT_SCENE_BG_SIZE_Y				(1516.0f)		//背景のサイズY
-#define CREDIT_SCENE_BG_STAGE_MOVE_SPEED	(0.13f)			//背景ステージの移動量
-#define CREDIT_SCENE_BG_CAR_CHANGE_COUNTER	(155)			//背景車を変えるまでの時間
+#define CREDIT_SCENE_BG_STAGE_MOVE_SPEED	(0.11f)			//背景ステージの移動量
+#define CREDIT_SCENE_BG_CAR_CHANGE_COUNTER	(168)			//背景車を変えるまでの時間
 #define CREDIT_SCENE_BG_CAR_SPEED			(1.0f)			//背景車の移動速度
+#define CREDIT_SCENE_BG_CAR_SIZE			(1.3f)			//背景車のサイズ
 #define CREDIT_SCENE_BG_TITLE_DEC_SIZE		(0.0002f)		//背景タイトルのサイズ縮小値
 #define CREDIT_SCENE_BG_TITLE_SIZE			(1.05f)			//背景タイトルのサイズ
-#define CREDIT_SCENE_BG_FADE_SPEED			(40)			//背景のフェードの時間
+#define CREDIT_SCENE_BG_FADE_SPEED			(60)			//背景のフェードの時間
 
 #define CREDIT_SCENE_CREDIT_SIZE_Y		(7809.0f)		//クレジットサイズY
-#define CREDIT_SCENE_CREDIT_MOVE		(1.5f)			//クレジットの移動速度
+#define CREDIT_SCENE_CREDIT_MOVE		(1.32f)			//クレジットの移動速度
 
-#define CREDIT_SCENE_FADE_SPEED		(140)			//フェードの速度
-#define CREDIT_SCENE_FADE_DELAY		(300)			//フェードするまでの遅延
+#define CREDIT_SCENE_FADE_SPEED		(150)			//フェードの速度
+#define CREDIT_SCENE_FADE_DELAY		(380)			//フェードするまでの遅延
 
 #define CREDIT_SCENE_PICTURE_CREATE_POS				(D3DXVECTOR3(350.0f, 1000.0f, 0.0f))		//絵の生成位置
 #define CREDIT_SCENE_PICTURE_CREATE_SCALE			(D3DXVECTOR3(0.35f, 0.35f, 0.35f))			//絵の大きさ
-#define CREDIT_SCENE_PICTURE_SPEED					(1.4f)										//絵の移動速度
+#define CREDIT_SCENE_PICTURE_SPEED					(1.2f)										//絵の移動速度
 #define CREDIT_SCENE_PICTURE_ROT					(0.1f)										//絵の向き
-#define CREDIT_SCENE_PICTURE_CREATE_INTERVAL		(480)										//絵の生成間隔
+#define CREDIT_SCENE_PICTURE_CREATE_INTERVAL		(600)										//絵の生成間隔
 #define CREDIT_SCENE_PICTURE_INIT_CREATE_INTERVAL	(360)										//絵の最初の生成間隔
-#define CREDIT_SCENE_PICTURE_LAST_CREATE			(3800)										//絵の生成を止めるまでの時間
+#define CREDIT_SCENE_PICTURE_LAST_CREATE			(4900)										//絵の生成を止めるまでの時間
 
 #define CREDIT_SCENE_SKIP_ICON_SIZE_X				(408.0f * 0.4f)				//スキップアイコンのサイズX
 #define CREDIT_SCENE_SKIP_ICON_SIZE_Y				(94.0f * 0.4f)				//スキップアイコンのサイズY
 #define CREDIT_SCENE_SKIP_UNINIT_COUNT				(180)						//スキップアイコンが消えるまでの時間
 #define CREDIT_SCENE_SKIP_DEC_ALPH					(0.07f)						//スキップアイコンのα値減少値
 
+#define CREDIT_SCENE_CAR_MODEL_ROTATE_SPEED			(-0.001f)							//車モデルのカメラ回転速度
+#define CREDIT_SCENE_CAR_MODEL_FADE_SPEED			(60)								//車モデルのフェード速度
+#define CREDIT_SCENE_CAR_MODEL_CAMERA_ROT			(D3DXVECTOR3(-0.3f, 0.3f, 0.0f))	//車モデルのカメラ向き
+#define CREDIT_SCENE_CAR_MODEL_CAMERA_DIST			(300.0f)							//車モデルのカメラ距離
+#define CREDIT_SCENE_CAR_MODEL_COUNTER				(600)								//車モデルの出す時間
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -54,6 +62,7 @@
 //=============================================================================
 CCreditScene::CCreditScene()
 {
+	m_pModelCar = nullptr;
 	m_pBg = nullptr;
 	m_pBgStage = nullptr;
 	m_pCredit = nullptr;
@@ -66,6 +75,7 @@ CCreditScene::CCreditScene()
 	m_bUninitSkipIcon = false;
 	m_nFrameCounter = 0;
 	m_nSkipIconCounter = 0;
+	m_nPictureTex = 0;
 	m_phase = PHASE::NONE;
 }
 
@@ -85,17 +95,63 @@ void CCreditScene::Init(void) {
 	CTexture::Load("credit");
 
 	//変数初期化
+	m_pModelCar = nullptr;
 	m_bCanFade = false;
 	m_nFrameCounter = 0;
 	m_nSkipIconCounter = 0;
 	m_bPictureRot = false;
-	m_phase = PHASE::BG_CAR_00;
+	m_phase = PHASE::MODEL_CAR;
 	m_pFade = nullptr;
 	m_bFade = false;
 	m_bFadeIn = true;
 	m_pBgStage = nullptr;
 	m_pSkipIcon = nullptr;
 	m_bUninitSkipIcon = false;
+	m_nPictureTex = 0;
+
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//レンダラーの取得
+	CRenderer* pRenderer = nullptr;
+	if (pManager != nullptr) pRenderer = pManager->GetRenderer();
+	//サウンドの取得
+	CSound* pSound = nullptr;
+	if (pManager != nullptr) pSound = pManager->GetSound();
+
+	//カメラの設定
+	if (pManager != nullptr) pManager->SetCamera(CDefaultCamera::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), CREDIT_SCENE_CAR_MODEL_CAMERA_ROT,
+		                                                                CREDIT_SCENE_CAR_MODEL_CAMERA_DIST));
+
+	//------------------------------
+	//ライトの初期設定
+	//------------------------------
+	D3DXMATRIX mtxLightProj;   // ライトの射影変換
+	//ライトのプロジェクションマトリックスを生成
+	D3DXMatrixPerspectiveFovLH(&mtxLightProj, D3DXToRadian(45.0f), 1.0f, 600.0f, 1200.0f);
+
+	D3DXMATRIX mtxLightView;   // ライトビュー変換
+	D3DXVECTOR3 posLightV = D3DXVECTOR3(200.0f, 800.0f, -400.0f);	//ライトの視点の位置
+	D3DXVECTOR3 posLightR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//ライトの注視点の位置
+	D3DXVECTOR3 vecLight = -D3DXVECTOR3(posLightV - posLightR);		//ライトのベクトル
+	D3DXVec3Normalize(&vecLight, &vecLight);	//ベクトルを正規化
+	//ライトのビューマトリックスを生成
+	D3DXMatrixLookAtLH(&mtxLightView, &posLightV, &D3DXVECTOR3(posLightV + vecLight), &D3DXVECTOR3(0, 1, 0));
+	//シェーダのライトを設定
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectLightMatrixView(mtxLightView);
+		pRenderer->SetEffectLightVector(D3DXVECTOR4(vecLight, 1.0f));
+		pRenderer->SetEffectLightMatrixProj(mtxLightProj);
+	}
+	//------------------------------
+	//フォグの初期設定
+	//------------------------------
+	if (pRenderer != nullptr) {
+		pRenderer->SetEffectFogEnable(false);
+		//バックバッファをフォグの色に合わせる
+		pRenderer->SetBackBuffColor(D3DXCOLOR(0.1f, 0.7f, 1.0f, 1.0f));
+	}
+	
 }
 
 //=============================================================================
@@ -103,10 +159,17 @@ void CCreditScene::Init(void) {
 //=============================================================================
 void CCreditScene::CreateObject(void)
 {
-	//背景
-	m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
-		                      CTexture::TEXTURE_TYPE::BG_CREDIT_CAR_00, SCREEN_WIDTH * 1.3f, SCREEN_HEIGHT * 1.3f);
-	m_pBg->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
+	//車の生成
+	m_pModelCar = CObjectModel::Create(CModel::MODELTYPE::OBJ_CREDIT_OP_CAR, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
+	CModel* pModel = m_pModelCar->GetPtrModel();
+	if (pModel != nullptr)
+	{
+		for (int i = 0; i < 14; i++)
+		{
+			pModel->SetMaterialSpecular(D3DXCOLOR(0.98f, 0.98f, 0.98f, 1.f), i);
+			pModel->SetMaterialPower(8.0f, i);
+		}
+	}
 
 	//マネージャーの取得
 	CManager* pManager = CManager::GetManager();
@@ -155,6 +218,10 @@ void CCreditScene::Update(void) {
 	//フェーズによる処理分け
 	switch (m_phase)
 	{
+	case CCreditScene::PHASE::MODEL_CAR:
+		//車モデル処理
+		ModelCar();
+		break;
 	case CCreditScene::PHASE::BG_CAR_00:
 		//背景車処理
 		BgCar00();
@@ -195,6 +262,55 @@ void CCreditScene::Update(void) {
 
 	//遷移処理
 	SceneFade();
+}
+
+//=============================================================================
+//車モデル処理
+//=============================================================================
+void CCreditScene::ModelCar()
+{
+	m_nFrameCounter++;
+	if (m_nFrameCounter > CREDIT_SCENE_CAR_MODEL_COUNTER)
+	{
+		//フェードする状態にする
+		SetFade(CREDIT_SCENE_CAR_MODEL_FADE_SPEED, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+
+		//フェードアウトになったら
+		if (!m_bFadeIn)
+		{
+			m_nFrameCounter = 0;
+		
+			//背景
+			m_pBg = CObject2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0.0f),
+				                      CTexture::TEXTURE_TYPE::BG_CREDIT_CAR_00,
+				                      SCREEN_WIDTH * CREDIT_SCENE_BG_CAR_SIZE, SCREEN_HEIGHT * CREDIT_SCENE_BG_CAR_SIZE);
+			m_pBg->SetDrawPriority(CObject::DRAW_PRIORITY::BG);
+			
+			//フェーズを変える
+			m_phase = PHASE::BG_CAR_00;
+			//消す
+			if (m_pModelCar != nullptr)
+			{
+				m_pModelCar->Uninit();
+				m_pModelCar = nullptr;
+			}
+			return;
+		}
+	}
+
+	//マネージャーの取得
+	CManager* pManager = CManager::GetManager();
+	//カメラの取得
+	CCamera* pCamera = nullptr;
+	if (pManager != nullptr) pCamera = pManager->GetCamera();
+	if (pCamera == nullptr) return;
+
+	//向き取得
+	D3DXVECTOR3 rot = pCamera->GetRot();
+	//向きを動かす
+	rot.y -= CREDIT_SCENE_CAR_MODEL_ROTATE_SPEED;
+	//向き設定
+	pCamera->SetRot(rot);
 }
 
 //=============================================================================
@@ -316,9 +432,8 @@ void CCreditScene::Bg00()
 	//移動させる
 	pos.y -= CREDIT_SCENE_BG_MOVE_SPEED;
 	//止める
-	if (pos.y < 0.0f - ((CREDIT_SCENE_BG_SIZE_Y / 2.0f) - SCREEN_HEIGHT))
+	if (pos.y < 0.0f - ((CREDIT_SCENE_BG_SIZE_Y / 2.0f) - SCREEN_HEIGHT) + 5.0f)
 	{
-		pos.y = 0.0f - ((CREDIT_SCENE_BG_SIZE_Y / 2.0f) - SCREEN_HEIGHT);
 		//フェードする状態にする
 		SetFade(CREDIT_SCENE_BG_FADE_SPEED, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
@@ -556,7 +671,10 @@ void CCreditScene::CreatePicture()
 
 		//絵の生成
 		CCreditPicture::Create(CREDIT_SCENE_PICTURE_CREATE_POS, CREDIT_SCENE_PICTURE_CREATE_SCALE, fRot,
-			                   CTexture::TEXTURE_TYPE::MESH_CAR_TIRE, -CREDIT_SCENE_PICTURE_SPEED);
+			                   static_cast<CTexture::TEXTURE_TYPE>(static_cast<int>(CTexture::TEXTURE_TYPE::CREDIT_PICTURE_00) + m_nPictureTex),
+			                   -CREDIT_SCENE_PICTURE_SPEED);
+		//テクスチャを次に変える
+		m_nPictureTex++;
 
 		//向きの切り替え
 		if (m_bPictureRot) m_bPictureRot = false;
