@@ -21,6 +21,7 @@ public:
 		BGM_MENU,				//メニューBGM
 		BGM_GAME,				//ゲームBGM
 		BGM_GAME_02,			//ゲーム02BGM
+		BGM_GAME_03,			//ゲーム03BGM
 		BGM_RESULT,				//リザルトBGM
 		BGM_FIND_WOLF,			//人狼発見BGM
 		BGM_FINAL_RESULT,		//最終リザルトBGM
