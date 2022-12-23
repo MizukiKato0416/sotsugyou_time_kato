@@ -9,6 +9,7 @@
 #include "sound.h"
 #include "objectList.h"
 #include "object_player_balloon_car.h"
+#include "player.h"
 #include "sound.h"
 #include "gameScene.h"
 
@@ -191,8 +192,11 @@ bool CItemBox::CollisionPlayer(void)
 			//何もアイテムを持っていない状態なら
 			if (pPlayer->GetItemType() == CItem::ITEM_TYPE::NONE)
 			{
+				int nRankPlayer = CGameScene::GetRanking(pPlayer->GetPlayer()->GetIndex() - 1);
 				//アイテムの中からランダムで取得させる
 				int nRandItem = rand() % (int(CItem::ITEM_TYPE::BALLOON_GAME_MAX) - 1) + 1;
+				//ランクによってはバナナにする
+				if (nRandItem == (int)CItem::ITEM_TYPE::STEAL_POINT && nRankPlayer <= 2) nRandItem = (int)CItem::ITEM_TYPE::BANANA;
 
 				//アイテムを取得させる
 				pPlayer->SetItemType((CItem::ITEM_TYPE)nRandItem);

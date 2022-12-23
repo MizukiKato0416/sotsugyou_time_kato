@@ -349,6 +349,9 @@ void CGameScene01::UpdateGame(void) {
 		//サウンドを再生
 		pSound->PlaySound(CSound::SOUND_LABEL::SE_PAUSE_OPEN);
 	}
+
+	//アイテムのためにランキング設定
+	SetRanking();
 }
 
 //=============================================================================
