@@ -13,6 +13,7 @@ data/MODEL/OBJECT/eraser.x
 data/MODEL/OBJECT/excavator.x	
 data/MODEL/OBJECT/birdhead.x	
 data/MODEL/OBJECT/shoppingkart.x	
+data/MODEL/OBJECT/kaki_00.x	
 data/MODEL/OBJECT/stage.x	
 data/MODEL/OBJECT/balloon_pink.x	
 data/MODEL/OBJECT/balloon_gold.x	

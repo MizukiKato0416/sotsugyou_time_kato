@@ -31,7 +31,7 @@
 #define CHECK_ICON_NEXT_MODEL_CREATE_POS	(200.0f)	//次のモデルの生成位置Y
 
 #define CHECK_ICON_SELECT_FRAME_SIZE	(120.0f)	//選択アイコンのフレームのサイズ
-#define CHECK_ICON_SELECT_SIZE			(30.0f)		//選択アイコンのサイズ
+#define CHECK_ICON_SELECT_SIZE			(28.0f)		//選択アイコンのサイズ
 
 
 //=============================================================================
@@ -100,7 +100,7 @@ HRESULT CCheckIcon::Init(void) {
 	SetMaterial(m_pPlayerModel);
 
 	//モデルの種類の数を取得
-	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_05) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
+	int nModelType = static_cast<int>(CModel::MODELTYPE::OBJ_CAR_06) - static_cast<int>(CModel::MODELTYPE::OBJ_CAR) + 1;
 	for (int nCntModel = 0; nCntModel < nModelType; nCntModel++)
 	{
 		//サイズ
@@ -364,7 +364,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最後なら最初に戻す
-		if (modelType == CModel::MODELTYPE::OBJ_CAR_05) modelType = CModel::MODELTYPE::OBJ_CAR;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR_06) modelType = CModel::MODELTYPE::OBJ_CAR;
 		else
 		{
 			//タイプを数値に
@@ -400,7 +400,7 @@ void CCheckIcon::SelectModel()
 		//現在のモデルのタイプ取得
 		CModel::MODELTYPE modelType = pModel->GetModelType();
 		//モデルのタイプが最初なら最後にする
-		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_05;
+		if (modelType == CModel::MODELTYPE::OBJ_CAR) modelType = CModel::MODELTYPE::OBJ_CAR_06;
 		else
 		{
 			//タイプを数値に
