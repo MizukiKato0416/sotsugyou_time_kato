@@ -195,7 +195,7 @@ HRESULT CSound::Init(HWND hWnd)
 	SetDefaultVolum(SOUND_LABEL::BGM_MENU				, 1.0f * SOUND_VOLUM);		//メニューBGM
 	SetDefaultVolum(SOUND_LABEL::BGM_GAME				, 1.0f * SOUND_VOLUM);		//ゲームBGM
 	SetDefaultVolum(SOUND_LABEL::BGM_GAME_02			, 0.8f * SOUND_VOLUM);		//ゲーム02BGM
-	SetDefaultVolum(SOUND_LABEL::BGM_GAME_03			, 1.8f * SOUND_VOLUM);		//ゲーム03BGM
+	SetDefaultVolum(SOUND_LABEL::BGM_GAME_03			, 1.2f * SOUND_VOLUM);		//ゲーム03BGM
 	SetDefaultVolum(SOUND_LABEL::BGM_RESULT				, 1.5f * SOUND_VOLUM);		//リザルトBGM
 	SetDefaultVolum(SOUND_LABEL::BGM_FIND_WOLF			, 1.6f * SOUND_VOLUM);		//人狼発見BGM
 	SetDefaultVolum(SOUND_LABEL::BGM_FINAL_RESULT		, 0.8f * SOUND_VOLUM);		//最終リザルトBGM
