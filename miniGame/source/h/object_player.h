@@ -48,6 +48,8 @@ public:
 
 	//プレイヤー取得処理
 	CPlayer *GetPlayer(void) { return m_pPlayer; }
+	//マテリアルの初期設定
+	void SetMaterialDefault(void);
 
 	//アイテムタイプ取得処理
 	CItem::ITEM_TYPE GetItemType(void) { return m_itemType; }
