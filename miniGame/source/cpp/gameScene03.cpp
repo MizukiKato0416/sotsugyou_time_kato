@@ -561,7 +561,7 @@ void CGameScene03::LookPlayerPos(void) {
 		//‹­§’âŽ~
 		if (posPlayer.x >= STOP_POS_MAX * GAME03_ONE_METER) {
 			//’âŽ~
-			pStopPlayer->StopMove();
+			pStopPlayer->StopMove(true);
 			//ˆÊ’u’²®
 			posPlayer.x = STOP_POS_MAX * GAME03_ONE_METER;
 			pStopPlayer->SetPos(posPlayer);
