@@ -180,6 +180,11 @@ data/TEXTURE/UI/skip_icon.png 				= credit
 data/TEXTURE/UI/credit_picture_00.jpg 		= credit
 data/TEXTURE/UI/credit_picture_01.jpg 		= credit
 data/TEXTURE/UI/credit_picture_02.jpg 		= credit
+data/TEXTURE/UI/credit_picture_02.jpg 		= credit
+data/TEXTURE/UI/credit_picture_02.jpg 		= credit
+data/TEXTURE/UI/credit_picture_02.jpg 		= credit
+data/TEXTURE/UI/credit_picture_02.jpg 		= credit
+data/TEXTURE/UI/credit_picture_02.jpg 		= credit
 
 data/TEXTURE/MESH/floor_01.jpg			= title, game01, credit
 data/TEXTURE/MESH/audience.png			= game01
