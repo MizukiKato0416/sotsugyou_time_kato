@@ -66,7 +66,7 @@ void CChangeColor::Update(void) {
 
 	//色相を加算
 	hsl.x += m_fSpeedColorwheel;
-	if (hsl.x >= 360.f) hsl.x = 0.f;
+	if (hsl.x >= 360.f) hsl.x -= 360.f;
 
 	//RGBに変換
 	m_col = ConvertHSLtoRGB(hsl);
@@ -83,9 +83,9 @@ D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
 
 	if (fMax != fMin) {
 		// H(色相)  
-		if (fMax == rgb.r) hsl.x = 60 * (rgb.g - rgb.b) / (fMax - fMin);
-		if (fMax == rgb.g) hsl.x = 60 * (rgb.b - rgb.r) / (fMax - fMin) + 120;
-		if (fMax == rgb.b) hsl.x = 60 * (rgb.r - rgb.g) / (fMax - fMin) + 240;
+		if (fMax == rgb.r) hsl.x = 60.0f * (rgb.g - rgb.b) / (fMax - fMin);
+		if (fMax == rgb.g) hsl.x = 60.0f * (rgb.b - rgb.r) / (fMax - fMin) + 120;
+		if (fMax == rgb.b) hsl.x = 60.0f * (rgb.r - rgb.g) / (fMax - fMin) + 240;
 
 		// S(彩度)
 		if (hsl.z <= 127) {
@@ -99,7 +99,7 @@ D3DXVECTOR4 CChangeColor::ConvertRGBtoHSL(D3DXCOLOR rgb) {
 
 	//マイナス時の調整
 	if (hsl.x < 0) {
-		hsl.x = hsl.x + 360;
+		hsl.x += 360.0f;
 	}
 
 	//Lの計算
@@ -115,10 +115,9 @@ D3DXCOLOR CChangeColor::ConvertHSLtoRGB(D3DXVECTOR4 hsl) {
 	float fMax, fMin;
 	D3DXCOLOR rgb = { 0, 0, 0, hsl.w / 255 };
 
-	if (hsl.x >= 360) {
-		hsl.x = 0;
-	}
+	if (hsl.x >= 360.f) hsl.x -= 360.f;
 
+	//彩度を決める？
 	if (hsl.z <= 49) {
 		fMax = 2.55 * (hsl.z + hsl.z * (hsl.y / 100));
 		fMin = 2.55 * (hsl.z - hsl.z * (hsl.y / 100));
@@ -128,35 +127,36 @@ D3DXCOLOR CChangeColor::ConvertHSLtoRGB(D3DXVECTOR4 hsl) {
 		fMin = 2.55 * (hsl.z - (100 - hsl.z) * (hsl.y / 100));
 	}
 
-	if (hsl.x < 60) {
+	//カラーホイールに応じて色の決定
+	if (hsl.x < 60.0f) {
 		rgb.r = fMax;
-		rgb.g = fMin + (fMax - fMin) * (hsl.x / 60);
+		rgb.g = fMin + (fMax - fMin) * (hsl.x / 60.0f);
 		rgb.b = fMin;
 	}
-	else if (hsl.x >= 60 && hsl.x < 120) {
-		rgb.r = fMin + (fMax - fMin) * ((120 - hsl.x) / 60);
+	else if (hsl.x >= 60.0f && hsl.x < 120) {
+		rgb.r = fMin + (fMax - fMin) * ((120 - hsl.x) / 60.0f);
 		rgb.g = fMax;
 		rgb.b = fMin;
 	}
 	else if (hsl.x >= 120 && hsl.x < 180) {
 		rgb.r = fMin;
 		rgb.g = fMax;
-		rgb.b = fMin + (fMax - fMin) * ((hsl.x - 120) / 60);
+		rgb.b = fMin + (fMax - fMin) * ((hsl.x - 120) / 60.0f);
 	}
 	else if (hsl.x >= 180 && hsl.x < 240) {
 		rgb.r = fMin;
-		rgb.g = fMin + (fMax - fMin) * ((240 - hsl.x) / 60);
+		rgb.g = fMin + (fMax - fMin) * ((240 - hsl.x) / 60.0f);
 		rgb.b = fMax;
 	}
 	else if (hsl.x >= 240 && hsl.x < 300) {
-		rgb.r = fMin + (fMax - fMin) * ((hsl.x - 240) / 60);
+		rgb.r = fMin + (fMax - fMin) * ((hsl.x - 240) / 60.0f);
 		rgb.g = fMin;
 		rgb.b = fMax;
 	}
-	else if (hsl.x >= 300 && hsl.x < 360) {
+	else if (hsl.x >= 300 && hsl.x < 360.0f) {
 		rgb.r = fMax;
 		rgb.g = fMin;
-		rgb.b = fMin + (fMax - fMin) * ((360 - hsl.x) / 60);
+		rgb.b = fMin + (fMax - fMin) * ((360.0f - hsl.x) / 60.0f);
 	}
 
 	//四捨五入

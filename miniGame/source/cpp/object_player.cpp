@@ -79,40 +79,11 @@ HRESULT CObjectPlayer::Init(void) {
 
 	CObjectModel::Init();
 
-	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-
 	//プレイヤーの生成
 	m_pPlayer = CPlayer::Create();
 
 
-	//プレイヤー番号によって色を変える
-	switch (m_pPlayer->GetIndex())
-	{
-	case 1:
-		col = OBJECT_PLAYER_COLOR_1P;
-		break;
-	case 2:
-		col = OBJECT_PLAYER_COLOR_2P;
-		break;
-	case 3:
-		col = OBJECT_PLAYER_COLOR_3P;
-		break;
-	case 4:
-		col = OBJECT_PLAYER_COLOR_4P;
-		break;
-	default:
-		break;
-	}
-
-	//モデル取得
-	CModel *pModel = GetPtrModel();
-	if (pModel != nullptr)
-	{
-		//指定したマテリアルの色を設定
-		pModel->SetMaterialDiffuse(col, 0);
-		pModel->SetMaterialSpecular(col / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
-		pModel->SetMaterialPower(2.0f, 0);
-	}
+	SetMaterialDefault();
 
 	return S_OK;
 }
@@ -170,4 +141,38 @@ void CObjectPlayer::GameOver(void) {
 //=============================================================================
 float CObjectPlayer::GetRadius(void) {
 	return COLLISION_RADIUS;
+}
+
+//=============================================================================
+// マテリアルの初期設定
+//=============================================================================
+void CObjectPlayer::SetMaterialDefault(void) {
+	D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+	if (m_pPlayer == nullptr) return;
+	//プレイヤー番号によって色を変える
+	switch (m_pPlayer->GetIndex())
+	{
+	case 1:
+		col = OBJECT_PLAYER_COLOR_1P;
+		break;
+	case 2:
+		col = OBJECT_PLAYER_COLOR_2P;
+		break;
+	case 3:
+		col = OBJECT_PLAYER_COLOR_3P;
+		break;
+	case 4:
+		col = OBJECT_PLAYER_COLOR_4P;
+		break;
+	}
+
+	//モデル取得
+	CModel *pModel = GetPtrModel();
+	if (pModel == nullptr) return;
+
+	//指定したマテリアルの色を設定
+	pModel->SetMaterialDiffuse(col, 0);
+	pModel->SetMaterialSpecular(col / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
+	pModel->SetMaterialPower(2.0f, 0);
 }

@@ -615,32 +615,7 @@ void CObjectPlayerAttackCar::Defence(void)
 			m_pChangeColor = nullptr;
 		}
 		//デフォルトの色に戻す
-		D3DXCOLOR col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-
-		//プレイヤー番号によって色を変える
-		switch (GetPlayer()->GetIndex())
-		{
-		case 1:
-			col = OBJECT_PLAYER_COLOR_1P;
-			break;
-		case 2:
-			col = OBJECT_PLAYER_COLOR_2P;
-			break;
-		case 3:
-			col = OBJECT_PLAYER_COLOR_3P;
-			break;
-		case 4:
-			col = OBJECT_PLAYER_COLOR_4P;
-			break;
-		}
-
-		//モデル取得
-		CModel *pModel = GetPtrModel();
-		if (pModel != nullptr)
-		{
-			//指定したマテリアルの色を設定
-			pModel->SetMaterialDiffuse(col, 0);
-		}
+		SetMaterialDefault();
 	}
 
 }
@@ -918,7 +893,14 @@ void CObjectPlayerAttackCar::SetRanking()
 //ディフェンス状態設定処理
 void CObjectPlayerAttackCar::SetDefence(const bool bDefence) {
 	m_bDefence = bDefence;
+
+	//変化する色のクラスを生成
 	if (m_pChangeColor == nullptr) {
-		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.3f, 1.0f), 2.0f);
+		m_pChangeColor = CChangeColor::Create(D3DXCOLOR(1.0f, 0.5f, 0.3f, 1.0f), 2.5f);
+	}
+
+	CModel* pModel = GetPtrModel();
+	if (pModel != nullptr) {
+		pModel->SetMaterialSpecular(D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.5f), 0);	//スペキュラーを薄める
 	}
 }
