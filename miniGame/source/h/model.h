@@ -31,6 +31,7 @@ public:
 		OBJ_CAR_03,						//車03
 		OBJ_CAR_04,						//車04
 		OBJ_CAR_05,						//車05
+		OBJ_CAR_06,						//車06
 		OBJ_STADIUM,					//スタジアム
 		OBJ_BALLOON_PINK,				//風船(ピンク)
 		OBJ_BALLOON_GOLD,				//風船(ゴールド)

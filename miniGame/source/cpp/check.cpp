@@ -169,8 +169,6 @@ void CCheck::Check()
 		int nNumPlayer = m_nNumPlayer;
 #ifdef _DEBUG
 		nNumPlayer = 1;
-#else
-		nNumPlayer = 1;
 #endif // !_DEBUG
 
 		for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)

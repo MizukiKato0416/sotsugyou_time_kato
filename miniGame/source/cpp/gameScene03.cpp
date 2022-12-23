@@ -146,8 +146,8 @@ void CGameScene03::Init(void) {
 
 	//BGMの再生
 	if (pSound != nullptr) {
-		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_02);
-		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_02);
+		pSound->PlaySound(CSound::SOUND_LABEL::BGM_GAME_03);
+		pSound->SetBGM(CSound::SOUND_LABEL::BGM_GAME_03);
 	}
 
 	//プレイヤーの最大速度を設定
