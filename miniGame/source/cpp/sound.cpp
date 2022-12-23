@@ -197,7 +197,7 @@ HRESULT CSound::Init(HWND hWnd)
 	SetDefaultVolum(SOUND_LABEL::BGM_RESULT				, 1.5f * SOUND_VOLUM);		//リザルトBGM
 	SetDefaultVolum(SOUND_LABEL::BGM_FIND_WOLF			, 1.6f * SOUND_VOLUM);		//人狼発見BGM
 	SetDefaultVolum(SOUND_LABEL::BGM_FINAL_RESULT		, 0.8f * SOUND_VOLUM);		//最終リザルトBGM
-	SetDefaultVolum(SOUND_LABEL::BGM_CREDIT				, 2.0f * SOUND_VOLUM);		//えんどろーる
+	SetDefaultVolum(SOUND_LABEL::BGM_CREDIT				, 2.3f * SOUND_VOLUM);		//えんどろーる
 
 	SetDefaultVolum(SOUND_LABEL::SE_POINT_1				, 1.8f * SOUND_VOLUM);		//1ポイント獲得SE
 	SetDefaultVolum(SOUND_LABEL::SE_POINT_3				, 1.4f * SOUND_VOLUM);		//3ポイント獲得SE

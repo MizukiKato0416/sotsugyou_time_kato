@@ -19,6 +19,7 @@
 //*****************************************************************************
 class CObject2D;
 class CNextButton;
+class CObjectModel;
 
 //*****************************************************************************
 // リザルトシーンクラス
@@ -46,6 +47,7 @@ private:
 		MAX
 	};
 
+	void ModelCar();									//車モデル処理
 	void BgCar00();										//背景車処理
 	void BgCar01();										//背景車処理
 	void BgTitle();										//背景タイトル処理
@@ -58,6 +60,7 @@ private:
 	void Fade();										//フェード処理
 	void SkipIcon();									//スキップアイコン処理
 
+	CObjectModel *m_pModelCar;		//くるまのモデル
 	CObject2D *m_pBg;				//背景
 	CObject2D *m_pBgStage;			//背景ステージ
 	CObject2D *m_pCredit;			//クレジット
