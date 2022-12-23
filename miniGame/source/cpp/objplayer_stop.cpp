@@ -185,7 +185,7 @@ void CObjplayerStop::Move(void) {
 	//Aƒ{ƒ^ƒ“‚ð‰Ÿ‚µ‚½‚ç
 	else if (pInput->GetTrigger(CInput::CODE::CHECK_A, GetPlayer()->GetIndex() - 1) && m_bCanStop) {
 		//’âŽ~ˆ—
-		StopMove();
+		StopMove(false);
 	}
 	//“yšº
 	CPresetEffect::SetEffect3D(1, GetPos(), {}, {});
@@ -194,7 +194,7 @@ void CObjplayerStop::Move(void) {
 //=============================================================================
 // ˆÚ“®—Ê‚ÌŒ¸­
 //=============================================================================
-void CObjplayerStop::StopMove(void) {
+void CObjplayerStop::StopMove(bool bForced) {
 	m_bStopMove = true;
 
 	//’âŽ~
@@ -205,6 +205,14 @@ void CObjplayerStop::StopMove(void) {
 	//ƒTƒEƒ“ƒh‚ÌŽæ“¾
 	CSound* pSound = nullptr;
 	if (pManager != nullptr) pSound = pManager->GetSound();
-	//TODO:‰¹Ä¶
-	if (pSound != nullptr) pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
+	//‰¹Ä¶
+	if (pSound != nullptr) {
+		//‹­§“I‚ÉŽ~‚Ü‚Á‚½‚©‚Ç‚¤‚©
+		if (bForced) {
+			pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASHSTOP);
+		}
+		else {
+			pSound->PlaySound(CSound::SOUND_LABEL::SE_CRASH);
+		}
+	}
 }

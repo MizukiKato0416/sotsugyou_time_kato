@@ -45,6 +45,7 @@ CSound::PARAM CSound::m_aParam[(int)SOUND_LABEL::ENUM_MAX] = {
 	{ "data/SOUND/SE/pause_open.wav", 0 },
 	{ "data/SOUND/SE/cursor.wav", 0 },
 	{ "data/SOUND/SE/clash.wav", 0 },
+	{ "data/SOUND/SE/game3_crash.wav", 0 },
 	{ "data/SOUND/SE/fall.wav", 0 },
 	{ "data/SOUND/SE/explosion.wav", 0 },
 	{ "data/SOUND/SE/shield.wav", 0 },
@@ -190,6 +191,11 @@ HRESULT CSound::Init(HWND hWnd)
 		CloseHandle(hFile);
 	}
 
+	//1.0で初期化
+	for (float& fVolum : m_afDefaultVolum) {
+		fVolum = 1.0f;
+	}
+
 	//音量調整
 	SetDefaultVolum(SOUND_LABEL::BGM_TITLE				, 1.0f * SOUND_VOLUM);		//タイトルBGM
 	SetDefaultVolum(SOUND_LABEL::BGM_MENU				, 1.0f * SOUND_VOLUM);		//メニューBGM
@@ -235,7 +241,7 @@ HRESULT CSound::Init(HWND hWnd)
 
 	for (int nCntSound = 0; nCntSound < static_cast<int>(SOUND_LABEL::ENUM_MAX); nCntSound++)
 	{
-		ControllVoice(static_cast<SOUND_LABEL>(nCntSound), m_fDefaultVolum[nCntSound]);
+		ControllVoice(static_cast<SOUND_LABEL>(nCntSound), m_afDefaultVolum[nCntSound]);
 	}
 
 	return S_OK;

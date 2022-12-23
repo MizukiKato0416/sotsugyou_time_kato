@@ -45,6 +45,7 @@ public:
 		SE_PAUSE_OPEN,			//ポーズ開くSE
 		SE_CURSOR,				//カーソルSE
 		SE_CRASH,				//衝突SE
+		SE_CRASHSTOP,			//衝突停止SE
 		SE_FALL,				//落下SE
 		SE_EXPLOSION,			//爆発SE
 		SE_ITEM_SHIELD_GET,		//盾アイテム獲得SE
@@ -77,9 +78,9 @@ public:
 	void ControllVoice(const SOUND_LABEL &label, const float fVolume) { m_apSourceVoice[(int)label]->SetVolume(fVolume); }	//音量調整
 
 	//デフォルトのボリューム設定処理
-	void SetDefaultVolum(const SOUND_LABEL &label, const float fDefaultVolum) { m_fDefaultVolum[(int)label] = fDefaultVolum; }
+	void SetDefaultVolum(const SOUND_LABEL &label, const float fDefaultVolum) { m_afDefaultVolum[(int)label] = fDefaultVolum; }
 	//デフォルトのボリューム取得処理
-	float GetDefaultVolum(const SOUND_LABEL &label) { return m_fDefaultVolum[(int)label]; }
+	float GetDefaultVolum(const SOUND_LABEL &label) { return m_afDefaultVolum[(int)label]; }
 
 private:
 	// パラメータ構造体定義
@@ -103,7 +104,7 @@ private:
 
 	SOUND_LABEL m_playBGM;	//再生中のBGM
 	bool m_abBeginPlay[(int)SOUND_LABEL::ENUM_MAX];			//１フレームごとの再生開始時かどうかの判定
-	float m_fDefaultVolum[(int)SOUND_LABEL::ENUM_MAX];		//デフォルトのボリューム
+	float m_afDefaultVolum[(int)SOUND_LABEL::ENUM_MAX];		//デフォルトのボリューム
 };
 
 #endif // !_SOUND_H_
