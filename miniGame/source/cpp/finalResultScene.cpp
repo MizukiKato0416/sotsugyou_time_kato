@@ -227,7 +227,7 @@ void CFinalResultScene::CreateObject(void)
 		//タワーの生成 TODO:モデル変更
 		m_apResultTower[nIdxPlayer] = CObjectModel::Create(CModel::MODELTYPE::OBJ_RESULT_TOWER, posPlayer, D3DXVECTOR3(0.0f, 0.0f, 0.0f), false);
 	
-		//モデルの設定
+		//プレイヤーモデルの設定
 		CModel* pModelPlayer = m_apObjPlayer[nIdxPlayer]->GetPtrModel();
 		if (pModelPlayer == nullptr) continue;	//ループ飛ばす
 		D3DXCOLOR colPlayer = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);	//プレイヤーの色
@@ -252,6 +252,12 @@ void CFinalResultScene::CreateObject(void)
 		pModelPlayer->SetMaterialDiffuse(colPlayer, 0);
 		pModelPlayer->SetMaterialSpecular(colPlayer / 2.0f + D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
 		pModelPlayer->SetMaterialPower(2.0f, 0);
+
+		//タワーモデルの設定
+		CModel* pModelTower = m_apResultTower[nIdxPlayer]->GetPtrModel();
+		if (pModelTower == nullptr) continue;	//ループ飛ばす
+		pModelTower->SetMaterialSpecular(D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 0);
+		pModelTower->SetMaterialSpecular(D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f), 1);
 	}
 }
 
