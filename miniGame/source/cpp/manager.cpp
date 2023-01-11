@@ -170,8 +170,13 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow) {
 	CPlane::CreateTextureFile();
 	CSphere::CreateTextureSphere();
 
+#ifdef _DEBUG
 	//シーンの生成
 	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::SELECT_GAME);
+#else
+	//シーンの生成
+	CScene::ChangeScene(m_pScene, CScene::SCENE_TYPE::TITLE);
+#endif
 
 	return S_OK;
 }

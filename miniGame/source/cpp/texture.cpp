@@ -230,10 +230,7 @@ HRESULT CTexture::AllSceneTextureLoad()
 		//コメント
 		if (strstr(pLoadText, "//") != nullptr) continue;
 
-		//ディレクトリ名のコピー 安全なためおそらく必要ないif
-		/*if (strlen(pLoadText) < MAX_TEXTURE_FILE_PATH) {
-		strcpy_s(m_asFilePath[nIdxType], pLoadText);
-		}*/
+		//ディレクトリ名のコピー
 		strcpy_s(m_asFilePath[nIdxType], pLoadText);
 
 
@@ -241,7 +238,6 @@ HRESULT CTexture::AllSceneTextureLoad()
 		pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 
 		while (pLoadText != nullptr)
-		//while (strcmp(pLoadText, "\0") != 0)	strtok_sを正しく使えていなかったので勘違いかも
 		{
 			//読み込みのタイプと一致していた場合終了
 			bLoadTexture[nIdxType] = strcmp(pLoadText, "all") == 0;
@@ -311,18 +307,13 @@ HRESULT CTexture::LoadTex(const char * sLoadType)
 		//コメント
 		if (strstr(pLoadText, "//") != nullptr) continue;
 
-		//ディレクトリ名のコピー 安全なためおそらく必要ないif
-		/*if (strlen(pLoadText) < MAX_TEXTURE_FILE_PATH) {
+		//ディレクトリ名のコピー
 		strcpy_s(m_asFilePath[nIdxType], pLoadText);
-		}*/
-		strcpy_s(m_asFilePath[nIdxType], pLoadText);
-
 
 		//文字列の分割（空白 タブ 改行 = ,）
 		pLoadText = strtok_s(nullptr, " ,=\t\n", &pText);
 
 		while (pLoadText != nullptr)
-		//while (strcmp(pLoadText, "\0") != 0)	strtok_sを正しく使えていなかったので勘違いかも
 		{
 			//読み込みのタイプと一致していた場合終了
 			bLoadTexture[nIdxType] = strcmp(pLoadText, sLoadType) == 0;
