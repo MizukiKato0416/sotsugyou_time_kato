@@ -85,7 +85,7 @@ HRESULT CFinishUi::Init(void) {
 
 	//オブジェクトの初期化
 	CObject2D::Init();
-
+	SetDrawPriority(CObject::DRAW_PRIORITY::FRONT);
 	return S_OK;
 }
 
